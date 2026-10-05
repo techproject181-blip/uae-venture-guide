@@ -96,10 +96,10 @@ export function HeroVisual() {
           </span>
         </span>
       </div>
-
-      {/* The FAQ on the home page explains the Official mark in full. */}
-      <figcaption className="sr-only">
-        An example plan for a specialty café in Dubai. In a real plan, Official means the fee was checked against a government or free zone page.
+      {/* Visible on purpose: the demo data has no checked fees, so real demo plans show Demo fee or Estimate, not Official. */}
+      <figcaption className="mt-12 text-center text-sm text-muted-foreground">
+        An example plan. <span className="font-medium text-foreground">Official</span> means an administrator checked the fee against a
+        government or free zone page; other fees are marked as demo or estimate.
       </figcaption>
     </figure>
   );

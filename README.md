@@ -35,7 +35,7 @@ Demo accounts, all with the password `Demo2026pass`:
 | Mentor | `omar@demo.test`, `fatima@demo.test`, `daniel@demo.test` (and `rahul@demo.test`, waiting for approval) |
 | Funder | `layla@demo.test`, `hamad@demo.test` (and `khalid@demo.test`, waiting for approval) |
 
-The demo sources are real official websites, but their summaries and every fee amount are **demo values**, labelled "Demo" in the app. In plans these costs show a grey DEMO FEE mark. A cost gets the gold OFFICIAL seal only from a fee an administrator has checked: on a source's page, add a fee reference with "This is demo data that has not been checked" left unticked, then make a new plan (or a new version) for that emirate. An administrator must check every demo value before real users rely on it.
+The demo sources are real official websites, but their summaries and every fee amount are **demo values**, labelled "Demo" in the app. In plans these costs show a grey DEMO FEE mark. A cost gets the amber OFFICIAL seal only from a fee an administrator has checked: on a source's page, add a fee reference with "This is demo data that has not been checked" left unticked, then make a new plan (or a new version) for that emirate. An administrator must check every demo value before real users rely on it.
 
 Other commands:
 
@@ -69,8 +69,12 @@ On Vercel, add the same variables in the project settings instead of using a fil
 
 How a request is checked: every API route uses `route()` from `src/lib/api.js`, which turns errors into clear JSON answers. It checks the body with a Zod schema and the user with `requireApiUser()`. Who may read a plan is decided in one place, `canReadPlan()` in `src/lib/plans.js`.
 
+How pages are laid out: every page is built from the layout kit in `src/components/layout.jsx` (`PageHeader`, `Panel`, `Stack`, `Split`, `CardGrid`, `ListPanel`, `TablePanel`, `StatGrid`, `FormActions`). There are three shapes: list pages (header, filter bar, cards or a table), detail and form pages (main content with a help column on the right) and dashboards (numbers, then lists).
+
+How colours work: all colours live in one place, the `:root` block of `src/app/globals.css`. It has four scales (`ink` greys, `brand` emerald, `gold` amber, `danger` red), named roles built from them (`--primary`, `--border`, `--accent`, `--seal` …), chart colours and shadows. Components use them through Tailwind classes such as `bg-primary`, `text-ink-600`, `border-border-strong` or `shadow-panel`, or `var(--…)` in SVG and charts. Never write a hex value or one of Tailwind's own colours (`slate-300`, `emerald-500`) in a component: `src/lib/theme-colors.test.js` fails if you do. The only copies of the values are `src/lib/theme-colors.js`, for the PDF report (it is drawn on the server and cannot read CSS; the same test checks it matches), and the favicon files in `src/app/`.
+
 How sign-in works: the password is checked against its bcrypt hash, then the server sets a signed session cookie (a JWT) that browser JavaScript cannot read. Every private page loads the user from the database, so an approval or a suspension takes effect at once.
 
 ## Stack
 
-Next.js 16 with JavaScript, Tailwind CSS v4, shadcn/ui, Motion, MongoDB with Mongoose (Docker for development, a hosted database for production), bcrypt and JWT session cookies, Zod, Nodemailer over SMTP (notification and password-reset emails only), Recharts and react-pdf. Mentors and entrepreneurs talk in conversations saved in MongoDB; the page checks for new messages every few seconds. Deployed on Vercel. The AI provider is not chosen yet.
+Next.js 16 with JavaScript, Tailwind CSS v4 (colours as tokens in `globals.css`), shadcn/ui, Motion for animations, Geist and Bricolage Grotesque fonts, MongoDB with Mongoose (Docker for development, a hosted database for production), bcrypt and JWT session cookies, Zod, Nodemailer over SMTP (notification and password-reset emails only), Recharts and react-pdf. Mentors and entrepreneurs talk in conversations saved in MongoDB; the page checks for new messages every few seconds. Deployed on Vercel. The AI provider is not chosen yet.
