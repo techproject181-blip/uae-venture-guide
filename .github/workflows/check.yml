@@ -1,0 +1,26 @@
+# Runs the checks on each push and pull request: lint and the production build.
+name: Check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      mongo:
+        image: mongo:7.0
+        # The same port as docker-compose.yml, so .env.development works unchanged.
+        ports:
+          - 27018:27017
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build

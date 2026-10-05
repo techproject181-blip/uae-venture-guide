@@ -1,0 +1,16 @@
+# Local MongoDB for development. Start it with `npm run db:up`.
+# Production uses a hosted MongoDB (see .env.production.example).
+services:
+  mongo:
+    # MongoDB 8.0 refuses to start on the newer Linux kernel inside Docker Desktop
+    # (MongoDB issue SERVER-121912), so development uses 7.0.
+    image: mongo:7.0
+    container_name: uae-venture-guide-mongo
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:27018:27017" # port 27018 on this computer only, so it does not clash with other projects
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
