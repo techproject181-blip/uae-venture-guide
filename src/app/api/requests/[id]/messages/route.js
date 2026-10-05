@@ -10,7 +10,7 @@ import { messagesQuerySchema, requestMessageSchema } from "@/lib/schemas/message
 export const GET = route(async (request, { params }) => {
   const user = await requireApiUser();
   const { id } = await params;
-  const query = messagesQuerySchema.safeParse({ after: request.nextUrl.searchParams.get("after") });
+  const query = messagesQuerySchema.safeParse({ after: new URL(request.url).searchParams.get("after") });
   if (!query.success) throw new ApiError(400, "The date is not valid.", fieldErrors(query.error));
 
   const conversation = await findConversation(id, user);

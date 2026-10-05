@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MessagesSquare } from "lucide-react";
 import { Fields, Section } from "@/components/document";
 import { EmptyState, PageHeader } from "@/components/page-header";
 import { InterestList } from "@/components/requests/interest-list";
@@ -27,8 +28,8 @@ export default async function RequestsPage() {
   await connectDB();
   const requests = toPlain(
     await MentorRequest.find(isMentor ? { mentorId: user.id } : { entrepreneurId: user.id })
-      .populate("mentorId", "name email")
-      .populate("entrepreneurId", "name email")
+      .populate("mentorId", "name")
+      .populate("entrepreneurId", "name")
       .populate("planId", "title")
       .sort({ createdAt: -1 })
       .lean(),
@@ -64,7 +65,7 @@ export default async function RequestsPage() {
         title={isMentor ? "Guidance requests" : "Requests"}
         description={
           isMentor
-            ? "Founders asking for your help. Once you accept, you see each other's email and you can read the attached plan."
+            ? "Founders asking for your help. Once you accept, you can talk in a saved chat here and read the attached plan."
             : "Your guidance requests to mentors, and funders' interest in your shared plans."
         }
       />
@@ -87,10 +88,12 @@ export default async function RequestsPage() {
   );
 }
 
-/** One guidance request: who and when, the message, the attached plan, the reply, and the mentor's buttons. */
+/** One guidance request: who and when, the message, the attached plan, the chat link or reply, and the mentor's buttons. */
 function RequestEntry({ request, isMentor }) {
   const other = isMentor ? request.entrepreneurId : request.mentorId;
   const accepted = request.status === "accepted";
+  // Accepted and completed requests have a conversation (lib/messages.js); a completed one is read-only.
+  const hasChat = accepted || request.status === "completed";
   const plan = request.planId;
 
   return (
@@ -107,7 +110,7 @@ function RequestEntry({ request, isMentor }) {
 
       <p className="mt-3 max-w-prose whitespace-pre-line">{request.message}</p>
 
-      {(plan || (accepted && other)) && (
+      {plan && (
         <Fields
           className="mt-5"
           items={[
@@ -120,24 +123,28 @@ function RequestEntry({ request, isMentor }) {
                   </Link>
                 ) : (
                   <>
-                    {plan.title} <span className="font-normal text-muted-foreground">(readable once you accept)</span>
+                    {plan.title}{" "}
+                    <span className="font-normal text-muted-foreground">
+                      {request.status === "pending" ? "(readable once you accept)" : "(no longer shared)"}
+                    </span>
                   </>
                 ),
             },
-            accepted &&
-              other && {
-                label: "Email",
-                value: (
-                  <a href={`mailto:${other.email}`} className="text-foreground decoration-primary underline underline-offset-4 wrap-anywhere hover:decoration-2">
-                    {other.email}
-                  </a>
-                ),
-              },
           ]}
         />
       )}
 
-      {request.mentorReply && (
+      {hasChat && (
+        <div className="mt-5">
+          <Link href={`/requests/${request._id}`} className={buttonVariants({ variant: accepted ? "default" : "outline", size: "lg" })}>
+            <MessagesSquare aria-hidden="true" />
+            Open chat<span className="sr-only"> about {request.topic}</span>
+          </Link>
+        </div>
+      )}
+
+      {/* A declined request has no chat, so the mentor's reason is shown here. */}
+      {request.status === "declined" && request.mentorReply && (
         <dl className="mt-5">
           <dt className="field-label">Mentor&apos;s reply</dt>
           <dd className="mt-1 max-w-prose whitespace-pre-line">{request.mentorReply}</dd>

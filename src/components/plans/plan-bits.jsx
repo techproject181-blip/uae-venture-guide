@@ -1,3 +1,4 @@
+import { Info } from "lucide-react";
 import { Stamp } from "@/components/stamp";
 import { formatAedRange } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -95,12 +96,32 @@ export function LevelBadge({ label, level }) {
   );
 }
 
-/** The notice every roadmap, chat answer and report shows (FR-12). */
+/** The notice every roadmap, chat answer and report shows (FR-12). It is its own small panel. */
 export function AdviceNotice() {
   return (
-    <aside className="rounded-lg border bg-card px-4 py-3 text-sm">
-      <strong className="font-medium">Guidance only.</strong> Check each step and fee with the official source before you pay or
-      sign anything. This is not legal or financial advice.
-    </aside>
+    <div role="note" className="panel flex gap-3 px-5 py-4 text-sm sm:px-6">
+      <Info className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+      <p>
+        <strong className="font-medium">Guidance only.</strong> Check each step and fee with the official source before you pay or
+        sign anything. This is not legal or financial advice.
+      </p>
+    </div>
+  );
+}
+
+/**
+ * Facts as rows inside a flush panel: the name on the left, the value on the
+ * right, split by thin rules. rows: [{ label, value }]; empty rows are skipped.
+ */
+export function FactRows({ rows }) {
+  return (
+    <dl className="divide-y">
+      {rows.filter(Boolean).map(({ label, value }) => (
+        <div key={label} className="flex items-baseline justify-between gap-4 px-5 py-3 sm:px-6">
+          <dt className="text-sm text-muted-foreground">{label}</dt>
+          <dd className="text-right font-medium tabular-nums">{value}</dd>
+        </div>
+      ))}
+    </dl>
   );
 }

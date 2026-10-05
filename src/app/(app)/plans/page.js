@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
+import { CardGrid } from "@/components/layout";
 import { EmptyState, PageHeader } from "@/components/page-header";
 import { PlanCard } from "@/components/plans/plan-card";
 import { buttonVariants } from "@/components/ui/button";
@@ -15,7 +16,7 @@ export default async function PlansPage() {
   await connectDB();
   const plans = await Plan.find({ ownerId: user.id })
     .sort({ updatedAt: -1 })
-    .select("title emirate sector status tasks.status updatedAt")
+    .select("title idea emirate sector status tasks.status updatedAt")
     .lean();
 
   const newPlan = (
@@ -35,13 +36,13 @@ export default async function PlansPage() {
           action={newPlan}
         />
       ) : (
-        <ul className="-mt-3 divide-y border-b">
+        <CardGrid>
           {toPlain(plans).map((plan) => (
             <li key={plan._id}>
               <PlanCard plan={plan} />
             </li>
           ))}
-        </ul>
+        </CardGrid>
       )}
     </>
   );

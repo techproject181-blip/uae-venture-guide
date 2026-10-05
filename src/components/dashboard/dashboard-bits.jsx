@@ -1,43 +1,77 @@
 import Link from "next/link";
-import { PageHeader } from "@/components/page-header";
+import { ArrowRight, ChevronRight } from "lucide-react";
+import { ListPanel, PageHeader, Panel } from "@/components/layout";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-// Small building blocks shared by the role dashboards.
+// Small building blocks shared by the role dashboards. Every dashboard has the
+// same skeleton: Greeting → StatGrid → Split (the role's main list on the
+// left; NextStep, Shortcuts and notices on the right).
 
 /** The greeting at the top of every dashboard, with an optional short line under it. */
 export function Greeting({ user, description, actions }) {
   return <PageHeader title={`Welcome, ${user.name.split(" ")[0]}`} description={description} actions={actions} />;
 }
 
-/** The one thing to do next, on a pale gold band. A dashboard shows at most one. */
+/** The title link of a list row. Its ::after covers the row (the <li> is `relative`), so the whole row is a large target. */
+export const rowLink =
+  "rounded-xs font-medium text-foreground decoration-primary underline-offset-4 outline-none after:absolute after:inset-0 hover:underline focus-visible:ring-3 focus-visible:ring-ring/50";
+
+/** A row of a dashboard list, with the kit's row padding. `link` adds the hover tint for rows that are one big link. */
+export function Row({ link = false, className, children }) {
+  return <li className={cn("relative px-5 py-4 sm:px-6", link && "transition-colors hover:bg-slate-50/80", className)}>{children}</li>;
+}
+
+/** The one thing to do next, in its own panel at the top of the right-hand column. A dashboard shows at most one. */
 export function NextStep({ title, href, linkText, children }) {
   return (
-    <section
-      aria-labelledby="next-step-title"
-      className="mb-10 flex flex-col gap-2 rounded-xl border border-primary/15 bg-accent px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-8"
-    >
-      <div className="min-w-0">
-        <h2 id="next-step-title" className="text-lg">
-          {title}
-        </h2>
-        {children && <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-foreground/80">{children}</div>}
-      </div>
+    <Panel title="Next step" className="border-primary/25">
+      <h3 className="font-semibold text-pretty">{title}</h3>
+      {children && <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">{children}</div>}
       {href && (
-        <TextLink href={href} className="shrink-0">
+        <Link href={href} className={buttonVariants({ variant: "outline", size: "lg", className: "mt-5 w-full" })}>
           {linkText}
-        </TextLink>
+          <ArrowRight aria-hidden="true" />
+        </Link>
       )}
-    </section>
+    </Panel>
   );
 }
 
-/** A gold link that stands on its own line, with a touch area 44 px tall. */
+/** Links to the pages a role uses most, each with one short line about it. items: [{ href, label, detail, icon }] */
+export function Shortcuts({ title = "Shortcuts", items }) {
+  return (
+    <ListPanel title={title}>
+      {items.map(({ href, label, detail, icon: Icon }) => (
+        <Row key={href} link className="flex items-center gap-3.5">
+          {Icon && (
+            <span aria-hidden="true" className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-foreground">
+              <Icon className="size-4" />
+            </span>
+          )}
+          <div className="min-w-0 flex-1">
+            <Link href={href} className={rowLink}>
+              {label}
+            </Link>
+            {detail && <p className="mt-0.5 text-sm text-muted-foreground tabular-nums">{detail}</p>}
+          </div>
+          <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+        </Row>
+      ))}
+    </ListPanel>
+  );
+}
+
+/**
+ * A link in a panel's header row, such as "All plans". It keeps a touch area
+ * 44 px tall without making the header row taller than its neighbours.
+ */
 export function TextLink({ href, className, children }) {
   return (
     <Link
       href={href}
       className={cn(
-        "inline-flex min-h-11 items-center rounded-xs font-medium text-foreground decoration-primary underline underline-offset-4 outline-none hover:decoration-2 focus-visible:ring-3 focus-visible:ring-ring/50",
+        "-my-2.5 inline-flex min-h-11 items-center rounded-xs text-sm font-medium text-foreground decoration-primary underline underline-offset-4 outline-none hover:decoration-2 focus-visible:ring-3 focus-visible:ring-ring/50",
         className,
       )}
     >

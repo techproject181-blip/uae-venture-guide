@@ -3,8 +3,10 @@
 import { useRouter } from "next/navigation";
 import { SelectField, TextAreaField, TextField } from "@/components/form/fields";
 import { FormAlert } from "@/components/form/form-alert";
+import { FormPart } from "@/components/form/form-part";
 import { SubmitButton } from "@/components/form/submit-button";
 import { useApiForm } from "@/components/form/use-api-form";
+import { FormActions } from "@/components/layout";
 import { RoadLoader } from "@/components/loaders/road-loader";
 import { EMIRATES, JURISDICTION_PREFERENCES, SECTORS } from "@/lib/constants";
 import { postJson } from "@/lib/form-helpers";
@@ -20,11 +22,10 @@ export function IntakeForm() {
   });
 
   return (
-    <form noValidate onSubmit={handleSubmit} onChange={clearError} className="space-y-8">
+    <form noValidate onSubmit={handleSubmit} onChange={clearError} className="space-y-6 lg:space-y-8">
       <FormAlert>{formError}</FormAlert>
 
-      <fieldset className="space-y-5">
-        <legend className="text-xl font-bold">Your idea</legend>
+      <FormPart id="intake-idea" legend="Your idea" note="The roadmap, budget and risks are built from these answers.">
         <TextField id="title" label="Plan name" placeholder="For example: Karak café near campus" error={errors.title} />
         <TextAreaField
           id="idea"
@@ -40,12 +41,9 @@ export function IntakeForm() {
           placeholder="For example: university students and office workers nearby"
           error={errors.targetCustomers}
         />
-      </fieldset>
+      </FormPart>
 
-      {/* A thin rule between the two groups of questions, as on a printed form. */}
-      <div className="border-t pt-8">
-        <fieldset className="space-y-5">
-          <legend className="text-xl font-bold">Where and how</legend>
+      <FormPart id="intake-where" legend="Where and how">
           <div className="grid gap-5 sm:grid-cols-2">
             <SelectField id="emirate" label="Emirate" options={EMIRATES} placeholder="Choose an emirate…" error={errors.emirate} />
             <SelectField id="sector" label="Sector" options={SECTORS} placeholder="Choose a sector…" error={errors.sector} />
@@ -78,12 +76,13 @@ export function IntakeForm() {
               error={errors.teamSize}
             />
           </div>
-        </fieldset>
-      </div>
+      </FormPart>
 
-      <SubmitButton pending={pending} pendingText="Building your roadmap…">
-        Build my roadmap
-      </SubmitButton>
+      <FormActions>
+        <SubmitButton pending={pending} pendingText="Building your roadmap…">
+          Build my roadmap
+        </SubmitButton>
+      </FormActions>
       {pending && <RoadLoader label="Finding the steps, fees and documents for your business…" className="panel px-6 py-8" />}
     </form>
   );
