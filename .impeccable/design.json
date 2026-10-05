@@ -1,263 +1,312 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-05T15:16:16+00:00",
+  "generatedAt": "2026-10-05T15:56:34+00:00",
   "title": "Design System: UAE Venture Guide",
   "extensions": {
     "colorMeta": {
-      "paper": {
+      "page": {
         "role": "neutral",
-        "displayName": "Paper",
+        "displayName": "Page Grey",
+        "canonical": "#f6f7f9",
+        "tonalRamp": [
+          "#0f172a",
+          "#1e293b",
+          "#334155",
+          "#475569",
+          "#8590a2",
+          "#cbd5e1",
+          "#e2e8f0",
+          "#f6f7f9"
+        ],
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
+      },
+      "panel": {
+        "role": "neutral",
+        "displayName": "Panel White",
         "canonical": "#ffffff",
         "tonalRamp": [
-          "#1b1d21",
-          "#232528",
-          "#3e4046",
-          "#5f646d",
-          "#797e86",
-          "#c3c6cb",
-          "#e1e3e5",
-          "#f7f7f7"
-        ]
+          "#0f172a",
+          "#1e293b",
+          "#334155",
+          "#475569",
+          "#8590a2",
+          "#cbd5e1",
+          "#e2e8f0",
+          "#f6f7f9"
+        ],
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
       },
       "ink": {
         "role": "neutral",
-        "displayName": "AE Black Ink",
-        "canonical": "#232528",
+        "displayName": "Ink",
+        "canonical": "#0f172a",
         "tonalRamp": [
-          "#1b1d21",
-          "#232528",
-          "#3e4046",
-          "#5f646d",
-          "#797e86",
-          "#c3c6cb",
-          "#e1e3e5",
-          "#f7f7f7"
+          "#0f172a",
+          "#1e293b",
+          "#334155",
+          "#475569",
+          "#8590a2",
+          "#cbd5e1",
+          "#e2e8f0",
+          "#f6f7f9"
         ],
-        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
       },
       "ink-muted": {
         "role": "neutral",
-        "displayName": "Muted Ink",
-        "canonical": "#5f646d",
+        "displayName": "Muted Slate",
+        "canonical": "#475569",
         "tonalRamp": [
-          "#1b1d21",
-          "#232528",
-          "#3e4046",
-          "#5f646d",
-          "#797e86",
-          "#c3c6cb",
-          "#e1e3e5",
-          "#f7f7f7"
+          "#0f172a",
+          "#1e293b",
+          "#334155",
+          "#475569",
+          "#8590a2",
+          "#cbd5e1",
+          "#e2e8f0",
+          "#f6f7f9"
         ],
-        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
       },
       "quiet-fill": {
         "role": "neutral",
         "displayName": "Quiet Fill",
-        "canonical": "#f7f7f7",
+        "canonical": "#f1f5f9",
         "tonalRamp": [
-          "#1b1d21",
-          "#232528",
-          "#3e4046",
-          "#5f646d",
-          "#797e86",
-          "#c3c6cb",
-          "#e1e3e5",
-          "#f7f7f7"
+          "#0f172a",
+          "#1e293b",
+          "#334155",
+          "#475569",
+          "#8590a2",
+          "#cbd5e1",
+          "#e2e8f0",
+          "#f6f7f9"
         ],
-        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
       },
       "hairline": {
         "role": "neutral",
         "displayName": "Hairline",
-        "canonical": "#e1e3e5",
+        "canonical": "#e2e8f0",
         "tonalRamp": [
-          "#1b1d21",
-          "#232528",
-          "#3e4046",
-          "#5f646d",
-          "#797e86",
-          "#c3c6cb",
-          "#e1e3e5",
-          "#f7f7f7"
+          "#0f172a",
+          "#1e293b",
+          "#334155",
+          "#475569",
+          "#8590a2",
+          "#cbd5e1",
+          "#e2e8f0",
+          "#f6f7f9"
         ],
-        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
+      },
+      "soft-edge": {
+        "role": "neutral",
+        "displayName": "Soft Edge",
+        "canonical": "#cbd5e1",
+        "tonalRamp": [
+          "#0f172a",
+          "#1e293b",
+          "#334155",
+          "#475569",
+          "#8590a2",
+          "#cbd5e1",
+          "#e2e8f0",
+          "#f6f7f9"
+        ],
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
       },
       "field-edge": {
         "role": "neutral",
         "displayName": "Field Edge",
-        "canonical": "#797e86",
+        "canonical": "#8590a2",
         "tonalRamp": [
-          "#1b1d21",
-          "#232528",
-          "#3e4046",
-          "#5f646d",
-          "#797e86",
-          "#c3c6cb",
-          "#e1e3e5",
-          "#f7f7f7"
+          "#0f172a",
+          "#1e293b",
+          "#334155",
+          "#475569",
+          "#8590a2",
+          "#cbd5e1",
+          "#e2e8f0",
+          "#f6f7f9"
         ],
-        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
       },
-      "gold": {
+      "emerald": {
         "role": "primary",
-        "displayName": "Licence Gold",
-        "canonical": "#7c5e24",
+        "displayName": "UAE Emerald",
+        "canonical": "#047857",
         "tonalRamp": [
-          "#4a3816",
-          "#6a5020",
-          "#7c5e24",
-          "#92722a",
-          "#b68a35",
-          "#d7bc6d",
-          "#f2eccf",
-          "#f9f7ed"
+          "#022c22",
+          "#064e3b",
+          "#065f46",
+          "#047857",
+          "#10b981",
+          "#6ee7b7",
+          "#d1fae5",
+          "#ecfdf5"
         ],
-        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
       },
-      "gold-hover": {
+      "emerald-deep": {
         "role": "primary",
-        "displayName": "Pressed Gold",
-        "canonical": "#6a5020",
+        "displayName": "Deep Emerald",
+        "canonical": "#065f46",
         "tonalRamp": [
-          "#4a3816",
-          "#6a5020",
-          "#7c5e24",
-          "#92722a",
-          "#b68a35",
-          "#d7bc6d",
-          "#f2eccf",
-          "#f9f7ed"
+          "#022c22",
+          "#064e3b",
+          "#065f46",
+          "#047857",
+          "#10b981",
+          "#6ee7b7",
+          "#d1fae5",
+          "#ecfdf5"
         ],
-        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
       },
-      "gold-focus": {
+      "emerald-focus": {
         "role": "primary",
-        "displayName": "Focus Gold",
-        "canonical": "#92722a",
+        "displayName": "Focus Emerald",
+        "canonical": "#10b981",
         "tonalRamp": [
-          "#4a3816",
-          "#6a5020",
-          "#7c5e24",
-          "#92722a",
-          "#b68a35",
-          "#d7bc6d",
-          "#f2eccf",
-          "#f9f7ed"
+          "#022c22",
+          "#064e3b",
+          "#065f46",
+          "#047857",
+          "#10b981",
+          "#6ee7b7",
+          "#d1fae5",
+          "#ecfdf5"
         ],
-        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
       },
-      "seal-gold": {
+      "emerald-wash": {
         "role": "primary",
-        "displayName": "Seal Gold",
-        "canonical": "#b68a35",
+        "displayName": "Emerald Wash",
+        "canonical": "#ecfdf5",
         "tonalRamp": [
-          "#4a3816",
-          "#6a5020",
-          "#7c5e24",
-          "#92722a",
-          "#b68a35",
-          "#d7bc6d",
-          "#f2eccf",
-          "#f9f7ed"
+          "#022c22",
+          "#064e3b",
+          "#065f46",
+          "#047857",
+          "#10b981",
+          "#6ee7b7",
+          "#d1fae5",
+          "#ecfdf5"
         ],
-        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
       },
-      "gold-wash": {
+      "emerald-selection": {
         "role": "primary",
-        "displayName": "Gold Wash",
-        "canonical": "#f9f7ed",
+        "displayName": "Emerald Selection",
+        "canonical": "#d1fae5",
         "tonalRamp": [
-          "#4a3816",
-          "#6a5020",
-          "#7c5e24",
-          "#92722a",
-          "#b68a35",
-          "#d7bc6d",
-          "#f2eccf",
-          "#f9f7ed"
+          "#022c22",
+          "#064e3b",
+          "#065f46",
+          "#047857",
+          "#10b981",
+          "#6ee7b7",
+          "#d1fae5",
+          "#ecfdf5"
         ],
-        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
       },
-      "gold-selection": {
+      "chart-estimated": {
         "role": "primary",
-        "displayName": "Selection Gold",
-        "canonical": "#f2eccf",
+        "displayName": "Light Emerald",
+        "canonical": "#45c093",
         "tonalRamp": [
-          "#4a3816",
-          "#6a5020",
-          "#7c5e24",
-          "#92722a",
-          "#b68a35",
-          "#d7bc6d",
-          "#f2eccf",
-          "#f9f7ed"
+          "#022c22",
+          "#065f46",
+          "#047857",
+          "#10b981",
+          "#45c093",
+          "#6ee7b7",
+          "#d1fae5",
+          "#ecfdf5"
         ],
-        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
       },
-      "done-green": {
+      "seal-amber": {
         "role": "secondary",
-        "displayName": "Done Green",
-        "canonical": "#2f663c",
+        "displayName": "Seal Amber",
+        "canonical": "#d97706",
         "tonalRamp": [
-          "#1a3a22",
-          "#2f663c",
-          "#3f8550",
-          "#5aa26b",
-          "#8cc39a",
-          "#bfe0c7",
-          "#e1f1e5",
-          "#f3faf4"
+          "#78350f",
+          "#92400e",
+          "#b45309",
+          "#d97706",
+          "#f59e0b",
+          "#fcd34d",
+          "#fef3c7",
+          "#fffbeb"
         ],
-        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
       },
-      "done-wash": {
+      "seal-ink": {
         "role": "secondary",
-        "displayName": "Done Wash",
-        "canonical": "#f3faf4",
+        "displayName": "Seal Ink",
+        "canonical": "#b45309",
         "tonalRamp": [
-          "#1a3a22",
-          "#2f663c",
-          "#3f8550",
-          "#5aa26b",
-          "#8cc39a",
-          "#bfe0c7",
-          "#e1f1e5",
-          "#f3faf4"
+          "#78350f",
+          "#92400e",
+          "#b45309",
+          "#d97706",
+          "#f59e0b",
+          "#fcd34d",
+          "#fef3c7",
+          "#fffbeb"
         ],
-        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
+      },
+      "seal-wash": {
+        "role": "secondary",
+        "displayName": "Seal Wash",
+        "canonical": "#fffbeb",
+        "tonalRamp": [
+          "#78350f",
+          "#92400e",
+          "#b45309",
+          "#d97706",
+          "#f59e0b",
+          "#fcd34d",
+          "#fef3c7",
+          "#fffbeb"
+        ],
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
       },
       "error-red": {
         "role": "tertiary",
         "displayName": "Error Red",
-        "canonical": "#b52520",
+        "canonical": "#b91c1c",
         "tonalRamp": [
-          "#5e1411",
-          "#8a1c18",
-          "#b52520",
-          "#d43a33",
-          "#e8716b",
-          "#f5aaa6",
-          "#fbd5d3",
+          "#450a0a",
+          "#7f1d1d",
+          "#991b1b",
+          "#b91c1c",
+          "#ef4444",
+          "#fca5a5",
+          "#fee2e2",
           "#fef2f2"
         ],
-        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
       },
       "error-wash": {
         "role": "tertiary",
         "displayName": "Error Wash",
         "canonical": "#fef2f2",
         "tonalRamp": [
-          "#5e1411",
-          "#8a1c18",
-          "#b52520",
-          "#d43a33",
-          "#e8716b",
-          "#f5aaa6",
-          "#fbd5d3",
+          "#450a0a",
+          "#7f1d1d",
+          "#991b1b",
+          "#b91c1c",
+          "#ef4444",
+          "#fca5a5",
+          "#fee2e2",
           "#fef2f2"
         ],
-        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+        "note": "Ramp uses Tailwind's matching colour scale; the canonical value is the one set in globals.css."
       }
     },
     "typographyMeta": {
@@ -271,19 +320,19 @@
       },
       "title": {
         "displayName": "Title",
-        "purpose": "The next step's title; form part legends at 700."
+        "purpose": "The next step's title; form-part legends and empty-state headings at 700."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "Prose (max about 42rem) and field values at 500 with tabular figures."
+        "purpose": "Prose (about 42rem wide at most) and field values at 500 with tabular figures."
       },
       "body-small": {
         "displayName": "Body small",
-        "purpose": "Tables, costs, navigation, hints and legends."
+        "purpose": "Tables, costs, navigation, hints, legends and form labels."
       },
       "label": {
         "displayName": "Field label",
-        "purpose": "Uppercase label directly above the value or control it names; table headers."
+        "purpose": "Uppercase label directly above the value it names; table headers."
       },
       "stamp": {
         "displayName": "Stamp",
@@ -292,16 +341,106 @@
     },
     "shadows": [
       {
-        "name": "none",
-        "value": "none",
-        "purpose": "The system is flat; toasts and chart tooltips set box-shadow: none explicitly."
+        "name": "panel-rest",
+        "value": "0 1px 2px rgb(15 23 42 / 0.04), 0 1px 3px rgb(15 23 42 / 0.04)",
+        "purpose": "Every white panel on the grey page."
+      },
+      {
+        "name": "panel-lift",
+        "value": "0 4px 12px rgb(15 23 42 / 0.08)",
+        "purpose": "A panel that is a link, on hover, with a 1px rise and a Soft Edge border."
+      },
+      {
+        "name": "button-primary",
+        "value": "0 1px 2px rgb(4 120 87 / 0.25)",
+        "purpose": "The emerald main button at rest."
+      },
+      {
+        "name": "button-primary-hover",
+        "value": "0 4px 12px rgb(4 120 87 / 0.25)",
+        "purpose": "The emerald main button on hover."
+      },
+      {
+        "name": "control-hint",
+        "value": "0 1px 2px rgb(0 0 0 / 0.05)",
+        "purpose": "Outline buttons and role choice cards."
+      },
+      {
+        "name": "tooltip",
+        "value": "0 8px 24px rgb(15 23 42 / 0.10)",
+        "purpose": "Chart tooltips."
+      },
+      {
+        "name": "nav-progress-glow",
+        "value": "0 0 8px rgb(16 185 129 / 0.6)",
+        "purpose": "The soft glow under the page loading bar."
+      },
+      {
+        "name": "focus-ring",
+        "value": "0 0 0 3px rgb(16 185 129 / 0.5)",
+        "purpose": "Keyboard focus on every interactive element (red at 20% on invalid fields)."
       }
     ],
     "motion": [
       {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The one easing curve for UI motion (--ease-out)."
+      },
+      {
+        "name": "state-change",
+        "value": "150ms to 200ms",
+        "purpose": "Colour, border and shadow changes on buttons, links, tabs and panels; buttons shrink to 0.97 while pressed."
+      },
+      {
+        "name": "page-enter",
+        "value": "320ms ease-out backwards; from opacity 0 and 6px down",
+        "purpose": "Every page slides in softly when it opens (template.js files)."
+      },
+      {
+        "name": "details-open",
+        "value": "260ms ease-out on block-size",
+        "purpose": "Folded details open and close smoothly where supported."
+      },
+      {
         "name": "stamp-press",
         "value": "240ms cubic-bezier(0.16, 1, 0.3, 1) both; from opacity 0, scale 1.4, rotate -8deg to opacity 1, scale 1, rotate -2deg",
-        "purpose": "The one moving moment: ticking a step presses the DONE stamp on."
+        "purpose": "Ticking a step presses the DONE stamp on."
+      },
+      {
+        "name": "progress-fill",
+        "value": "900ms ease-out; grows from scale 0",
+        "purpose": "The progress bar fills when the page opens."
+      },
+      {
+        "name": "chart-bars",
+        "value": "600ms",
+        "purpose": "Chart bars grow in when the chart appears."
+      },
+      {
+        "name": "spinner",
+        "value": "1.4s linear turn plus 1.4s ease-in-out arc stretch, infinite",
+        "purpose": "Busy buttons."
+      },
+      {
+        "name": "road-loader",
+        "value": "2.6s loop; road drawn through four stops, each stop turns emerald and pops to 1.3 scale",
+        "purpose": "Long waits such as building a roadmap."
+      },
+      {
+        "name": "skeleton-shimmer",
+        "value": "1.6s linear infinite",
+        "purpose": "Grey placeholder bars."
+      },
+      {
+        "name": "appear-late",
+        "value": "200ms fade after 180ms delay",
+        "purpose": "Loaders wait so fast pages never flash one."
+      },
+      {
+        "name": "nav-progress",
+        "value": "6s cubic-bezier(0.1, 0.7, 0.2, 1) creep to 90%, then 300ms fade after 150ms",
+        "purpose": "The 3px emerald bar along the top while the next page loads."
       },
       {
         "name": "reduced-motion",
@@ -315,16 +454,20 @@
         "value": "640px"
       },
       {
-        "name": "md",
-        "value": "768px"
-      },
-      {
         "name": "lg",
-        "value": "1024px"
+        "value": "1024px (sticky blurred header, inline nav, step cost column)"
       },
       {
-        "name": "container",
-        "value": "72rem (1152px) max width"
+        "name": "xl",
+        "value": "1280px (user name in header)"
+      },
+      {
+        "name": "2xl",
+        "value": "1536px (40px side padding)"
+      },
+      {
+        "name": "page-width",
+        "value": "90rem (1440px) max, side padding 16/24/32/40px"
       }
     ]
   },
@@ -333,49 +476,57 @@
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "The one main action on a page, in AE Gold.",
-      "html": "<button class=\"ds-btn-primary\">Add task</button>",
-      "css": ".ds-btn-primary{font-family: var(--font-sans), Roboto, system-ui, sans-serif;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 20px;font-size:16px;font-weight:500;color:#fff;background:#7c5e24;border:1px solid transparent;border-radius:4.8px;cursor:pointer;transition:background-color .15s,box-shadow .15s}.ds-btn-primary:hover{background:#6a5020}.ds-btn-primary:focus-visible{outline:none;border-color:#92722a;box-shadow:0 0 0 3px rgba(146,114,42,.5)}"
+      "description": "The one main action on a page, in UAE Emerald.",
+      "html": "<button class=\"ds-btn-primary\">Create plan</button>",
+      "css": ".ds-btn-primary{font-family:var(--font-sans),Roboto,system-ui,sans-serif;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 20px;font-size:16px;font-weight:500;border:1px solid transparent;border-radius:10px;cursor:pointer;transition:color .15s cubic-bezier(.16,1,.3,1),background-color .15s cubic-bezier(.16,1,.3,1),border-color .15s cubic-bezier(.16,1,.3,1),box-shadow .15s cubic-bezier(.16,1,.3,1),scale .15s cubic-bezier(.16,1,.3,1);color:#fff;background:#047857;box-shadow:0 1px 2px rgb(4 120 87 / .25)}.ds-btn-primary:hover{background:#065f46;box-shadow:0 4px 12px rgb(4 120 87 / .25)}.ds-btn-primary:active{scale:.97}.ds-btn-primary:focus-visible{outline:none;border-color:#10b981;box-shadow:0 0 0 3px rgb(16 185 129 / .5)}"
     },
     {
       "name": "Outline Button",
       "kind": "button",
       "refersTo": "button-outline",
-      "description": "Every secondary action: a black-outlined box like one on a printed form.",
+      "description": "Most secondary actions: white with a soft edge.",
       "html": "<button class=\"ds-btn-outline\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg>Download PDF</button>",
-      "css": ".ds-btn-outline{font-family: var(--font-sans), Roboto, system-ui, sans-serif;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 20px 0 16px;font-size:16px;font-weight:500;color:#232528;background:#fff;border:1px solid rgba(35,37,40,.8);border-radius:4.8px;cursor:pointer;transition:background-color .15s,box-shadow .15s}.ds-btn-outline:hover{background:#f7f7f7}.ds-btn-outline:focus-visible{outline:none;border-color:#92722a;box-shadow:0 0 0 3px rgba(146,114,42,.5)}"
+      "css": ".ds-btn-outline{font-family:var(--font-sans),Roboto,system-ui,sans-serif;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 20px;font-size:16px;font-weight:500;border:1px solid transparent;border-radius:10px;cursor:pointer;transition:color .15s cubic-bezier(.16,1,.3,1),background-color .15s cubic-bezier(.16,1,.3,1),border-color .15s cubic-bezier(.16,1,.3,1),box-shadow .15s cubic-bezier(.16,1,.3,1),scale .15s cubic-bezier(.16,1,.3,1);padding-left:16px;color:#0f172a;background:#fff;border-color:#cbd5e1;box-shadow:0 1px 2px rgb(0 0 0 / .05)}.ds-btn-outline:hover{border-color:#94a3b8;background:#f8fafc}.ds-btn-outline:active{scale:.97}.ds-btn-outline:focus-visible{outline:none;border-color:#10b981;box-shadow:0 0 0 3px rgb(16 185 129 / .5)}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "A quiet action with no edge, such as Sign in.",
+      "html": "<button class=\"ds-btn-ghost\">Sign in</button>",
+      "css": ".ds-btn-ghost{font-family:var(--font-sans),Roboto,system-ui,sans-serif;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 20px;font-size:16px;font-weight:500;border:1px solid transparent;border-radius:10px;cursor:pointer;transition:color .15s cubic-bezier(.16,1,.3,1),background-color .15s cubic-bezier(.16,1,.3,1),border-color .15s cubic-bezier(.16,1,.3,1),box-shadow .15s cubic-bezier(.16,1,.3,1),scale .15s cubic-bezier(.16,1,.3,1);color:#0f172a;background:transparent}.ds-btn-ghost:hover{background:#f1f5f9}.ds-btn-ghost:active{scale:.97}.ds-btn-ghost:focus-visible{outline:none;border-color:#10b981;box-shadow:0 0 0 3px rgb(16 185 129 / .5)}"
     },
     {
       "name": "Destructive Button",
       "kind": "button",
       "refersTo": "button-destructive",
-      "description": "Delete and other irreversible actions: red outline, never a solid red fill.",
+      "description": "Delete and other actions that cannot be undone: red outline, never a solid red fill.",
       "html": "<button class=\"ds-btn-destructive\">Delete</button>",
-      "css": ".ds-btn-destructive{font-family: var(--font-sans), Roboto, system-ui, sans-serif;display:inline-flex;align-items:center;height:44px;padding:0 20px;font-size:16px;font-weight:500;color:#b52520;background:#fff;border:1px solid #b52520;border-radius:4.8px;cursor:pointer;transition:background-color .15s,box-shadow .15s}.ds-btn-destructive:hover{background:#fef2f2}.ds-btn-destructive:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(181,37,32,.2)}"
+      "css": ".ds-btn-destructive{font-family:var(--font-sans),Roboto,system-ui,sans-serif;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 20px;font-size:16px;font-weight:500;border:1px solid transparent;border-radius:10px;cursor:pointer;transition:color .15s cubic-bezier(.16,1,.3,1),background-color .15s cubic-bezier(.16,1,.3,1),border-color .15s cubic-bezier(.16,1,.3,1),box-shadow .15s cubic-bezier(.16,1,.3,1),scale .15s cubic-bezier(.16,1,.3,1);color:#b91c1c;background:#fff;border-color:#b91c1c}.ds-btn-destructive:hover{background:#fef2f2}.ds-btn-destructive:active{scale:.97}.ds-btn-destructive:focus-visible{outline:none;box-shadow:0 0 0 3px rgb(185 28 28 / .2)}"
     },
     {
       "name": "Text Field",
       "kind": "input",
       "refersTo": "input",
-      "description": "Labelled input with a Field Edge border and a gold focus ring.",
-      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Task</span><input class=\"ds-input\" placeholder=\"Reserve your trade name\"></label>",
-      "css": ".ds-field{font-family: var(--font-sans), Roboto, system-ui, sans-serif;display:flex;flex-direction:column;gap:8px;max-width:360px}.ds-field-label{font-size:14px;font-weight:500;color:#232528}.ds-input{font-family: var(--font-sans), Roboto, system-ui, sans-serif;height:44px;padding:0 12px;font-size:16px;color:#232528;background:#fff;border:1px solid #797e86;border-radius:6px;outline:none;transition:border-color .15s,box-shadow .15s}.ds-input:focus-visible{border-color:#92722a;box-shadow:0 0 0 3px rgba(146,114,42,.5)}"
+      "description": "Labelled input with a Field Edge border and an emerald focus ring.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Task</span><input class=\"ds-input\" placeholder=\"Reserve your trade name\"><span class=\"ds-field-hint\">Keep it short.</span></label>",
+      "css": ".ds-field{font-family:var(--font-sans),Roboto,system-ui,sans-serif;display:flex;flex-direction:column;gap:8px;max-width:360px;color:#0f172a}.ds-field-label{font-size:14px;font-weight:500}.ds-field-hint{font-size:14px;color:#475569}.ds-input{font-family:var(--font-sans),Roboto,system-ui,sans-serif;height:44px;padding:0 12px;font-size:16px;color:#0f172a;background:#fff;border:1px solid #8590a2;border-radius:10px;outline:none;transition:border-color .15s,box-shadow .15s}.ds-input::placeholder{color:#475569}.ds-input:focus-visible{outline:none;border-color:#10b981;box-shadow:0 0 0 3px rgb(16 185 129 / .5)}"
     },
     {
       "name": "Navigation Tabs",
       "kind": "nav",
       "refersTo": "nav-tab-active",
-      "description": "Header links and plan tabs: text with a 2px gold rule under the current one.",
+      "description": "Header links and plan tabs: text with a 2px emerald rule under the current one.",
       "html": "<nav class=\"ds-tabs\"><a href=\"#\" aria-current=\"page\">Overview</a><a href=\"#\">Steps</a><a href=\"#\">Budget</a><a href=\"#\">Documents</a><a href=\"#\">Risks</a><a href=\"#\">Chat</a></nav>",
-      "css": ".ds-tabs{font-family: var(--font-sans), Roboto, system-ui, sans-serif;display:flex;border-bottom:1px solid #e1e3e5}.ds-tabs a{display:block;padding:12px;font-size:14px;color:#5f646d;text-decoration:none;border-bottom:2px solid transparent;transition:color .15s}.ds-tabs a:hover{color:#232528}.ds-tabs a:focus-visible{outline:none;box-shadow:inset 0 0 0 3px rgba(146,114,42,.5)}.ds-tabs a[aria-current=page]{color:#232528;font-weight:500;border-bottom-color:#7c5e24}"
+      "css": ".ds-tabs{font-family:var(--font-sans),Roboto,system-ui,sans-serif;display:flex;border-bottom:1px solid #e2e8f0;background:#fff}.ds-tabs a{display:block;padding:12px;font-size:14px;color:#475569;text-decoration:none;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}.ds-tabs a:hover{color:#0f172a;border-bottom-color:#cbd5e1}.ds-tabs a:focus-visible{outline:none;box-shadow:inset 0 0 0 3px rgb(16 185 129 / .5)}.ds-tabs a[aria-current=page]{color:#0f172a;font-weight:500;border-bottom-color:#047857}"
     },
     {
       "name": "Stamps",
       "kind": "chip",
       "refersTo": "stamp-official",
-      "description": "Rubber-stamp marks: OFFICIAL (checked fees only), DONE, DEMO FEE, and plain Estimate text.",
-      "html": "<div class=\"ds-stamps\"><span class=\"ds-stamp ds-stamp-official\">Official</span><span class=\"ds-stamp ds-stamp-done\">Done</span><span class=\"ds-stamp ds-stamp-quiet\">Demo fee</span><span class=\"ds-estimate\">Estimate</span></div>",
-      "css": ".ds-stamps{font-family: var(--font-sans), Roboto, system-ui, sans-serif;display:flex;gap:12px;align-items:center}.ds-stamp{display:inline-flex;align-items:center;padding:3px 6px;font-size:11px;line-height:1;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid;border-radius:3px;background:#fff}.ds-stamp-official{border:3px double #b68a35;color:#7c5e24}.ds-stamp-done{border-color:#2f663c;color:#2f663c;transform:rotate(-2deg)}.ds-stamp-quiet{border-color:#e1e3e5;color:#5f646d}.ds-estimate{font-size:12px;color:#5f646d}"
+      "description": "Rubber-stamp marks: OFFICIAL (checked fees only), DONE, waiting, stopped, DEMO FEE, and plain Estimate text.",
+      "html": "<div class=\"ds-stamps\"><span class=\"ds-stamp ds-stamp-official\">Official</span><span class=\"ds-stamp ds-stamp-done\">Done</span><span class=\"ds-stamp ds-stamp-waiting\">Needs approval</span><span class=\"ds-stamp ds-stamp-stopped\">Declined</span><span class=\"ds-stamp ds-stamp-quiet\">Demo fee</span><span class=\"ds-estimate\">Estimate</span></div>",
+      "css": ".ds-stamps{font-family:var(--font-sans),Roboto,system-ui,sans-serif;display:flex;flex-wrap:wrap;gap:12px;align-items:center}.ds-stamp{display:inline-flex;align-items:center;padding:3px 6px;font-size:11px;line-height:1;font-weight:700;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;border:1.5px solid;border-radius:4px}.ds-stamp-official{border:3px double #d97706;background:#fffbeb;color:#b45309}.ds-stamp-done{border-color:#047857;background:#ecfdf5;color:#047857;rotate:-2deg}.ds-stamp-waiting{border-color:#94a3b8;background:#f8fafc;color:#334155}.ds-stamp-stopped{border-color:#b91c1c;background:#fef2f2;color:#b91c1c}.ds-stamp-quiet{border-color:#e2e8f0;color:#475569}.ds-estimate{font-size:12px;color:#475569}"
     },
     {
       "name": "Field Row",
@@ -383,60 +534,69 @@
       "refersTo": "",
       "description": "The licence header: uppercase labels above values, split by vertical hairlines.",
       "html": "<dl class=\"ds-fields\"><div><dt>Emirate</dt><dd>Sharjah</dd></div><div><dt>Sector</dt><dd>Food and drink</dd></div><div><dt>Budget</dt><dd>AED 120,000</dd></div><div><dt>Reference</dt><dd>1EAC66</dd></div></dl>",
-      "css": ".ds-fields{font-family: var(--font-sans), Roboto, system-ui, sans-serif;display:flex;flex-wrap:wrap;margin:0;color:#232528}.ds-fields div{padding:0 20px;border-left:1px solid #e1e3e5}.ds-fields div:first-child{padding-left:0;border-left:0}.ds-fields dt{font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#5f646d}.ds-fields dd{margin:4px 0 0;font-weight:500;font-variant-numeric:tabular-nums}"
+      "css": ".ds-fields{font-family:var(--font-sans),Roboto,system-ui,sans-serif;display:flex;flex-wrap:wrap;margin:0;color:#0f172a}.ds-fields div{padding:0 20px;border-left:1px solid #e2e8f0}.ds-fields div:first-child{padding-left:0;border-left:0}.ds-fields dt{font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#475569}.ds-fields dd{margin:4px 0 0;font-weight:500;font-variant-numeric:tabular-nums}"
     },
     {
       "name": "Next Step Band",
       "kind": "card",
       "refersTo": "next-step-band",
-      "description": "The plan overview's lead block on Gold Wash: step, fee with its mark, link to all steps.",
+      "description": "The plan overview's lead block on Emerald Wash: step, fee with its mark, link to all steps.",
       "html": "<section class=\"ds-next\"><h2>Next step</h2><p class=\"ds-next-title\"><span>2.2</span>Pay for and collect your trade licence</p><p class=\"ds-next-cost\"><b>AED 5,000–15,000</b><span class=\"ds-next-stamp\">Demo fee</span></p><a href=\"#\">See all steps</a></section>",
-      "css": ".ds-next{font-family: var(--font-sans), Roboto, system-ui, sans-serif;background:#f9f7ed;border-radius:4.8px;padding:20px 24px;color:#232528}.ds-next h2{margin:0;font-size:20px;font-weight:700;letter-spacing:-.01em}.ds-next-title{margin:12px 0 0;display:flex;gap:12px;font-size:18px;font-weight:500}.ds-next-title span{color:#5f646d;font-variant-numeric:tabular-nums}.ds-next-cost{margin:8px 0 16px;display:flex;gap:8px;align-items:center;font-size:14px}.ds-next-cost b{font-weight:500;font-variant-numeric:tabular-nums}.ds-next-stamp{padding:3px 6px;font-size:11px;line-height:1;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid #e1e3e5;border-radius:3px;color:#5f646d;background:#fff}.ds-next a{color:#232528;font-weight:500;text-decoration:underline;text-decoration-color:#7c5e24;text-underline-offset:4px}.ds-next a:hover{text-decoration-thickness:2px}.ds-next a:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(146,114,42,.5)}"
+      "css": ".ds-next{font-family:var(--font-sans),Roboto,system-ui,sans-serif;background:#ecfdf5;border:1px solid rgb(4 120 87 / .15);border-radius:14px;padding:20px 24px;color:#0f172a}.ds-next h2{margin:0;font-size:20px;font-weight:700;letter-spacing:-.01em}.ds-next-title{margin:12px 0 0;display:flex;gap:12px;font-size:18px;font-weight:500}.ds-next-title span{color:#475569;font-variant-numeric:tabular-nums}.ds-next-cost{margin:8px 0 16px;display:flex;gap:8px;align-items:center;font-size:14px}.ds-next-cost b{font-weight:500;font-variant-numeric:tabular-nums}.ds-next-stamp{padding:3px 6px;font-size:11px;line-height:1;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid #e2e8f0;border-radius:4px;color:#475569}.ds-next a{color:#0f172a;font-weight:500;text-decoration:underline;text-decoration-color:#047857;text-underline-offset:4px;transition:text-decoration-color .15s}.ds-next a:hover{text-decoration-thickness:2px}.ds-next a:focus-visible{outline:none;box-shadow:0 0 0 3px rgb(16 185 129 / .5)}"
     },
     {
-      "name": "Ruled Table",
+      "name": "Panel with Ruled Table",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "A white panel on the grey page holding a ruled table: quiet header row, hairline rows, bold total.",
+      "html": "<div class=\"ds-page\"><div class=\"ds-panel\"><table class=\"ds-table\"><thead><tr><th>Item</th><th>Estimated</th></tr></thead><tbody><tr><td>Trade licence</td><td>AED 15,000</td></tr><tr><td>Visas</td><td>AED 9,000</td></tr></tbody><tfoot><tr><td>Total</td><td>AED 24,000</td></tr></tfoot></table></div></div>",
+      "css": ".ds-page{background:#f6f7f9;padding:24px}.ds-panel{max-width:420px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgb(15 23 42 / .04),0 1px 3px rgb(15 23 42 / .04);transition:box-shadow .2s cubic-bezier(.16,1,.3,1),border-color .2s cubic-bezier(.16,1,.3,1),translate .2s cubic-bezier(.16,1,.3,1)}.ds-panel:hover{translate:0 -1px;border-color:#cbd5e1;box-shadow:0 4px 12px rgb(15 23 42 / .08)}.ds-table{font-family:var(--font-sans),Roboto,system-ui,sans-serif;width:100%;border-collapse:collapse;text-align:left;font-size:14px;font-variant-numeric:tabular-nums;color:#0f172a}.ds-table th{background:rgb(241 245 249 / .7);padding:12px 16px;font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#475569;border-bottom:1px solid #e2e8f0}.ds-table td{padding:12px 16px;border-bottom:1px solid #e2e8f0}.ds-table tbody tr:last-child td{border-bottom:0}.ds-table tfoot td{font-weight:700;border-top:1px solid #e2e8f0;border-bottom:0}"
+    },
+    {
+      "name": "Road Loader",
       "kind": "custom",
-      "refersTo": "table-header",
-      "description": "Bordered ruled table: quiet header row, hairline rows, bold total.",
-      "html": "<div class=\"ds-table-box\"><table class=\"ds-table\"><thead><tr><th>Item</th><th>Estimated</th></tr></thead><tbody><tr><td>Trade licence</td><td>AED 15,000</td></tr><tr><td>Visas</td><td>AED 9,000</td></tr></tbody><tfoot><tr><td>Total</td><td>AED 24,000</td></tr></tfoot></table></div>",
-      "css": ".ds-table-box{border:1px solid #e1e3e5;border-radius:4.8px;overflow:hidden;max-width:420px}.ds-table{font-family: var(--font-sans), Roboto, system-ui, sans-serif;width:100%;border-collapse:collapse;text-align:left;font-size:14px;font-variant-numeric:tabular-nums;color:#232528}.ds-table th{background:#f7f7f7;padding:12px 16px;font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#5f646d;border-bottom:1px solid rgba(35,37,40,.2)}.ds-table td{padding:12px 16px;border-bottom:1px solid #e1e3e5}.ds-table tbody tr:last-child td{border-bottom:0}.ds-table tfoot td{font-weight:700;border-top:1px solid rgba(35,37,40,.2);border-bottom:0}"
+      "refersTo": "",
+      "description": "The loader for long waits: a road drawn through four stops, each turning emerald as the line reaches it.",
+      "html": "<div class=\"ds-road\" role=\"status\"><svg viewBox=\"0 0 160 48\" width=\"160\" height=\"48\" aria-hidden=\"true\"><path d=\"M12 34 C 34 34, 34 14, 56 14 S 82 34, 104 34 S 126 14, 148 14\" fill=\"none\" stroke=\"#e2e8f0\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-dasharray=\"1 7\"/><path class=\"ds-road-line\" pathLength=\"1\" d=\"M12 34 C 34 34, 34 14, 56 14 S 82 34, 104 34 S 126 14, 148 14\" fill=\"none\" stroke=\"#047857\" stroke-width=\"3\" stroke-linecap=\"round\"/><circle class=\"ds-stop ds-s0\" cx=\"12\" cy=\"34\" r=\"5.5\" stroke-width=\"2.5\"/><circle class=\"ds-stop ds-s1\" cx=\"56\" cy=\"14\" r=\"5.5\" stroke-width=\"2.5\"/><circle class=\"ds-stop ds-s2\" cx=\"104\" cy=\"34\" r=\"5.5\" stroke-width=\"2.5\"/><circle class=\"ds-stop ds-s3\" cx=\"148\" cy=\"14\" r=\"5.5\" stroke-width=\"2.5\"/></svg><span>Finding the steps for your business…</span></div>",
+      "css": ".ds-road{font-family:var(--font-sans),Roboto,system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;gap:12px;font-size:14px;color:#475569}.ds-road svg{overflow:visible}.ds-road-line{stroke-dasharray:1;animation:ds-draw 2.6s linear infinite}.ds-stop{fill:#fff;stroke:#e2e8f0;transform-box:fill-box;transform-origin:center;animation:2.6s ease-out infinite}.ds-s0{animation-name:ds-s0}.ds-s1{animation-name:ds-s1}.ds-s2{animation-name:ds-s2}.ds-s3{animation-name:ds-s3}@keyframes ds-draw{0%{stroke-dashoffset:1}72%,92%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}@keyframes ds-s0{0%,1%,96%,100%{fill:#fff;stroke:#e2e8f0;scale:1}5%{fill:#047857;stroke:#047857;scale:1.3}10%,88%{fill:#047857;stroke:#047857;scale:1}}@keyframes ds-s1{0%,24%,96%,100%{fill:#fff;stroke:#e2e8f0;scale:1}28%{fill:#047857;stroke:#047857;scale:1.3}33%,88%{fill:#047857;stroke:#047857;scale:1}}@keyframes ds-s2{0%,48%,96%,100%{fill:#fff;stroke:#e2e8f0;scale:1}52%{fill:#047857;stroke:#047857;scale:1.3}57%,88%{fill:#047857;stroke:#047857;scale:1}}@keyframes ds-s3{0%,71%,96%,100%{fill:#fff;stroke:#e2e8f0;scale:1}75%{fill:#047857;stroke:#047857;scale:1.3}80%,88%{fill:#047857;stroke:#047857;scale:1}}@media (prefers-reduced-motion:reduce){.ds-road *{animation-duration:.01ms!important;animation-iteration-count:1!important}}"
     }
   ],
   "narrative": {
-    "northStar": "The Licence Paper",
-    "overview": "**Creative North Star: \"The Licence Paper\"**\n\nEvery screen is a page of an official UAE document: a trade licence or certificate printed on white paper in black ink. A plan opens with a title, a row of labelled fields (Emirate, Sector, Licence, Budget, Reference, Issued), then sections separated by thin rules. Steps are strictly numbered (1, 1.1, 1.2), figures line up in tabular columns, and the only marks of authority are small rubber stamps: a double-ruled gold OFFICIAL seal, a green DONE, a grey DEMO FEE.\n\nThe palette is taken from the UAE Government Design System scales (AE Black, AE Gold, AE Green, AE Red), but the site never claims to be official: no emblems, no falcons, and the footer says \"Not a government service.\" Density is calm and document-like: one column, generous rules, few things per screen. The system is a deliberate rejection of the earlier SaaS look: no purple, no gradients, no stat tiles, no icon cards, no pill badges, no shadows.",
+    "northStar": "Emerald and Ink",
+    "overview": "**Creative North Star: \"Emerald and Ink\"**\n\nEvery page is a clean licence file laid on a soft grey desk. The page is light grey; content that is one bounded thing (a form, a table, a chat, a source being edited) sits on a white panel with a thin edge and a very soft shadow. Text is near-black ink. One emerald colour, the green of the UAE flag, marks the main button, links, the current tab and anything that is done. Gold is not part of the look any more: a small amber seal is kept for one job only, the OFFICIAL mark on a fee that was checked.\n\nThe document structure stays. A plan opens with a title and a row of labelled fields (Emirate, Sector, Licence, Budget, Reference, Issued), then sections split by thin rules. Steps are numbered (1, 1.1, 1.2), money lines up in tabular columns, tables are ruled, and status is shown by small rubber stamps whose words carry the meaning. The site never claims to be a government service.\n\nThe mood is calm, modern and light. Motion is quick and soft: pages slide up a few pixels when they open, details fold open smoothly, and a thin emerald bar runs along the top while the next page loads. Everything respects the \"reduce motion\" setting.",
     "keyCharacteristics": [
-      "White paper, AE Black ink, hairline rules between sections instead of cards.",
-      "AE Gold reserved for the one main action, link underlines, the active-tab rule and the OFFICIAL seal.",
-      "Small uppercase field labels above values, like the field names on a licence.",
-      "Rubber-stamp status marks whose words always carry the meaning, never colour alone.",
-      "Roboto throughout, with tabular figures for every amount and step number.",
-      "Flat: no shadows anywhere; depth comes from rules and quiet fills."
+      "Soft grey page, white panels with a hairline edge and a barely-there shadow.",
+      "Near-black ink for text; slate grey for secondary text.",
+      "Emerald for the one main action, links, the current tab, progress and done.",
+      "Amber only inside the OFFICIAL seal; red only for errors and stopped states.",
+      "Small uppercase field labels above values, numbered steps and ruled tables.",
+      "Roboto everywhere, with tabular figures for every amount and step number.",
+      "Short, soft motion (150 to 320ms, ease-out) that turns off with reduced motion."
     ],
     "rules": [
       {
-        "name": "The One Gold Action Rule",
-        "body": "A page has at most one solid gold button. Every other action is a black outline box, like a box on a printed form.",
+        "name": "The One Emerald Action Rule",
+        "body": "A page has at most one solid emerald button. Every other action is a white outline button, a ghost button or a link.",
         "section": "colors"
       },
       {
         "name": "The Earned Seal Rule",
-        "body": "The OFFICIAL seal appears only on a fee an administrator checked against a cited official page. Demo amounts carry DEMO FEE; everything else says Estimate. The fee legend names only the marks present on the page.",
+        "body": "The amber OFFICIAL seal appears only on a fee an administrator checked against a cited official page. Demo amounts carry DEMO FEE; everything else says Estimate. The fee legend names only the marks shown on the page.",
         "section": "colors"
       },
       {
         "name": "The State Colours Rule",
-        "body": "Green means done and red means error or stopped, everywhere; neither is used for decoration.",
+        "body": "Emerald means action or done, red means error or stopped, amber means checked-official. None of them is used for decoration.",
         "section": "colors"
       },
       {
-        "name": "The Grey Chart Rule",
-        "body": "Plan charts are drawn in Field Edge grey (estimated) and AE Black ink (actual) on hairline gridlines, with labels in Muted Ink, never in the bar colour.",
+        "name": "The Emerald Chart Rule",
+        "body": "Plan charts use Light Emerald for estimated and UAE Emerald for actual. The two differ in lightness, so every kind of colour vision can tell them apart (checked with the dataviz palette validator). Labels, legends and axis text are Muted Slate, never the bar colour, and gridlines are Hairline.",
         "section": "colors"
       },
       {
         "name": "The Tabular Figures Rule",
-        "body": "Every amount, percentage, step number and reference uses tabular figures so columns align from row to row.",
+        "body": "Every amount, percentage, step number and reference uses tabular figures so columns line up.",
         "section": "typography"
       },
       {
@@ -445,28 +605,36 @@
         "section": "typography"
       },
       {
-        "name": "The Rules Not Cards Rule",
-        "body": "Sections are divided by hairline rules, not wrapped in cards. A border box is used only where content is a bounded object: a table, a form being filled in, a notice, an empty state.",
+        "name": "The Rules Inside, Panels Around Rule",
+        "body": "A panel holds one bounded thing: a form, a table, a chat, a preview, a loader. Sections within a page are divided by hairline rules, not by more panels.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Soft Lift Rule",
+        "body": "Shadows stay at or below 10% opacity and lift at most 1px on hover. Nothing gets a hard or offset shadow.",
         "section": "elevation"
       }
     ],
     "dos": [
-      "Do divide sections with hairline rules (#e1e3e5) and 40px of space, not cards.",
-      "Do use exactly one solid gold button per page; make every other action an outline box.",
+      "Do put content on the soft grey page and use a white panel only for one bounded thing.",
+      "Do divide sections with hairline rules and 40px of space.",
+      "Do use exactly one solid emerald button per page; make every other action an outline, ghost or link.",
       "Do show OFFICIAL only on administrator-checked fees, DEMO FEE on demo amounts, and Estimate otherwise, with a legend that names only the marks shown.",
       "Do put an uppercase 12px field label directly above the value it names, and set every figure in tabular numerals.",
       "Do write status in words inside a stamp, so colour is never the only signal.",
-      "Do keep touch targets at least 44px and show the gold focus ring on every interactive element.",
+      "Do keep touch targets at least 44px and show the emerald focus ring on every interactive element.",
+      "Do use the shared ease-out curve and keep UI motion between 150 and 320ms, and respect reduced motion.",
       "Do keep the footer line saying the site is not a government service."
     ],
     "donts": [
+      "Don't bring back the gold palette: gold or amber is for the OFFICIAL seal only, never for buttons, links or tabs.",
       "Don't use purple, violet, gradients or a gradient logo.",
-      "Don't add shadows to anything, including toasts, tooltips and menus.",
-      "Don't build stat tiles, icon cards or pill-shaped badges; status is a 3px-cornered stamp.",
+      "Don't use hard, offset or strong shadows; keep them soft and cool.",
+      "Don't build stat tiles or icon cards; status is a 4px-cornered stamp.",
       "Don't place an uppercase label above a heading as an eyebrow or kicker; labels name values.",
-      "Don't use green or red for decoration, or gold for anything but action, links, active navigation and the seal.",
+      "Don't use emerald, red or amber for decoration.",
       "Don't use government emblems, falcons or claims of being official.",
-      "Don't colour chart labels in the bar colour; plan charts stay grey and ink."
+      "Don't colour chart labels in the bar colour."
     ]
   }
 }

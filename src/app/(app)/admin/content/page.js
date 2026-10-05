@@ -71,7 +71,7 @@ export default async function AdminContentPage() {
 function ContentList({ title, empty, rows }) {
   // The list carries its own rules, so the section needs no rule above its heading.
   return (
-    <Section title={title} className="border-t-0 pt-0">
+    <Section title={title} >
       {rows.length === 0 ? (
         <p className="text-muted-foreground">{empty}</p>
       ) : (

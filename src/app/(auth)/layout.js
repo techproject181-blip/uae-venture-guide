@@ -1,19 +1,20 @@
+import { AuthShowcase } from "@/components/brand/auth-showcase";
 import { Logo } from "@/components/logo";
-import { SiteFooter } from "@/components/site-footer";
 
-/** The sign-in, sign-up and password pages: one plain column with the form. */
+/** The sign-in, sign-up and password pages: the emerald showcase on the left (from 1024px), the form on the right. */
 export default function AuthLayout({ children }) {
   return (
-    <div className="flex min-h-dvh flex-col">
-      <header className="border-b bg-card">
-        <div className="page-width flex py-2.5">
+    <div className="grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+      <AuthShowcase />
+      <div className="flex flex-col bg-card">
+        <header className="flex h-16 items-center px-4 sm:px-8 lg:hidden">
           <Logo />
-        </div>
-      </header>
-      <main id="main" className="flex flex-1 justify-center px-4 py-10 sm:py-14">
-        <div className="w-full max-w-md">{children}</div>
-      </main>
-      <SiteFooter />
+        </header>
+        <main id="main" className="flex flex-1 items-center justify-center px-4 py-10 sm:px-8 lg:py-16">
+          <div className="w-full max-w-md">{children}</div>
+        </main>
+        <p className="px-4 pb-6 text-center text-sm text-muted-foreground sm:px-8 lg:hidden">Not a government service. Guidance only.</p>
+      </div>
     </div>
   );
 }

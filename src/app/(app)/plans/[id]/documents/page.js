@@ -35,7 +35,7 @@ export default async function PlanDocumentsPage({ params }) {
     <Section
       title="Documents"
       description={isOwner ? "Collect these before you apply. Tick each one when you have it." : "Collect these before you apply."}
-      className="max-w-3xl border-t-0 pt-0"
+      className="max-w-3xl"
     >
       {required.length > 0 && (
         <div className="max-w-sm">

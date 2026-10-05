@@ -1,23 +1,20 @@
-/** The title at the top of a page, with optional buttons on the right, closed by a thin rule. */
-export function PageHeader({ title, description, actions }) {
-  return (
-    <div className="mb-8 flex flex-col gap-4 border-b pb-6 sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        <h1 className="text-[1.75rem] leading-tight sm:text-[2rem]">{title}</h1>
-        {description && <p className="mt-2 max-w-2xl text-muted-foreground">{description}</p>}
-      </div>
-      {actions && <div className="flex shrink-0 flex-wrap gap-2">{actions}</div>}
-    </div>
-  );
-}
+import { cn } from "@/lib/utils";
+
+// PageHeader lives in the layout kit; it is exported here too so older imports keep working.
+export { PageHeader } from "@/components/layout";
 
 /** What a list shows when it has nothing in it yet. `as` sets the heading level, h2 unless it sits under one. */
-export function EmptyState({ title, text, action, as: Heading = "h2" }) {
+export function EmptyState({ title, text, action, as: Heading = "h2", className }) {
   return (
-    <div className="rounded-xl border border-dashed border-slate-300 bg-card/60 px-6 py-10 text-center">
-      <Heading className="text-lg font-bold">{title}</Heading>
+    <div className={cn("rounded-xl border border-dashed border-slate-300 bg-card/70 px-6 py-12 text-center sm:py-16", className)}>
+      <svg viewBox="0 0 48 24" aria-hidden="true" className="mx-auto mb-4 h-6 w-12 text-slate-300">
+        <path d="M4 18c8 0 8-12 20-12s12 12 20 12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="1 5" />
+        <circle cx="4" cy="18" r="3.5" fill="var(--primary)" />
+        <circle cx="44" cy="18" r="3.5" fill="none" stroke="currentColor" strokeWidth="2.5" />
+      </svg>
+      <Heading className="text-lg font-semibold">{title}</Heading>
       {text && <p className="mx-auto mt-1 max-w-md text-muted-foreground">{text}</p>}
-      {action && <div className="mt-6">{action}</div>}
+      {action && <div className="mt-6 flex justify-center">{action}</div>}
     </div>
   );
 }

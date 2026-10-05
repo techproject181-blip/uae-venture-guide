@@ -1,11 +1,14 @@
-import { Roboto } from "next/font/google";
+import { Bricolage_Grotesque, Geist } from "next/font/google";
 import { Toaster } from "sonner";
+import { MotionProvider } from "@/components/motion-provider";
 import { NavigationProgress } from "@/components/navigation-progress";
 import "./globals.css";
 
-// Roboto for all text: the UAE Government Design System's text face, plain and
-// easy to read. next/font serves it from this app, with no layout shift.
-const roboto = Roboto({ subsets: ["latin"], variable: "--font-sans" });
+// Geist for all text: clear at small sizes, with even figures for money.
+// Bricolage Grotesque for the logo and big headings: friendly, with character.
+// next/font serves both from this app, with no layout shift.
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-display", weight: ["600", "700", "800"] });
 
 export const metadata = {
   title: { default: "UAE Venture Guide", template: "%s | UAE Venture Guide" },
@@ -15,7 +18,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${roboto.variable} h-full antialiased`}>
+    <html lang="en" className={`${geist.variable} ${display.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <NavigationProgress />
         <a
@@ -24,7 +27,7 @@ export default function RootLayout({ children }) {
         >
           Skip to main content
         </a>
-        {children}
+        <MotionProvider>{children}</MotionProvider>
         <Toaster position="top-center" closeButton toastOptions={{ classNames: { toast: "rounded-xl! border-border! shadow-[0_8px_24px_rgb(15_23_42/0.12)]!" } }} />
       </body>
     </html>

@@ -31,7 +31,7 @@ export default async function PlanSourcesPage({ params }) {
     <Section
       title="Official sources"
       description="The government and free zone pages behind the steps and fees in this plan."
-      className="max-w-3xl border-t-0 pt-0"
+      className="max-w-3xl"
     >
       {groups.map((group) => (
         <section key={group.key} aria-labelledby={`sources-${group.key}`} className="mt-8 first:mt-2">

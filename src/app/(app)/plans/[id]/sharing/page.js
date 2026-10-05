@@ -26,8 +26,7 @@ export default async function PlanSharingPage({ params }) {
     <Section
       title="Share with funders"
       description="Funders browse pitch cards and can ask to see your plan. You decide who gets in."
-      className="border-t-0 pt-0"
-    >
+      >
       {plan.hiddenByAdmin && (
         <p role="alert" className="mb-6 max-w-2xl rounded-lg border border-destructive/30 bg-destructive-surface px-4 py-3 text-destructive">
           An administrator has hidden this plan from funders.

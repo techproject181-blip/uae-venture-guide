@@ -13,7 +13,10 @@
     "seed:demo": "node --env-file=.env.development --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/seed-demo.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "db:backup": "node scripts/backup-db.mjs"
+    "db:backup": "node scripts/backup-db.mjs",
+    "push:mine": "git push https://github.com/muneebnawaz018/uae-venture-guide.git main:main",
+    "push:client": "git push https://github.com/techproject181-blip/uae-venture-guide.git main:main",
+    "push": "npm run push:mine && npm run push:client"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -24,6 +27,7 @@
     "jose": "^6.2.12",
     "lucide-react": "^1.52.0",
     "mongoose": "^9.10.4",
+    "motion": "^14.0.0",
     "next": "16.3.8",
     "nodemailer": "^7.0.13",
     "react": "19.2.8",

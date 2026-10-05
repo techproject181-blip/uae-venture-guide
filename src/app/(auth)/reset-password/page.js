@@ -8,7 +8,7 @@ export default async function ResetPasswordPage({ searchParams }) {
 
   return (
     <>
-      <h1 className="text-[1.75rem] leading-tight sm:text-[2rem]">Choose a new password</h1>
+      <h1 className="text-[1.875rem] leading-[1.15] sm:text-[2.25rem]">Choose a new password</h1>
       <p className="mt-2 text-muted-foreground">
         After this, sign in with your new password.{" "}
         <Link href="/forgot-password" className="font-medium text-foreground decoration-primary underline underline-offset-4 hover:decoration-2">

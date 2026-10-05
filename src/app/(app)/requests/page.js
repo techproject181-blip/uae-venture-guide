@@ -70,7 +70,7 @@ export default async function RequestsPage() {
       />
 
       {showInterests && (
-        <Section title="Funder interest in your plans" className="mb-12 border-t-0 pt-0">
+        <Section title="Funder interest in your plans" className="mb-12">
           <InterestList interests={interests} />
         </Section>
       )}
@@ -79,7 +79,7 @@ export default async function RequestsPage() {
         list
       ) : (
         // Each list closes with its own rule, so the sections are split by space, not by a second rule.
-        <Section title="Guidance requests" className="border-t-0 pt-0">
+        <Section title="Guidance requests" >
           {list}
         </Section>
       )}

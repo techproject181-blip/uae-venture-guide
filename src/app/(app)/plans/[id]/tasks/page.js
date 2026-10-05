@@ -26,7 +26,7 @@ export default async function PlanTasksPage({ params }) {
 
   return (
     <div className="space-y-10">
-      <Section title="Steps" description="Press a step to see what it involves, who you deal with and the official source." className="border-t-0 pt-0">
+      <Section title="Steps" description="Press a step to see what it involves, who you deal with and the official source." >
         <FeeLegend {...feeMarks(plan.tasks)} done={plan.tasks.some((task) => task.status === "done")} />
         <div className="mt-8 space-y-10">
           {plan.phases.map((phase, index) => {

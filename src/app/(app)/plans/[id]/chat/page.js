@@ -28,7 +28,7 @@ export default async function PlanChatPage({ params }) {
     <Section
       title="Ask about this plan"
       description="Answers use your roadmap and the official sources only."
-      className="max-w-3xl border-t-0 pt-0"
+      className="max-w-3xl"
     >
       <ChatPanel planId={id} messages={messages} sources={sourcesById} left={await quotaLeft(user.id, "chatMessages")} />
     </Section>

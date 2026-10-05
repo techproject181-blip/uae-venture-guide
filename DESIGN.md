@@ -1,22 +1,25 @@
 ---
 name: UAE Venture Guide
-description: A business plan that reads like a clean official UAE document.
+description: A business plan that reads like a clean licence file, in emerald and ink.
 colors:
-  paper: "#ffffff"
-  ink: "#232528"
-  ink-muted: "#5f646d"
-  quiet-fill: "#f7f7f7"
-  hairline: "#e1e3e5"
-  field-edge: "#797e86"
-  gold: "#7c5e24"
-  gold-hover: "#6a5020"
-  gold-focus: "#92722a"
-  seal-gold: "#b68a35"
-  gold-wash: "#f9f7ed"
-  gold-selection: "#f2eccf"
-  done-green: "#2f663c"
-  done-wash: "#f3faf4"
-  error-red: "#b52520"
+  page: "#f6f7f9"
+  panel: "#ffffff"
+  ink: "#0f172a"
+  ink-muted: "#475569"
+  quiet-fill: "#f1f5f9"
+  hairline: "#e2e8f0"
+  soft-edge: "#cbd5e1"
+  field-edge: "#8590a2"
+  emerald: "#047857"
+  emerald-deep: "#065f46"
+  emerald-focus: "#10b981"
+  emerald-wash: "#ecfdf5"
+  emerald-selection: "#d1fae5"
+  chart-estimated: "#45c093"
+  seal-amber: "#d97706"
+  seal-ink: "#b45309"
+  seal-wash: "#fffbeb"
+  error-red: "#b91c1c"
   error-wash: "#fef2f2"
 typography:
   display:
@@ -40,7 +43,7 @@ typography:
     fontFamily: "Roboto, ui-sans-serif, system-ui, sans-serif"
     fontSize: "1rem"
     fontWeight: 400
-    lineHeight: 1.625
+    lineHeight: 1.5
   body-small:
     fontFamily: "Roboto, ui-sans-serif, system-ui, sans-serif"
     fontSize: "0.875rem"
@@ -60,10 +63,12 @@ typography:
     lineHeight: 1
     letterSpacing: "0.08em"
 rounded:
-  hairline: "2px"
-  stamp: "3px"
-  md: "4.8px"
-  lg: "6px"
+  stamp: "4px"
+  sm: "6px"
+  md: "8px"
+  lg: "10px"
+  xl: "14px"
+  full: "9999px"
 spacing:
   xs: "8px"
   sm: "12px"
@@ -72,60 +77,78 @@ spacing:
   xl: "40px"
 components:
   button-primary:
-    backgroundColor: "{colors.gold}"
-    textColor: "{colors.paper}"
+    backgroundColor: "{colors.emerald}"
+    textColor: "{colors.panel}"
     typography: "{typography.body}"
-    rounded: "{rounded.md}"
+    rounded: "{rounded.lg}"
     padding: "0 20px"
     height: "44px"
   button-primary-hover:
-    backgroundColor: "{colors.gold-hover}"
+    backgroundColor: "{colors.emerald-deep}"
   button-outline:
-    backgroundColor: "{colors.paper}"
+    backgroundColor: "{colors.panel}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.md}"
+    typography: "{typography.body}"
+    rounded: "{rounded.lg}"
     padding: "0 20px"
     height: "44px"
   button-outline-hover:
+    backgroundColor: "#f8fafc"
+  button-ghost:
+    textColor: "{colors.ink}"
+    rounded: "{rounded.lg}"
+    padding: "0 20px"
+    height: "44px"
+  button-ghost-hover:
     backgroundColor: "{colors.quiet-fill}"
   button-destructive:
-    backgroundColor: "{colors.paper}"
+    backgroundColor: "{colors.panel}"
     textColor: "{colors.error-red}"
-    rounded: "{rounded.md}"
+    rounded: "{rounded.lg}"
     padding: "0 20px"
     height: "44px"
   button-destructive-hover:
     backgroundColor: "{colors.error-wash}"
   input:
-    backgroundColor: "{colors.paper}"
+    backgroundColor: "{colors.panel}"
     textColor: "{colors.ink}"
     typography: "{typography.body}"
     rounded: "{rounded.lg}"
     padding: "0 12px"
     height: "44px"
+  panel:
+    backgroundColor: "{colors.panel}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.xl}"
+    padding: "20px 24px"
+  next-step-band:
+    backgroundColor: "{colors.emerald-wash}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.xl}"
+    padding: "20px 24px"
   stamp-official:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.gold}"
+    backgroundColor: "{colors.seal-wash}"
+    textColor: "{colors.seal-ink}"
     typography: "{typography.stamp}"
     rounded: "{rounded.stamp}"
     padding: "3px 6px"
   stamp-done:
-    backgroundColor: "{colors.paper}"
-    textColor: "{colors.done-green}"
+    backgroundColor: "{colors.emerald-wash}"
+    textColor: "{colors.emerald}"
+    typography: "{typography.stamp}"
+    rounded: "{rounded.stamp}"
+    padding: "3px 6px"
+  stamp-stopped:
+    backgroundColor: "{colors.error-wash}"
+    textColor: "{colors.error-red}"
     typography: "{typography.stamp}"
     rounded: "{rounded.stamp}"
     padding: "3px 6px"
   stamp-quiet:
-    backgroundColor: "{colors.paper}"
     textColor: "{colors.ink-muted}"
     typography: "{typography.stamp}"
     rounded: "{rounded.stamp}"
     padding: "3px 6px"
-  next-step-band:
-    backgroundColor: "{colors.gold-wash}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.md}"
-    padding: "20px 24px"
   table-header:
     backgroundColor: "{colors.quiet-fill}"
     textColor: "{colors.ink-muted}"
@@ -137,163 +160,208 @@ components:
     padding: "12px 12px"
   progress-bar:
     backgroundColor: "{colors.hairline}"
-    rounded: "{rounded.hairline}"
-    height: "6px"
+    rounded: "{rounded.full}"
+    height: "8px"
 ---
 
 # Design System: UAE Venture Guide
 
 ## Overview
 
-**Creative North Star: "The Licence Paper"**
+**Creative North Star: "Emerald and Ink"**
 
-Every screen is a page of an official UAE document: a trade licence or certificate printed on white paper in black ink. A plan opens with a title, a row of labelled fields (Emirate, Sector, Licence, Budget, Reference, Issued), then sections separated by thin rules. Steps are strictly numbered (1, 1.1, 1.2), figures line up in tabular columns, and the only marks of authority are small rubber stamps: a double-ruled gold OFFICIAL seal, a green DONE, a grey DEMO FEE.
+Every page is a clean licence file laid on a soft grey desk. The page is light grey; content that is one bounded thing (a form, a table, a chat, a source being edited) sits on a white panel with a thin edge and a very soft shadow. Text is near-black ink. One emerald colour, the green of the UAE flag, marks the main button, links, the current tab and anything that is done. Gold is not part of the look any more: a small amber seal is kept for one job only, the OFFICIAL mark on a fee that was checked.
 
-The palette is taken from the UAE Government Design System scales (AE Black, AE Gold, AE Green, AE Red), but the site never claims to be official: no emblems, no falcons, and the footer says "Not a government service." Density is calm and document-like: one column, generous rules, few things per screen. The system is a deliberate rejection of the earlier SaaS look: no purple, no gradients, no stat tiles, no icon cards, no pill badges, no shadows.
+The document structure stays. A plan opens with a title and a row of labelled fields (Emirate, Sector, Licence, Budget, Reference, Issued), then sections split by thin rules. Steps are numbered (1, 1.1, 1.2), money lines up in tabular columns, tables are ruled, and status is shown by small rubber stamps whose words carry the meaning. The site never claims to be a government service.
+
+The mood is calm, modern and light. Motion is quick and soft: pages slide up a few pixels when they open, details fold open smoothly, and a thin emerald bar runs along the top while the next page loads. Everything respects the "reduce motion" setting.
 
 **Key Characteristics:**
-- White paper, AE Black ink, hairline rules between sections instead of cards.
-- AE Gold reserved for the one main action, link underlines, the active-tab rule and the OFFICIAL seal.
-- Small uppercase field labels above values, like the field names on a licence.
-- Rubber-stamp status marks whose words always carry the meaning, never colour alone.
-- Roboto throughout, with tabular figures for every amount and step number.
-- Flat: no shadows anywhere; depth comes from rules and quiet fills.
+- Soft grey page, white panels with a hairline edge and a barely-there shadow.
+- Near-black ink for text; slate grey for secondary text.
+- Emerald for the one main action, links, the current tab, progress and done.
+- Amber only inside the OFFICIAL seal; red only for errors and stopped states.
+- Small uppercase field labels above values, numbered steps and ruled tables.
+- Roboto everywhere, with tabular figures for every amount and step number.
+- Short, soft motion (150 to 320ms, ease-out) that turns off with reduced motion.
 
 ## Colors
 
-A near-monochrome document palette: ink on paper, with gold as the single voice of authority and action, and green and red reserved for state.
+A cool, near-neutral palette: ink on white over a soft grey page, with emerald as the single voice for action and progress.
 
 ### Primary
-- **Licence Gold** (#7c5e24, AE Gold 700): the main button on a page, link underlines, the active navigation and tab rule, the checkbox and caret accent, and the ink of the OFFICIAL seal. Darkens to **Pressed Gold** (#6a5020) on button hover. 6.0:1 on white.
-- **Seal Gold** (#b68a35, AE Gold 500): only the double-ruled border of the OFFICIAL seal and the border of the VG logo mark. Never text.
-- **Focus Gold** (#92722a, AE Gold 600): keyboard focus rings and focused field edges.
-- **Gold Wash** (#f9f7ed, AE Gold 50): the background of the "Next step" band on the plan overview; the one tinted surface in the system.
-- **Selection Gold** (#f2eccf, AE Gold 100): text selection only.
+- **UAE Emerald** (emerald): the main button on a page, link underlines, the current nav link and plan tab, checkbox and caret colour, the progress-bar fill, the DONE stamp, the "actual" chart bar, the logo square and the loading bar. 5.5:1 on white. Darkens to **Deep Emerald** (emerald-deep) on button hover; Deep Emerald is also the text colour on Emerald Wash.
+- **Focus Emerald** (emerald-focus): keyboard focus. Shown as the field edge plus a 3px ring at 50% opacity, and as the glow under the loading bar. Never used for text.
+- **Emerald Wash** (emerald-wash): the "Next step" band, the dashboard and profile notice bands, the chosen role card, avatars and the DONE stamp fill.
+- **Emerald Selection** (emerald-selection): text selection only.
+- **Light Emerald** (chart-estimated): the "estimated" bar in plan and post charts. Never text.
 
 ### Secondary
-- **Done Green** (#2f663c, AE Green 700): finished, approved or accepted: the DONE stamp, the progress bar fill, the done-step checkbox, "3 of 3 done". 6.8:1 on white. **Done Wash** (#f3faf4) is its quiet surface.
+- **Seal Amber** (seal-amber): the double-ruled border of the OFFICIAL seal, nothing else.
+- **Seal Ink** (seal-ink): the word OFFICIAL inside the seal. 5.0:1 on white. **Seal Wash** (seal-wash) is the seal's fill.
 
 ### Tertiary
-- **Error Red** (#b52520, AE Red 700): errors, declined or stopped states, the Delete button outline, and an over-budget figure. 6.5:1 on white. **Error Wash** (#fef2f2) is its hover and alert surface.
+- **Error Red** (error-red): error messages, invalid field edges, declined or stopped stamps, the Delete button, an over-budget figure and a "High" risk level. 6.5:1 on white. **Error Wash** (error-wash) is its hover and alert surface.
 
 ### Neutral
-- **Paper** (#ffffff): page, header and every container.
-- **AE Black Ink** (#232528, AE Black 800): all text, headings, values, and the "Actual" chart bar. 15.4:1 on white.
-- **Muted Ink** (#5f646d, AE Black 500): descriptions, field labels, step numbers, chart axis labels. 6.0:1.
-- **Field Edge** (#797e86, AE Black 400): form-control borders (4.1:1) and the "Estimated" chart bar.
-- **Hairline** (#e1e3e5, AE Black 100): every rule between sections, rows and table cells; the progress-bar track.
-- **Quiet Fill** (#f7f7f7, AE Black 50): table header rows, the guidance notice, button and tab hover.
+- **Page Grey** (page): the background of every page.
+- **Panel White** (panel): panels, the header, inputs, outline buttons.
+- **Ink** (ink): all text, headings and values. 17.9:1 on white.
+- **Muted Slate** (ink-muted): descriptions, field labels, step numbers, hints, chart labels and legends. 7.6:1 on white.
+- **Quiet Fill** (quiet-fill): table header rows, ghost-button hover, chart hover band.
+- **Hairline** (hairline): every rule between sections, rows and table cells; panel edges; chart gridlines; the progress track.
+- **Soft Edge** (soft-edge): the outline-button border, the dashed empty-state border and the hover edge of panels and nav links.
+- **Field Edge** (field-edge): form-control borders (3.2:1, enough for a control edge).
 
 ### Named Rules
-**The One Gold Action Rule.** A page has at most one solid gold button. Every other action is a black outline box, like a box on a printed form.
+**The One Emerald Action Rule.** A page has at most one solid emerald button. Every other action is a white outline button, a ghost button or a link.
 
-**The Earned Seal Rule.** The OFFICIAL seal appears only on a fee an administrator checked against a cited official page. Demo amounts carry DEMO FEE; everything else says Estimate. The fee legend names only the marks present on the page.
+**The Earned Seal Rule.** The amber OFFICIAL seal appears only on a fee an administrator checked against a cited official page. Demo amounts carry DEMO FEE; everything else says Estimate. The fee legend names only the marks shown on the page.
 
-**The State Colours Rule.** Green means done and red means error or stopped, everywhere; neither is used for decoration.
+**The State Colours Rule.** Emerald means action or done, red means error or stopped, amber means checked-official. None of them is used for decoration.
 
-**The Grey Chart Rule.** Plan charts are drawn in Field Edge grey (estimated) and AE Black ink (actual) on hairline gridlines, with labels in Muted Ink, never in the bar colour.
+**The Emerald Chart Rule.** Plan charts use Light Emerald for estimated and UAE Emerald for actual. The two differ in lightness, so every kind of colour vision can tell them apart (checked with the dataviz palette validator). Labels, legends and axis text are Muted Slate, never the bar colour, and gridlines are Hairline.
 
 ## Typography
 
-**Display Font:** Roboto (via next/font, with system sans fallback)
+**Display Font:** Roboto (served by next/font, with system sans fallback)
 **Body Font:** Roboto
 **Label/Mono Font:** Roboto, uppercase and tracked for labels; no separate mono face in use.
 
-**Character:** one plain, legible face, the UAE Government Design System's text face, doing every job by weight and size alone, like a typeset form.
+**Character:** one plain, easy-to-read face doing every job by weight and size, like a typeset form.
 
 ### Hierarchy
 - **Display** (700, 1.75rem on phones, 2rem from 640px, line-height 1.25, -0.01em): the page or plan title, once per page.
 - **Headline** (700, 1.25rem, -0.01em): section headings such as Money, Licence, Roadmap, Next step.
-- **Title** (500, 1.125rem): the next step's title; form part legends use the same size at 700.
-- **Body** (400, 1rem, relaxed 1.625 in prose): prose capped at about 42rem (max-w-2xl); field values at 500 with tabular figures.
-- **Body small** (400, 0.875rem, tabular figures): tables, costs, navigation, hints, legends.
-- **Label** (500, 0.75rem, 0.06em, uppercase, Muted Ink): field labels above a value and table column headers.
+- **Title** (500, 1.125rem): the next step's title; form-part legends and empty-state headings use the same size at 700.
+- **Body** (400, 1rem): prose, capped at about 42rem; field values at 500 with tabular figures.
+- **Body small** (400, 0.875rem, tabular figures): tables, costs, navigation, hints, legends, field labels on forms (at 500).
+- **Label** (500, 0.75rem, 0.06em, uppercase, Muted Slate): field labels above a value and table column headers.
 - **Stamp** (700, 0.6875rem, 0.08em, uppercase): text inside stamps only.
 
 ### Named Rules
-**The Tabular Figures Rule.** Every amount, percentage, step number and reference uses tabular figures so columns align from row to row.
+**The Tabular Figures Rule.** Every amount, percentage, step number and reference uses tabular figures so columns line up.
 
 **The Label Names A Value Rule.** The uppercase field label always sits directly above the value or control it names. It is never a decorative line above a heading.
 
 ## Layout
 
-One centred column, max 72rem (1152px), with 16px side padding on phones and 24px from 640px; main content has 32px top and bottom padding (40px from 640px). Pages are a stack of sections 40px apart; each section opens with a hairline rule, 24px of space, its heading, then content 16px below. Prose and simple lists stay within about 42rem even on wide screens.
+Every page uses one shared width: up to 90rem (1440px), centred, with side padding of 16px on phones, 24px from 640px, 32px from 1024px and 40px from 1536px. Main content has 32px top and bottom padding, 40px from 640px and 48px from 1024px. Prose, descriptions and simple lists stay within about 42 to 48rem even on wide screens.
 
-Field rows measure their own width (container queries): in narrow space they sit in a two-column grid with 24px gaps; when there is room they run on one line, each field after the first separated by a vertical hairline and 20px padding. Short rows join the line sooner than long ones.
+Pages are a stack of sections 40px apart. Each section opens with a hairline rule, 24px of space and its heading, then content 16px below. The page title is closed by its own rule, 24px below it.
 
-Navigation lives in a header with a bottom rule. From 768px the links sit inline beside the logo; on phones they drop to their own ruled row with tighter padding, wrapping if needed. Plan tabs scroll sideways on phones and centre the current tab. Step rows stack the cost below the title on phones and move it into a fixed 240px right-aligned column from 1024px, so amounts line up. Every interactive target is at least 44px tall.
+Field rows measure their own width (container queries). In narrow space they sit in a two-column grid with 24px gaps; when there is room they run on one line, each field after the first split off by a vertical hairline and 20px padding. Short rows join the line sooner than long ones.
+
+The header is white with a bottom rule. From 1024px it sticks to the top, at 90% white with a background blur, and the nav links sit inline beside the logo; below 1024px the links drop to their own ruled row with tighter padding and wrap if needed. Plan tabs scroll sideways on phones and centre the current tab. Step rows put the cost under the title on phones and move it into a fixed 240px right-aligned column from 1024px. Every interactive target is at least 44px tall.
 
 ## Elevation & Depth
 
-Flat. There are no shadows anywhere, including toasts and chart tooltips, which explicitly set none. Depth is conveyed by hairline rules, a 1px border around boxed content (tables, forms, the guidance notice), the Quiet Fill on header rows, and the single Gold Wash band for the next step.
+Mostly flat, with a very soft lift. The grey page and white panels give the main sense of depth. Shadows are faint and cool (ink-tinted), never hard or offset. Sections inside a page are still split by rules, not wrapped in panels.
+
+### Shadow Vocabulary
+- **Panel rest** (`box-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 1px 3px rgb(15 23 42 / 0.04)`): every white panel.
+- **Panel lift** (`box-shadow: 0 4px 12px rgb(15 23 42 / 0.08)`): a panel that is a link, on hover, with a 1px rise and a Soft Edge border.
+- **Emerald button** (`box-shadow: 0 1px 2px rgb(4 120 87 / 0.25)`, `0 4px 12px rgb(4 120 87 / 0.25)` on hover): the main button only.
+- **Control hint** (`box-shadow: 0 1px 2px rgb(0 0 0 / 0.05)`): outline buttons and role cards.
+- **Tooltip** (`box-shadow: 0 8px 24px rgb(15 23 42 / 0.10)`): chart tooltips.
 
 ### Named Rules
-**The Rules Not Cards Rule.** Sections are divided by hairline rules, not wrapped in cards. A border box is used only where content is a bounded object: a table, a form being filled in, a notice, an empty state.
+**The Rules Inside, Panels Around Rule.** A panel holds one bounded thing: a form, a table, a chat, a preview, a loader. Sections within a page are divided by hairline rules, not by more panels.
+
+**The Soft Lift Rule.** Shadows stay at or below 10% opacity and lift at most 1px on hover. Nothing gets a hard or offset shadow.
 
 ## Shapes
 
-Restrained, slightly softened corners. Buttons, panels, notices and the next-step band use 4.8px; form controls use 6px; stamps and the logo mark use 3px; the progress bar and chart bars use 2px. Circles appear only for avatars and radio marks. Borders are 1px hairlines, with 1.5px for stamps, a 3px double rule for the OFFICIAL seal, a 2px underline for active navigation, and a dashed 1px ink border (30% opacity) for empty states.
+Gently rounded corners on a 10px base. Buttons, inputs, notices and alerts use 10px; panels, the next-step band, role cards and empty states use 14px; skeleton bars use 8px; stamps use 4px; chart bars round their ends at 4px. Fully round shapes are kept for the progress bar, avatars, radio marks and numbered circles. Borders are 1px hairlines, with 1.5px for stamps, a 3px double rule for the OFFICIAL seal, a 2px underline for the current nav link or tab, and a dashed Soft Edge border for empty states.
 
 ## Components
 
 ### Buttons
-Printed-form boxes: plain, bordered, firm.
-- **Shape:** gently squared corners (4.8px); standard height 44px with 20px side padding and 16px text at 500 weight.
-- **Primary:** solid Licence Gold with white text; darkens to Pressed Gold on hover. One per page.
-- **Outline:** white with an AE Black border at 80% opacity and ink text; Quiet Fill on hover. The default for every secondary action, including Download PDF, Share with funders, Edit, Sign out.
+Calm and solid: white or emerald, gently rounded.
+- **Shape:** 10px corners; the standard size is 44px tall with 20px side padding and 16px text at 500.
+- **Primary:** UAE Emerald with white text and a soft emerald shadow; Deep Emerald and a larger soft shadow on hover. One per page.
+- **Outline:** white with a Soft Edge border, ink text and a hint of shadow; the border darkens (#94a3b8) and the fill goes to #f8fafc on hover. The default for secondary actions (Download PDF, Edit, Create account).
+- **Ghost:** no border or fill; Quiet Fill on hover (Sign in).
 - **Destructive:** white with an Error Red border and text; Error Wash on hover.
-- **Link:** ink text with a gold underline offset 4px; the underline thickens to 2px on hover.
-- **Focus:** Focus Gold border plus a 3px ring at 50% opacity. Icons are line icons, 16px, leading the label.
+- **Link:** ink text with an emerald underline 4px below; the underline thickens to 2px on hover.
+- **Press and focus:** buttons shrink to 97% while pressed (150ms ease-out). Focus shows the Focus Emerald edge plus a 3px ring at 50%. Busy buttons show the spinner. Icons are 16px line icons before the label.
 
 ### Stamps (status and fee marks)
-Small rubber stamps, the system's only chips.
-- **Style:** white, 1.5px border in the tone colour, uppercase bold 11px text, 3px corners, 3px by 6px padding.
-- **Tones:** OFFICIAL (3px double Seal Gold rule, Licence Gold text), DONE (green), waiting (ink at 70%), stopped (red), quiet (hairline border, Muted Ink; used for DEMO FEE and To do). "Estimate" is plain small muted text, not a stamp.
-- **Done:** a DONE stamp is tilted -2 degrees.
+Small rubber stamps, the system's only status chips.
+- **Style:** 1.5px border in the tone colour, a light fill of the same family, uppercase bold 11px text, 4px corners, 3px by 6px padding.
+- **Tones:** OFFICIAL (3px double Seal Amber rule, Seal Wash fill, Seal Ink text), DONE (emerald on Emerald Wash), waiting (slate #94a3b8 edge, #f8fafc fill, #334155 text), stopped (red on Error Wash), quiet (Hairline edge, Muted Slate text; used for DEMO FEE and To do). "Estimate" is plain small muted text, not a stamp.
+- **Done:** a DONE stamp is tilted -2 degrees; when a step is just ticked it is pressed on (see Motion).
+
+### Fee Legend
+The key to the marks on a page of fees. It shows each mark in the same form as on the page, followed by a short meaning: OFFICIAL "checked against an official page", DEMO FEE "sample amount, not checked", Estimate "our guess", DONE "finished". It lists only the marks present.
 
 ### Field Rows
 The licence header: uppercase label above a medium-weight tabular value, split by vertical hairlines when on one line. Used for the plan header, money summaries, step details and profiles.
 
 ### Ruled Tables
-Full-width, 14px tabular text. Header row on Quiet Fill with uppercase labels and a darker rule (ink at 20%); body rows split by hairlines with 12px by 16px cells; footer totals bold in ink above a darker rule. Tables sit in a bordered box, so the last row has no rule.
+Full-width, 14px tabular text. Header row on Quiet Fill (70%) with uppercase labels; body rows split by hairlines with 12px by 16px cells; footer totals bold in ink above a rule. Tables sit in a bordered box or panel, so the last row has no rule.
+
+### Panels
+- **Corner Style:** 14px.
+- **Background:** Panel White on Page Grey.
+- **Shadow Strategy:** Panel rest; Panel lift for a panel that is a link.
+- **Border:** 1px Hairline.
+- **Internal Padding:** 20px, 24px from 640px.
 
 ### Inputs / Fields
-- **Style:** white, 1px Field Edge border, 6px corners, 44px tall, 16px text, a visible 14px medium label above and an optional muted hint below.
-- **Focus:** Focus Gold border plus a 3px Focus Gold ring at 50%.
-- **Error:** red border and 3px red ring at 20%, with a red message and alert icon below. Checkboxes are native, 20px, accented in gold (green for step completion).
-- **Long forms:** split into fieldset parts by hairline rules, each with a bold 18px legend.
+- **Style:** white, 1px Field Edge border, 10px corners, 44px tall, 16px text, a visible 14px medium label above and an optional muted hint below.
+- **Focus:** Focus Emerald edge plus a 3px ring at 50%.
+- **Error:** red edge and a 3px red ring at 20%, with a red message and alert icon below. Form alerts are Error Wash boxes with a light red edge. Checkboxes are native, 20px, coloured emerald.
+- **Long forms:** split into parts by hairline rules, each with a bold 18px legend.
+- **Choice cards (role picker):** white 14px-corner cards with a custom radio; the chosen card gets an emerald edge, Emerald Wash fill and an emerald ring.
 
 ### Navigation
-Text links with a 2px bottom rule: Licence Gold and ink at 500 weight for the current section, transparent rule and Muted Ink otherwise, ink on hover. The same grammar runs the main header and the plan tabs (Overview, Steps, Budget, Documents, Risks, Chat), which are real links.
+Text links with a 2px bottom rule: emerald rule and ink at 500 for the current section; transparent rule and Muted Slate otherwise; Soft Edge rule and ink on hover (200ms). The same grammar runs the main header and the plan tabs (Overview, Steps, Budget, Documents, Risks, Chat), which are real links. The logo is a 32px emerald square with "VG" in white beside the app name in bold.
 
 ### Next Step Band
-The plan overview's lead block: Gold Wash background, 4.8px corners, 20 to 24px padding, a Headline, the numbered step title with its muted number, the cost with its mark, and a gold-underlined link to all steps.
+The plan overview's lead block: Emerald Wash with a faint emerald edge (15%), 14px corners, 20 to 24px padding, a Headline, the numbered step title with its muted number, the cost with its mark, and an emerald-underlined link to all steps. The same band shape is used for the dashboard and profile notices.
 
 ### Step Row
-A numbered roadmap step: 44px checkbox target, muted step number (1.1), the title as a button that unfolds details (description, field row, official sources, status select, Edit), a chevron that turns, and the cost aligned right. Rows are split by hairlines.
+A numbered roadmap step: a 44px checkbox target, the muted step number (1.1), the title as a button that unfolds the details, and the cost right-aligned. Rows are split by hairlines.
 
 ### Progress Bar
-A 6px hairline track with a Done Green fill and 2px corners, labelled "4 of 15 steps done" with a tabular percentage.
+An 8px fully rounded Hairline track with an emerald fill, labelled with a tabular percentage. The fill grows from empty when the page opens (900ms).
+
+### Loaders
+- **Spinner:** a 16px arc in the text colour that runs round and stretches (1.4s), for busy buttons.
+- **Road loader:** for long waits such as building a roadmap. A dotted road is drawn through four stops in emerald and each stop turns emerald and pops as the line reaches it, like steps of a plan (2.6s loop), with a muted label below.
+- **Skeleton:** grey bars (#eef1f5) with a soft light passing over them (1.6s), 8px corners.
+- **Late start:** loaders wait 180ms before fading in, so fast pages never flash one.
+- **Page loading bar:** a 3px emerald bar with a soft emerald glow along the top of the window; it creeps towards 90% while the next page loads, then fades out.
 
 ### Motion
-One moving moment: ticking a step presses the DONE stamp on (240ms, cubic-bezier(0.16, 1, 0.3, 1), from 1.4 scale and -8 degrees with no opacity to rest at -2 degrees). Everything else is colour transitions only, and reduced motion removes all animation.
+All UI motion uses one ease-out curve, cubic-bezier(0.16, 1, 0.3, 1), and short times:
+- Colour and border changes: 150 to 200ms.
+- Page enter: each page fades in and rises 6px (320ms).
+- Details: folded sections open and close smoothly (260ms) where the browser supports it.
+- Stamp press: ticking a step presses the DONE stamp on (240ms, from 1.4 scale and -8 degrees with no opacity to rest at -2 degrees).
+- Chart bars grow in (600ms).
+- Reduced motion: every animation and transition is cut to almost nothing.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** divide sections with hairline rules (#e1e3e5) and 40px of space, not cards.
-- **Do** use exactly one solid gold button per page; make every other action an outline box.
+- **Do** put content on the soft grey page and use a white panel only for one bounded thing.
+- **Do** divide sections with hairline rules and 40px of space.
+- **Do** use exactly one solid emerald button per page; make every other action an outline, ghost or link.
 - **Do** show OFFICIAL only on administrator-checked fees, DEMO FEE on demo amounts, and Estimate otherwise, with a legend that names only the marks shown.
 - **Do** put an uppercase 12px field label directly above the value it names, and set every figure in tabular numerals.
 - **Do** write status in words inside a stamp, so colour is never the only signal.
-- **Do** keep touch targets at least 44px and show the gold focus ring on every interactive element.
+- **Do** keep touch targets at least 44px and show the emerald focus ring on every interactive element.
+- **Do** use the shared ease-out curve and keep UI motion between 150 and 320ms, and respect reduced motion.
 - **Do** keep the footer line saying the site is not a government service.
 
 ### Don't:
+- **Don't** bring back the gold palette: gold or amber is for the OFFICIAL seal only, never for buttons, links or tabs.
 - **Don't** use purple, violet, gradients or a gradient logo.
-- **Don't** add shadows to anything, including toasts, tooltips and menus.
-- **Don't** build stat tiles, icon cards or pill-shaped badges; status is a 3px-cornered stamp.
+- **Don't** use hard, offset or strong shadows; keep them soft and cool.
+- **Don't** build stat tiles or icon cards; status is a 4px-cornered stamp.
 - **Don't** place an uppercase label above a heading as an eyebrow or kicker; labels name values.
-- **Don't** use green or red for decoration, or gold for anything but action, links, active navigation and the seal.
+- **Don't** use emerald, red or amber for decoration.
 - **Don't** use government emblems, falcons or claims of being official.
-- **Don't** colour chart labels in the bar colour; plan charts stay grey and ink.
+- **Don't** colour chart labels in the bar colour.
