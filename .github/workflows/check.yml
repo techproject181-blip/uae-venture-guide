@@ -1,0 +1,40 @@
+# Runs every check on each push and pull request: lint, the unit and database
+# tests, the production build, and the browser tests.
+name: Check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      mongo:
+        image: mongo:7.0
+        # The same port as docker-compose.yml, so .env.development works unchanged.
+        ports:
+          - 27018:27017
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      # The page sweep (tests/e2e/pages.spec.js) signs in with the demo accounts.
+      - run: npm run seed:demo
+      # Chrome is already on the runner; Firefox and WebKit (Safari's engine) are installed here.
+      - run: npx playwright install --with-deps firefox webkit
+      # Starts `npm run dev` itself, then tests Chrome, Firefox, Safari and two phones.
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: playwright-traces
+          path: test-results/
+          retention-days: 7

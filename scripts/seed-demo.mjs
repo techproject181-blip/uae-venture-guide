@@ -1,0 +1,202 @@
+// Fills the development database with demo data: accounts for every role,
+// official sources and fee references, mentor and funder profiles, four plans
+// made by the planner, experience posts, guidance requests and funder interest.
+// Safe to run again: accounts, sources and fees are updated in place, and the
+// demo accounts' plans, posts and requests are recreated.
+// Usage: npm run seed:demo
+//
+// The sources are real official websites, but the summaries and every fee
+// amount are demo values marked "demo". An administrator must check each one
+// against the official page before real users rely on it.
+import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
+import { connectDB } from "../src/lib/db.js";
+import { generateRoadmap } from "../src/lib/roadmap/generate.js";
+import { ChatMessage } from "../src/models/ChatMessage.js";
+import { FeeReference } from "../src/models/FeeReference.js";
+import { FunderProfile } from "../src/models/FunderProfile.js";
+import { FundingInterest } from "../src/models/FundingInterest.js";
+import { MentorProfile } from "../src/models/MentorProfile.js";
+import { MentorRequest } from "../src/models/MentorRequest.js";
+import { Plan } from "../src/models/Plan.js";
+import { Post } from "../src/models/Post.js";
+import { Source } from "../src/models/Source.js";
+import { User } from "../src/models/User.js";
+
+const DEMO_PASSWORD = "Demo2026pass";
+
+const USERS = [
+  { name: "Sara Al Mansoori", email: "admin@demo.test", role: "admin", status: "active" },
+  { name: "Aisha Khan", email: "aisha@demo.test", role: "entrepreneur", status: "active" },
+  { name: "Yousef Al Hammadi", email: "yousef@demo.test", role: "entrepreneur", status: "active" },
+  { name: "Omar Saeed", email: "omar@demo.test", role: "mentor", status: "active" },
+  { name: "Fatima Al Nuaimi", email: "fatima@demo.test", role: "mentor", status: "active" },
+  { name: "Daniel Okafor", email: "daniel@demo.test", role: "mentor", status: "active" },
+  { name: "Rahul Mehta", email: "rahul@demo.test", role: "mentor", status: "pending" },
+  { name: "Layla Haddad", email: "layla@demo.test", role: "funder", status: "active" },
+  { name: "Hamad Investments", email: "hamad@demo.test", role: "funder", status: "active" },
+  { name: "Khalid Rahman", email: "khalid@demo.test", role: "funder", status: "pending" },
+];
+
+// key: a short name used below to attach fee references.
+const SOURCES = [
+  { key: "uae", title: "Start a business in the UAE", publisher: "UAE Government portal (u.ae)", url: "https://u.ae/en/information-and-services/business", emirate: null, categories: ["licensing", "general"], summary: "The steps to set up a company in the UAE, the difference between mainland and free zones, and links to each emirate's licensing authority." },
+  { key: "fta", title: "Corporate tax and VAT registration", publisher: "Federal Tax Authority", url: "https://tax.gov.ae", emirate: null, categories: ["tax"], summary: "Who must register for corporate tax and VAT, the deadlines, and how to register online through EmaraTax." },
+  { key: "icp", title: "Residence visas and Emirates ID", publisher: "Federal Authority for Identity, Citizenship, Customs and Port Security", url: "https://icp.gov.ae", emirate: null, categories: ["visas"], summary: "Applying for the establishment card, residence visas and the Emirates ID card." },
+  { key: "mohre", title: "Work permits and labour rules", publisher: "Ministry of Human Resources and Emiratisation", url: "https://www.mohre.gov.ae", emirate: null, categories: ["visas", "legal"], summary: "Work permits and labour rules for companies registered on the mainland." },
+  { key: "cbuae", title: "Banking in the UAE", publisher: "Central Bank of the UAE", url: "https://www.centralbank.ae", emirate: null, categories: ["banking"], summary: "Banking rules in the UAE and the licensed banks where a company can open an account." },
+  { key: "det", title: "Business licences in Dubai", publisher: "Dubai Department of Economy and Tourism", url: "https://www.dubaidet.gov.ae", emirate: "dubai", categories: ["licensing"], summary: "Trade name reservation, initial approval and trade licences for Dubai mainland companies." },
+  { key: "added", title: "Business licences in Abu Dhabi", publisher: "Abu Dhabi Department of Economic Development", url: "https://www.added.gov.ae", emirate: "abu_dhabi", categories: ["licensing"], summary: "Economic licences for Abu Dhabi mainland companies, including low-cost licences for small businesses." },
+  { key: "sedd", title: "Business licences in Sharjah", publisher: "Sharjah Economic Development Department", url: "https://www.sedd.ae", emirate: "sharjah", categories: ["licensing"], summary: "Trade, professional and industrial licences for Sharjah mainland companies." },
+  { key: "dmcc", title: "DMCC free zone company setup", publisher: "Dubai Multi Commodities Centre", url: "https://www.dmcc.ae", emirate: "dubai", categories: ["free_zones", "licensing"], summary: "Company setup packages, licence types and flexi desks in the DMCC free zone." },
+  { key: "shams", title: "Shams free zone company setup", publisher: "Sharjah Media City (Shams)", url: "https://www.shams.ae", emirate: "sharjah", categories: ["free_zones", "licensing"], summary: "Licence packages for media, creative and service businesses in the Shams free zone." },
+  { key: "rakez", title: "RAKEZ company setup", publisher: "Ras Al Khaimah Economic Zone", url: "https://rakez.com", emirate: "ras_al_khaimah", categories: ["free_zones", "licensing"], summary: "Free zone licences and startup packages in Ras Al Khaimah." },
+  { key: "khalifa", title: "Support for Emirati entrepreneurs", publisher: "Khalifa Fund for Enterprise Development", url: "https://www.khalifafund.ae", emirate: "abu_dhabi", categories: ["funding"], summary: "Funding programmes, training and advice for UAE national entrepreneurs." },
+  { key: "dubaisme", title: "Dubai SME support programmes", publisher: "Dubai SME", url: "https://sme.ae", emirate: "dubai", categories: ["funding"], summary: "Support, training and incentives for small and medium businesses in Dubai." },
+];
+
+// source: the key of the source above. All amounts are demo values.
+const FEES = [
+  { source: "det", kind: "trade_name", item: "Trade name reservation", emirate: "dubai", jurisdiction: "mainland", min: 620, max: 620, recurrence: "one_time" },
+  { source: "det", kind: "initial_approval", item: "Initial approval", emirate: "dubai", jurisdiction: "mainland", min: 120, max: 120, recurrence: "one_time" },
+  { source: "det", kind: "trade_licence", item: "Trade licence, commercial or professional", emirate: "dubai", jurisdiction: "mainland", min: 12000, max: 18000, recurrence: "yearly" },
+  { source: "added", kind: "trade_name", item: "Trade name reservation", emirate: "abu_dhabi", jurisdiction: "mainland", min: 200, max: 200, recurrence: "one_time" },
+  { source: "added", kind: "trade_licence", item: "Economic licence for a small business", emirate: "abu_dhabi", jurisdiction: "mainland", min: 1000, max: 10000, recurrence: "yearly" },
+  { source: "sedd", kind: "trade_name", item: "Trade name reservation", emirate: "sharjah", jurisdiction: "mainland", min: 200, max: 300, recurrence: "one_time" },
+  { source: "sedd", kind: "trade_licence", item: "Trade or professional licence", emirate: "sharjah", jurisdiction: "mainland", min: 5000, max: 15000, recurrence: "yearly" },
+  { source: "dmcc", kind: "trade_licence", item: "Licence with flexi desk package", emirate: "dubai", jurisdiction: "free_zone", min: 30000, max: 50000, recurrence: "yearly" },
+  { source: "shams", kind: "trade_licence", item: "Media or service licence package", emirate: "sharjah", jurisdiction: "free_zone", min: 5750, max: 15000, recurrence: "yearly" },
+  { source: "rakez", kind: "trade_licence", item: "Startup licence package", emirate: "ras_al_khaimah", jurisdiction: "free_zone", min: 6000, max: 15000, recurrence: "yearly" },
+  { source: "icp", kind: "establishment_card", item: "Establishment card", emirate: null, jurisdiction: "any", min: 1000, max: 2000, recurrence: "one_time" },
+  { source: "icp", kind: "investor_visa", item: "Investor residence visa, two years", emirate: null, jurisdiction: "any", min: 3500, max: 6000, recurrence: "one_time" },
+  { source: "icp", kind: "emirates_id", item: "Emirates ID, two years", emirate: null, jurisdiction: "any", min: 370, max: 370, recurrence: "one_time" },
+  { source: "icp", kind: "medical_test", item: "Visa medical fitness test", emirate: null, jurisdiction: "any", min: 260, max: 700, recurrence: "one_time" },
+  { source: "fta", kind: "tax_registration", item: "Corporate tax registration", emirate: null, jurisdiction: "any", min: 0, max: 0, recurrence: "one_time" },
+];
+
+// Every demo account has the published password above, and one is an
+// administrator, so demo data only ever goes into a database on this computer.
+if (!/^mongodb:\/\/(127\.0\.0\.1|localhost)[:/]/.test(process.env.MONGODB_URI ?? "")) {
+  console.error("Demo data can only be added to a local database (mongodb://127.0.0.1 or mongodb://localhost).");
+  process.exit(1);
+}
+
+await connectDB();
+// Build every index first (unique emails, text search, one waiting request per pair, and so on).
+await Promise.all([User, Source, FeeReference, MentorProfile, FunderProfile, Plan, Post, MentorRequest, FundingInterest, ChatMessage].map((model) => model.init()));
+const now = new Date();
+
+const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 10);
+for (const user of USERS) {
+  await User.updateOne({ email: user.email }, { $set: { ...user, passwordHash } }, { upsert: true });
+}
+
+const sourceIds = {};
+for (const { key, ...source } of SOURCES) {
+  const saved = await Source.findOneAndUpdate(
+    { url: source.url },
+    { $set: { ...source, verifiedAt: now, active: true, demo: true } },
+    { upsert: true, returnDocument: "after" },
+  );
+  sourceIds[key] = saved._id;
+}
+
+for (const fee of FEES) {
+  const sourceId = sourceIds[fee.source];
+  await FeeReference.updateOne(
+    { sourceId, kind: fee.kind, item: fee.item },
+    {
+      $set: {
+        sourceId,
+        kind: fee.kind,
+        item: fee.item,
+        emirate: fee.emirate,
+        jurisdiction: fee.jurisdiction,
+        amountMinAed: fee.min,
+        amountMaxAed: fee.max,
+        recurrence: fee.recurrence,
+        notes: "Demo amount for testing. Check the official page before relying on it.",
+        verifiedAt: now,
+        active: true,
+        demo: true,
+      },
+    },
+    { upsert: true },
+  );
+}
+
+// ---------------------------------------------------------------- community
+
+const ids = Object.fromEntries((await User.find({ email: /@demo\.test$/ }).lean()).map((u) => [u.email.split("@")[0], u._id]));
+
+const MENTORS = {
+  omar: { headline: "Founder of two cafés in Dubai", bio: "I opened two specialty cafés in Dubai and have helped friends set up food businesses in Dubai and Sharjah. Happy to talk about locations, fit-out and food safety.", expertise: ["hospitality_food", "business_setup"], industries: ["food_beverage", "retail"], emirates: ["dubai", "sharjah"], yearsExperience: 9 },
+  fatima: { headline: "Marketing lead for UAE startups", bio: "Ten years of marketing for retail and online brands across the UAE. I help founders find their first customers without spending too much.", expertise: ["marketing_sales", "retail_ecommerce"], industries: ["ecommerce", "retail", "creative_media"], emirates: ["abu_dhabi", "dubai"], yearsExperience: 10 },
+  daniel: { headline: "Software engineer and product advisor", bio: "I build software products and help student founders turn app ideas into a first version that users can try.", expertise: ["technology_product", "finance_funding"], industries: ["technology", "education"], emirates: ["dubai", "sharjah", "ajman"], yearsExperience: 7 },
+  rahul: { headline: "Logistics manager", bio: "Twelve years running warehouses and deliveries in the UAE. I can help with supply chains, vehicles and delivery partners.", expertise: ["operations"], industries: ["logistics"], emirates: ["dubai", "ras_al_khaimah"], yearsExperience: 12 },
+};
+for (const [name, profile] of Object.entries(MENTORS)) {
+  await MentorProfile.updateOne({ userId: ids[name] }, { $set: { ...profile, userId: ids[name], acceptingRequests: true } }, { upsert: true });
+}
+
+const FUNDERS = {
+  layla: { organization: "Gulf Student Ventures", funderType: "angel", ticketMinAed: 25000, ticketMaxAed: 150000, sectors: ["food_beverage", "education", "technology"], bio: "I back student founders with small first cheques and stay close as a mentor." },
+  hamad: { organization: "Hamad Investments", funderType: "vc", ticketMinAed: 200000, ticketMaxAed: 2000000, sectors: ["technology", "ecommerce", "logistics"], bio: "We invest in UAE startups that can grow across the Gulf, usually after a first version has paying users." },
+  khalid: { organization: "Khalid Rahman", funderType: "angel", ticketMinAed: 10000, ticketMaxAed: 50000, sectors: ["tourism_events", "creative_media"], bio: "Former tour operator investing in small tourism and events businesses." },
+};
+for (const [name, profile] of Object.entries(FUNDERS)) {
+  await FunderProfile.updateOne({ userId: ids[name] }, { $set: { ...profile, userId: ids[name] } }, { upsert: true });
+}
+
+// Start from a clean slate for the demo accounts' own content.
+const demoPlans = await Plan.find({ ownerId: { $in: [ids.aisha, ids.yousef] } }).distinct("_id");
+await Promise.all([
+  Plan.deleteMany({ _id: { $in: demoPlans } }),
+  ChatMessage.deleteMany({ planId: { $in: demoPlans } }),
+  FundingInterest.deleteMany({ planId: { $in: demoPlans } }),
+  MentorRequest.deleteMany({ entrepreneurId: { $in: [ids.aisha, ids.yousef] } }),
+  Post.deleteMany({ authorId: { $in: Object.keys(MENTORS).map((name) => ids[name]) } }),
+]);
+
+const PLANS = [
+  { owner: "aisha", done: 4, paid: { "Trade name reservation": 250, "Initial approval": 300, "Office or shop rent": 30000 }, pitch: "A karak tea café beside the university, open late for students to study. Low fit-out cost and steady daily customers.", intake: { title: "Karak café near campus", idea: "A small café beside the university serving karak tea, sandwiches and a quiet space to study in the evenings.", emirate: "sharjah", sector: "food_beverage", jurisdictionPref: "unsure", budgetAed: 120000, targetCustomers: "University students and office workers nearby", teamSize: 3 } },
+  { owner: "aisha", done: 1, intake: { title: "Study planner app", idea: "A mobile app that helps university students plan study time, track deadlines and share notes with classmates.", emirate: "dubai", sector: "technology", jurisdictionPref: "unsure", budgetAed: 60000, targetCustomers: "University students across the UAE", teamSize: 2 } },
+  { owner: "yousef", done: 6, pitch: "Small-group desert and mountain tours from Ras Al Khaimah, booked online, for residents and visitors who want something quieter than the big tour buses.", intake: { title: "Mountain and desert tours", idea: "Small-group desert and mountain tours in Ras Al Khaimah, booked online, with local guides and photography stops.", emirate: "ras_al_khaimah", sector: "tourism_events", jurisdictionPref: "free_zone", budgetAed: 90000, targetCustomers: "UAE residents and tourists looking for small-group trips", teamSize: 2 } },
+  { owner: "yousef", done: 0, intake: { title: "Handmade perfume shop", idea: "An online shop selling handmade oud and perfume blends, with small gift sets for weddings and Eid.", emirate: "abu_dhabi", sector: "ecommerce", jurisdictionPref: "mainland", budgetAed: 45000, targetCustomers: "Shoppers in the UAE buying gifts", teamSize: 1 } },
+];
+const plans = [];
+// paid: what the founder already paid for some costs, so the "estimated and actual" chart has data.
+for (const { owner, done, paid = {}, pitch, intake } of PLANS) {
+  const roadmap = await generateRoadmap(intake);
+  roadmap.tasks.forEach((task, i) => {
+    if (i < done) Object.assign(task, { status: "done", completedAt: now });
+  });
+  for (const item of roadmap.budgetItems) {
+    if (paid[item.label] !== undefined) item.actualAed = paid[item.label];
+  }
+  plans.push(await Plan.create({ ...intake, ...roadmap, ownerId: ids[owner], status: "ready", shared: Boolean(pitch), pitchSummary: pitch }));
+}
+
+const POSTS = [
+  { author: "omar", title: "What I learned opening my first café in Dubai", body: "## Start small\n\nMy first café had **eight seats**. Rent was the biggest cost, so I signed a short lease first and only moved to a bigger place after a year.\n\n## Before you sign\n\n- Read the food safety rules before you fit out the kitchen\n- Ask the landlord about the Ejari registration\n- Keep three months of costs in reserve\n\nMost of my mistakes cost money because I rushed. Take two extra weeks to check everything.", chart: { type: "bar", title: "My first-year costs (AED thousands)", labels: ["Rent", "Fit-out", "Licence", "Staff"], values: [60, 45, 15, 90] } },
+  { author: "omar", title: "Mainland or free zone for a food business?", body: "Most food businesses I know chose **mainland**, because their customers walk in from the street. A free zone works better when you sell online or to other businesses.\n\nAsk yourself one question: *where will my customers be?* If the answer is a shop front, start with mainland." },
+  { author: "fatima", title: "Finding your first 100 customers on a small budget", body: "You do not need a big marketing budget to start. These worked for the founders I advise:\n\n1. Instagram posts that show the product being made\n2. A launch offer for friends and their friends\n3. Partnering with a café or gym that serves the same customers\n\nTrack which one brings customers, and spend more only on that one.", chart: { type: "pie", title: "Where my clients' first customers came from", labels: ["Instagram", "Friends", "Partners", "Walk-ins"], values: [45, 25, 20, 10] } },
+];
+for (const { author, ...post } of POSTS) {
+  await Post.create({ ...post, authorId: ids[author], status: "published" });
+}
+
+await MentorRequest.create([
+  { entrepreneurId: ids.aisha, mentorId: ids.omar, planId: plans[0]._id, topic: "Choosing a location near campus", message: "I want to open a karak café near the university. Is mainland the right choice, and how big should the first place be?", status: "accepted", mentorReply: "Happy to help. Mainland makes sense for a walk-in café. Let us look at your budget together.", respondedAt: now },
+  { entrepreneurId: ids.yousef, mentorId: ids.fatima, topic: "Marketing my tours online", message: "How should I market small-group tours online when I have almost no budget for ads?", status: "pending" },
+]);
+await FundingInterest.create([
+  { planId: plans[0]._id, funderId: ids.layla, message: "I back student food businesses and would like to learn more about your café.", status: "accepted", respondedAt: now },
+  { planId: plans[2]._id, funderId: ids.khalid, message: "I ran tours for ten years and like your idea. Can we talk about your first season?", status: "pending" },
+]);
+
+await mongoose.disconnect();
+console.log(
+  `Demo data ready: ${USERS.length} accounts (password ${DEMO_PASSWORD}), ${SOURCES.length} sources, ${FEES.length} fee references, ` +
+    `${PLANS.length} plans, ${POSTS.length} posts, 2 guidance requests and 2 funder interests.`,
+);

@@ -1,0 +1,472 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-05T15:16:16+00:00",
+  "title": "Design System: UAE Venture Guide",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#1b1d21",
+          "#232528",
+          "#3e4046",
+          "#5f646d",
+          "#797e86",
+          "#c3c6cb",
+          "#e1e3e5",
+          "#f7f7f7"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "AE Black Ink",
+        "canonical": "#232528",
+        "tonalRamp": [
+          "#1b1d21",
+          "#232528",
+          "#3e4046",
+          "#5f646d",
+          "#797e86",
+          "#c3c6cb",
+          "#e1e3e5",
+          "#f7f7f7"
+        ],
+        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Muted Ink",
+        "canonical": "#5f646d",
+        "tonalRamp": [
+          "#1b1d21",
+          "#232528",
+          "#3e4046",
+          "#5f646d",
+          "#797e86",
+          "#c3c6cb",
+          "#e1e3e5",
+          "#f7f7f7"
+        ],
+        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+      },
+      "quiet-fill": {
+        "role": "neutral",
+        "displayName": "Quiet Fill",
+        "canonical": "#f7f7f7",
+        "tonalRamp": [
+          "#1b1d21",
+          "#232528",
+          "#3e4046",
+          "#5f646d",
+          "#797e86",
+          "#c3c6cb",
+          "#e1e3e5",
+          "#f7f7f7"
+        ],
+        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#e1e3e5",
+        "tonalRamp": [
+          "#1b1d21",
+          "#232528",
+          "#3e4046",
+          "#5f646d",
+          "#797e86",
+          "#c3c6cb",
+          "#e1e3e5",
+          "#f7f7f7"
+        ],
+        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+      },
+      "field-edge": {
+        "role": "neutral",
+        "displayName": "Field Edge",
+        "canonical": "#797e86",
+        "tonalRamp": [
+          "#1b1d21",
+          "#232528",
+          "#3e4046",
+          "#5f646d",
+          "#797e86",
+          "#c3c6cb",
+          "#e1e3e5",
+          "#f7f7f7"
+        ],
+        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+      },
+      "gold": {
+        "role": "primary",
+        "displayName": "Licence Gold",
+        "canonical": "#7c5e24",
+        "tonalRamp": [
+          "#4a3816",
+          "#6a5020",
+          "#7c5e24",
+          "#92722a",
+          "#b68a35",
+          "#d7bc6d",
+          "#f2eccf",
+          "#f9f7ed"
+        ],
+        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+      },
+      "gold-hover": {
+        "role": "primary",
+        "displayName": "Pressed Gold",
+        "canonical": "#6a5020",
+        "tonalRamp": [
+          "#4a3816",
+          "#6a5020",
+          "#7c5e24",
+          "#92722a",
+          "#b68a35",
+          "#d7bc6d",
+          "#f2eccf",
+          "#f9f7ed"
+        ],
+        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+      },
+      "gold-focus": {
+        "role": "primary",
+        "displayName": "Focus Gold",
+        "canonical": "#92722a",
+        "tonalRamp": [
+          "#4a3816",
+          "#6a5020",
+          "#7c5e24",
+          "#92722a",
+          "#b68a35",
+          "#d7bc6d",
+          "#f2eccf",
+          "#f9f7ed"
+        ],
+        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+      },
+      "seal-gold": {
+        "role": "primary",
+        "displayName": "Seal Gold",
+        "canonical": "#b68a35",
+        "tonalRamp": [
+          "#4a3816",
+          "#6a5020",
+          "#7c5e24",
+          "#92722a",
+          "#b68a35",
+          "#d7bc6d",
+          "#f2eccf",
+          "#f9f7ed"
+        ],
+        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+      },
+      "gold-wash": {
+        "role": "primary",
+        "displayName": "Gold Wash",
+        "canonical": "#f9f7ed",
+        "tonalRamp": [
+          "#4a3816",
+          "#6a5020",
+          "#7c5e24",
+          "#92722a",
+          "#b68a35",
+          "#d7bc6d",
+          "#f2eccf",
+          "#f9f7ed"
+        ],
+        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+      },
+      "gold-selection": {
+        "role": "primary",
+        "displayName": "Selection Gold",
+        "canonical": "#f2eccf",
+        "tonalRamp": [
+          "#4a3816",
+          "#6a5020",
+          "#7c5e24",
+          "#92722a",
+          "#b68a35",
+          "#d7bc6d",
+          "#f2eccf",
+          "#f9f7ed"
+        ],
+        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+      },
+      "done-green": {
+        "role": "secondary",
+        "displayName": "Done Green",
+        "canonical": "#2f663c",
+        "tonalRamp": [
+          "#1a3a22",
+          "#2f663c",
+          "#3f8550",
+          "#5aa26b",
+          "#8cc39a",
+          "#bfe0c7",
+          "#e1f1e5",
+          "#f3faf4"
+        ],
+        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+      },
+      "done-wash": {
+        "role": "secondary",
+        "displayName": "Done Wash",
+        "canonical": "#f3faf4",
+        "tonalRamp": [
+          "#1a3a22",
+          "#2f663c",
+          "#3f8550",
+          "#5aa26b",
+          "#8cc39a",
+          "#bfe0c7",
+          "#e1f1e5",
+          "#f3faf4"
+        ],
+        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+      },
+      "error-red": {
+        "role": "tertiary",
+        "displayName": "Error Red",
+        "canonical": "#b52520",
+        "tonalRamp": [
+          "#5e1411",
+          "#8a1c18",
+          "#b52520",
+          "#d43a33",
+          "#e8716b",
+          "#f5aaa6",
+          "#fbd5d3",
+          "#fef2f2"
+        ],
+        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+      },
+      "error-wash": {
+        "role": "tertiary",
+        "displayName": "Error Wash",
+        "canonical": "#fef2f2",
+        "tonalRamp": [
+          "#5e1411",
+          "#8a1c18",
+          "#b52520",
+          "#d43a33",
+          "#e8716b",
+          "#f5aaa6",
+          "#fbd5d3",
+          "#fef2f2"
+        ],
+        "note": "Ramp anchors are the AE scale values used in the build; intermediate steps are synthesized."
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Page or plan title, once per page; 1.75rem on phones, 2rem from 640px."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings: Money, Licence, Roadmap, Next step."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "The next step's title; form part legends at 700."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Prose (max about 42rem) and field values at 500 with tabular figures."
+      },
+      "body-small": {
+        "displayName": "Body small",
+        "purpose": "Tables, costs, navigation, hints and legends."
+      },
+      "label": {
+        "displayName": "Field label",
+        "purpose": "Uppercase label directly above the value or control it names; table headers."
+      },
+      "stamp": {
+        "displayName": "Stamp",
+        "purpose": "Text inside status and fee stamps only."
+      }
+    },
+    "shadows": [
+      {
+        "name": "none",
+        "value": "none",
+        "purpose": "The system is flat; toasts and chart tooltips set box-shadow: none explicitly."
+      }
+    ],
+    "motion": [
+      {
+        "name": "stamp-press",
+        "value": "240ms cubic-bezier(0.16, 1, 0.3, 1) both; from opacity 0, scale 1.4, rotate -8deg to opacity 1, scale 1, rotate -2deg",
+        "purpose": "The one moving moment: ticking a step presses the DONE stamp on."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation and transition durations 0.01ms",
+        "purpose": "prefers-reduced-motion: reduce removes all motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "container",
+        "value": "72rem (1152px) max width"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one main action on a page, in AE Gold.",
+      "html": "<button class=\"ds-btn-primary\">Add task</button>",
+      "css": ".ds-btn-primary{font-family: var(--font-sans), Roboto, system-ui, sans-serif;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 20px;font-size:16px;font-weight:500;color:#fff;background:#7c5e24;border:1px solid transparent;border-radius:4.8px;cursor:pointer;transition:background-color .15s,box-shadow .15s}.ds-btn-primary:hover{background:#6a5020}.ds-btn-primary:focus-visible{outline:none;border-color:#92722a;box-shadow:0 0 0 3px rgba(146,114,42,.5)}"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Every secondary action: a black-outlined box like one on a printed form.",
+      "html": "<button class=\"ds-btn-outline\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><polyline points=\"7 10 12 15 17 10\"/><line x1=\"12\" y1=\"15\" x2=\"12\" y2=\"3\"/></svg>Download PDF</button>",
+      "css": ".ds-btn-outline{font-family: var(--font-sans), Roboto, system-ui, sans-serif;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 20px 0 16px;font-size:16px;font-weight:500;color:#232528;background:#fff;border:1px solid rgba(35,37,40,.8);border-radius:4.8px;cursor:pointer;transition:background-color .15s,box-shadow .15s}.ds-btn-outline:hover{background:#f7f7f7}.ds-btn-outline:focus-visible{outline:none;border-color:#92722a;box-shadow:0 0 0 3px rgba(146,114,42,.5)}"
+    },
+    {
+      "name": "Destructive Button",
+      "kind": "button",
+      "refersTo": "button-destructive",
+      "description": "Delete and other irreversible actions: red outline, never a solid red fill.",
+      "html": "<button class=\"ds-btn-destructive\">Delete</button>",
+      "css": ".ds-btn-destructive{font-family: var(--font-sans), Roboto, system-ui, sans-serif;display:inline-flex;align-items:center;height:44px;padding:0 20px;font-size:16px;font-weight:500;color:#b52520;background:#fff;border:1px solid #b52520;border-radius:4.8px;cursor:pointer;transition:background-color .15s,box-shadow .15s}.ds-btn-destructive:hover{background:#fef2f2}.ds-btn-destructive:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(181,37,32,.2)}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Labelled input with a Field Edge border and a gold focus ring.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Task</span><input class=\"ds-input\" placeholder=\"Reserve your trade name\"></label>",
+      "css": ".ds-field{font-family: var(--font-sans), Roboto, system-ui, sans-serif;display:flex;flex-direction:column;gap:8px;max-width:360px}.ds-field-label{font-size:14px;font-weight:500;color:#232528}.ds-input{font-family: var(--font-sans), Roboto, system-ui, sans-serif;height:44px;padding:0 12px;font-size:16px;color:#232528;background:#fff;border:1px solid #797e86;border-radius:6px;outline:none;transition:border-color .15s,box-shadow .15s}.ds-input:focus-visible{border-color:#92722a;box-shadow:0 0 0 3px rgba(146,114,42,.5)}"
+    },
+    {
+      "name": "Navigation Tabs",
+      "kind": "nav",
+      "refersTo": "nav-tab-active",
+      "description": "Header links and plan tabs: text with a 2px gold rule under the current one.",
+      "html": "<nav class=\"ds-tabs\"><a href=\"#\" aria-current=\"page\">Overview</a><a href=\"#\">Steps</a><a href=\"#\">Budget</a><a href=\"#\">Documents</a><a href=\"#\">Risks</a><a href=\"#\">Chat</a></nav>",
+      "css": ".ds-tabs{font-family: var(--font-sans), Roboto, system-ui, sans-serif;display:flex;border-bottom:1px solid #e1e3e5}.ds-tabs a{display:block;padding:12px;font-size:14px;color:#5f646d;text-decoration:none;border-bottom:2px solid transparent;transition:color .15s}.ds-tabs a:hover{color:#232528}.ds-tabs a:focus-visible{outline:none;box-shadow:inset 0 0 0 3px rgba(146,114,42,.5)}.ds-tabs a[aria-current=page]{color:#232528;font-weight:500;border-bottom-color:#7c5e24}"
+    },
+    {
+      "name": "Stamps",
+      "kind": "chip",
+      "refersTo": "stamp-official",
+      "description": "Rubber-stamp marks: OFFICIAL (checked fees only), DONE, DEMO FEE, and plain Estimate text.",
+      "html": "<div class=\"ds-stamps\"><span class=\"ds-stamp ds-stamp-official\">Official</span><span class=\"ds-stamp ds-stamp-done\">Done</span><span class=\"ds-stamp ds-stamp-quiet\">Demo fee</span><span class=\"ds-estimate\">Estimate</span></div>",
+      "css": ".ds-stamps{font-family: var(--font-sans), Roboto, system-ui, sans-serif;display:flex;gap:12px;align-items:center}.ds-stamp{display:inline-flex;align-items:center;padding:3px 6px;font-size:11px;line-height:1;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid;border-radius:3px;background:#fff}.ds-stamp-official{border:3px double #b68a35;color:#7c5e24}.ds-stamp-done{border-color:#2f663c;color:#2f663c;transform:rotate(-2deg)}.ds-stamp-quiet{border-color:#e1e3e5;color:#5f646d}.ds-estimate{font-size:12px;color:#5f646d}"
+    },
+    {
+      "name": "Field Row",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "The licence header: uppercase labels above values, split by vertical hairlines.",
+      "html": "<dl class=\"ds-fields\"><div><dt>Emirate</dt><dd>Sharjah</dd></div><div><dt>Sector</dt><dd>Food and drink</dd></div><div><dt>Budget</dt><dd>AED 120,000</dd></div><div><dt>Reference</dt><dd>1EAC66</dd></div></dl>",
+      "css": ".ds-fields{font-family: var(--font-sans), Roboto, system-ui, sans-serif;display:flex;flex-wrap:wrap;margin:0;color:#232528}.ds-fields div{padding:0 20px;border-left:1px solid #e1e3e5}.ds-fields div:first-child{padding-left:0;border-left:0}.ds-fields dt{font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#5f646d}.ds-fields dd{margin:4px 0 0;font-weight:500;font-variant-numeric:tabular-nums}"
+    },
+    {
+      "name": "Next Step Band",
+      "kind": "card",
+      "refersTo": "next-step-band",
+      "description": "The plan overview's lead block on Gold Wash: step, fee with its mark, link to all steps.",
+      "html": "<section class=\"ds-next\"><h2>Next step</h2><p class=\"ds-next-title\"><span>2.2</span>Pay for and collect your trade licence</p><p class=\"ds-next-cost\"><b>AED 5,000–15,000</b><span class=\"ds-next-stamp\">Demo fee</span></p><a href=\"#\">See all steps</a></section>",
+      "css": ".ds-next{font-family: var(--font-sans), Roboto, system-ui, sans-serif;background:#f9f7ed;border-radius:4.8px;padding:20px 24px;color:#232528}.ds-next h2{margin:0;font-size:20px;font-weight:700;letter-spacing:-.01em}.ds-next-title{margin:12px 0 0;display:flex;gap:12px;font-size:18px;font-weight:500}.ds-next-title span{color:#5f646d;font-variant-numeric:tabular-nums}.ds-next-cost{margin:8px 0 16px;display:flex;gap:8px;align-items:center;font-size:14px}.ds-next-cost b{font-weight:500;font-variant-numeric:tabular-nums}.ds-next-stamp{padding:3px 6px;font-size:11px;line-height:1;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid #e1e3e5;border-radius:3px;color:#5f646d;background:#fff}.ds-next a{color:#232528;font-weight:500;text-decoration:underline;text-decoration-color:#7c5e24;text-underline-offset:4px}.ds-next a:hover{text-decoration-thickness:2px}.ds-next a:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(146,114,42,.5)}"
+    },
+    {
+      "name": "Ruled Table",
+      "kind": "custom",
+      "refersTo": "table-header",
+      "description": "Bordered ruled table: quiet header row, hairline rows, bold total.",
+      "html": "<div class=\"ds-table-box\"><table class=\"ds-table\"><thead><tr><th>Item</th><th>Estimated</th></tr></thead><tbody><tr><td>Trade licence</td><td>AED 15,000</td></tr><tr><td>Visas</td><td>AED 9,000</td></tr></tbody><tfoot><tr><td>Total</td><td>AED 24,000</td></tr></tfoot></table></div>",
+      "css": ".ds-table-box{border:1px solid #e1e3e5;border-radius:4.8px;overflow:hidden;max-width:420px}.ds-table{font-family: var(--font-sans), Roboto, system-ui, sans-serif;width:100%;border-collapse:collapse;text-align:left;font-size:14px;font-variant-numeric:tabular-nums;color:#232528}.ds-table th{background:#f7f7f7;padding:12px 16px;font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#5f646d;border-bottom:1px solid rgba(35,37,40,.2)}.ds-table td{padding:12px 16px;border-bottom:1px solid #e1e3e5}.ds-table tbody tr:last-child td{border-bottom:0}.ds-table tfoot td{font-weight:700;border-top:1px solid rgba(35,37,40,.2);border-bottom:0}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Licence Paper",
+    "overview": "**Creative North Star: \"The Licence Paper\"**\n\nEvery screen is a page of an official UAE document: a trade licence or certificate printed on white paper in black ink. A plan opens with a title, a row of labelled fields (Emirate, Sector, Licence, Budget, Reference, Issued), then sections separated by thin rules. Steps are strictly numbered (1, 1.1, 1.2), figures line up in tabular columns, and the only marks of authority are small rubber stamps: a double-ruled gold OFFICIAL seal, a green DONE, a grey DEMO FEE.\n\nThe palette is taken from the UAE Government Design System scales (AE Black, AE Gold, AE Green, AE Red), but the site never claims to be official: no emblems, no falcons, and the footer says \"Not a government service.\" Density is calm and document-like: one column, generous rules, few things per screen. The system is a deliberate rejection of the earlier SaaS look: no purple, no gradients, no stat tiles, no icon cards, no pill badges, no shadows.",
+    "keyCharacteristics": [
+      "White paper, AE Black ink, hairline rules between sections instead of cards.",
+      "AE Gold reserved for the one main action, link underlines, the active-tab rule and the OFFICIAL seal.",
+      "Small uppercase field labels above values, like the field names on a licence.",
+      "Rubber-stamp status marks whose words always carry the meaning, never colour alone.",
+      "Roboto throughout, with tabular figures for every amount and step number.",
+      "Flat: no shadows anywhere; depth comes from rules and quiet fills."
+    ],
+    "rules": [
+      {
+        "name": "The One Gold Action Rule",
+        "body": "A page has at most one solid gold button. Every other action is a black outline box, like a box on a printed form.",
+        "section": "colors"
+      },
+      {
+        "name": "The Earned Seal Rule",
+        "body": "The OFFICIAL seal appears only on a fee an administrator checked against a cited official page. Demo amounts carry DEMO FEE; everything else says Estimate. The fee legend names only the marks present on the page.",
+        "section": "colors"
+      },
+      {
+        "name": "The State Colours Rule",
+        "body": "Green means done and red means error or stopped, everywhere; neither is used for decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The Grey Chart Rule",
+        "body": "Plan charts are drawn in Field Edge grey (estimated) and AE Black ink (actual) on hairline gridlines, with labels in Muted Ink, never in the bar colour.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Figures Rule",
+        "body": "Every amount, percentage, step number and reference uses tabular figures so columns align from row to row.",
+        "section": "typography"
+      },
+      {
+        "name": "The Label Names A Value Rule",
+        "body": "The uppercase field label always sits directly above the value or control it names. It is never a decorative line above a heading.",
+        "section": "typography"
+      },
+      {
+        "name": "The Rules Not Cards Rule",
+        "body": "Sections are divided by hairline rules, not wrapped in cards. A border box is used only where content is a bounded object: a table, a form being filled in, a notice, an empty state.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do divide sections with hairline rules (#e1e3e5) and 40px of space, not cards.",
+      "Do use exactly one solid gold button per page; make every other action an outline box.",
+      "Do show OFFICIAL only on administrator-checked fees, DEMO FEE on demo amounts, and Estimate otherwise, with a legend that names only the marks shown.",
+      "Do put an uppercase 12px field label directly above the value it names, and set every figure in tabular numerals.",
+      "Do write status in words inside a stamp, so colour is never the only signal.",
+      "Do keep touch targets at least 44px and show the gold focus ring on every interactive element.",
+      "Do keep the footer line saying the site is not a government service."
+    ],
+    "donts": [
+      "Don't use purple, violet, gradients or a gradient logo.",
+      "Don't add shadows to anything, including toasts, tooltips and menus.",
+      "Don't build stat tiles, icon cards or pill-shaped badges; status is a 3px-cornered stamp.",
+      "Don't place an uppercase label above a heading as an eyebrow or kicker; labels name values.",
+      "Don't use green or red for decoration, or gold for anything but action, links, active navigation and the seal.",
+      "Don't use government emblems, falcons or claims of being official.",
+      "Don't colour chart labels in the bar colour; plan charts stay grey and ink."
+    ]
+  }
+}

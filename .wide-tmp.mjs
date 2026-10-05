@@ -1,0 +1,11 @@
+import { chromium } from "@playwright/test";
+const browser = await chromium.launch({ channel: "chrome" });
+const ctx = await browser.newContext();
+await ctx.request.post("http://localhost:3000/api/auth/sign-in", { data: { email: process.argv[3], password: "Demo2026pass" } });
+const page = await ctx.newPage();
+await page.setViewportSize({ width: Number(process.argv[4]), height: 900 });
+await page.goto("http://localhost:3000" + process.argv[2], { waitUntil: "networkidle" });
+const vw = await page.evaluate(() => window.innerWidth);
+const out = await page.evaluate((vw) => [...document.querySelectorAll("body *")].filter((e) => e.getBoundingClientRect().right > vw + 1).slice(0, 8).map((e) => `${e.tagName}.${(e.className?.baseVal ?? e.className).toString().slice(0, 90)} r=${Math.round(e.getBoundingClientRect().right)}`), vw);
+console.log(out.join("\n"));
+await browser.close();

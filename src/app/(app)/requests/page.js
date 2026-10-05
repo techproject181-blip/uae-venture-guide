@@ -1,0 +1,154 @@
+import Link from "next/link";
+import { Fields, Section } from "@/components/document";
+import { EmptyState, PageHeader } from "@/components/page-header";
+import { InterestList } from "@/components/requests/interest-list";
+import { RequestActions } from "@/components/requests/request-actions";
+import { StatusBadge } from "@/components/status-badge";
+import { buttonVariants } from "@/components/ui/button";
+import { toPlain } from "@/lib/api";
+import { connectDB } from "@/lib/db";
+import { formatDate } from "@/lib/format";
+import { requireUser } from "@/lib/guards";
+import { listInterestsForOwner } from "@/lib/funding";
+import { cn } from "@/lib/utils";
+import { MentorRequest } from "@/models/MentorRequest";
+import "@/models/Plan"; // registers the models that populate() reads from
+import "@/models/User";
+
+export const metadata = { title: "Requests" };
+
+const STATUS_ORDER = { pending: 0, accepted: 1, completed: 2, declined: 3 };
+
+/** Entrepreneurs see the guidance requests they sent and funders' interest in their plans; mentors see requests sent to them. */
+export default async function RequestsPage() {
+  const user = await requireUser({ roles: ["entrepreneur", "mentor"] });
+  const isMentor = user.role === "mentor";
+
+  await connectDB();
+  const requests = toPlain(
+    await MentorRequest.find(isMentor ? { mentorId: user.id } : { entrepreneurId: user.id })
+      .populate("mentorId", "name email")
+      .populate("entrepreneurId", "name email")
+      .populate("planId", "title")
+      .sort({ createdAt: -1 })
+      .lean(),
+  ).sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
+  const interests = isMentor ? [] : toPlain(await listInterestsForOwner(user.id));
+  const showInterests = interests.length > 0;
+
+  const list =
+    requests.length === 0 ? (
+      <EmptyState
+        title="No requests yet"
+        text={isMentor ? "Requests from founders appear here." : "Find a mentor and ask for help with your plan."}
+        action={
+          !isMentor && (
+            <Link href="/mentors" className={buttonVariants({ size: "lg" })}>
+              Find a mentor
+            </Link>
+          )
+        }
+      />
+    ) : (
+      // Under the page title the list needs no rule of its own on top; under a section heading it does.
+      <ul className={cn("divide-y border-b", !isMentor && "border-t")}>
+        {requests.map((request) => (
+          <RequestEntry key={request._id} request={request} isMentor={isMentor} />
+        ))}
+      </ul>
+    );
+
+  return (
+    <>
+      <PageHeader
+        title={isMentor ? "Guidance requests" : "Requests"}
+        description={
+          isMentor
+            ? "Founders asking for your help. Once you accept, you see each other's email and you can read the attached plan."
+            : "Your guidance requests to mentors, and funders' interest in your shared plans."
+        }
+      />
+
+      {showInterests && (
+        <Section title="Funder interest in your plans" className="mb-12 border-t-0 pt-0">
+          <InterestList interests={interests} />
+        </Section>
+      )}
+
+      {isMentor ? (
+        list
+      ) : (
+        // Each list closes with its own rule, so the sections are split by space, not by a second rule.
+        <Section title="Guidance requests" className="border-t-0 pt-0">
+          {list}
+        </Section>
+      )}
+    </>
+  );
+}
+
+/** One guidance request: who and when, the message, the attached plan, the reply, and the mentor's buttons. */
+function RequestEntry({ request, isMentor }) {
+  const other = isMentor ? request.entrepreneurId : request.mentorId;
+  const accepted = request.status === "accepted";
+  const plan = request.planId;
+
+  return (
+    <li className={cn("py-6", isMentor && "first:pt-0")}>
+      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+        <div className="min-w-0">
+          <h3 className="text-lg">{request.topic}</h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {isMentor ? "From" : "To"} {other?.name ?? "a removed account"} · {formatDate(request.createdAt)}
+          </p>
+        </div>
+        <StatusBadge status={request.status} />
+      </div>
+
+      <p className="mt-3 max-w-prose whitespace-pre-line">{request.message}</p>
+
+      {(plan || (accepted && other)) && (
+        <Fields
+          className="mt-5"
+          items={[
+            plan && {
+              label: "Attached plan",
+              value:
+                accepted || !isMentor ? (
+                  <Link href={`/plans/${plan._id}`} className="text-foreground decoration-primary underline underline-offset-4 hover:decoration-2">
+                    {plan.title}
+                  </Link>
+                ) : (
+                  <>
+                    {plan.title} <span className="font-normal text-muted-foreground">(readable once you accept)</span>
+                  </>
+                ),
+            },
+            accepted &&
+              other && {
+                label: "Email",
+                value: (
+                  <a href={`mailto:${other.email}`} className="text-foreground decoration-primary underline underline-offset-4 wrap-anywhere hover:decoration-2">
+                    {other.email}
+                  </a>
+                ),
+              },
+          ]}
+        />
+      )}
+
+      {request.mentorReply && (
+        <dl className="mt-5">
+          <dt className="field-label">Mentor&apos;s reply</dt>
+          <dd className="mt-1 max-w-prose whitespace-pre-line">{request.mentorReply}</dd>
+        </dl>
+      )}
+
+      {isMentor && (request.status === "pending" || accepted) && (
+        <div className="mt-6">
+          <RequestActions requestId={request._id} status={request.status} />
+        </div>
+      )}
+    </li>
+  );
+}

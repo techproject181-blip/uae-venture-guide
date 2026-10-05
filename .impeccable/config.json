@@ -1,0 +1,35 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "src/components/posts/markdown.jsx"
+        ],
+        "createdAt": "2026-10-05T12:11:51.061Z",
+        "reason": "Claude: L19 is the Markdown blockquote style (a left rule marking quoted text in mentor posts), the standard quotation convention, not an accent border on a card"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "helvetica",
+        "files": [
+          "src/lib/report/plan-report.jsx"
+        ],
+        "createdAt": "2026-10-05T15:26:24.875Z",
+        "reason": "Claude: the PDF report uses react-pdf's built-in standard PDF fonts, which need no font files; the web pages use Roboto"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "helvetica-bold",
+        "files": [
+          "src/lib/report/plan-report.jsx"
+        ],
+        "createdAt": "2026-10-05T15:26:24.906Z",
+        "reason": "Claude: the PDF report uses react-pdf's built-in standard PDF fonts, which need no font files; the web pages use Roboto"
+      }
+    ]
+  }
+}
