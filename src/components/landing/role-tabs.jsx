@@ -76,8 +76,8 @@ export function RoleTabs() {
             tabIndex={r.id === active ? 0 : -1}
             onClick={() => setActive(r.id)}
             className={cn(
-              "relative min-h-11 rounded-full px-5 text-sm font-medium outline-none focus-visible:ring-3 focus-visible:ring-ring/50 sm:px-7",
-              r.id === active ? "text-white" : "text-muted-foreground hover:text-foreground",
+              "relative min-h-11 rounded-full px-4 text-sm font-medium outline-none focus-visible:ring-3 focus-visible:ring-ring/50 sm:px-7",
+              r.id === active ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground",
             )}
           >
             {r.id === active && (

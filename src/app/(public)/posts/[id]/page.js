@@ -93,7 +93,7 @@ export default async function PostPage({ params }) {
                 }
               >
                 {toPlain(others).map((other) => (
-                  <li key={other._id} className="relative px-5 py-4 hover:bg-slate-50/70 sm:px-6">
+                  <li key={other._id} className="relative px-5 py-4 hover:bg-ink-50/70 sm:px-6">
                     <Link
                       href={`/posts/${other._id}`}
                       className="line-clamp-2 font-medium outline-none after:absolute after:inset-0 hover:text-primary focus-visible:after:ring-3 focus-visible:after:ring-ring/50 focus-visible:after:ring-inset"

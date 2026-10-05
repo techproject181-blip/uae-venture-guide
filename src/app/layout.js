@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
           Skip to main content
         </a>
         <MotionProvider>{children}</MotionProvider>
-        <Toaster position="top-center" closeButton toastOptions={{ classNames: { toast: "rounded-xl! border-border! shadow-[0_8px_24px_rgb(15_23_42/0.12)]!" } }} />
+        <Toaster position="top-center" closeButton toastOptions={{ classNames: { toast: "rounded-xl! border-border! shadow-float!" } }} />
       </body>
     </html>
   );

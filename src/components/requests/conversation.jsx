@@ -132,7 +132,7 @@ export function Conversation({ requestId, opening, initialMessages, initialCanSe
         aria-live="polite"
         aria-label={`Conversation with ${otherName}`}
         tabIndex={0}
-        className="max-h-[60vh] min-h-64 space-y-5 overflow-y-auto bg-slate-50 px-4 py-5 outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset sm:px-6"
+        className="max-h-[60vh] min-h-64 space-y-5 overflow-y-auto bg-ink-50 px-4 py-5 outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset sm:px-6"
       >
         <Bubble message={opening} label="Original request" />
         {messages.map((message) => (
@@ -186,7 +186,7 @@ export function Conversation({ requestId, opening, initialMessages, initialCanSe
             </p>
           </form>
         ) : (
-          <div className="flex gap-3 rounded-lg border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-muted-foreground">
+          <div className="flex gap-3 rounded-lg border border-dashed border-ink-300 bg-ink-50 p-4 text-sm text-muted-foreground">
             <Lock className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
             <p>This request is completed, so the conversation is closed. You can still read every message here.</p>
           </div>

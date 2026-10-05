@@ -14,7 +14,7 @@ export function ProgressBar({ percent, label = "Progress" }) {
         <span className="font-medium tabular-nums">{percent}%</span>
       </div>
       <div
-        className="mt-2 h-2 overflow-hidden rounded-full bg-slate-200"
+        className="mt-2 h-2 overflow-hidden rounded-full bg-ink-200"
         role="progressbar"
         aria-label={label}
         aria-valuenow={percent}

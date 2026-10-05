@@ -9,8 +9,11 @@ import { cn } from "@/lib/utils";
 
 const SUGGESTIONS = ["What will this cost me?", "Which documents do I still need?", "How long will it take?", "Mainland or free zone?"];
 
-/** The chat about one plan: history, the answer streaming in, and the question box. */
-export function ChatPanel({ planId, messages, sources, left }) {
+/**
+ * The chat about one plan, as one panel: a header row, the history with the
+ * answer streaming in, and the question box at the bottom.
+ */
+export function ChatPanel({ planId, messages, sources, left, title = "Ask about this plan", description }) {
   const router = useRouter();
   const [draft, setDraft] = useState("");
   const [live, setLive] = useState(null); // { question, answer } while an answer streams in
@@ -62,9 +65,24 @@ export function ChatPanel({ planId, messages, sources, left }) {
 
   const empty = messages.length === 0 && !live;
   return (
-    <div className="panel">
-      {/* The conversation reads like minutes: each question, then its answer, split by thin rules. */}
-      <div role="log" aria-live="polite" aria-busy={Boolean(live)} className={cn("max-h-[60vh] overflow-y-auto", !empty && "border-b px-5 py-2")}>
+    <section aria-labelledby="chat-title" className="panel overflow-hidden">
+      <div className="border-b px-5 py-4 sm:px-6">
+        <h2 id="chat-title" className="text-[1.0625rem] leading-snug font-semibold tracking-[-0.01em]">
+          {title}
+        </h2>
+        {description && <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>}
+      </div>
+
+      <div
+        role="log"
+        aria-label="Conversation"
+        aria-live="polite"
+        // It scrolls on its own, so it can take focus for keyboard scrolling.
+        tabIndex={0}
+        aria-busy={Boolean(live)}
+        className="max-h-[60vh] min-h-48 space-y-5 overflow-y-auto bg-ink-50/60 px-5 py-5 outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset sm:px-6"
+      >
+        {empty && <p className="py-10 text-center text-sm text-muted-foreground">No questions yet. Pick one below or type your own.</p>}
         {messages.map((message) => (
           <Message key={message._id} role={message.role} text={message.content} sources={message.sourceIds.map((id) => sources[id]).filter(Boolean)} />
         ))}
@@ -76,7 +94,7 @@ export function ChatPanel({ planId, messages, sources, left }) {
         )}
       </div>
 
-      <div className="p-4 sm:p-5">
+      <div className="border-t px-5 py-4 sm:px-6">
         {empty && (
           <div className="mb-4 flex flex-wrap gap-2">
             {SUGGESTIONS.map((suggestion) => (
@@ -84,7 +102,7 @@ export function ChatPanel({ planId, messages, sources, left }) {
                 key={suggestion}
                 type="button"
                 onClick={() => ask(suggestion)}
-                className="min-h-11 rounded-full border border-slate-300 bg-card px-4 text-sm font-medium transition-colors duration-150 outline-none hover:border-primary hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                className="min-h-11 rounded-full border border-ink-300 bg-card px-4 text-sm font-medium transition-colors duration-150 outline-none hover:border-primary hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
               >
                 {suggestion}
               </button>
@@ -107,7 +125,7 @@ export function ChatPanel({ planId, messages, sources, left }) {
             maxLength={1000}
             placeholder="Ask about costs, documents, visas…"
             disabled={Boolean(live)}
-            className="h-11 min-w-0 flex-1 rounded-md border border-input bg-card px-3 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="h-11 min-w-0 flex-1 rounded-lg border border-input bg-card px-3 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           />
           <Button type="submit" size="lg" disabled={Boolean(live)}>
             <Send aria-hidden="true" />
@@ -116,20 +134,24 @@ export function ChatPanel({ planId, messages, sources, left }) {
         </form>
         <p className="mt-3 text-sm text-muted-foreground">{left} questions left today. Answers are guidance, not legal or financial advice.</p>
       </div>
-    </div>
+    </section>
   );
 }
 
 function Message({ role, text, sources = [] }) {
   const mine = role === "user";
   return (
-    <div className={cn("py-3", mine && "border-t pt-5 first:border-t-0 first:pt-3")}>
+    <div className={cn("flex flex-col", mine ? "items-end" : "items-start")}>
       <p className="field-label">{mine ? "You asked" : "Answer"}</p>
-      <div className={cn("mt-1 max-w-2xl", mine && "font-medium")}>
+      <div
+        className={cn(
+          "mt-1.5 max-w-[min(42rem,92%)] rounded-2xl px-4 py-3",
+          mine ? "rounded-tr-md bg-primary text-primary-foreground" : "rounded-tl-md border bg-card",
+        )}
+      >
         <ChatText text={text} />
-      </div>
       {sources.length > 0 && (
-        <ul className="mt-3 space-y-1 text-sm">
+        <ul className="mt-3 space-y-1 border-t pt-3 text-sm">
           {sources.map((source) => (
             <li key={source.url}>
               <a
@@ -146,6 +168,7 @@ function Message({ role, text, sources = [] }) {
           ))}
         </ul>
       )}
+      </div>
     </div>
   );
 }

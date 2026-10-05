@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Fields } from "@/components/document";
+import { CardGrid } from "@/components/layout";
 import { EmptyState, PageHeader } from "@/components/page-header";
 import { StatusBadge } from "@/components/status-badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -29,51 +30,58 @@ export default async function InterestsPage() {
           }
         />
       ) : (
-        <ul className="divide-y border-b">
+        <CardGrid className="grid-cols-1">
           {interests.map((interest) => {
             const plan = interest.planId;
             const open = interest.status === "accepted" && plan?.shared && !plan?.hiddenByAdmin;
             return (
-              <li key={interest._id} className="py-6 first:pt-0">
-                <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
-                  <div className="min-w-0">
-                    <h2 className="text-lg">{plan?.title ?? "A deleted plan"}</h2>
-                    <p className="mt-1 text-sm text-muted-foreground">Sent {formatDate(interest.createdAt)}</p>
+              <li key={interest._id}>
+                <article className="panel flex h-full flex-col p-5 sm:p-6">
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <h2 className="text-[1.0625rem] leading-snug font-semibold tracking-[-0.01em]">{plan?.title ?? "A deleted plan"}</h2>
+                        <p className="mt-1 text-sm text-muted-foreground tabular-nums">Sent {formatDate(interest.createdAt)}</p>
+                      </div>
+                      <StatusBadge status={interest.status} className="shrink-0" />
+                    </div>
+                    <p className="mt-4 line-clamp-4 text-sm leading-relaxed whitespace-pre-line text-muted-foreground">{interest.message}</p>
                   </div>
-                  <StatusBadge status={interest.status} />
-                </div>
-                <p className="mt-3 max-w-prose whitespace-pre-line text-muted-foreground">{interest.message}</p>
 
-                {open && (
-                  <div className="mt-5 flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-8">
-                    <Link href={`/plans/${plan._id}`} className={buttonVariants({ size: "lg", className: "self-start sm:self-auto" })}>
-                      Read the full plan
-                    </Link>
-                    <Fields
-                      items={[
-                        { label: "Owner", value: plan.ownerId?.name },
-                        {
-                          label: "Email",
-                          value: (
-                            <a
-                              href={`mailto:${plan.ownerId?.email}`}
-                              className="text-foreground decoration-primary underline underline-offset-4 wrap-anywhere hover:decoration-2"
-                            >
-                              {plan.ownerId?.email}
-                            </a>
-                          ),
-                        },
-                      ]}
-                    />
-                  </div>
-                )}
-                {interest.status === "accepted" && !open && (
-                  <p className="mt-4 text-sm text-muted-foreground">The owner has stopped sharing this plan.</p>
-                )}
+                  {open && (
+                    <div className="mt-5 space-y-4 border-t pt-4">
+                      <Fields
+                        items={[
+                          { label: "Owner", value: plan.ownerId?.name },
+                          {
+                            label: "Email",
+                            value: (
+                              <a
+                                href={`mailto:${plan.ownerId?.email}`}
+                                className="text-foreground decoration-primary underline underline-offset-4 wrap-anywhere hover:decoration-2"
+                              >
+                                {plan.ownerId?.email}
+                              </a>
+                            ),
+                          },
+                        ]}
+                      />
+                      <Link href={`/plans/${plan._id}`} className={buttonVariants({ size: "lg", className: "w-full" })}>
+                        Read the full plan
+                      </Link>
+                    </div>
+                  )}
+                  {interest.status === "accepted" && !open && (
+                    <p className="mt-5 border-t pt-4 text-sm text-muted-foreground">The owner has stopped sharing this plan.</p>
+                  )}
+                  {interest.status === "pending" && (
+                    <p className="mt-5 border-t pt-4 text-sm text-muted-foreground">Waiting for the owner to answer. You will get an email.</p>
+                  )}
+                </article>
               </li>
             );
           })}
-        </ul>
+        </CardGrid>
       )}
     </>
   );

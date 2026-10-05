@@ -28,7 +28,7 @@ export default async function MentorsPage({ searchParams }) {
         description="Founders and professionals who help new businesses in the UAE. An administrator checks every mentor."
       />
 
-      <form className="panel mb-6 grid gap-4 p-4 sm:p-5 md:grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] md:items-end">
+      <form className="panel mb-6 grid gap-4 p-4 sm:p-5 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_8rem] md:items-end">
         <div className="space-y-2">
           <label className="block text-sm font-medium" htmlFor="expertise">
             Expertise
@@ -84,7 +84,7 @@ export default async function MentorsPage({ searchParams }) {
               </Link>
             )}
           </div>
-          <CardGrid>
+          <CardGrid className="grid-cols-1">
             {mentors.map((mentor) => (
               <li key={mentor._id}>
                 <MentorCard mentor={mentor} />

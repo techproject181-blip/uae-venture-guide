@@ -150,7 +150,7 @@ export default async function PlanOverviewPage({ params }) {
                     {phase.number}
                   </span>
                   <span className="min-w-0 flex-1 font-medium">{phase.title}</span>
-                  <span aria-hidden="true" className="hidden h-1.5 w-24 overflow-hidden rounded-full bg-slate-200 sm:block">
+                  <span aria-hidden="true" className="hidden h-1.5 w-24 overflow-hidden rounded-full bg-ink-200 sm:block">
                     <span className="block h-full rounded-full bg-done" style={{ width: `${percent}%` }} />
                   </span>
                   <span className={cn("w-20 shrink-0 text-right text-sm tabular-nums", complete ? "font-medium text-done" : "text-muted-foreground")}>

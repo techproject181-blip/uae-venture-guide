@@ -55,7 +55,7 @@ export function TaskRow({ planId, task, number, phases, sources, canEdit }) {
   }
 
   return (
-    <li className="py-1.5">
+    <li className={cn("py-1.5", canEdit ? "pr-5 pl-2 sm:pr-6 sm:pl-3" : "px-5 sm:px-6")}>
       <div className="flex flex-col gap-x-6 lg:flex-row lg:items-start">
         <div className="flex min-w-0 flex-1 items-start gap-2">
           {canEdit && (
@@ -154,7 +154,7 @@ export function TaskRow({ planId, task, number, phases, sources, canEdit }) {
           </div>
         )}
         {canEdit && editing && (
-          <div className="max-w-4xl panel p-4 sm:p-5">
+          <div className="rounded-lg bg-secondary/70 p-4 sm:p-5">
             <TaskForm planId={planId} phases={phases} task={task} onDone={() => setEditing(false)} />
             <div className="mt-5 flex justify-end border-t pt-4">
               <DeleteButton

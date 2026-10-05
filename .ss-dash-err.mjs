@@ -1,0 +1,11 @@
+import { chromium } from "@playwright/test";
+const b = await chromium.launch({ channel: "chrome" });
+const c = await b.newContext();
+await c.request.post("http://localhost:3000/api/auth/sign-in", { data: { email: process.argv[3], password: "Demo2026pass" } });
+const p = await c.newPage();
+p.on("console", m => { if (["error","warning"].includes(m.type())) console.log(m.type(), m.text().slice(0,400)); });
+p.on("pageerror", e => console.log("pageerror", e.message));
+await p.goto("http://localhost:3000"+process.argv[2], { waitUntil: "networkidle" });
+const sideways = await p.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+console.log("sideways", sideways);
+await b.close();

@@ -20,7 +20,7 @@ export default async function PostsPage() {
       {posts.length === 0 ? (
         <EmptyState title="No posts yet" text="Mentors' stories appear here." />
       ) : (
-        <CardGrid>
+        <CardGrid className="grid-cols-1">
           {posts.map((post) => (
             <li key={post._id}>
               <PostCard post={post} authorName={post.authorId?.name ?? "A mentor"} />

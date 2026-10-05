@@ -18,7 +18,7 @@ export function SignOutButton() {
   }
 
   return (
-    <Button variant="outline" size="lg" onClick={signOut} disabled={pending} className="max-sm:px-3 max-sm:[&_svg]:hidden">
+    <Button variant="outline" size="lg" onClick={signOut} disabled={pending} className="max-sm:h-10 max-sm:px-3 max-sm:[&_svg]:hidden">
       <LogOut aria-hidden="true" />
       {pending ? "Signing out…" : "Sign out"}
     </Button>

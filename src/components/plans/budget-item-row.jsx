@@ -16,7 +16,7 @@ export function BudgetItemRow({ planId, item, canEdit, columns }) {
   return (
     <>
       <tr>
-        <td>
+        <td className="pl-5 sm:pl-6">
           <p className="font-medium">{item.label}</p>
           <p className="text-muted-foreground">{labelOf(BUDGET_CATEGORIES, item.category)}</p>
         </td>
@@ -40,7 +40,7 @@ export function BudgetItemRow({ planId, item, canEdit, columns }) {
       </tr>
       {editing && (
         <tr>
-          <td colSpan={columns} className="bg-secondary px-4 py-5">
+          <td colSpan={columns} className="bg-secondary/70 px-5 py-5 sm:px-6">
             <BudgetItemForm planId={planId} item={item} onDone={() => setEditing(false)} />
             <div className="mt-5 flex justify-end border-t pt-4">
               <DeleteButton

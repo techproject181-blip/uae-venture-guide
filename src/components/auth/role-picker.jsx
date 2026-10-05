@@ -20,13 +20,13 @@ export function RolePicker({ error }) {
         {ROLES.map(({ value, title, text, needsApproval }) => (
           <label
             key={value}
-            className="group flex min-h-11 cursor-pointer items-start gap-3 rounded-xl border bg-card px-4 py-3 shadow-xs transition-[border-color,background-color,box-shadow] duration-200 hover:border-slate-300 has-checked:border-primary has-checked:bg-accent has-checked:shadow-[0_0_0_1px_var(--primary)] has-focus:ring-3 has-focus:ring-ring/50"
+            className="group flex min-h-11 cursor-pointer items-start gap-3 rounded-xl border bg-card px-4 py-3 shadow-xs transition-[border-color,background-color,box-shadow] duration-200 hover:border-ink-300 has-checked:border-primary has-checked:bg-accent has-checked:shadow-[0_0_0_1px_var(--primary)] has-focus:ring-3 has-focus:ring-ring/50"
           >
             {/* The ring shows on any focus: Safari does not count a hidden radio moved with the arrow keys as "focus-visible". */}
             <input type="radio" name="role" value={value} defaultChecked={value === "entrepreneur"} className="sr-only" />
             <span
               aria-hidden="true"
-              className="mt-0.5 flex size-4.5 shrink-0 items-center justify-center rounded-full border-[1.5px] border-slate-400 transition-colors group-has-checked:border-primary"
+              className="mt-0.5 flex size-4.5 shrink-0 items-center justify-center rounded-full border-[1.5px] border-ink-400 transition-colors group-has-checked:border-primary"
             >
               <span className="size-2 scale-50 rounded-full bg-primary opacity-0 transition-[opacity,scale] duration-200 group-has-checked:scale-100 group-has-checked:opacity-100" />
             </span>

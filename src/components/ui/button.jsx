@@ -8,10 +8,10 @@ const variants = cva(
     variants: {
       variant: {
         // The one main action on a page: emerald.
-        default: "bg-primary text-primary-foreground shadow-[0_1px_2px_rgb(4_120_87/0.25)] hover:bg-(--primary-hover) hover:shadow-[0_4px_12px_rgb(4_120_87/0.25)]",
+        default: "bg-primary text-primary-foreground shadow-primary hover:bg-primary-hover hover:shadow-primary-lift",
         // Everything else: a white button with a light edge.
-        outline: "border-slate-300 bg-card text-foreground shadow-xs hover:border-slate-400 hover:bg-slate-50 aria-expanded:bg-secondary",
-        secondary: "bg-foreground text-white hover:bg-slate-800",
+        outline: "border-ink-300 bg-card text-foreground shadow-xs hover:border-ink-400 hover:bg-ink-50 aria-expanded:bg-secondary",
+        secondary: "bg-foreground text-primary-foreground hover:bg-ink-800",
         ghost: "hover:bg-secondary hover:text-foreground aria-expanded:bg-secondary",
         destructive: "border-destructive bg-card text-destructive hover:bg-destructive-surface focus-visible:border-destructive focus-visible:ring-destructive/20",
         link: "text-foreground underline decoration-primary underline-offset-4 hover:decoration-2",

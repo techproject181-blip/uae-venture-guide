@@ -66,10 +66,13 @@ export async function expectNotFound(page, path) {
 
 /**
  * Checks the page with axe for WCAG 2.1 level A and AA problems. It first waits
- * for entrance animations to end, because text that is still fading in would be
- * measured at part of its real contrast. Loaders that never stop are skipped.
+ * for the page title and for entrance animations to end, because text that is
+ * still fading in would be measured at part of its real contrast. Loaders that
+ * never stop are skipped.
  */
 export async function expectAccessible(page) {
+  // After a client-side page change the new title arrives a moment later.
+  await expect.poll(() => page.title()).not.toBe("");
   await page.evaluate(() =>
     Promise.all(
       document

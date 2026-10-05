@@ -1,5 +1,8 @@
 import Link from "next/link";
+import { AdminTabs } from "@/components/admin/admin-tabs";
 import { UserActions } from "@/components/admin/user-actions";
+import { tableEdges } from "@/components/admin/table-edges";
+import { TablePanel } from "@/components/layout";
 import { EmptyState, PageHeader } from "@/components/page-header";
 import { Pagination } from "@/components/pagination";
 import { StatusBadge } from "@/components/status-badge";
@@ -39,32 +42,27 @@ export default async function AdminUsersPage({ searchParams }) {
     User.countDocuments({ status: "pending" }),
   ]);
 
+  const current = FILTERS.find((f) => f.value === filter);
+
   return (
     <>
       <PageHeader title="Users" description="Approve new mentors and funders. Suspend accounts that break the rules." />
 
-      <nav aria-label="Filter users" className="-mx-3 mb-4 flex flex-wrap">
-        {FILTERS.map(({ value, label }) => (
-          <Link
-            key={value}
-            href={`/admin/users?status=${value}`}
-            aria-current={filter === value ? "page" : undefined}
-            className={cn(
-              "border-b-2 px-3 py-3 text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset",
-              filter === value ? "border-primary font-medium text-foreground" : "border-transparent text-muted-foreground hover:text-foreground",
-            )}
-          >
-            {label}
-            {value === "pending" && pendingCount > 0 && <span className="tabular-nums"> ({pendingCount})</span>}
-          </Link>
-        ))}
-      </nav>
+      <AdminTabs
+        label="Filter users"
+        tabs={FILTERS.map(({ value, label }) => ({
+          href: `/admin/users?status=${value}`,
+          label,
+          count: value === "pending" ? pendingCount : 0,
+          current: filter === value,
+        }))}
+      />
 
       {users.length === 0 ? (
-        <EmptyState title={FILTERS.find((f) => f.value === filter).empty} />
+        <EmptyState title={current.empty} />
       ) : (
-        <div className="relative overflow-x-auto panel">
-          <table className="doc-table">
+        <TablePanel title={current.label} description={total === 1 ? "1 account" : `${total} accounts`}>
+          <table className={cn("doc-table [&_td]:align-middle", tableEdges)}>
             <thead>
               <tr>
                 <th scope="col">Name</th>
@@ -110,7 +108,7 @@ export default async function AdminUsersPage({ searchParams }) {
               })}
             </tbody>
           </table>
-        </div>
+        </TablePanel>
       )}
 
       <Pagination page={page} total={total} pageSize={PAGE_SIZE} href={(n) => `/admin/users?status=${filter}&page=${n}`} />

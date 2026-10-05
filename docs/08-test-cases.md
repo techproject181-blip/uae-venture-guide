@@ -51,6 +51,9 @@ For manual testing, use the demo accounts in the README (password `Demo2026pass`
 | MENT-06 | A mentor writes a post with a chart and a picture, edits it, deletes it | Shows on the public posts page, changes after editing, gone after deleting | By hand | |
 | MENT-07 | HTML inside a post | Shown as nothing, never run | `security.spec.js` | |
 | MENT-08 | Ask a mentor who is not taking requests | Refused with a clear message | By hand | |
+| MENT-09 | After the mentor accepts, the entrepreneur and the mentor each send a message in the request's conversation | Each message is saved, shows on the other side within a few seconds without reloading, and is still there after a reload | `community.spec.js` | |
+| MENT-10 | The mentor marks the request completed, then both open the conversation | The messages can still be read, but there is no box to send a new one; sending through the API is refused (409) | `messages.test.js` (database), by hand in the browser | |
+| MENT-11 | Someone who is not in the request (another entrepreneur, another mentor, a funder or an administrator) opens the conversation | "Not found" (404) for the page and for the messages API | `messages.test.js` (database), by hand in the browser | |
 
 ## Funders (FUND)
 
@@ -89,4 +92,4 @@ For manual testing, use the demo accounts in the README (password `Demo2026pass`
 
 ## Unit and database tests
 
-`npm test` runs 50 tests without a browser: budget and progress sums, the UAE day for the daily limits, the form rules, who may read a plan (every role and every request state), the daily limits with 10 requests at the same moment, which fees the planner marks official or demo, and which sources the chat links.
+`npm test` runs 66 tests in 9 files without a browser: budget and progress sums, the UAE day for the daily limits, the form rules, who may read a plan (every role and every request state), who may read and write a guidance request's conversation and when it closes, the daily limits with 10 requests at the same moment, which fees the planner marks official or demo, and which sources the chat links.

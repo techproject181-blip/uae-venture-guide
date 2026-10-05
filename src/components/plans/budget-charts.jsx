@@ -33,40 +33,52 @@ export function BudgetCharts({ rows }) {
   const withActual = byEstimate.filter((row) => row.actual > 0);
 
   return (
-    <div className="grid gap-x-10 gap-y-10 border-t pt-6 lg:grid-cols-2">
-      <figure className="min-w-0">
-        <figcaption className="text-xl font-bold">First-year cost by category</figcaption>
-        <p className="mt-1 text-muted-foreground">Estimated, with 12 months of monthly costs.</p>
-        <Drawing height={chartHeight(byEstimate.length)}>
-          <CategoryChart rows={byEstimate} height={chartHeight(byEstimate.length)} />
-        </Drawing>
-        <ChartTable rows={byEstimate} />
+    <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
+      <figure className="panel flex min-w-0 flex-col overflow-hidden">
+        <ChartCaption title="First-year cost by category" text="Estimated, with 12 months of monthly costs." />
+        <div className="px-5 pb-5 sm:px-6 sm:pb-6">
+          <Drawing height={chartHeight(byEstimate.length)}>
+            <CategoryChart rows={byEstimate} height={chartHeight(byEstimate.length)} />
+          </Drawing>
+          <ChartTable rows={byEstimate} />
+        </div>
       </figure>
 
-      <figure className="min-w-0 border-t pt-6 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-10">
-        <figcaption className="text-xl font-bold">Estimated and actual</figcaption>
-        <p className="mt-1 text-muted-foreground">Categories where you have entered what you paid.</p>
-        {withActual.length === 0 ? (
-          <p className="mt-4 rounded-xl border border-dashed border-slate-300 bg-card/60 px-5 py-8 text-center text-sm text-muted-foreground">
-            Add what you actually paid to your costs below to compare it with the estimates.
-          </p>
-        ) : (
-          <>
-            <Drawing height={chartHeight(withActual.length * 1.6)}>
-              <ActualChart rows={withActual} height={chartHeight(withActual.length * 1.6)} />
-            </Drawing>
-            <ChartTable rows={withActual} showActual />
-          </>
-        )}
+      <figure className="panel flex min-w-0 flex-col overflow-hidden">
+        <ChartCaption title="Estimated and actual" text="Categories where you have entered what you paid." />
+        <div className="flex flex-1 flex-col px-5 pb-5 sm:px-6 sm:pb-6">
+          {withActual.length === 0 ? (
+            <p className="mt-5 grid flex-1 place-items-center rounded-lg border border-dashed border-ink-300 px-5 py-8 text-center text-sm text-muted-foreground sm:mt-6">
+              Add what you actually paid to your costs below to compare it with the estimates.
+            </p>
+          ) : (
+            <>
+              <Drawing height={chartHeight(withActual.length * 1.6)}>
+                <ActualChart rows={withActual} height={chartHeight(withActual.length * 1.6)} />
+              </Drawing>
+              <ChartTable rows={withActual} showActual />
+            </>
+          )}
+        </div>
       </figure>
     </div>
+  );
+}
+
+/** A chart's title and note, as the header row of its panel. */
+function ChartCaption({ title, text }) {
+  return (
+    <figcaption className="border-b px-5 py-4 sm:px-6">
+      <span className="block text-[1.0625rem] leading-snug font-semibold tracking-[-0.01em]">{title}</span>
+      <span className="mt-0.5 block text-sm text-muted-foreground">{text}</span>
+    </figcaption>
   );
 }
 
 /** Keeps the drawing's space while it loads. Hidden from screen readers, which read the table instead. */
 function Drawing({ height, children }) {
   return (
-    <div className="mt-4" style={{ minHeight: height }} aria-hidden="true">
+    <div className="mt-5 sm:mt-6" style={{ minHeight: height }} aria-hidden="true">
       {children}
     </div>
   );

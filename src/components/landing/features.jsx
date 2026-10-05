@@ -27,8 +27,8 @@ export function Features() {
       <Feature icon={ListChecks} title="A roadmap in the right order" text="Licence, visas, bank and tax, as numbered steps you tick off." className="lg:col-span-2">
         <ol className="grid gap-2 sm:grid-cols-3">
           {["Choose your licence", "Reserve the trade name", "Open a bank account"].map((step, index) => (
-            <li key={step} className="flex items-center gap-2.5 rounded-lg border bg-slate-50/70 px-3 py-2.5 text-sm">
-              <span className={cn("flex size-5 shrink-0 items-center justify-center rounded-md border", index < 2 ? "border-primary bg-primary text-white" : "border-slate-300 bg-white")}>
+            <li key={step} className="flex items-center gap-2.5 rounded-lg border bg-ink-50/70 px-3 py-2.5 text-sm">
+              <span className={cn("flex size-5 shrink-0 items-center justify-center rounded-md border", index < 2 ? "border-primary bg-primary text-primary-foreground" : "border-ink-300 bg-card")}>
                 {index < 2 && <Check className="size-3.5" strokeWidth={3} />}
               </span>
               <span className="truncate">{step}</span>
@@ -49,7 +49,7 @@ export function Features() {
         <ul className="space-y-1.5 text-sm">
           {["Passport copy", "Tenancy contract (Ejari)", "Initial approval"].map((doc, index) => (
             <li key={doc} className="flex items-center gap-2">
-              <Check className={cn("size-4", index < 2 ? "text-primary" : "text-slate-300")} strokeWidth={3} />
+              <Check className={cn("size-4", index < 2 ? "text-primary" : "text-ink-300")} strokeWidth={3} />
               <span className={index < 2 ? "" : "text-muted-foreground"}>{doc}</span>
             </li>
           ))}
@@ -65,8 +65,8 @@ export function Features() {
           ].map(([label, estimated, paid]) => (
             <div key={label} className="flex items-center gap-3 text-xs">
               <span className="w-16 text-muted-foreground">{label}</span>
-              <span className="relative h-2.5 flex-1 overflow-hidden rounded-full bg-slate-100">
-                <span className="bar-grow absolute inset-y-0 left-0 origin-left rounded-full bg-emerald-300" style={{ width: `${estimated}%` }} />
+              <span className="relative h-2.5 flex-1 overflow-hidden rounded-full bg-ink-100">
+                <span className="bar-grow absolute inset-y-0 left-0 origin-left rounded-full bg-brand-300" style={{ width: `${estimated}%` }} />
                 <span className="absolute inset-y-0 left-0 rounded-full bg-primary" style={{ width: `${paid}%` }} />
               </span>
             </div>
@@ -76,8 +76,8 @@ export function Features() {
 
       <Feature icon={Bot} title="Ask about your plan" text="Questions about your own plan, answered with links to the official sources." className="lg:col-span-2">
         <div className="space-y-2 text-sm">
-          <p className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-md bg-primary px-3.5 py-2 text-white">Which documents do I need?</p>
-          <p className="w-fit max-w-[85%] rounded-2xl rounded-bl-md border bg-white px-3.5 py-2">You still need your tenancy contract…</p>
+          <p className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-md bg-primary px-3.5 py-2 text-primary-foreground">Which documents do I need?</p>
+          <p className="w-fit max-w-[85%] rounded-2xl rounded-bl-md border bg-card px-3.5 py-2">You still need your tenancy contract…</p>
         </div>
       </Feature>
 
@@ -86,7 +86,7 @@ export function Features() {
           {["FA", "OS", "DO", "LH"].map((initials, index) => (
             <span
               key={initials}
-              className={cn("-ml-2 flex size-9 items-center justify-center rounded-full border-2 border-white text-xs font-bold first:ml-0", index % 2 ? "bg-amber-100 text-amber-800" : "bg-accent text-accent-foreground")}
+              className={cn("-ml-2 flex size-9 items-center justify-center rounded-full border-2 border-card text-xs font-bold first:ml-0", index % 2 ? "bg-gold-100 text-gold-800" : "bg-accent text-accent-foreground")}
             >
               {initials}
             </span>

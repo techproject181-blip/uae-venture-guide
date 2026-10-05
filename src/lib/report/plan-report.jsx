@@ -2,22 +2,16 @@ import { Document, Link, Page, StyleSheet, Text, View } from "@react-pdf/rendere
 import { estimatedWeeks, firstYearCost, firstYearTotal, progressPercent, remainingBudget, totalsByCategory } from "@/lib/budget";
 import { BUDGET_CATEGORIES, EMIRATES, JURISDICTIONS, RECURRENCES, SECTORS, TASK_STATUSES, labelOf } from "@/lib/constants";
 import { formatAed, formatAedRange, formatDate } from "@/lib/format";
+import { reportColors } from "@/lib/theme-colors";
 
 // The plan as a PDF report (FR-40), drawn with @react-pdf/renderer. It uses
 // the built-in Helvetica font, so no font files are needed. It looks like the
 // app: black ink on white paper, thin rules, small uppercase field labels, an
 // OFFICIAL mark in gold on checked fees and green for finished steps. The
-// colours are the UAE Government Design System ones the app uses.
+// colours come from the app's palette (src/lib/theme-colors.js mirrors
+// globals.css, because the PDF is drawn on the server and cannot read CSS).
 
-const INK = "#0f172a"; // the app's ink
-const MUTED = "#475569"; // muted text
-const RULE = "#e2e8f0"; // the thin rules
-const STRONG_RULE = "#94a3b8"; // under table headings
-const FILL = "#f1f5f9"; // quiet fills
-const GOLD = "#b45309"; // the OFFICIAL mark, as on screen
-const GREEN = "#047857"; // emerald: done
-const RED = "#b91c1c"; // over budget
-const BAR = "#45c093"; // the estimate colour of the budget chart in the app
+const { ink: INK, muted: MUTED, rule: RULE, strongRule: STRONG_RULE, fill: FILL, seal: GOLD, done: GREEN, danger: RED, estimate: BAR } = reportColors;
 
 const s = StyleSheet.create({
   page: { paddingTop: 40, paddingBottom: 56, paddingHorizontal: 40, fontFamily: "Helvetica", fontSize: 10, color: INK, lineHeight: 1.4 },

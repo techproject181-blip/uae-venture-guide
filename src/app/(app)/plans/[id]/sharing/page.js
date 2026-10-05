@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { Section } from "@/components/document";
 import { SharingForm } from "@/components/funding/sharing-form";
 import { progressPercent } from "@/lib/budget";
 import { requireUser } from "@/lib/guards";
@@ -23,16 +22,17 @@ export default async function PlanSharingPage({ params }) {
     progress: progressPercent(plan.tasks),
   };
   return (
-    <Section
-      title="Share with funders"
-      description="Funders browse pitch cards and can ask to see your plan. You decide who gets in."
-      >
-      {plan.hiddenByAdmin && (
-        <p role="alert" className="mb-6 max-w-2xl rounded-lg border border-destructive/30 bg-destructive-surface px-4 py-3 text-destructive">
-          An administrator has hidden this plan from funders.
-        </p>
-      )}
-      <SharingForm planId={plan._id} card={card} shared={plan.shared} />
-    </Section>
+    <SharingForm
+      planId={plan._id}
+      card={card}
+      shared={plan.shared}
+      notice={
+        plan.hiddenByAdmin && (
+          <p role="alert" className="rounded-xl border border-destructive/30 bg-destructive-surface px-5 py-4 text-destructive">
+            An administrator has hidden this plan from funders.
+          </p>
+        )
+      }
+    />
   );
 }

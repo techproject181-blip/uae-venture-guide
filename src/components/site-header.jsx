@@ -13,11 +13,11 @@ const LINKS = [
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b bg-card/85 backdrop-blur-lg backdrop-saturate-150">
-      <div className="page-width flex h-16 items-center gap-6">
+      <div className="page-width flex h-16 items-center gap-3 sm:gap-6">
         <Logo />
         <NavLinks links={LINKS} className="hidden self-stretch lg:flex" />
-        <div className="ml-auto flex items-center gap-2">
-          <Link href="/sign-in" className={buttonVariants({ variant: "ghost", size: "lg" })}>
+        <div className="ml-auto flex shrink-0 items-center gap-2">
+          <Link href="/sign-in" className={buttonVariants({ variant: "ghost", size: "lg", className: "max-sm:px-3" })}>
             Sign in
           </Link>
           <Link href="/sign-up" className={buttonVariants({ size: "lg", className: "hidden sm:inline-flex" })}>

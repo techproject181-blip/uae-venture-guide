@@ -7,10 +7,11 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieCh
 // from the dataviz reference palette, never cycled. The drawing is hidden from
 // screen readers (a table gives the same numbers), so Recharts' own keyboard
 // layer is switched off.
-const SERIES = "#047857"; // the app's emerald
-const SLICES = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300"];
-const INK = "#475569"; // the app's muted text colour
-const RULE = "#e2e8f0"; // the app's thin rules
+// Colours are the palette tokens in globals.css; SVG reads var() the same as CSS.
+const SERIES = "var(--primary)";
+const SLICES = [1, 2, 3, 4, 5, 6].map((n) => `var(--chart-${n})`);
+const INK = "var(--chart-text)";
+const RULE = "var(--chart-grid)";
 const axisProps = { tickLine: false, axisLine: false, tick: { fill: INK, fontSize: 13 } };
 
 /** A bar, line or pie chart of `data` ([{ label, value }]). */
@@ -40,7 +41,7 @@ export default function PostChartDrawing({ type, title, data, height }) {
           <CartesianGrid vertical={false} stroke={RULE} />
           <XAxis dataKey="label" {...axisProps} />
           <YAxis width={48} {...axisProps} />
-          <Tooltip cursor={{ fill: "#f1f5f9" }} />
+          <Tooltip cursor={{ fill: "var(--chart-cursor)" }} />
           <Bar dataKey="value" name={title || "Value"} fill={SERIES} radius={[4, 4, 0, 0]} maxBarSize={48} animationDuration={600} />
         </BarChart>
       )}

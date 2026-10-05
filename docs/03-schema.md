@@ -1,18 +1,18 @@
 # Schema
 
-MongoDB Atlas. One database per environment, named by `MONGODB_DB` (for example `uae_venture_guide_dev`). The auth library (Better Auth) owns four collections; the app owns the rest.
+MongoDB through Mongoose 9: MongoDB 7 in Docker for development and the tests, a free MongoDB Atlas cluster for the live site. The database name is part of `MONGODB_URI` (for example `uae_venture_guide`). Each collection has one Mongoose model in `src/models`, and the app owns every collection; there is no auth library. Collections are written below in camelCase for reading; Mongoose stores them in lower case (`mentorRequests` is stored as `mentorrequests`).
 
 Conventions:
 
-- Ids are `ObjectId` in `_id`. References to users store the user's id as a string, because that is how Better Auth exposes `user.id`.
+- Ids are `ObjectId` in `_id`. References to other documents, users included, are `ObjectId`s with a Mongoose `ref`.
 - Money is whole dirhams stored as integers (`Int32`). Plan estimates never need fils, and integers avoid rounding bugs in totals.
 - Every document has `createdAt` and, where it changes, `updatedAt` (both `Date`), omitted below.
-- Every collection has a `$jsonSchema` validator for required fields and enum values, created by `npm run db:setup`. Zod validates first, in the app; the validator is the second line of defence when a bug slips past Zod.
+- Every model's Mongoose schema checks required fields, lengths and enum values, and declares the collection's indexes. Zod validates first, in the app; the Mongoose schema is the second line of defence when a bug slips past Zod.
 - Things that are read and written together live in one document. A plan and its roadmap are one document, so saving a generated roadmap is one atomic write.
 
 ## Enums
 
-Stored as strings. The same lists live in `src/lib/domain/enums.ts` (shared by the browser and the server) and in the collection validators.
+Stored as strings. The same lists live in `src/lib/constants.js` (shared by the browser and the server) and in the model schemas.
 
 | Enum | Values |
 | --- | --- |
@@ -35,21 +35,26 @@ Stored as strings. The same lists live in `src/lib/domain/enums.ts` (shared by t
 
 ## Accounts
 
-**`user`** (Better Auth). Built-in fields: `name`, `email`, `emailVerified`, `image`, `createdAt`, `updatedAt`. Added through `user.additionalFields`:
+**`user`** (model `User`, stored as `users`). The app's own accounts:
 
 | Field | Type | Rule |
 | --- | --- | --- |
-| `role` | string | Accepted at signup, but its validator only allows `entrepreneur`, `mentor` or `funder`. The `user.update.before` hook refuses any change to it through Better Auth's own endpoints (without that hook, a user could switch roles through `/api/auth/update-user` and skip approval). Only admin data functions change it; `admin` is set only by an admin or the seed script |
-| `status` | string | Not accepted as input. The `user.create.before` hook sets `active` for entrepreneurs and `pending` for mentors and funders |
-| `emirate` | string | Optional |
+| `name` | string | Up to 80 characters |
+| `email` | string | Unique, stored in lower case |
+| `passwordHash` | string | A bcrypt hash (bcryptjs). The password itself is never stored |
+| `role` | string | Chosen at sign-up, where the Zod schema only allows `entrepreneur`, `mentor` or `funder`. Users cannot change it; `admin` is set only by `npm run create-admin` |
+| `status` | string | Not accepted as input. The sign-up route sets `active` for entrepreneurs and `pending` for mentors and funders; only administrators change it |
+| `passwordResetHash`, `passwordResetExpires` | string, Date | Only a hash of the emailed reset token is stored, so a database leak cannot reset passwords |
 
-Indexes: `email_unique` on `{ email: 1 }`, and `status_createdAt` on `{ status: 1, createdAt: -1 }` for the admin users list (pending accounts first, newest first).
+Indexes: unique on `{ email: 1 }`, and `{ status: 1, createdAt: -1 }` for the admin users list.
 
-**`session`**, **`account`**, **`verification`** (Better Auth). Not touched by app code, except that suspending a user deletes their `session` documents.
+There is no sessions collection. A session is a JWT signed with `JWT_SECRET` (jose), kept in an HTTP-only cookie for 7 days. Every private page loads the user from the database, so an approval or a suspension takes effect at once.
 
-**`mentorProfiles`**: `_id` is the user id (string). `headline`, `bio`, `expertise: string[]`, `industries: string[]`, `emirates: string[]`, `yearsExperience`, `linkedinUrl`, `acceptingRequests` (default true).
+**`loginAttempts`** (model `LoginAttempt`): `email` (unique), `failures`, `createdAt`. After five failures, sign-in for that email is refused until a TTL index deletes the record, 15 minutes after the first failure.
 
-**`funderProfiles`**: `_id` is the user id (string). `organization`, `funderType`, `ticketMinAed`, `ticketMaxAed`, `sectors: string[]`, `bio`.
+**`mentorProfiles`**: `userId` (unique). `headline`, `bio`, `expertise: string[]`, `industries: string[]`, `emirates: string[]`, `yearsExperience`, `linkedinUrl`, `acceptingRequests` (default true).
+
+**`funderProfiles`**: `userId` (unique). `organization`, `funderType`, `ticketMinAed`, `ticketMaxAed`, `sectors: string[]`, `bio`.
 
 ## Plans
 
@@ -58,7 +63,7 @@ Indexes: `email_unique` on `{ email: 1 }`, and `status_createdAt` on `{ status: 
 ```ts
 {
   _id: ObjectId,
-  ownerId: string,
+  ownerId: ObjectId,
   // intake
   title: string,
   idea: string,               // max 2,000 characters
@@ -131,11 +136,11 @@ Tasks sit in one flat array with a `phaseId` rather than nested inside phases, s
 
 Indexes: `{ ownerId: 1, updatedAt: -1 }`, and `{ shared: 1, hiddenByAdmin: 1, emirate: 1, sector: 1 }` for the funder feed.
 
-**`chatMessages`**: `planId: ObjectId`, `authorId: string`, `role` (`user` or `assistant`), `content`, `inputTokens`, `outputTokens`. Kept apart from the plan because it grows without bound. Index `{ planId: 1, createdAt: 1 }`.
+**`chatMessages`**: `planId: ObjectId`, `role` (`user` or `assistant`), `content`, `sourceIds` (the sources an answer used). Kept apart from the plan because it grows without bound. Index `{ planId: 1, createdAt: 1 }`.
 
 ## Reference data
 
-**`sources`**: `title`, `publisher`, `url`, `emirate` (null means federal, applies everywhere), `categories: string[]`, `summary`, `verifiedAt`, `active`. Searched with an Atlas Search index named `sources_text` over `title`, `publisher` and `summary`; see [Source search](02-architecture.md#source-search) for the plain text-index mode that automated tests use.
+**`sources`**: `title`, `publisher`, `url`, `emirate` (null means federal, applies everywhere), `categories: string[]`, `summary`, `verifiedAt`, `active`. Searched with a MongoDB text index named `sources_text` over `title`, `publisher` and `summary`; see [Source search](02-architecture.md#source-search).
 
 **`feeReferences`**: `sourceId: ObjectId`, `emirate` (null for federal), `jurisdiction` (`mainland` or `free_zone`), `item` (for example "trade licence, professional activity"), `amountMinAed`, `amountMaxAed`, `recurrence`, `notes`, `verifiedAt`, `active`. Index `{ emirate: 1, active: 1 }`.
 
@@ -143,19 +148,21 @@ Both collections start empty except for a few clearly labelled demo rows. An adm
 
 ## Mentors, posts, funders
 
-**`mentorRequests`**: `entrepreneurId`, `mentorId`, `planId?: ObjectId`, `topic`, `message`, `status`, `mentorReply?`, `respondedAt?`. Partial unique index on `{ entrepreneurId: 1, mentorId: 1 }` where `status` is `pending`, so one pending request per pair.
+**`mentorRequests`**: `entrepreneurId`, `mentorId`, `planId?: ObjectId`, `topic`, `message`, `status`, `mentorReply?`, `respondedAt?`. Partial unique index on `{ entrepreneurId: 1, mentorId: 1 }` where `status` is `pending`, so one pending request per pair. Accepting a request opens its conversation; a reply sent with the acceptance becomes the conversation's first message.
 
-**`posts`**: `authorId`, `title`, `body` (Markdown, rendered without raw HTML), `images: { url, storageKey, alt }[]` (at most five, `alt` required), `chart?: { type: "bar" | "line" | "pie", labels: string[], values: number[] }`, `status`. Index `{ status: 1, createdAt: -1 }`.
+**`requestMessages`** (model `RequestMessage`, stored as `requestmessages`): `requestId: ObjectId` (the guidance request), `authorId: ObjectId` (the entrepreneur or the mentor), `body` (1 to 2,000 characters), `createdAt`. Index `{ requestId: 1, createdAt: 1 }`, because a conversation is always read oldest first, and `{ authorId: 1, createdAt: -1 }` for the limit of 30 messages a minute per person. Kept apart from the request because a conversation can grow without limit. Messages can be sent only while the request is `accepted`; once it is `completed` they stay readable but no new ones are accepted. The rules live in `src/lib/messages.js`.
+
+**`posts`**: `authorId`, `title`, `body` (Markdown, rendered without raw HTML), `images: { url, alt }[]` (at most five; `url` is a picture's web address pasted by the mentor, and `alt` is required), `chart?: { type: "bar" | "line" | "pie", labels: string[], values: number[] }`, `status`. Index `{ status: 1, createdAt: -1 }`.
 
 **`fundingInterests`**: `planId: ObjectId`, `funderId`, `message`, `status`, `respondedAt?`. Unique index on `{ planId: 1, funderId: 1 }`.
 
 ## AI usage
 
-**`aiUsage`**: one document per user per day. `userId`, `day` (`"2026-09-23"` in UAE time), `generations`, `chatMessages`, `inputTokens`, `outputTokens`. Unique index on `{ userId: 1, day: 1 }`, plus a TTL index that deletes documents after 180 days.
+**`aiUsage`**: one document per user per day. `userId`, `day` (`"2026-09-23"` in UAE time), `generations`, `chatMessages`. Unique index on `{ userId: 1, day: 1 }`, plus a TTL index that deletes documents after 180 days.
 
-Quota check and increment happen in one atomic call:
+Quota check and increment happen in one atomic call, in `consumeQuota()` (`src/lib/quota.js`):
 
-```ts
+```js
 aiUsage.findOneAndUpdate(
   { userId, day, generations: { $lt: DAILY_GENERATIONS } },
   { $inc: { generations: 1 } },
@@ -180,7 +187,7 @@ Every write requires an `active` account, with one exception: users may edit the
 
 | Collection | Read | Write |
 | --- | --- | --- |
-| `user` | Self; admins (with emails); anyone, for active mentors' name and image | Self (name, image, emirate); admins (role, status) |
+| `user` | Self; admins (with emails); anyone, for active mentors' names | Self (name, and the password through a reset link); admins (status) |
 | `mentorProfiles` | Anyone, when the mentor is active; self; admins, so they can review a pending mentor | Self |
 | `funderProfiles` | Self; admins; owners of plans this funder sent interest to | Self |
 | `plans` | `canReadPlan` | Owner; admins may set `hiddenByAdmin` |
@@ -188,16 +195,17 @@ Every write requires an `active` account, with one exception: users may edit the
 | `sources`, `feeReferences` | Anyone, when `active` | Admins |
 | `aiUsage` | Self; admins | Only the quota function |
 | `mentorRequests` | The entrepreneur, the mentor, admins | Entrepreneur creates (target mentor must be active and accepting). Mentor sets `accepted`, `declined` or `completed` and the reply |
+| `requestMessages` | Only the request's entrepreneur and mentor, while both the request is `accepted` or `completed` and the reader's account is active. Anyone else, admins included, gets "not found" | The same two people, only while the request is `accepted` |
 | `posts` | Anyone, when `published`; author; admins | Active mentor authors; admins may set `hidden` |
 | `fundingInterests` | The funder, the plan owner, admins | Active funders create on shared, non-hidden plans. The owner sets `accepted` or `declined` |
 
 **Pitch cards.** Funders never receive a plan document unless `canReadPlan` passes. Discovery goes through `listPitchCards(viewer, filters)`, which checks the viewer is an active funder and projects only `_id`, `title`, `sector`, `emirate`, `budgetAed`, `pitchSummary` and progress percentage, for plans that are shared and not hidden.
 
-**Contact details.** An accepted mentor request or funding interest shows both parties' names and emails. `getRequestContacts(viewer, kind, id)` returns them only when the status is `accepted` and the viewer is one of the two parties.
+**Contact details.** Guidance requests do not show email addresses: once a mentor accepts, the entrepreneur and the mentor talk in the request's conversation (`requestMessages`), and email only tells them that something changed. An accepted funding interest shows the plan owner's name and email to the funder, and the funder's to the owner, only while the interest is `accepted`; there is no chat with funders.
 
 ## Derived values
 
-Computed in `src/lib/domain/budget.ts` and `src/lib/domain/progress.ts`, never stored. They live in `src/lib` because the browser uses them too, for live totals while editing:
+Computed in `src/lib/budget.js`, never stored. They live in `src/lib` because the browser uses them too, for live totals while editing:
 
 - **First-year total** = sum of one-time items + 12 × sum of monthly items + sum of yearly items. Computed twice: once over `estimatedAed`, once over `actualAed` where set.
 - **Remaining** = `budgetAed` − estimated first-year total. Negative means over budget, and the UI says so.
