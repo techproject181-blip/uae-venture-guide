@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MessagesSquare } from "lucide-react";
-import { Fields, Section } from "@/components/document";
+import { Fields } from "@/components/document";
+import { Panel, Stack } from "@/components/layout";
 import { EmptyState, PageHeader } from "@/components/page-header";
 import { InterestList } from "@/components/requests/interest-list";
 import { RequestActions } from "@/components/requests/request-actions";
@@ -11,7 +12,6 @@ import { connectDB } from "@/lib/db";
 import { formatDate } from "@/lib/format";
 import { requireUser } from "@/lib/guards";
 import { listInterestsForOwner } from "@/lib/funding";
-import { cn } from "@/lib/utils";
 import { MentorRequest } from "@/models/MentorRequest";
 import "@/models/Plan"; // registers the models that populate() reads from
 import "@/models/User";
@@ -51,12 +51,13 @@ export default async function RequestsPage() {
         }
       />
     ) : (
-      // Under the page title the list needs no rule of its own on top; under a section heading it does.
-      <ul className={cn("divide-y border-b", !isMentor && "border-t")}>
-        {requests.map((request) => (
-          <RequestEntry key={request._id} request={request} isMentor={isMentor} />
-        ))}
-      </ul>
+      <Panel title="Guidance requests" description={isMentor ? undefined : "Open a chat once a mentor accepts."} flush>
+        <ul className="divide-y">
+          {requests.map((request) => (
+            <RequestEntry key={request._id} request={request} isMentor={isMentor} />
+          ))}
+        </ul>
+      </Panel>
     );
 
   return (
@@ -70,20 +71,14 @@ export default async function RequestsPage() {
         }
       />
 
-      {showInterests && (
-        <Section title="Funder interest in your plans" className="mb-12">
-          <InterestList interests={interests} />
-        </Section>
-      )}
-
-      {isMentor ? (
-        list
-      ) : (
-        // Each list closes with its own rule, so the sections are split by space, not by a second rule.
-        <Section title="Guidance requests" >
-          {list}
-        </Section>
-      )}
+      <Stack>
+        {showInterests && (
+          <Panel title="Funder interest in your plans" flush>
+            <InterestList interests={interests} />
+          </Panel>
+        )}
+        {list}
+      </Stack>
     </>
   );
 }
@@ -97,10 +92,10 @@ function RequestEntry({ request, isMentor }) {
   const plan = request.planId;
 
   return (
-    <li className={cn("py-6", isMentor && "first:pt-0")}>
+    <li className="px-5 py-5 sm:px-6 sm:py-6">
       <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
         <div className="min-w-0">
-          <h3 className="text-lg">{request.topic}</h3>
+          <h3 className="text-[1.0625rem] font-semibold">{request.topic}</h3>
           <p className="mt-1 text-sm text-muted-foreground">
             {isMentor ? "From" : "To"} {other?.name ?? "a removed account"} · {formatDate(request.createdAt)}
           </p>
@@ -108,7 +103,7 @@ function RequestEntry({ request, isMentor }) {
         <StatusBadge status={request.status} />
       </div>
 
-      <p className="mt-3 max-w-prose whitespace-pre-line">{request.message}</p>
+      <p className="mt-3 max-w-prose whitespace-pre-line text-foreground/90">{request.message}</p>
 
       {plan && (
         <Fields

@@ -7,18 +7,18 @@ import { formatAedRange, formatDate } from "@/lib/format";
 
 const link = "text-foreground decoration-primary underline underline-offset-4 hover:decoration-2";
 
-/** Funding interest in the owner's plans, with the funder's profile and accept/decline buttons. */
+/** Funding interest in the owner's plans, with the funder's profile and accept/decline buttons. Rows for a flush panel. */
 export function InterestList({ interests }) {
   return (
-    <ul className="divide-y border-y">
+    <ul className="divide-y">
       {interests.map((interest) => {
         const funder = interest.funderId;
         const profile = interest.funderProfile;
         return (
-          <li key={interest._id} className="py-6">
+          <li key={interest._id} className="px-5 py-5 sm:px-6 sm:py-6">
             <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
               <div className="min-w-0">
-                <h3 className="text-lg">{funder?.name ?? "A removed account"}</h3>
+                <h3 className="text-[1.0625rem] font-semibold">{funder?.name ?? "A removed account"}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">
                   Interested in{" "}
                   <Link href={`/plans/${interest.planId?._id}`} className={`font-medium ${link}`}>
