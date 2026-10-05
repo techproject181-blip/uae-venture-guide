@@ -8,7 +8,7 @@ test("an entrepreneur signs up, signs out and signs in again", async ({ page }) 
   await expectAccessible(page);
 
   await page.getByRole("button", { name: "Sign out" }).click();
-  await page.waitForURL("**/sign-in");
+  await page.waitForURL((url) => url.pathname === "/");
   await expectAccessible(page);
   await signIn(page, email);
   await page.waitForURL("**/dashboard");

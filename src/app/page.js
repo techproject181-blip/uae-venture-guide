@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Check, ChevronDown } from "lucide-react";
 import { Features } from "@/components/landing/features";
-import { LinksOff } from "@/components/landing/links-off";
 import { HeroVisual } from "@/components/landing/hero-visual";
 import { RoleTabs } from "@/components/landing/role-tabs";
 import { SiteFooter } from "@/components/site-footer";
@@ -52,7 +51,7 @@ function SectionIntro({ id, title, text }) {
 
 export default function HomePage() {
   return (
-    <LinksOff>
+    <>
       <SiteHeader />
       <main id="main" className="flex-1 overflow-x-clip">
         {/* Hero */}
@@ -182,6 +181,6 @@ export default function HomePage() {
       </main>
 
       <SiteFooter />
-    </LinksOff>
+    </>
   );
 }
