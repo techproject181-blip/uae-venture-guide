@@ -342,7 +342,7 @@ export async function AdminDashboard({ user }) {
         aside={
           <>
             {demoSources > 0 && (
-              <Panel title="Demo data" className="border-amber-300/70">
+              <Panel title="Demo data">
                 <p className="text-sm">
                   <strong className="font-medium">{demoSources === 1 ? "1 source is" : `${demoSources} sources are`} demo data.</strong> Check each one
                   against the official page, then untick “demo” before real users rely on it.
