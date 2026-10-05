@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useConfirm } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { sendJson } from "@/lib/form-helpers";
 import { cn } from "@/lib/utils";
@@ -19,7 +20,8 @@ const ACTIONS = {
       label: "Suspend",
       status: "suspended",
       done: "Account suspended.",
-      confirm: "Suspend this account? The user is signed out at once.",
+      confirm: "Suspend this account?",
+      detail: "The user is signed out at once and cannot sign in until you reactivate them.",
       variant: "destructive",
     },
   ],
@@ -30,9 +32,10 @@ const ACTIONS = {
 export function UserActions({ userId, status, className }) {
   const router = useRouter();
   const [pending, setPending] = useState(false);
+  const confirm = useConfirm();
 
   async function change(action) {
-    if (action.confirm && !window.confirm(action.confirm)) return;
+    if (action.confirm && !(await confirm({ title: action.confirm, description: action.detail, confirmLabel: action.label, danger: action.variant === "destructive" }))) return;
     setPending(true);
     const result = await sendJson("PATCH", `/api/admin/users/${userId}`, { status: action.status });
     setPending(false);

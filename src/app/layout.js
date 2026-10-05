@@ -1,5 +1,6 @@
 import { Bricolage_Grotesque, Geist } from "next/font/google";
 import { Toaster } from "sonner";
+import { ConfirmProvider } from "@/components/confirm-dialog";
 import { MotionProvider } from "@/components/motion-provider";
 import { NavigationProgress } from "@/components/navigation-progress";
 import "./globals.css";
@@ -27,8 +28,10 @@ export default function RootLayout({ children }) {
         >
           Skip to main content
         </a>
-        <MotionProvider>{children}</MotionProvider>
-        <Toaster position="top-center" closeButton toastOptions={{ classNames: { toast: "rounded-xl! border-border! shadow-float!" } }} />
+        <MotionProvider>
+          <ConfirmProvider>{children}</ConfirmProvider>
+        </MotionProvider>
+        <Toaster position="top-right" closeButton toastOptions={{ classNames: { toast: "rounded-xl! border-border! shadow-float!" } }} />
       </body>
     </html>
   );

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { DeleteButton } from "@/components/delete-button";
+import { useConfirm } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { postJson } from "@/lib/form-helpers";
 
@@ -12,9 +13,10 @@ import { postJson } from "@/lib/form-helpers";
 export function PlanActions({ planId }) {
   const router = useRouter();
   const [pending, setPending] = useState(false);
+  const confirm = useConfirm();
 
   async function regenerate() {
-    if (!window.confirm("Make a new version of this roadmap? This plan is kept as it is.")) return;
+    if (!(await confirm({ title: "Make a new version?", description: "A new roadmap is built from your answers. This plan is kept as it is.", confirmLabel: "Make new version" }))) return;
     setPending(true);
     const result = await postJson(`/api/plans/${planId}/regenerate`);
     setPending(false);

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useConfirm } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { sendJson } from "@/lib/form-helpers";
 
@@ -13,9 +14,10 @@ export function RequestActions({ requestId, status }) {
   const router = useRouter();
   const [reply, setReply] = useState("");
   const [pending, setPending] = useState(false);
+  const confirm = useConfirm();
 
   async function act(action) {
-    if (action === "complete" && !window.confirm("Mark this request as completed? The founder's plan is no longer shared with you.")) return;
+    if (action === "complete" && !(await confirm({ title: "Mark as completed?", description: "The founder's plan is no longer shared with you, and the conversation becomes read-only.", confirmLabel: "Mark completed" }))) return;
     setPending(true);
     const result = await sendJson("PATCH", `/api/requests/${requestId}`, { action, reply: reply.trim() || undefined });
     setPending(false);

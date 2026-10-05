@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useConfirm } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { sendJson } from "@/lib/form-helpers";
 
@@ -10,9 +11,10 @@ import { sendJson } from "@/lib/form-helpers";
 export function InterestActions({ interestId }) {
   const router = useRouter();
   const [pending, setPending] = useState(false);
+  const confirm = useConfirm();
 
   async function act(action) {
-    if (action === "accept" && !window.confirm("Accept? This funder can then read your full plan and see your email.")) return;
+    if (action === "accept" && !(await confirm({ title: "Accept this funder?", description: "They can then read your full plan and see your email.", confirmLabel: "Accept" }))) return;
     setPending(true);
     const result = await sendJson("PATCH", `/api/interests/${interestId}`, { action });
     setPending(false);
