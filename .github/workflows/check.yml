@@ -10,12 +10,16 @@ jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # CI has its own throwaway MongoDB instead of Atlas.
     services:
       mongo:
         image: mongo:7.0
-        # The same port as docker-compose.yml, so .env.development works unchanged.
         ports:
-          - 27018:27017
+          - 27017:27017
+    env:
+      MONGODB_URI: mongodb://127.0.0.1:27017/uae_venture_guide
+      JWT_SECRET: ci-only-secret-that-is-at-least-32-characters
+      APP_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7

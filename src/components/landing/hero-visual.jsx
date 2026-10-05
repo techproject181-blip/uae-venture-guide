@@ -15,7 +15,7 @@ const BUDGET = [
   { label: "Office", share: 45, className: "bg-primary" },
   { label: "Licence", share: 30, className: "bg-brand-400" },
   { label: "Visas", share: 15, className: "bg-gold-500" },
-  { label: "Other", share: 10, className: "bg-ink-300" },
+  { label: "Other", share: 10, className: "bg-ink-400" },
 ];
 
 /** The picture beside the home page headline: an example plan in an app window, its budget at the foot, and a mentor's reply floating above. */

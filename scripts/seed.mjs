@@ -30,9 +30,10 @@ import { User } from "../src/models/User.js";
 const DEMO_PASSWORD = "Demo2026pass";
 
 // Every account has the published password above, and one is an
-// administrator, so this data only ever goes into a database on this computer.
-if (!/^mongodb:\/\/(127\.0\.0\.1|localhost)[:/]/.test(process.env.MONGODB_URI ?? "")) {
-  console.error("Seed data can only be added to a local database (mongodb://127.0.0.1 or mongodb://localhost).");
+// administrator. Seed only the project's own database, never a live site
+// with real users.
+if (!process.env.MONGODB_URI) {
+  console.error("MONGODB_URI is not set. Copy .env.example to .env.local and fill it in.");
   process.exit(1);
 }
 

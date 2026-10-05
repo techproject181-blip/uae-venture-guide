@@ -16,11 +16,9 @@ import { TEST_DOMAIN } from "./helpers.js";
 // tests use the same database as `npm run dev`.
 
 export async function openDatabase() {
-  if (!process.env.MONGODB_URI) process.loadEnvFile(".env.development");
-  // The tests add an administrator with a known password, so never a real database.
-  if (!/^mongodb:\/\/(127\.0\.0\.1|localhost)[:/]/.test(process.env.MONGODB_URI)) {
-    throw new Error("Browser tests only run against a local database (mongodb://127.0.0.1 or mongodb://localhost).");
-  }
+  if (!process.env.MONGODB_URI) process.loadEnvFile(".env.local");
+  // The tests add an administrator with a known password, so run them only
+  // against the project's own database, never a live site with real users.
   await mongoose.connect(process.env.MONGODB_URI);
 }
 
