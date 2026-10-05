@@ -45,7 +45,7 @@ export function HeroVisual() {
 
           <ol className="mt-5 divide-y rounded-xl border">
             {STEPS.map((step, index) => (
-              <li key={step.number} className="flex items-start gap-3 px-4 py-3">
+              <li key={step.number} className="flex items-start gap-3 px-3 py-3 sm:px-4">
                 <span
                   aria-hidden="true"
                   className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md border ${step.done ? "hero-tick border-primary bg-primary text-white" : "border-slate-300"}`}
@@ -53,7 +53,7 @@ export function HeroVisual() {
                 >
                   {step.done && <Check className="size-3.5" strokeWidth={3} />}
                 </span>
-                <span className="w-7 shrink-0 text-sm text-muted-foreground tabular-nums">{step.number}</span>
+                <span className="hidden w-7 shrink-0 text-sm text-muted-foreground tabular-nums sm:inline">{step.number}</span>
                 <span className="min-w-0 flex-1 text-sm font-medium">{step.title}</span>
                 <span className="flex shrink-0 flex-col items-end gap-1.5">
                   <span className="text-sm font-medium whitespace-nowrap tabular-nums">{step.fee}</span>

@@ -1,6 +1,7 @@
 // Fills the development database with demo data: accounts for every role,
 // official sources and fee references, mentor and funder profiles, four plans
-// made by the planner, experience posts, guidance requests and funder interest.
+// made by the planner, experience posts, guidance requests (one with a saved
+// founder–mentor conversation) and funder interest.
 // Safe to run again: accounts, sources and fees are updated in place, and the
 // demo accounts' plans, posts and requests are recreated.
 // Usage: npm run seed:demo
@@ -20,6 +21,7 @@ import { MentorProfile } from "../src/models/MentorProfile.js";
 import { MentorRequest } from "../src/models/MentorRequest.js";
 import { Plan } from "../src/models/Plan.js";
 import { Post } from "../src/models/Post.js";
+import { RequestMessage } from "../src/models/RequestMessage.js";
 import { Source } from "../src/models/Source.js";
 import { User } from "../src/models/User.js";
 
@@ -83,7 +85,7 @@ if (!/^mongodb:\/\/(127\.0\.0\.1|localhost)[:/]/.test(process.env.MONGODB_URI ??
 
 await connectDB();
 // Build every index first (unique emails, text search, one waiting request per pair, and so on).
-await Promise.all([User, Source, FeeReference, MentorProfile, FunderProfile, Plan, Post, MentorRequest, FundingInterest, ChatMessage].map((model) => model.init()));
+await Promise.all([User, Source, FeeReference, MentorProfile, FunderProfile, Plan, Post, MentorRequest, RequestMessage, FundingInterest, ChatMessage].map((model) => model.init()));
 const now = new Date();
 
 const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 10);
@@ -150,7 +152,9 @@ for (const [name, profile] of Object.entries(FUNDERS)) {
 
 // Start from a clean slate for the demo accounts' own content.
 const demoPlans = await Plan.find({ ownerId: { $in: [ids.aisha, ids.yousef] } }).distinct("_id");
+const demoRequests = await MentorRequest.find({ entrepreneurId: { $in: [ids.aisha, ids.yousef] } }).distinct("_id");
 await Promise.all([
+  RequestMessage.deleteMany({ requestId: { $in: demoRequests } }),
   Plan.deleteMany({ _id: { $in: demoPlans } }),
   ChatMessage.deleteMany({ planId: { $in: demoPlans } }),
   FundingInterest.deleteMany({ planId: { $in: demoPlans } }),
@@ -186,10 +190,23 @@ for (const { author, ...post } of POSTS) {
   await Post.create({ ...post, authorId: ids[author], status: "published" });
 }
 
-await MentorRequest.create([
-  { entrepreneurId: ids.aisha, mentorId: ids.omar, planId: plans[0]._id, topic: "Choosing a location near campus", message: "I want to open a karak café near the university. Is mainland the right choice, and how big should the first place be?", status: "accepted", mentorReply: "Happy to help. Mainland makes sense for a walk-in café. Let us look at your budget together.", respondedAt: now },
+const hoursAgo = (hours) => new Date(now.getTime() - hours * 60 * 60 * 1000);
+const [cafeRequest] = await MentorRequest.create([
+  { entrepreneurId: ids.aisha, mentorId: ids.omar, planId: plans[0]._id, topic: "Choosing a location near campus", message: "I want to open a karak café near the university. Is mainland the right choice, and how big should the first place be?", status: "accepted", respondedAt: hoursAgo(50), createdAt: hoursAgo(72) },
   { entrepreneurId: ids.yousef, mentorId: ids.fatima, topic: "Marketing my tours online", message: "How should I market small-group tours online when I have almost no budget for ads?", status: "pending" },
 ]);
+// The conversation Aisha and Omar had in the app after he accepted. His first
+// message is the reply he wrote when accepting.
+const CAFE_CHAT = [
+  { author: "omar", hours: 50, body: "Happy to help. Mainland makes sense for a walk-in café, because your customers will come in from the street. Let us look at your budget together." },
+  { author: "aisha", hours: 46, body: "Thank you! I found two shops: one with 8 seats right by the main gate, and one with 20 seats a five-minute walk away. The bigger one is about AED 20,000 more a year." },
+  { author: "omar", hours: 30, body: "Take the small one by the gate. Students choose the closest place between classes, and you keep the AED 20,000 as reserve. Ask the landlord if the kitchen already passed a municipality inspection; it can save you weeks on the food safety approval." },
+  { author: "aisha", hours: 26, body: "That makes sense. I will ask about the inspection on Sunday and update the rent in my budget. Could you look at the fit-out costs after that?" },
+];
+await RequestMessage.insertMany(
+  CAFE_CHAT.map(({ author, hours, body }) => ({ requestId: cafeRequest._id, authorId: ids[author], body, createdAt: hoursAgo(hours), updatedAt: hoursAgo(hours) })),
+);
+
 await FundingInterest.create([
   { planId: plans[0]._id, funderId: ids.layla, message: "I back student food businesses and would like to learn more about your café.", status: "accepted", respondedAt: now },
   { planId: plans[2]._id, funderId: ids.khalid, message: "I ran tours for ten years and like your idea. Can we talk about your first season?", status: "pending" },
@@ -198,5 +215,5 @@ await FundingInterest.create([
 await mongoose.disconnect();
 console.log(
   `Demo data ready: ${USERS.length} accounts (password ${DEMO_PASSWORD}), ${SOURCES.length} sources, ${FEES.length} fee references, ` +
-    `${PLANS.length} plans, ${POSTS.length} posts, 2 guidance requests and 2 funder interests.`,
+    `${PLANS.length} plans, ${POSTS.length} posts, 2 guidance requests (${CAFE_CHAT.length} chat messages) and 2 funder interests.`,
 );

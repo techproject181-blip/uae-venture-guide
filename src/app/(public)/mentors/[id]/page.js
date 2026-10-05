@@ -2,17 +2,26 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExternalLink } from "lucide-react";
 import { Avatar } from "@/components/avatar";
-import { BackLink } from "@/components/back-link";
-import { Section } from "@/components/document";
+import { ListPanel, PageHeader, Panel, Split } from "@/components/layout";
+import { Chips } from "@/components/mentors/chips";
 import { RequestForm } from "@/components/mentors/request-form";
+import { StatusBadge } from "@/components/status-badge";
 import { buttonVariants } from "@/components/ui/button";
 import { toPlain } from "@/lib/api";
 import { getMentor } from "@/lib/community";
 import { EMIRATES, EXPERTISE, SECTORS, labelOf } from "@/lib/constants";
+import { formatDate } from "@/lib/format";
 import { getCurrentUser } from "@/lib/session";
 import { Plan } from "@/models/Plan";
+import { Post } from "@/models/Post";
 
 export const metadata = { title: "Mentor" };
+
+const STEPS = [
+  "You send a short request: what you need help with, and one of your plans if you like.",
+  "The mentor gets an email and accepts or declines it on their Requests page.",
+  "Once accepted, you talk in a conversation saved here on the website. The mentor can read the plan you attached until the request is completed.",
+];
 
 export default async function MentorPage({ params }) {
   const { id } = await params;
@@ -21,70 +30,133 @@ export default async function MentorPage({ params }) {
 
   const viewer = await getCurrentUser();
   const canAsk = viewer?.role === "entrepreneur" && viewer.status === "active";
-  const plans = canAsk ? toPlain(await Plan.find({ ownerId: viewer.id }).select("title").sort({ updatedAt: -1 }).lean()) : [];
+  const [plans, posts] = await Promise.all([
+    canAsk ? Plan.find({ ownerId: viewer.id }).select("title").sort({ updatedAt: -1 }).lean() : [],
+    Post.find({ authorId: id, status: "published" }).select("title createdAt").sort({ createdAt: -1 }).limit(5).lean(),
+  ]);
 
-  // The profile as a short record, like the details on a licence.
-  const details = [
-    { label: "Can help with", value: mentor.expertise.map((a) => labelOf(EXPERTISE, a)).join(", ") },
-    mentor.industries.length > 0 && { label: "Industries", value: mentor.industries.map((s) => labelOf(SECTORS, s)).join(", ") },
-    { label: "Emirates", value: mentor.emirates.map((e) => labelOf(EMIRATES, e)).join(", ") },
-    { label: "Experience", value: `${mentor.yearsExperience} years` },
-  ].filter(Boolean);
+  const firstName = mentor.name.split(" ")[0];
 
   return (
-    <div className="max-w-3xl">
-      <BackLink href="/mentors">All mentors</BackLink>
-
-      <div className="flex items-start gap-4 border-b pb-6">
-        <Avatar name={mentor.name} className="size-14 text-lg" />
-        <div className="min-w-0">
-          <h1 className="text-[1.75rem] leading-tight sm:text-[2rem]">{mentor.name}</h1>
-          <p className="mt-1 text-muted-foreground">{mentor.headline}</p>
-        </div>
-      </div>
-
-      <p className="mt-6 max-w-[68ch] leading-relaxed whitespace-pre-line">{mentor.bio}</p>
-
-      <dl className="mt-6 divide-y border-t">
-        {details.map(({ label, value }) => (
-          <div key={label} className="grid gap-1 py-3 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-4">
-            <dt className="field-label sm:pt-0.5">{label}</dt>
-            <dd>{value}</dd>
-          </div>
-        ))}
-      </dl>
-
-      {mentor.linkedinUrl && (
-        <a
-          href={mentor.linkedinUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-4 inline-flex min-h-11 items-center gap-1.5 font-medium text-foreground decoration-primary underline underline-offset-4 hover:decoration-2"
-        >
-          LinkedIn profile
-          <ExternalLink className="size-4" aria-hidden="true" />
-          <span className="sr-only">(opens in a new tab)</span>
-        </a>
-      )}
-
-      <Section title="Ask for guidance" className="mt-10">
-        {!mentor.acceptingRequests ? (
-          <p className="text-muted-foreground">{mentor.name} is not taking new requests right now.</p>
-        ) : canAsk ? (
-          <div className="max-w-xl">
-            <RequestForm mentorId={id} mentorName={mentor.name} plans={plans} />
-          </div>
-        ) : viewer ? (
-          <p className="text-muted-foreground">Only entrepreneurs can send guidance requests.</p>
+    <>
+      <PageHeader
+        back={{ href: "/mentors", label: "All mentors" }}
+        title={mentor.name}
+        description={mentor.headline}
+        actions={
+          mentor.linkedinUrl && (
+            <a href={mentor.linkedinUrl} target="_blank" rel="noopener noreferrer" className={buttonVariants({ variant: "outline", size: "lg" })}>
+              LinkedIn profile
+              <ExternalLink aria-hidden="true" />
+              <span className="sr-only">(opens in a new tab)</span>
+            </a>
+          )
+        }
+      >
+        {mentor.acceptingRequests ? (
+          <StatusBadge status="active" label="Taking requests" />
         ) : (
-          <>
-            <p className="text-muted-foreground">Create a free account to ask {mentor.name} for help with your plan.</p>
-            <Link href="/sign-up" className={buttonVariants({ size: "lg", className: "mt-4" })}>
-              Create an account
-            </Link>
-          </>
+          <StatusBadge status="todo" label="Not taking requests" />
         )}
-      </Section>
-    </div>
+      </PageHeader>
+
+      <Split
+        aside={
+          <>
+            <Panel title="Details">
+              <dl className="space-y-4">
+                <div>
+                  <dt className="field-label">Can help with</dt>
+                  <dd className="mt-2">
+                    <Chips items={mentor.expertise.map((a) => labelOf(EXPERTISE, a))} />
+                  </dd>
+                </div>
+                {mentor.industries.length > 0 && (
+                  <div>
+                    <dt className="field-label">Industries</dt>
+                    <dd className="mt-2">
+                      <Chips items={mentor.industries.map((s) => labelOf(SECTORS, s))} />
+                    </dd>
+                  </div>
+                )}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="min-w-0">
+                    <dt className="field-label">Emirates</dt>
+                    <dd className="mt-1 font-medium">{mentor.emirates.map((e) => labelOf(EMIRATES, e)).join(", ")}</dd>
+                  </div>
+                  <div>
+                    <dt className="field-label">Experience</dt>
+                    <dd className="mt-1 font-medium tabular-nums">{mentor.yearsExperience} years</dd>
+                  </div>
+                </div>
+              </dl>
+            </Panel>
+
+            <Panel title="Ask for guidance">
+              {!mentor.acceptingRequests ? (
+                <p className="text-muted-foreground">{mentor.name} is not taking new requests right now.</p>
+              ) : canAsk ? (
+                <RequestForm mentorId={id} mentorName={mentor.name} plans={toPlain(plans)} />
+              ) : viewer ? (
+                <p className="text-muted-foreground">Only entrepreneurs can send guidance requests.</p>
+              ) : (
+                <>
+                  <p className="text-muted-foreground">Create a free account to ask {mentor.name} for help with your plan.</p>
+                  <Link href="/sign-up" className={buttonVariants({ size: "lg", className: "mt-4 w-full" })}>
+                    Create an account
+                  </Link>
+                </>
+              )}
+            </Panel>
+          </>
+        }
+      >
+        <Panel title={`About ${firstName}`}>
+          <div className="flex items-start gap-4">
+            <Avatar name={mentor.name} className="hidden size-14 text-lg sm:flex" />
+            <p className="max-w-[68ch] leading-relaxed whitespace-pre-line">{mentor.bio}</p>
+          </div>
+        </Panel>
+
+        <Panel title="How guidance works">
+          <ol className="space-y-4">
+            {STEPS.map((step, index) => (
+              <li key={step} className="flex gap-3.5">
+                <span
+                  aria-hidden="true"
+                  className="flex size-7 shrink-0 items-center justify-center rounded-full bg-accent text-sm font-semibold text-accent-foreground tabular-nums"
+                >
+                  {index + 1}
+                </span>
+                <p className="pt-0.5 text-muted-foreground">{step}</p>
+              </li>
+            ))}
+          </ol>
+        </Panel>
+
+        {posts.length > 0 && (
+          <ListPanel
+            title={`Posts by ${firstName}`}
+            actions={
+              <Link href="/posts" className="text-sm font-medium text-foreground decoration-primary underline underline-offset-4 hover:decoration-2">
+                All posts
+              </Link>
+            }
+          >
+            {toPlain(posts).map((post) => (
+              <li key={post._id} className="relative flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-5 py-4 hover:bg-slate-50/70 sm:px-6">
+                <Link
+                  href={`/posts/${post._id}`}
+                  className="font-medium outline-none after:absolute after:inset-0 hover:text-primary focus-visible:after:ring-3 focus-visible:after:ring-ring/50 focus-visible:after:ring-inset"
+                >
+                  {post.title}
+                </Link>
+                <span className="text-sm text-muted-foreground tabular-nums">{formatDate(post.createdAt)}</span>
+              </li>
+            ))}
+          </ListPanel>
+        )}
+      </Split>
+    </>
   );
 }

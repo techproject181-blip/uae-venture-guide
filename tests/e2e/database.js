@@ -8,6 +8,7 @@ import { MentorProfile } from "../../src/models/MentorProfile.js";
 import { MentorRequest } from "../../src/models/MentorRequest.js";
 import { Plan } from "../../src/models/Plan.js";
 import { Post } from "../../src/models/Post.js";
+import { RequestMessage } from "../../src/models/RequestMessage.js";
 import { User } from "../../src/models/User.js";
 import { TEST_DOMAIN } from "./helpers.js";
 
@@ -38,11 +39,13 @@ export async function removeTestAccounts(run) {
   const anHourAgo = new Date(Date.now() - 60 * 60 * 1000);
   const userIds = await User.find({ $or: [{ email: thisRun }, { email: testEmail, createdAt: { $lt: anHourAgo } }] }).distinct("_id");
   const planIds = await Plan.find({ ownerId: { $in: userIds } }).distinct("_id");
+  const requestIds = await MentorRequest.find({ $or: [{ entrepreneurId: { $in: userIds } }, { mentorId: { $in: userIds } }] }).distinct("_id");
   await Promise.all([
     Plan.deleteMany({ _id: { $in: planIds } }),
     ChatMessage.deleteMany({ planId: { $in: planIds } }),
     FundingInterest.deleteMany({ $or: [{ planId: { $in: planIds } }, { funderId: { $in: userIds } }] }),
-    MentorRequest.deleteMany({ $or: [{ entrepreneurId: { $in: userIds } }, { mentorId: { $in: userIds } }] }),
+    MentorRequest.deleteMany({ _id: { $in: requestIds } }),
+    RequestMessage.deleteMany({ $or: [{ requestId: { $in: requestIds } }, { authorId: { $in: userIds } }] }),
     Post.deleteMany({ authorId: { $in: userIds } }),
     MentorProfile.deleteMany({ userId: { $in: userIds } }),
     FunderProfile.deleteMany({ userId: { $in: userIds } }),

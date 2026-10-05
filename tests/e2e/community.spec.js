@@ -49,10 +49,39 @@ test("a mentor and a funder see a plan only after its owner says yes", async ({ 
     await expectNotFound(mentor, planPath);
     await mentor.goto("/requests");
     await expectAccessible(mentor);
+    await mentor.getByLabel("Reply (optional)").fill("Happy to help. I will read your roadmap today.");
     await mentor.getByRole("button", { name: "Accept" }).click();
     await expect(mentor.getByRole("button", { name: "Mark as completed" })).toBeVisible();
     await mentor.goto(planPath);
     await expect(mentor.getByRole("heading", { level: 1 })).toHaveText(title);
+  });
+
+  await test.step("the founder and the mentor talk in the request's chat", async () => {
+    // The mentor opens the chat from the requests list; the reply sent when accepting is the first message.
+    await mentor.goto("/requests");
+    await mentor.getByRole("link", { name: /Open chat/ }).click();
+    await mentor.waitForURL(/\/requests\/[0-9a-f]{24}$/);
+    const mentorLog = mentor.getByRole("log");
+    await expect(mentorLog.getByText("Happy to help. I will read your roadmap today.")).toBeVisible();
+    await expectAccessible(mentor);
+    await mentor.getByLabel(/^Message to/).fill("Which area are you looking at for the shop?");
+    await mentor.getByLabel(/^Message to/).press("Enter");
+    await expect(mentorLog.getByText("Which area are you looking at for the shop?")).toBeVisible();
+    await expect(mentor.getByLabel(/^Message to/)).toHaveValue("");
+
+    // The founder sees both messages, and answers.
+    await owner.goto("/requests");
+    await owner.getByRole("link", { name: /Open chat/ }).click();
+    await owner.waitForURL(/\/requests\/[0-9a-f]{24}$/);
+    const ownerLog = owner.getByRole("log");
+    await expect(ownerLog.getByText("Which area are you looking at for the shop?")).toBeVisible();
+    await expectAccessible(owner);
+    await owner.getByLabel(/^Message to/).fill("Near Kite Beach, close to the gyms.");
+    await owner.getByRole("button", { name: "Send" }).click();
+    await expect(ownerLog.getByText("Near Kite Beach, close to the gyms.")).toBeVisible();
+
+    // The mentor's open page picks up the answer by itself (it asks for new messages every few seconds).
+    await expect(mentorLog.getByText("Near Kite Beach, close to the gyms.")).toBeVisible({ timeout: 15_000 });
   });
 
   await test.step("the owner shares the plan's pitch card with funders", async () => {

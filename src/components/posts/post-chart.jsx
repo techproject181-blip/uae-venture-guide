@@ -17,8 +17,8 @@ export function PostChart({ chart }) {
   const data = chart.labels.map((label, i) => ({ label, value: chart.values[i] }));
 
   return (
-    <figure className="my-6 panel p-4 sm:p-5">
-      {chart.title && <figcaption className="font-bold">{chart.title}</figcaption>}
+    <figure className="panel p-5 sm:p-6">
+      {chart.title && <figcaption className="text-[1.0625rem] leading-snug font-semibold tracking-[-0.01em]">{chart.title}</figcaption>}
       <div className="mt-4" style={{ minHeight: HEIGHT }} aria-hidden="true">
         <PostChartDrawing type={chart.type} title={chart.title} data={data} height={HEIGHT} />
       </div>

@@ -18,6 +18,9 @@ export default defineConfig({
   use: {
     baseURL,
     trace: "retain-on-failure",
+    // Animations off: text that is still fading in, or waiting to fade in as
+    // the page scrolls, would fail the contrast check for the wrong reason.
+    reducedMotion: "reduce",
   },
   // Chrome, Firefox and Safari's engine (WebKit) on a laptop screen, plus a
   // phone of each kind. Chrome is the one installed on the computer; run

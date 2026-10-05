@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CardGrid } from "@/components/layout";
 import { MentorCard } from "@/components/mentors/mentor-card";
 import { EmptyState, PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,8 @@ export const metadata = { title: "Mentors" };
 
 const selectClass =
   "h-11 w-full cursor-pointer rounded-lg border border-input bg-card px-3 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50";
+
+const linkClass = "font-medium text-foreground decoration-primary underline underline-offset-4 hover:decoration-2";
 
 export default async function MentorsPage({ searchParams }) {
   const params = await searchParams;
@@ -25,7 +28,7 @@ export default async function MentorsPage({ searchParams }) {
         description="Founders and professionals who help new businesses in the UAE. An administrator checks every mentor."
       />
 
-      <form className="mb-8 grid gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] sm:items-end lg:max-w-3xl">
+      <form className="panel mb-6 grid gap-4 p-4 sm:p-5 md:grid-cols-[repeat(auto-fit,minmax(12rem,1fr))] md:items-end">
         <div className="space-y-2">
           <label className="block text-sm font-medium" htmlFor="expertise">
             Expertise
@@ -63,20 +66,32 @@ export default async function MentorsPage({ searchParams }) {
           text={filtered ? "Try another area or emirate." : "Mentors appear here once an administrator approves them."}
           action={
             filtered && (
-              <Link href="/mentors" className="font-medium text-foreground decoration-primary underline underline-offset-4 hover:decoration-2">
+              <Link href="/mentors" className={linkClass}>
                 Clear the filters
               </Link>
             )
           }
         />
       ) : (
-        <ul className="divide-y border-y">
-          {mentors.map((mentor) => (
-            <li key={mentor._id}>
-              <MentorCard mentor={mentor} />
-            </li>
-          ))}
-        </ul>
+        <>
+          <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+            <p role="status">
+              {mentors.length} {mentors.length === 1 ? "mentor" : "mentors"}
+            </p>
+            {filtered && (
+              <Link href="/mentors" className={linkClass}>
+                Clear the filters
+              </Link>
+            )}
+          </div>
+          <CardGrid>
+            {mentors.map((mentor) => (
+              <li key={mentor._id}>
+                <MentorCard mentor={mentor} />
+              </li>
+            ))}
+          </CardGrid>
+        </>
       )}
     </>
   );

@@ -6,9 +6,9 @@ UAE Venture Guide helps students and first-time founders turn a business idea in
 
 | Role | Can do | Account status on signup |
 | --- | --- | --- |
-| Entrepreneur | Create plans, edit budgets and tasks, chat with the AI about their own plans, request mentor guidance, share a plan with funders, download reports | Active |
-| Mentor | Publish a profile, answer guidance requests, read a plan attached to a request they accepted, write experience posts with pictures and charts | Pending until an admin approves |
-| Funder | Browse shared plans as pitch cards, send funding-interest requests, read the full plan once the owner accepts | Pending until an admin approves |
+| Entrepreneur | Create plans, edit budgets and tasks, chat with the AI about their own plans, request mentor guidance and message the mentor once they accept, share a plan with funders, download reports | Active |
+| Mentor | Publish a profile, answer guidance requests, message the entrepreneur in a request they accepted, read a plan attached to it, write experience posts with pictures and charts | Pending until an admin approves |
+| Funder | Browse shared plans as pitch cards, send funding-interest requests, read the full plan and see the owner's email once the owner accepts | Pending until an admin approves |
 | Admin | Approve and suspend users, hide posts and shared plans, maintain official sources and fee references, view AI usage | Created by seed script, never through signup |
 
 The AI assistant is a system actor, not a user account. It generates roadmaps and answers questions about one plan at a time, and it only sees that plan plus admin-curated sources.
@@ -23,14 +23,14 @@ The AI assistant is a system actor, not a user account. It generates roadmaps an
 4. **Progress tracking.** Task status (to do, in progress, done) and plan progress as a percentage of tasks done.
 5. **Plan chat.** Streaming chat that answers from the saved plan and matching official sources, and cites them.
 6. **Official sources.** Admin-curated government and free-zone sources, tagged by emirate and category, shown on each plan and in a public directory.
-7. **Mentors.** Mentor directory, guidance requests with an optional attached plan, and experience posts with up to five pictures and one simple chart.
-8. **Funders.** Owners opt in to sharing and write a short pitch summary. Funders browse pitch cards and send interest requests. The full plan opens to a funder only after the owner accepts, and turning sharing off closes it again.
+7. **Mentors.** Mentor directory, guidance requests with an optional attached plan, and experience posts with up to five pictures (added by pasting a picture's web address) and one simple chart. When a mentor accepts a request, it opens a conversation on the website: the entrepreneur and the mentor send each other messages, which are saved in MongoDB, and the page checks for new ones every few seconds. Once the request is completed, the conversation stays readable but is closed. Only those two people can read it.
+8. **Funders.** Owners opt in to sharing and write a short pitch summary. Funders browse pitch cards and send interest requests. The full plan and the owner's contact email open to a funder only after the owner accepts, and turning sharing off closes the plan again. There is no chat with funders.
 9. **Reports.** Downloadable PDF of a plan: summary, phases and tasks with status, budget table and chart, documents, risks, sources, disclaimer.
 10. **Admin console.** User approval and suspension, moderation, sources and fee references, AI usage.
 
 ### Out of scope for the first release
 
-- Direct messaging between users. An accepted request shows both parties' email addresses, and follow-up happens by email.
+- Messaging between users outside an accepted guidance request (for example, between two entrepreneurs, or between funders and plan owners).
 - Payments, subscriptions, or investment transactions of any kind.
 - The AI editing a plan. Chat is read-only; the user edits.
 - Real-time collaboration on a plan.
@@ -40,7 +40,7 @@ The AI assistant is a system actor, not a user account. It generates roadmaps an
 
 ## Decisions and assumptions
 
-A1, A2, A7, A9, A10 and A11 were confirmed by the project owner. A5 is open. The rest are working assumptions; each one changes scope or cost if it turns out wrong.
+A1, A2, A7, A9, A10, A11 and A12 were confirmed by the project owner. A5 is open. The rest are working assumptions; each one changes scope or cost if it turns out wrong.
 
 | # | Decision or assumption | Status | If wrong |
 | --- | --- | --- | --- |
@@ -50,11 +50,12 @@ A1, A2, A7, A9, A10 and A11 were confirmed by the project owner. A5 is open. The
 | A4 | AED is the only currency | Assumed | Add a currency field to budget items |
 | A5 | The AI provider and model are not chosen yet. The owner decides after a short trial at the end of Week 1, using the requirements in [04-ai.md](04-ai.md) (including data-use terms), and the full quality check confirms it at the end of Sprint 2. Until then AI features are built in fixture mode, behind one module, so the choice does not change the rest of the app | Open | Not applicable |
 | A6 | Not legal or financial advice. Every roadmap, chat answer and report carries a disclaimer and links to the authority | Required | Not applicable |
-| A7 | The app is one Next.js project, pages and server code together, and the database is MongoDB (Atlas). Both are final. Start on free tiers (Atlas, Vercel, Cloudinary) and rely on the features they include, such as Atlas Search, instead of adding paid services. Email goes through Nodemailer and an SMTP account. The AI provider is the only likely cost (A5) | Confirmed | Move to paid tiers when a limit in [02-architecture.md](02-architecture.md#free-tiers) is reached |
+| A7 | The app is one Next.js project, pages and server code together, and the database is MongoDB (Atlas). Both are final. Start on free tiers (Atlas, Vercel) and rely on what they include, such as a MongoDB text index for searching sources, instead of adding paid services. Email goes through Nodemailer and an SMTP account, for notifications and password resets only. The AI provider is the only likely cost (A5) | Confirmed | Move to paid tiers when a limit in [02-architecture.md](02-architecture.md#free-tiers) is reached |
 | A8 | The first release is for building and demoing, not commercial use. Vercel Hobby forbids commercial use, and the Atlas free tier has no backups | Assumed | Move to Vercel Pro and a paid Atlas tier with backups before launching commercially or taking on real users' data |
-| A9 | Zod validates on both sides, with one schema per shape shared by the browser and the server. The app uses the official MongoDB driver, not Mongoose. Images are stored on Cloudinary, not in MongoDB | Confirmed | Not applicable |
-| A10 | Reuse first, in browser and server code alike: search for existing code before writing, use what the stack already provides, and put shared logic in helpers instead of repeating it. Rules and the helper catalogue are in [06-conventions.md](06-conventions.md); a copy-paste check in `npm run check` enforces it | Confirmed | Not applicable |
-| A11 | Code is simple, strictly typed TypeScript that someone new to the repo can follow. It is fast by default (Server Components, React Compiler memoization, indexed queries), and comments say only what the code cannot, in plain words, without AI-style filler. Rules are in [06-conventions.md](06-conventions.md#writing-code) | Confirmed | Not applicable |
+| A9 | Zod validates on both sides, with one schema per shape shared by the browser and the server. The app reads and writes MongoDB through Mongoose 9 models (`src/models`). Post pictures are added by pasting a picture's web address, so the app stores only the address | Confirmed | Not applicable |
+| A10 | Reuse first, in browser and server code alike: search for existing code before writing, use what the stack already provides, and put shared logic in helpers instead of repeating it. Rules and the helper catalogue are in [06-conventions.md](06-conventions.md) | Confirmed | Not applicable |
+| A11 | Code is simple JavaScript (ES modules, with JSDoc comments on shared functions) that someone new to the repo can follow. It is fast by default (Server Components, indexed queries), and comments say only what the code cannot, in plain words, without AI-style filler. Rules are in [06-conventions.md](06-conventions.md#writing-code) | Confirmed | Not applicable |
+| A12 | Mentors and entrepreneurs talk inside the website, not by email. Accepting a guidance request opens a conversation that both can write in; messages are saved in MongoDB, and the page checks for new ones every few seconds instead of keeping a connection open, which Vercel does not allow. Completing the request closes the conversation but keeps it readable. Email only notifies people (request sent, accepted or declined, account approved) and sends password-reset links. Funders still get the plan owner's email after the owner accepts their interest | Confirmed | Not applicable |
 
 ## Open questions
 
