@@ -13,7 +13,7 @@ export function SignOutButton() {
   async function signOut() {
     setPending(true);
     await postJson("/api/auth/sign-out");
-    router.replace("/sign-in");
+    router.replace("/");
     router.refresh();
   }
 

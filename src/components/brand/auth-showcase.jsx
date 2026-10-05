@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Check } from "lucide-react";
 import { LogoMark, Wordmark } from "@/components/logo";
 
@@ -20,10 +21,10 @@ export function AuthShowcase() {
         className="absolute inset-0 opacity-[0.07] bg-[linear-gradient(var(--on-brand)_1px,transparent_1px),linear-gradient(90deg,var(--on-brand)_1px,transparent_1px)] bg-size-[40px_40px] mask-[radial-gradient(ellipse_at_center,black,transparent_75%)]"
       />
 
-      <div className="relative flex items-center gap-2.5">
+      <Link href="/" className="relative flex w-fit items-center gap-2.5 rounded-lg outline-none focus-visible:ring-3 focus-visible:ring-on-brand/50">
         <LogoMark className="ring-1 ring-on-brand/20 rounded-[9px]" />
         <Wordmark className="text-on-brand [&>span]:text-brand-300" />
-      </div>
+      </Link>
 
       <div className="relative">
         <p className="font-display text-[2.5rem] leading-[1.05] font-bold tracking-[-0.03em] xl:text-5xl">
