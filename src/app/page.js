@@ -91,7 +91,7 @@ export default function HomePage() {
 
         {/* Emirates strip */}
         <section aria-label="Emirates covered" className="border-y bg-card py-6">
-          <p className="page-width mb-4 text-center text-sm text-muted-foreground">Roadmaps for all seven emirates, mainland and free zones</p>
+          <p className="page-width mb-4 text-center text-sm text-muted-foreground">Plans for every emirate, mainland or free zone. Official sources so far for Federal, Abu Dhabi, Dubai, Sharjah and Ras Al Khaimah.</p>
           <div className="marquee-frame relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
             <ul className="marquee flex w-max gap-4">
               {[...EMIRATES, ...EMIRATES, ...EMIRATES, ...EMIRATES].map((emirate, index) => (

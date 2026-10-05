@@ -35,7 +35,7 @@ Demo accounts, all with the password `Demo2026pass`:
 | Mentor | `omar@demo.test`, `fatima@demo.test`, `daniel@demo.test` (and `rahul@demo.test`, waiting for approval) |
 | Funder | `layla@demo.test`, `hamad@demo.test` (and `khalid@demo.test`, waiting for approval) |
 
-The demo sources are real official websites, but their summaries and every fee amount are **demo values**, labelled "Demo" in the app. In plans these costs show a grey DEMO FEE mark. A cost gets the gold OFFICIAL seal only from a fee an administrator has checked: on a source's page, add a fee reference with "This is demo data that has not been checked" left unticked, then make a new plan (or a new version) for that emirate. An administrator must check every demo value before real users rely on it.
+The demo sources are real official websites, but their summaries and every fee amount are **demo values**, labelled "Demo" in the app. In plans these costs show a grey DEMO FEE mark. A cost gets the amber OFFICIAL seal only from a fee an administrator has checked: on a source's page, add a fee reference with "This is demo data that has not been checked" left unticked, then make a new plan (or a new version) for that emirate. An administrator must check every demo value before real users rely on it.
 
 Other commands:
 
@@ -66,11 +66,11 @@ On Vercel, add the same variables in the project settings instead of using a fil
 
 | Kind | Where | What it checks | Needs |
 | --- | --- | --- | --- |
-| Unit | `src/**/*.test.js`, next to the code | Budget and progress sums, the UAE day for daily limits, form rules | Nothing |
+| Unit | `src/**/*.test.js`, next to the code | Budget and progress sums, the UAE day for daily limits, form rules, and the colour guard (the PDF palette matches `globals.css`; no component uses a raw colour) | Nothing |
 | Database | `tests/integration` | Who may read a plan, for every role; who may read and send messages in a guidance request's conversation; daily limits, even with 10 requests at once; official fees in roadmaps; chat sources | The Docker database (`npm run db:up`) |
 | Browser | `tests/e2e` | Sign-up and sign-in, the lockout, a full plan (roadmap, task, budget, chat, PDF), the mentor and funder flow (including messages in a guidance request's conversation), security checks, keyboard-only use, every page for every role, and an axe accessibility check on each page. Any JavaScript or server error fails a test | The Docker database, the demo data, Google Chrome, and once `npx playwright install firefox webkit` |
 
-The browser tests run in Chrome, Firefox and Safari's engine (WebKit) on a laptop screen, and on a Chrome phone and an iPhone; `npx playwright test --project=chrome` runs one of them. [docs/08-test-cases.md](docs/08-test-cases.md) lists every test case, including the ones to check by hand.
+The browser tests run with "reduce motion" on, so animations cannot upset the contrast check. They run in Chrome, Firefox and Safari's engine (WebKit) on a laptop screen, and on a Chrome phone and an iPhone; `npx playwright test --project=chrome` runs one of them. [docs/08-test-cases.md](docs/08-test-cases.md) lists every test case, including the ones to check by hand.
 
 `npm test` runs the first two kinds. Each database test file uses its own temporary database, deleted at the end. `npm run test:e2e` uses `npm run dev` (it starts it if needed). Its accounts end in `@e2e.test` and are deleted after the run, so the demo data stays as it was. GitHub Actions runs everything on each push ([.github/workflows/check.yml](.github/workflows/check.yml)).
 
@@ -88,6 +88,10 @@ The browser tests run in Chrome, Firefox and Safari's engine (WebKit) on a lapto
 
 How a request is checked: every API route uses `route()` from `src/lib/api.js`, which turns errors into clear JSON answers. It checks the body with a Zod schema and the user with `requireApiUser()`. Who may read a plan is decided in one place, `canReadPlan()` in `src/lib/plans.js`.
 
+How pages are laid out: every page is built from the layout kit in `src/components/layout.jsx` (`PageHeader`, `Panel`, `Stack`, `Split`, `CardGrid`, `ListPanel`, `TablePanel`, `StatGrid`, `FormActions`). There are three shapes: list pages (header, filter bar, cards or a table), detail and form pages (main content with a help column on the right) and dashboards (numbers, then lists). [docs/06-conventions.md](docs/06-conventions.md) explains when to use which.
+
+How colours work: all colours live in one place, the `:root` block of `src/app/globals.css`. It has four scales (`ink` greys, `brand` emerald, `gold` amber, `danger` red), named roles built from them (`--primary`, `--border`, `--accent`, `--seal` …), chart colours and shadows. Components use them through Tailwind classes such as `bg-primary`, `text-ink-600`, `border-border-strong` or `shadow-panel`, or `var(--…)` in SVG and charts. Never write a hex value or one of Tailwind's own colours (`slate-300`, `emerald-500`) in a component: `src/lib/theme-colors.test.js` fails if you do. The only copies of the values are `src/lib/theme-colors.js`, for the PDF report (it is drawn on the server and cannot read CSS; the same test checks it matches), and the favicon files in `src/app/`.
+
 How sign-in works: the password is checked against its bcrypt hash, then the server sets a signed session cookie (a JWT) that browser JavaScript cannot read. Every private page loads the user from the database, so an approval or a suspension takes effect at once.
 
 ## Docs
@@ -102,11 +106,11 @@ How sign-in works: the password is checked against its bcrypt hash, then the ser
 | [06-conventions.md](docs/06-conventions.md) | Reuse first, how code is written and commented, where shared code lives, the helper catalogue |
 | [07-deployment.md](docs/07-deployment.md) | Putting the site online: Atlas, Vercel, the first administrator, checks, backups |
 | [08-test-cases.md](docs/08-test-cases.md) | Every test case, automated or by hand, with a column for results |
-| [DESIGN.md](DESIGN.md) | The look: colours from the UAE Government Design System, type, stamps, layout rules |
+| [DESIGN.md](DESIGN.md) | The look: the emerald and ink palette, fonts (Geist and Bricolage Grotesque), the logo, stamps, layout kit and motion |
 | [plans/](docs/plans/) | Step-by-step implementation plan per phase |
 
 The phase plans in [docs/plans/](docs/plans/) are dated records and still describe the first plan (TypeScript and Better Auth). The code uses JavaScript, Mongoose and its own sign-in, as the other docs describe.
 
 ## Stack
 
-Next.js 16 with JavaScript, Tailwind CSS v4, shadcn/ui, Motion, MongoDB with Mongoose (Docker for development, a hosted database for production), bcrypt and JWT session cookies, Zod, Nodemailer over SMTP (notification and password-reset emails only), Recharts, react-pdf, Vitest and Playwright. Mentors and entrepreneurs talk in conversations saved in MongoDB; the page checks for new messages every few seconds. Deployed on Vercel. The AI provider is not chosen yet.
+Next.js 16 with JavaScript, Tailwind CSS v4 (colours as tokens in `globals.css`), shadcn/ui, Motion for animations, Geist and Bricolage Grotesque fonts, MongoDB with Mongoose (Docker for development, a hosted database for production), bcrypt and JWT session cookies, Zod, Nodemailer over SMTP (notification and password-reset emails only), Recharts, react-pdf, Vitest and Playwright. Mentors and entrepreneurs talk in conversations saved in MongoDB; the page checks for new messages every few seconds. Deployed on Vercel. The AI provider is not chosen yet.
