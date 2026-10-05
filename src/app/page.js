@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { Features } from "@/components/landing/features";
 import { HeroVisual } from "@/components/landing/hero-visual";
+import { LinksOff } from "@/components/landing/links-off";
 import { RoleTabs } from "@/components/landing/role-tabs";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -51,7 +52,8 @@ function SectionIntro({ id, title, text }) {
 
 export default function HomePage() {
   return (
-    <>
+    // Showcase only for now: every link and button that goes to another page is switched off.
+    <LinksOff>
       <SiteHeader />
       <main id="main" className="flex-1 overflow-x-clip">
         {/* Hero */}
@@ -189,6 +191,6 @@ export default function HomePage() {
       </main>
 
       <SiteFooter />
-    </>
+    </LinksOff>
   );
 }
