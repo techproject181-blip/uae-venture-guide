@@ -148,6 +148,8 @@
   --secondary-foreground: var(--ink-900);
   --muted: var(--ink-100);
   --muted-foreground: var(--ink-600);
+  /* Lucide chevron-down for native selects. A data URI cannot read variables, so the stroke is ink-600 written out. */
+  --select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   --accent: var(--brand-50); /* pale emerald bands and the active pill */
   --accent-foreground: var(--brand-800);
   --seal: var(--gold-600); /* the border of an OFFICIAL seal */
@@ -676,6 +678,17 @@ details[open]::details-content {
   animation: bar-grow 600ms var(--ease-out) backwards;
 }
 
+/* A bar that fills from the left (the home page budget). */
+@keyframes bar-fill {
+  from {
+    scale: 0 1;
+  }
+}
+.bar-fill {
+  transform-origin: left;
+  animation: bar-fill 600ms var(--ease-out) backwards;
+}
+
 /* The home page headline and buttons come in one after another. */
 .intro > * {
   animation: rise 600ms var(--ease-out) backwards;
@@ -696,4 +709,15 @@ details[open]::details-content {
 }
 .marquee-frame:hover .marquee {
   animation-play-state: paused;
+}
+
+/* Native selects: our own chevron, set in from the edge like the inputs' padding.
+   Outside any layer on purpose, so it wins over the px-3 on each select. */
+select:not([multiple]) {
+  appearance: none;
+  padding-inline-end: 2.5rem;
+  background-image: var(--select-chevron);
+  background-position: right 0.75rem center;
+  background-size: 1.125rem;
+  background-repeat: no-repeat;
 }

@@ -40,7 +40,7 @@ Run this on your computer, with `.env.production` filled in:
 node --env-file=.env.production scripts/create-admin.mjs you@example.com "a long password" "Your Name"
 ```
 
-Never add the demo data to production: its accounts share a published password. `npm run seed:demo` refuses any database that is not on your computer.
+Never add the seed data to a public server: its accounts share a published password. `npm run seed` refuses any database that is not on the computer it runs on.
 
 ## 5. Official sources and fees
 

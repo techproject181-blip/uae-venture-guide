@@ -14,7 +14,7 @@ import {
 import { FeeReference } from "../../models/FeeReference.js";
 import { Source } from "../../models/Source.js";
 
-// Imports are relative (not "@/...") so scripts/seed-demo.mjs can run this file in plain Node.
+// Imports are relative (not "@/...") so scripts/seed.mjs can run this file in plain Node.
 //
 // The sample planner builds a startup roadmap from rules and the official fee
 // references, while no AI provider is connected. It returns the same shape an

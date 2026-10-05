@@ -1,10 +1,12 @@
-// Fills the development database with demo data: accounts for every role,
-// official sources and fee references, mentor and funder profiles, four plans
-// made by the planner, experience posts, guidance requests (one with a saved
-// founder–mentor conversation) and funder interest.
+// Fills a database with a small set of starting data: a few accounts for each
+// role, official sources and fee references, mentor and funder profiles, two
+// plans made by the planner, two experience posts, two guidance requests (one
+// with a saved founder–mentor conversation) and funder interest.
+// It also removes anything the browser tests left behind (@e2e.test accounts)
+// and old demo accounts that are no longer in the list below.
 // Safe to run again: accounts, sources and fees are updated in place, and the
 // demo accounts' plans, posts and requests are recreated.
-// Usage: npm run seed:demo
+// Usage: npm run seed
 //
 // The sources are real official websites, but the summaries and every fee
 // amount are demo values marked "demo". An administrator must check each one
@@ -27,6 +29,13 @@ import { User } from "../src/models/User.js";
 
 const DEMO_PASSWORD = "Demo2026pass";
 
+// Every account has the published password above, and one is an
+// administrator, so this data only ever goes into a database on this computer.
+if (!/^mongodb:\/\/(127\.0\.0\.1|localhost)[:/]/.test(process.env.MONGODB_URI ?? "")) {
+  console.error("Seed data can only be added to a local database (mongodb://127.0.0.1 or mongodb://localhost).");
+  process.exit(1);
+}
+
 const USERS = [
   { name: "Sara Al Mansoori", email: "admin@demo.test", role: "admin", status: "active" },
   { name: "Aisha Khan", email: "aisha@demo.test", role: "entrepreneur", status: "active" },
@@ -36,7 +45,6 @@ const USERS = [
   { name: "Daniel Okafor", email: "daniel@demo.test", role: "mentor", status: "active" },
   { name: "Rahul Mehta", email: "rahul@demo.test", role: "mentor", status: "pending" },
   { name: "Layla Haddad", email: "layla@demo.test", role: "funder", status: "active" },
-  { name: "Hamad Investments", email: "hamad@demo.test", role: "funder", status: "active" },
   { name: "Khalid Rahman", email: "khalid@demo.test", role: "funder", status: "pending" },
 ];
 
@@ -76,17 +84,33 @@ const FEES = [
   { source: "fta", kind: "tax_registration", item: "Corporate tax registration", emirate: null, jurisdiction: "any", min: 0, max: 0, recurrence: "one_time" },
 ];
 
-// Every demo account has the published password above, and one is an
-// administrator, so demo data only ever goes into a database on this computer.
-if (!/^mongodb:\/\/(127\.0\.0\.1|localhost)[:/]/.test(process.env.MONGODB_URI ?? "")) {
-  console.error("Demo data can only be added to a local database (mongodb://127.0.0.1 or mongodb://localhost).");
-  process.exit(1);
-}
-
 await connectDB();
 // Build every index first (unique emails, text search, one waiting request per pair, and so on).
 await Promise.all([User, Source, FeeReference, MentorProfile, FunderProfile, Plan, Post, MentorRequest, RequestMessage, FundingInterest, ChatMessage].map((model) => model.init()));
 const now = new Date();
+
+/** Deletes these accounts and everything they made or were part of. */
+async function removeAccounts(userIds) {
+  if (userIds.length === 0) return;
+  const planIds = await Plan.find({ ownerId: { $in: userIds } }).distinct("_id");
+  const requestIds = await MentorRequest.find({ $or: [{ entrepreneurId: { $in: userIds } }, { mentorId: { $in: userIds } }] }).distinct("_id");
+  await Promise.all([
+    RequestMessage.deleteMany({ requestId: { $in: requestIds } }),
+    MentorRequest.deleteMany({ _id: { $in: requestIds } }),
+    ChatMessage.deleteMany({ planId: { $in: planIds } }),
+    FundingInterest.deleteMany({ $or: [{ planId: { $in: planIds } }, { funderId: { $in: userIds } }] }),
+    Plan.deleteMany({ _id: { $in: planIds } }),
+    Post.deleteMany({ authorId: { $in: userIds } }),
+    MentorProfile.deleteMany({ userId: { $in: userIds } }),
+    FunderProfile.deleteMany({ userId: { $in: userIds } }),
+    User.deleteMany({ _id: { $in: userIds } }),
+  ]);
+}
+
+// Browser test accounts, and demo accounts dropped from the list above.
+const keep = USERS.map((user) => user.email);
+const leftovers = await User.find({ $or: [{ email: /@e2e\.test$/ }, { email: { $regex: /@demo\.test$/, $nin: keep } }] }).distinct("_id");
+await removeAccounts(leftovers);
 
 const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 10);
 for (const user of USERS) {
@@ -143,7 +167,6 @@ for (const [name, profile] of Object.entries(MENTORS)) {
 
 const FUNDERS = {
   layla: { organization: "Gulf Student Ventures", funderType: "angel", ticketMinAed: 25000, ticketMaxAed: 150000, sectors: ["food_beverage", "education", "technology"], bio: "I back student founders with small first cheques and stay close as a mentor." },
-  hamad: { organization: "Hamad Investments", funderType: "vc", ticketMinAed: 200000, ticketMaxAed: 2000000, sectors: ["technology", "ecommerce", "logistics"], bio: "We invest in UAE startups that can grow across the Gulf, usually after a first version has paying users." },
   khalid: { organization: "Khalid Rahman", funderType: "angel", ticketMinAed: 10000, ticketMaxAed: 50000, sectors: ["tourism_events", "creative_media"], bio: "Former tour operator investing in small tourism and events businesses." },
 };
 for (const [name, profile] of Object.entries(FUNDERS)) {
@@ -164,9 +187,7 @@ await Promise.all([
 
 const PLANS = [
   { owner: "aisha", done: 4, paid: { "Trade name reservation": 250, "Initial approval": 300, "Office or shop rent": 30000 }, pitch: "A karak tea café beside the university, open late for students to study. Low fit-out cost and steady daily customers.", intake: { title: "Karak café near campus", idea: "A small café beside the university serving karak tea, sandwiches and a quiet space to study in the evenings.", emirate: "sharjah", sector: "food_beverage", jurisdictionPref: "unsure", budgetAed: 120000, targetCustomers: "University students and office workers nearby", teamSize: 3 } },
-  { owner: "aisha", done: 1, intake: { title: "Study planner app", idea: "A mobile app that helps university students plan study time, track deadlines and share notes with classmates.", emirate: "dubai", sector: "technology", jurisdictionPref: "unsure", budgetAed: 60000, targetCustomers: "University students across the UAE", teamSize: 2 } },
   { owner: "yousef", done: 6, pitch: "Small-group desert and mountain tours from Ras Al Khaimah, booked online, for residents and visitors who want something quieter than the big tour buses.", intake: { title: "Mountain and desert tours", idea: "Small-group desert and mountain tours in Ras Al Khaimah, booked online, with local guides and photography stops.", emirate: "ras_al_khaimah", sector: "tourism_events", jurisdictionPref: "free_zone", budgetAed: 90000, targetCustomers: "UAE residents and tourists looking for small-group trips", teamSize: 2 } },
-  { owner: "yousef", done: 0, intake: { title: "Handmade perfume shop", idea: "An online shop selling handmade oud and perfume blends, with small gift sets for weddings and Eid.", emirate: "abu_dhabi", sector: "ecommerce", jurisdictionPref: "mainland", budgetAed: 45000, targetCustomers: "Shoppers in the UAE buying gifts", teamSize: 1 } },
 ];
 const plans = [];
 // paid: what the founder already paid for some costs, so the "estimated and actual" chart has data.
@@ -183,8 +204,8 @@ for (const { owner, done, paid = {}, pitch, intake } of PLANS) {
 
 const POSTS = [
   { author: "omar", title: "What I learned opening my first café in Dubai", body: "## Start small\n\nMy first café had **eight seats**. Rent was the biggest cost, so I signed a short lease first and only moved to a bigger place after a year.\n\n## Before you sign\n\n- Read the food safety rules before you fit out the kitchen\n- Ask the landlord about the Ejari registration\n- Keep three months of costs in reserve\n\nMost of my mistakes cost money because I rushed. Take two extra weeks to check everything.", chart: { type: "bar", title: "My first-year costs (AED thousands)", labels: ["Rent", "Fit-out", "Licence", "Staff"], values: [60, 45, 15, 90] } },
-  { author: "omar", title: "Mainland or free zone for a food business?", body: "Most food businesses I know chose **mainland**, because their customers walk in from the street. A free zone works better when you sell online or to other businesses.\n\nAsk yourself one question: *where will my customers be?* If the answer is a shop front, start with mainland." },
   { author: "fatima", title: "Finding your first 100 customers on a small budget", body: "You do not need a big marketing budget to start. These worked for the founders I advise:\n\n1. Instagram posts that show the product being made\n2. A launch offer for friends and their friends\n3. Partnering with a café or gym that serves the same customers\n\nTrack which one brings customers, and spend more only on that one.", chart: { type: "pie", title: "Where my clients' first customers came from", labels: ["Instagram", "Friends", "Partners", "Walk-ins"], values: [45, 25, 20, 10] } },
+  { author: "daniel", title: "Build the smallest app your users will try", body: "Most student app ideas I see try to do **ten things** at once. Pick the one task your users repeat every week and build only that.\n\n## A first version in six weeks\n\n- Week 1: talk to ten people who would use it\n- Weeks 2 to 5: build the one task, nothing else\n- Week 6: give it to those ten people and watch them use it\n\nA free zone licence can wait until someone is ready to pay." },
 ];
 for (const { author, ...post } of POSTS) {
   await Post.create({ ...post, authorId: ids[author], status: "published" });
@@ -209,7 +230,7 @@ await RequestMessage.insertMany(
 
 await FundingInterest.create([
   { planId: plans[0]._id, funderId: ids.layla, message: "I back student food businesses and would like to learn more about your café.", status: "accepted", respondedAt: now },
-  { planId: plans[2]._id, funderId: ids.khalid, message: "I ran tours for ten years and like your idea. Can we talk about your first season?", status: "pending" },
+  { planId: plans[1]._id, funderId: ids.khalid, message: "I ran tours for ten years and like your idea. Can we talk about your first season?", status: "pending" },
 ]);
 
 await mongoose.disconnect();

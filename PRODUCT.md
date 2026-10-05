@@ -42,7 +42,7 @@ Costs marked "official" come only from fee references an administrator checked a
 
 ## Evidence on Hand
 
-- Demo data from `npm run seed:demo`: 10 accounts, 13 real official sources with demo summaries and demo fee amounts, 4 plans, 3 mentor posts.
+- Demo data from `npm run seed`: 9 accounts, 13 real official sources with demo summaries and demo fee amounts, 2 plans, 3 mentor posts.
 - No real users, testimonials, press or usage numbers exist. Do not invent any.
 
 ## Product Principles

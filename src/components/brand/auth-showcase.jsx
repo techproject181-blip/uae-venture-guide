@@ -14,10 +14,10 @@ export function AuthShowcase() {
     <div className="relative hidden overflow-hidden bg-brand-deep text-on-brand lg:flex lg:flex-col lg:justify-between lg:p-12 xl:p-16">
       {/* A soft glow and a faint grid, behind everything. */}
       <div aria-hidden="true" className="absolute -top-40 -right-40 size-[36rem] rounded-full bg-brand-400/25 blur-3xl" />
-      <div aria-hidden="true" className="absolute -bottom-48 -left-32 size-[30rem] rounded-full bg-brand-300/10 blur-3xl" />
+      <div aria-hidden="true" className="absolute -bottom-48 -left-32 size-120 rounded-full bg-brand-300/10 blur-3xl" />
       <div
         aria-hidden="true"
-        className="absolute inset-0 opacity-[0.07] [background-image:linear-gradient(var(--on-brand)_1px,transparent_1px),linear-gradient(90deg,var(--on-brand)_1px,transparent_1px)] [background-size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]"
+        className="absolute inset-0 opacity-[0.07] bg-[linear-gradient(var(--on-brand)_1px,transparent_1px),linear-gradient(90deg,var(--on-brand)_1px,transparent_1px)] bg-size-[40px_40px] mask-[radial-gradient(ellipse_at_center,black,transparent_75%)]"
       />
 
       <div className="relative flex items-center gap-2.5">

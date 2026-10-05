@@ -14,6 +14,8 @@
 /coverage
 /test-results/
 /playwright-report/
+/blob-report/
+/playwright/.cache/
 
 # next.js
 /.next/
@@ -24,7 +26,19 @@
 
 # misc
 .DS_Store
+Thumbs.db
 *.pem
+*.log
+*.swp
+
+# editors (each person keeps their own settings)
+.idea/
+.vscode/*
+!.vscode/settings.json
+
+# design tool working files (screenshots, mock-ups, answers); the design
+# itself is described in DESIGN.md
+/.impeccable/
 
 # debug
 npm-debug.log*

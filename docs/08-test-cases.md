@@ -2,7 +2,7 @@
 
 Every main task of the app as a test case, with how it is checked. The ones marked with a file name are automated browser tests (Playwright) in `tests/e2e/`; they run in five setups: Chrome, Firefox and Safari's engine (WebKit) on a laptop screen, plus a Chrome phone and an iPhone. Every browser test also fails if a page shows a JavaScript error or the server answers with an error (500 or higher). The ones marked "by hand" are for manual testing.
 
-How to run the automated ones: `npm test` for the unit and database tests, `npm run test:e2e` for the browser tests (with `npm run db:up`, `npm run seed:demo` and `npm run dev` running).
+How to run the automated ones: `npm test` for the unit and database tests, `npm run test:e2e` for the browser tests (with `npm run db:up`, `npm run seed` and `npm run dev` running).
 
 For manual testing, use the demo accounts in the README (password `Demo2026pass`) and fill in the Result column: pass, or what went wrong.
 

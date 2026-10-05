@@ -34,7 +34,7 @@ export default async function DiscoverPage({ searchParams }) {
     <>
       <PageHeader title="Discover" description="Plans that founders chose to share. You see a full plan only if its owner accepts your interest." />
 
-      <form className="panel mb-6 grid gap-4 p-4 sm:p-5 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_8rem] md:items-end">
+      <form className="panel mb-6 grid gap-4 p-4 sm:p-5 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_10rem] md:items-end">
         <div className="space-y-2">
           <label className="block text-sm font-medium" htmlFor="sector">
             Sector
@@ -62,7 +62,7 @@ export default async function DiscoverPage({ searchParams }) {
           </select>
         </div>
         <Button type="submit" variant="outline" size="lg">
-          Filter
+          Apply filters
         </Button>
       </form>
 

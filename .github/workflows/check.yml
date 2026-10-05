@@ -27,7 +27,7 @@ jobs:
       - run: npm test
       - run: npm run build
       # The page sweep (tests/e2e/pages.spec.js) signs in with the demo accounts.
-      - run: npm run seed:demo
+      - run: npm run seed
       # Chrome is already on the runner; Firefox and WebKit (Safari's engine) are installed here.
       - run: npx playwright install --with-deps firefox webkit
       # Starts `npm run dev` itself, then tests Chrome, Firefox, Safari and two phones.

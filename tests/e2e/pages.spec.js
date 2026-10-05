@@ -4,7 +4,7 @@ import { expectAccessible } from "./helpers.js";
 // Opens every page as each kind of user and checks that it loads, shows no
 // JavaScript or server errors (see fixtures.js), never scrolls sideways (which
 // matters most on phones), and passes the accessibility check. It signs in
-// with the demo accounts from `npm run seed:demo` and only reads, so the demo
+// with the demo accounts from `npm run seed` and only reads, so the demo
 // data stays as it was. Detail pages are reached by following the first link
 // of their list, so no ids are needed.
 
@@ -12,7 +12,7 @@ const DEMO_PASSWORD = "Demo2026pass";
 
 async function signInAs(page, email) {
   const response = await page.request.post("/api/auth/sign-in", { data: { email, password: DEMO_PASSWORD } });
-  expect(response.ok(), `sign in as ${email} (run npm run seed:demo first)`).toBe(true);
+  expect(response.ok(), `sign in as ${email} (run npm run seed first)`).toBe(true);
 }
 
 /** The address of the first link on `listPath` that starts with `prefix` and is followed by an id. */
@@ -33,7 +33,7 @@ async function firstFeePage(page) {
     const fee = await page.locator(`a[href^="${source}/fees/"]`).first().getAttribute("href", { timeout: 1000 }).catch(() => null);
     if (fee) return fee;
   }
-  throw new Error("No source with fee references (run npm run seed:demo).");
+  throw new Error("No source with fee references (run npm run seed).");
 }
 
 async function checkPage(page, path) {

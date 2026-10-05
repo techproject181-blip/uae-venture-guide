@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight, Check, ChevronDown } from "lucide-react";
 import { Features } from "@/components/landing/features";
 import { HeroVisual } from "@/components/landing/hero-visual";
-import { LinksOff } from "@/components/landing/links-off";
 import { RoleTabs } from "@/components/landing/role-tabs";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -41,7 +40,7 @@ const linkClass = "font-medium text-foreground underline decoration-primary unde
 /** A section heading, centred, with a short line under it. */
 function SectionIntro({ id, title, text }) {
   return (
-    <div className="reveal mx-auto mb-12 max-w-2xl text-center lg:mb-16">
+    <div className="reveal mx-auto mb-10 max-w-2xl text-center lg:mb-12">
       <h2 id={id} className="font-display text-[2rem] leading-tight font-bold tracking-[-0.03em] sm:text-[2.5rem]">
         {title}
       </h2>
@@ -52,15 +51,14 @@ function SectionIntro({ id, title, text }) {
 
 export default function HomePage() {
   return (
-    // Showcase only for now: every link and button that goes to another page is switched off.
-    <LinksOff>
+    <>
       <SiteHeader />
       <main id="main" className="flex-1 overflow-x-clip">
         {/* Hero */}
         <section className="relative">
           <div
             aria-hidden="true"
-            className="absolute inset-0 -z-10 [background-image:radial-gradient(circle_at_1px_1px,color-mix(in_srgb,var(--ink-900)_7%,transparent)_1px,transparent_0)] [background-size:24px_24px] [mask-image:linear-gradient(to_bottom,black,transparent_85%)]"
+            className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_1px_1px,color-mix(in_srgb,var(--ink-900)_7%,transparent)_1px,transparent_0)] bg-size-[24px_24px] mask-[linear-gradient(to_bottom,black,transparent_85%)]"
           />
           <div className="page-width grid items-center gap-16 py-16 sm:py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-12 lg:py-24 xl:gap-20">
             <div className="intro text-center lg:text-left">
@@ -86,6 +84,14 @@ export default function HomePage() {
                   Sign in
                 </Link>
               </div>
+              <ul className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground lg:justify-start">
+                {["Free to use", "Mainland and free zones", "Mentors approved by an administrator"].map((point) => (
+                  <li key={point} className="flex items-center gap-1.5">
+                    <Check className="size-4 text-primary" strokeWidth={2.5} aria-hidden="true" />
+                    {point}
+                  </li>
+                ))}
+              </ul>
             </div>
             <HeroVisual />
           </div>
@@ -94,7 +100,7 @@ export default function HomePage() {
         {/* Emirates strip */}
         <section aria-label="Emirates covered" className="border-y bg-card py-6">
           <p className="page-width mb-4 text-center text-sm text-muted-foreground">Plans for every emirate, mainland or free zone. Official sources so far for Federal, Abu Dhabi, Dubai, Sharjah and Ras Al Khaimah.</p>
-          <div className="marquee-frame relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
+          <div className="marquee-frame relative overflow-hidden mask-[linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
             <ul className="marquee flex w-max gap-4">
               {[...EMIRATES, ...EMIRATES, ...EMIRATES, ...EMIRATES].map((emirate, index) => (
                 <li
@@ -110,13 +116,13 @@ export default function HomePage() {
         </section>
 
         {/* Features */}
-        <section aria-labelledby="features-title" className="page-width py-20 sm:py-28">
+        <section aria-labelledby="features-title" className="page-width py-16 sm:py-20 lg:py-24">
           <SectionIntro id="features-title" title="Everything a first business needs, in one place" text="One plan holds your steps, costs, documents and questions, so you always know what comes next." />
           <Features />
         </section>
 
         {/* How it works */}
-        <section aria-labelledby="how-title" className="border-y bg-card py-20 sm:py-28">
+        <section aria-labelledby="how-title" className="border-y bg-card py-16 sm:py-20 lg:py-24">
           <div className="page-width">
             <SectionIntro id="how-title" title="How it works" text="Three steps from idea to a plan you can follow." />
             <ol className="relative grid gap-10 md:grid-cols-3 md:gap-8">
@@ -135,16 +141,31 @@ export default function HomePage() {
         </section>
 
         {/* Who it is for */}
-        <section aria-labelledby="roles-title" className="page-width py-20 sm:py-28">
+        <section aria-labelledby="roles-title" className="page-width py-16 sm:py-20 lg:py-24">
           <SectionIntro id="roles-title" title="Made for founders, mentors and funders" text="Mentors and funders are approved by an administrator first." />
           <RoleTabs />
         </section>
 
         {/* Questions */}
-        <section aria-labelledby="faq-title" className="border-t bg-card py-20 sm:py-28">
-          <div className="page-width">
-            <SectionIntro id="faq-title" title="Questions" />
-            <div className="mx-auto max-w-3xl divide-y rounded-2xl border">
+        <section aria-labelledby="faq-title" className="border-t bg-card py-16 sm:py-20 lg:py-24">
+          <div className="page-width grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
+            <div className="reveal text-center lg:text-left">
+              <h2 id="faq-title" className="font-display text-[2rem] leading-tight font-bold tracking-[-0.03em] sm:text-[2.5rem]">
+                Questions
+              </h2>
+              <p className="mt-3 text-lg text-muted-foreground">
+                See what mentors share in their{" "}
+                <Link href="/posts" className={linkClass}>
+                  experience posts
+                </Link>
+                , or browse the{" "}
+                <Link href="/sources" className={linkClass}>
+                  official sources
+                </Link>
+                .
+              </p>
+            </div>
+            <div className="divide-y rounded-2xl border">
               {QUESTIONS.map(({ q, a }) => (
                 <details key={q} className="group px-5 sm:px-6">
                   <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-semibold outline-none focus-visible:ring-3 focus-visible:ring-ring/50 [&::-webkit-details-marker]:hidden">
@@ -155,42 +176,11 @@ export default function HomePage() {
                 </details>
               ))}
             </div>
-            <p className="mt-8 text-center text-muted-foreground">
-              See what mentors share in their{" "}
-              <Link href="/posts" className={linkClass}>
-                experience posts
-              </Link>
-              , or browse the{" "}
-              <Link href="/sources" className={linkClass}>
-                official sources
-              </Link>
-              .
-            </p>
-          </div>
-        </section>
-
-        {/* Call to action */}
-        <section className="page-width pb-20 sm:pb-28">
-          <div className="reveal relative overflow-hidden rounded-3xl bg-brand-deep px-6 py-16 text-center text-on-brand sm:px-12 sm:py-20">
-            <div aria-hidden="true" className="absolute -top-24 left-1/2 size-[30rem] -translate-x-1/2 rounded-full bg-brand-400/30 blur-3xl" />
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(var(--on-brand)_1px,transparent_1px),linear-gradient(90deg,var(--on-brand)_1px,transparent_1px)] [background-size:36px_36px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]"
-            />
-            <h2 className="relative mx-auto max-w-2xl font-display text-[2rem] leading-tight font-bold tracking-[-0.03em] sm:text-5xl">Your roadmap is a few questions away.</h2>
-            <p className="relative mx-auto mt-4 max-w-lg text-lg text-brand-100/80">Free to use. Mentor or funder? Choose your role when you sign up.</p>
-            <Link
-              href="/sign-up"
-              className={buttonVariants({ size: "lg", variant: "outline", className: "group relative mt-8 h-12 border-on-brand bg-on-brand px-6 text-base text-brand-deep hover:border-on-brand hover:bg-brand-50" })}
-            >
-              Create a free account
-              <ArrowRight className="transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
-            </Link>
           </div>
         </section>
       </main>
 
       <SiteFooter />
-    </LinksOff>
+    </>
   );
 }

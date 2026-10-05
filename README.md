@@ -23,7 +23,7 @@ You need Node.js 24 and Docker Desktop.
 
 1. Start the local database: `npm run db:up` (MongoDB 7 in Docker, on port 27018)
 2. Install the packages: `npm install`
-3. Fill the database with demo data: `npm run seed:demo`
+3. Fill the database with starting data: `npm run seed` (two founders, three mentors, funders, two plans and three posts; it also clears anything the browser tests left behind).
 4. Start the app: `npm run dev`, then open <http://localhost:3000>
 
 Demo accounts, all with the password `Demo2026pass`:

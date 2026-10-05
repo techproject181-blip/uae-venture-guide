@@ -1,20 +1,28 @@
 import { Check, MessageCircle, Wallet } from "lucide-react";
 import { Stamp } from "@/components/stamp";
 
-// An example plan, drawn like the plan page. The official fees match the demo
-// fee references for mainland Dubai; the rest are estimates.
+// An example plan, drawn like the plan page. It shows each kind of fee mark
+// once or twice: Official (checked by an administrator), Demo fee and Estimate.
 const STEPS = [
   { number: "1.1", title: "Reserve your trade name", fee: "AED 620", basis: "official", done: true },
   { number: "1.2", title: "Get initial approval", fee: "AED 120", basis: "official", done: true },
   { number: "2.1", title: "Rent a place and register the lease", fee: "AED 15,000–40,000", basis: "estimate" },
-  { number: "2.2", title: "Pay for your trade licence", fee: "AED 12,000–18,000", basis: "official" },
+  { number: "2.2", title: "Pay for your trade licence", fee: "AED 12,000–18,000", basis: "demo" },
 ];
 
-/** The picture beside the home page headline: an example plan in an app window, with two cards floating around it. */
+// The example budget, split by category. Shares add up to 100.
+const BUDGET = [
+  { label: "Office", share: 45, className: "bg-primary" },
+  { label: "Licence", share: 30, className: "bg-brand-400" },
+  { label: "Visas", share: 15, className: "bg-gold-500" },
+  { label: "Other", share: 10, className: "bg-ink-300" },
+];
+
+/** The picture beside the home page headline: an example plan in an app window, its budget at the foot, and a mentor's reply floating above. */
 export function HeroVisual() {
   return (
     <figure className="relative mx-auto w-full max-w-xl lg:max-w-none">
-      <div aria-hidden="true" className="absolute -inset-x-6 -inset-y-10 -z-10 rounded-[3rem] bg-gradient-to-br from-brand-200/60 via-brand-100/40 to-brand-50/60 blur-2xl" />
+      <div aria-hidden="true" className="absolute -inset-x-6 -inset-y-10 -z-10 rounded-[3rem] bg-linear-to-br from-brand-200/60 via-brand-100/40 to-brand-50/60 blur-2xl" />
 
       <div className="hero-window overflow-hidden rounded-2xl border bg-card shadow-window">
         {/* Window bar */}
@@ -25,7 +33,7 @@ export function HeroVisual() {
           <span className="ml-3 truncate rounded-md bg-card px-3 py-1 text-xs text-muted-foreground ring-1 ring-border">My plans / Specialty café</span>
         </div>
 
-        <div className="p-5 sm:p-6 sm:pb-20">
+        <div className="p-5 sm:p-6">
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="font-display text-xl font-bold tracking-[-0.02em]">Specialty café</p>
@@ -57,39 +65,49 @@ export function HeroVisual() {
                 <span className="min-w-0 flex-1 text-sm font-medium">{step.title}</span>
                 <span className="flex shrink-0 flex-col items-end gap-1.5">
                   <span className="text-sm font-medium whitespace-nowrap tabular-nums">{step.fee}</span>
-                  {step.basis === "official" ? (
-                    <Stamp tone="official">Official</Stamp>
-                  ) : (
-                    <span className="text-xs text-muted-foreground">Estimate</span>
-                  )}
+                  {step.basis === "official" && <Stamp tone="official">Official</Stamp>}
+                  {step.basis === "demo" && <Stamp tone="quiet">Demo fee</Stamp>}
+                  {step.basis === "estimate" && <span className="text-xs text-muted-foreground">Estimate</span>}
                 </span>
               </li>
             ))}
           </ol>
         </div>
+
+        {/* Budget, at the foot of the window: the plan split by category, in one bar. */}
+        <div aria-hidden="true" className="border-t bg-ink-50 px-5 py-4 sm:px-6">
+          <div className="flex items-baseline justify-between gap-4">
+            <p className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+              <Wallet className="size-3.5 text-primary" />
+              First-year budget
+            </p>
+            <p className="font-display text-lg font-bold tabular-nums">AED 60,000</p>
+          </div>
+          <div className="mt-3 flex h-2.5 gap-0.5 overflow-hidden rounded-full">
+            {BUDGET.map((part, index) => (
+              <span key={part.label} className={`bar-fill h-full ${part.className}`} style={{ width: `${part.share}%`, animationDelay: `${0.4 + index * 0.1}s` }} />
+            ))}
+          </div>
+          <ul className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+            {BUDGET.map((part) => (
+              <li key={part.label} className="flex items-center gap-1.5">
+                <span className={`size-2 rounded-full ${part.className}`} />
+                {part.label}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
-      {/* Floating cards */}
-      <div aria-hidden="true" className="float-slow absolute -bottom-8 -left-4 hidden w-52 rounded-xl border bg-card p-3.5 shadow-lg sm:block lg:-left-10">
-        <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-          <Wallet className="size-3.5 text-primary" />
-          First-year budget
-        </div>
-        <p className="mt-1.5 font-display text-lg font-bold tabular-nums">AED 60,000</p>
-        <div className="mt-2 flex h-10 items-end gap-1.5">
-          {[60, 85, 40, 70, 30, 55].map((height, index) => (
-            <span key={index} className="bar-grow flex-1 rounded-t-sm bg-brand-400/80" style={{ height: `${height}%`, animationDelay: `${0.4 + index * 0.08}s` }} />
-          ))}
-        </div>
-      </div>
+      {/* Floating card */}
       <div
         aria-hidden="true"
         className="float-slow absolute -top-7 -right-4 hidden items-center gap-3 rounded-xl border bg-card p-3.5 pr-5 shadow-lg sm:flex lg:-right-8"
         style={{ animationDelay: "-3s" }}
       >
-        <span className="flex size-9 items-center justify-center rounded-full bg-accent text-xs font-bold text-accent-foreground">OS</span>
+        <span className="flex size-9 items-center justify-center rounded-full bg-accent text-xs font-bold text-accent-foreground">MN</span>
         <span>
-          <span className="block text-sm font-medium">Omar accepted your request</span>
+          <span className="block text-sm font-medium">Muneeb accepted your request</span>
           <span className="flex items-center gap-1 text-xs text-muted-foreground">
             <MessageCircle className="size-3" />
             Mentor · Food and drink
@@ -97,9 +115,9 @@ export function HeroVisual() {
         </span>
       </div>
       {/* Visible on purpose: the demo data has no checked fees, so real demo plans show Demo fee or Estimate, not Official. */}
-      <figcaption className="mt-12 text-center text-sm text-muted-foreground">
+      <figcaption className="mx-auto mt-5 max-w-md text-center text-sm text-muted-foreground">
         An example plan. <span className="font-medium text-foreground">Official</span> means an administrator checked the fee against a
-        government or free zone page; other fees are marked as demo or estimate.
+        government or free zone page.
       </figcaption>
     </figure>
   );

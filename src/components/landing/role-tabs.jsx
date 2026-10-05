@@ -63,7 +63,7 @@ export function RoleTabs() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl">
+    <div>
       <div role="tablist" aria-label="Who it is for" onKeyDown={onKeyDown} className="mx-auto flex w-fit gap-1 rounded-full border bg-card p-1 shadow-xs">
         {ROLES.map((r) => (
           <button
