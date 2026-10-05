@@ -46,11 +46,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files: real secrets never go into git. The development file only
-# points at the local Docker database, so it is shared.
+# env files: real secrets never go into git. Only the empty template is shared.
 .env*
-!.env.development
-!.env.production.example
+!.env.example
+*credentials*.env
 
 # vercel
 .vercel
@@ -59,5 +58,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# database backups (npm run db:backup) hold real user data
+# database exports hold real user data
 /backups/

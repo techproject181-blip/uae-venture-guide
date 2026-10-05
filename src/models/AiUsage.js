@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 const aiUsageSchema = new mongoose.Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    day: { type: String, required: true }, // "2026-10-05"
+    day: { type: String, required: true }, // "YYYY-MM-DD" in UAE time
     generations: { type: Number, default: 0 },
     chatMessages: { type: Number, default: 0 },
   },

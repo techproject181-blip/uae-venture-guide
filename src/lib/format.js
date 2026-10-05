@@ -14,12 +14,12 @@ export function formatAedRange(min, max) {
   return `AED ${aedFormat.format(min)}–${aedFormat.format(max)}`;
 }
 
-/** A Date or ISO string -> "5 Oct 2026" */
+/** A Date or ISO string -> "D Mon YYYY": day, short month and year */
 export function formatDate(value) {
   return value ? dateFormat.format(new Date(value)) : "";
 }
 
-/** A Date or ISO string -> "2026-10-05", the format date inputs need. */
+/** A Date or ISO string -> "YYYY-MM-DD", the format date inputs need. */
 export function toDateInput(value) {
   return new Date(value).toISOString().slice(0, 10);
 }

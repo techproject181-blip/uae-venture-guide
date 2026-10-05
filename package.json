@@ -7,9 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "db:up": "docker compose up -d",
-    "db:down": "docker compose down",
-    "seed": "node --env-file=.env.development --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/seed.mjs"
+    "seed": "node --env-file-if-exists=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/seed.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

@@ -25,7 +25,7 @@ export function Features() {
   return (
     <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
       <Feature icon={ListChecks} title="A roadmap in the right order" text="Licence, visas, bank and tax, as numbered steps you tick off." className="lg:col-span-2">
-        <ol className="grid gap-2 sm:grid-cols-3">
+        <ol className="grid gap-2 sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
           {["Choose your licence", "Reserve the trade name", "Open a bank account"].map((step, index) => (
             <li key={step} className="flex items-center gap-2.5 rounded-lg border bg-ink-50/70 px-3 py-2.5 text-sm">
               <span className={cn("flex size-5 shrink-0 items-center justify-center rounded-md border", index < 2 ? "border-primary bg-primary text-primary-foreground" : "border-ink-300 bg-card")}>

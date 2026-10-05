@@ -25,7 +25,7 @@ export function SiteFooter() {
   return (
     <footer className="mt-auto border-t bg-card">
       <div className="page-width grid gap-10 py-10 sm:grid-cols-2 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)] lg:py-14">
-        <div className="max-w-sm">
+        <div className="max-w-sm sm:col-span-2 lg:col-span-1">
           <div className="flex items-center gap-2.5">
             <LogoMark />
             <Wordmark />

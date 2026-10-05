@@ -9,7 +9,7 @@ export async function connectDB() {
 
   const uri = process.env.MONGODB_URI;
   if (!uri) {
-    throw new Error("MONGODB_URI is not set. Add it to .env.development or .env.production.");
+    throw new Error("MONGODB_URI is not set. Copy .env.example to .env.local and fill it in.");
   }
 
   cached.promise ??= mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });

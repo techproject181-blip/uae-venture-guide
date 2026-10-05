@@ -10,7 +10,7 @@ const MESSAGES = {
   chatMessages: `You have sent ${DAILY_LIMITS.chatMessages} chat messages today, the daily limit. Please try again tomorrow.`,
 };
 
-/** Today's date in the UAE, for example "2026-10-05". */
+/** Today's date in the UAE, as "YYYY-MM-DD". */
 export function uaeDay(date = new Date()) {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Dubai" }).format(date);
 }
