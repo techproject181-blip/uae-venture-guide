@@ -9,6 +9,7 @@ import { useApiForm } from "@/components/form/use-api-form";
 import { sendJson } from "@/lib/form-helpers";
 import { postSchema } from "@/lib/schemas/community";
 import { FormPart } from "@/components/form/form-part";
+import { FormActions } from "@/components/layout";
 
 const CHART_TYPES = [
   { value: "", label: "No chart" },
@@ -32,9 +33,9 @@ export function PostForm({ post = null }) {
   });
 
   return (
-    <form noValidate onSubmit={handleSubmit} onChange={clearError} className="space-y-8">
+    <form noValidate onSubmit={handleSubmit} onChange={clearError} className="space-y-6 lg:space-y-8">
       <FormAlert>{formError}</FormAlert>
-      <div className="space-y-5">
+      <FormPart legend="Your post">
         <TextField id="title" label="Title" defaultValue={post?.title} error={errors.title} />
         <TextAreaField
           id="body"
@@ -44,7 +45,7 @@ export function PostForm({ post = null }) {
           defaultValue={post?.body}
           error={errors.body}
         />
-      </div>
+      </FormPart>
 
       <FormPart
         id="pictures"
@@ -82,11 +83,11 @@ export function PostForm({ post = null }) {
         </div>
       </FormPart>
 
-      <div className="border-t pt-6">
+      <FormActions>
         <SubmitButton pending={pending} pendingText="Saving…">
           {post ? "Save post" : "Publish post"}
         </SubmitButton>
-      </div>
+      </FormActions>
     </form>
   );
 }

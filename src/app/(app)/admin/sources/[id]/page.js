@@ -3,9 +3,10 @@ import { notFound } from "next/navigation";
 import { ChevronDown, ExternalLink } from "lucide-react";
 import { FeeForm } from "@/components/admin/fee-form";
 import { SourceForm } from "@/components/admin/source-form";
-import { BackLink } from "@/components/back-link";
+import { tableEdges } from "@/components/admin/table-edges";
 import { DeleteButton } from "@/components/delete-button";
-import { Fields, Section } from "@/components/document";
+import { Fields } from "@/components/document";
+import { Panel, Split, TablePanel } from "@/components/layout";
 import { PageHeader } from "@/components/page-header";
 import { Stamp } from "@/components/stamp";
 import { StatusBadge } from "@/components/status-badge";
@@ -15,6 +16,7 @@ import { EMIRATES, FEE_KINDS, JURISDICTIONS, RECURRENCES, SOURCE_CATEGORIES, lab
 import { connectDB } from "@/lib/db";
 import { formatAedRange, formatDate } from "@/lib/format";
 import { requireUser } from "@/lib/guards";
+import { cn } from "@/lib/utils";
 import { FeeReference } from "@/models/FeeReference";
 import { Source } from "@/models/Source";
 
@@ -29,59 +31,77 @@ export default async function EditSourcePage({ params }) {
   if (!source) notFound();
   const fees = await FeeReference.find({ sourceId: id }).sort({ kind: 1 }).lean();
 
+  const emirate = source.emirate ? labelOf(EMIRATES, source.emirate) : "Federal";
+
   return (
-    <div className="max-w-4xl">
-      <BackLink href="/admin/sources">All sources</BackLink>
-      <PageHeader
-        title={source.title}
-        description={source.publisher}
-        actions={
+    <>
+      <PageHeader back={{ href: "/admin/sources", label: "All sources" }} title={source.title} description={source.publisher}>
+        <span className="flex flex-wrap gap-1.5">
+          <StatusBadge status={source.active ? "active" : "hidden"} label={source.active ? "Shown" : "Hidden"} />
+          {source.demo && <Stamp tone="waiting">Demo</Stamp>}
+        </span>
+      </PageHeader>
+
+      <Split
+        aside={
           <>
-            <a href={source.url} target="_blank" rel="noopener noreferrer" className={buttonVariants({ variant: "outline", size: "lg" })}>
-              Open page
-              <ExternalLink aria-hidden="true" />
-            </a>
-            <DeleteButton
-              url={`/api/admin/sources/${id}`}
-              confirmText="Delete this source and all its fee references?"
-              redirectTo="/admin/sources"
-              doneText="Source deleted."
-            />
+            <Panel
+              title="Official page"
+              footer={
+                <>
+                  <a href={source.url} target="_blank" rel="noopener noreferrer" className={buttonVariants({ variant: "outline", size: "lg" })}>
+                    Open page
+                    <ExternalLink aria-hidden="true" />
+                  </a>
+                  <DeleteButton
+                    url={`/api/admin/sources/${id}`}
+                    confirmText="Delete this source and all its fee references?"
+                    redirectTo="/admin/sources"
+                    doneText="Source deleted."
+                  />
+                </>
+              }
+            >
+              <Fields
+                items={[
+                  { label: "Last checked", value: formatDate(source.verifiedAt) },
+                  { label: "Fee references", value: fees.length },
+                ]}
+              />
+              <p className="mt-5 text-sm wrap-anywhere text-muted-foreground">{source.url}</p>
+            </Panel>
+            <Panel title="How this is used">
+              <ul className="list-disc space-y-2 pl-5 text-sm text-muted-foreground marker:text-ink-300">
+                <li>
+                  While it is shown, new roadmaps and chat answers for {source.emirate ? emirate : "every emirate"} may cite it, and it is
+                  listed on the public sources page.
+                </li>
+                <li>Roadmaps mark a cost as official only when it comes from one of its fee references.</li>
+                <li>Fees marked demo appear in roadmaps as “Demo fee”, not official.</li>
+                <li>Deleting the source deletes its fee references too.</li>
+              </ul>
+            </Panel>
           </>
         }
-      />
-
-      <Fields
-        items={[
-          { label: "Emirate", value: source.emirate ? labelOf(EMIRATES, source.emirate) : "Federal" },
-          { label: "Categories", value: source.categories.map((c) => labelOf(SOURCE_CATEGORIES, c)).join(", ") || "None" },
-          { label: "Last checked", value: formatDate(source.verifiedAt) },
-          {
-            label: "Status",
-            value: (
-              <span className="flex flex-wrap gap-1.5">
-                <StatusBadge status={source.active ? "active" : "hidden"} label={source.active ? "Shown" : "Hidden"} />
-                {source.demo && <Stamp tone="waiting">Demo</Stamp>}
-              </span>
-            ),
-          },
-        ]}
-      />
-      <dl className="mt-6 max-w-2xl">
-        <dt className="field-label">Summary</dt>
-        <dd className="mt-1">{source.summary}</dd>
-      </dl>
-
-      <Section
-        title="Fee references"
-        description="Roadmaps mark a cost as official only when it comes from one of these."
-        className="mt-10"
       >
+        <Panel title="Summary">
+          <p className="max-w-prose">{source.summary}</p>
+          <Fields
+            className="mt-5"
+            items={[
+              { label: "Emirate", value: emirate },
+              { label: "Categories", value: source.categories.map((c) => labelOf(SOURCE_CATEGORIES, c)).join(", ") || "None" },
+            ]}
+          />
+        </Panel>
+
         {fees.length === 0 ? (
-          <p className="text-muted-foreground">No fee references yet. Add the first one below.</p>
+          <Panel title="Fee references" description="Roadmaps mark a cost as official only when it comes from one of these.">
+            <p className="text-muted-foreground">No fee references yet. Add the first one below.</p>
+          </Panel>
         ) : (
-          <div className="relative overflow-x-auto panel">
-            <table className="doc-table min-w-160">
+          <TablePanel title="Fee references" description="Roadmaps mark a cost as official only when it comes from one of these.">
+            <table className={cn("doc-table min-w-160", tableEdges)}>
               <thead>
                 <tr>
                   <th scope="col">Fee</th>
@@ -120,7 +140,7 @@ export default async function EditSourcePage({ params }) {
                     <td className="text-right">
                       <Link
                         href={`/admin/sources/${id}/fees/${fee._id}`}
-                        className="font-medium text-foreground decoration-primary underline-offset-4 hover:underline"
+                        className="inline-flex min-h-11 items-center rounded-xs font-medium text-foreground decoration-primary underline-offset-4 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
                       >
                         Edit
                       </Link>
@@ -129,26 +149,24 @@ export default async function EditSourcePage({ params }) {
                 ))}
               </tbody>
             </table>
-          </div>
+          </TablePanel>
         )}
-      </Section>
 
-      <Section title="Add a fee reference" className="mt-10">
-        <div className="panel p-5 sm:p-6">
+        <Panel title="Add a fee reference" description="Add each fee this page lists, one at a time.">
           <FeeForm sourceId={id} defaultEmirate={source.emirate} />
-        </div>
-      </Section>
+        </Panel>
 
-      {/* The source's facts are shown above, so its edit form stays folded until needed. */}
-      <details className="group mt-10 panel">
-        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-md px-5 py-3 font-medium outline-none group-open:rounded-b-none hover:bg-secondary focus-visible:ring-3 focus-visible:ring-ring/50 [&::-webkit-details-marker]:hidden">
-          Edit source details
-          <ChevronDown className="size-4 shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
-        </summary>
-        <div className="border-t p-5 sm:p-6">
-          <SourceForm source={toPlain(source)} />
-        </div>
-      </details>
-    </div>
+        {/* The source's facts are shown above, so its edit form stays folded until needed. */}
+        <details className="group panel overflow-hidden">
+          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 text-[1.0625rem] leading-snug font-semibold tracking-[-0.01em] outline-none hover:bg-ink-50/80 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset sm:px-6 [&::-webkit-details-marker]:hidden">
+            Edit source details
+            <ChevronDown className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" aria-hidden="true" />
+          </summary>
+          <div className="border-t p-5 sm:p-6">
+            <SourceForm source={toPlain(source)} />
+          </div>
+        </details>
+      </Split>
+    </>
   );
 }

@@ -79,7 +79,7 @@ export async function EntrepreneurDashboard({ user }) {
             <Shortcuts
               items={[
                 { href: "/mentors", label: "Find a mentor", detail: "Ask someone who has done it before", icon: Users },
-                { href: "/requests", label: "Requests", detail: `${count(requests, "open guidance request")} · ${count(newInterest, "new funder interest", "new funder interests", "new funder interest")}`, icon: Inbox },
+                { href: "/requests", label: "Requests", detail: "Guidance requests and funder interest", icon: Inbox },
                 { href: "/sources", label: "Official sources", detail: "The pages behind the official costs", icon: Landmark },
               ]}
             />
@@ -100,7 +100,6 @@ export async function EntrepreneurDashboard({ user }) {
         ) : (
           <ListPanel
             title="Your plans"
-            description="Most recently changed first."
             actions={plans.length > 5 && <TextLink href="/plans">All plans</TextLink>}
           >
             {toPlain(plans.slice(0, 5)).map((plan) => (
@@ -169,7 +168,7 @@ export async function MentorDashboard({ user }) {
             )}
             <Shortcuts
               items={[
-                { href: "/requests", label: "Requests", detail: "Accept, decline and talk with founders", icon: Inbox },
+                { href: "/requests", label: "Requests", detail: "Answer and talk with founders", icon: Inbox },
                 { href: "/my-posts", label: "Your posts", detail: count(postCount, "post"), icon: Newspaper },
                 { href: "/profile", label: "Your profile", detail: "What founders see in the directory", icon: UserRound },
               ]}
@@ -279,7 +278,7 @@ export async function FunderDashboard({ user }) {
             <p className="text-muted-foreground">You have not asked about a plan yet. Tell an owner from their pitch card when a plan interests you.</p>
           </Panel>
         ) : (
-          <ListPanel title="Your interests" actions={interests.length > 5 && <TextLink href="/interests">All interests</TextLink>}>
+          <ListPanel title="Your interests" actions={<TextLink href="/interests">All interests</TextLink>}>
             {toPlain(interests.slice(0, 5)).map((interest) => {
               const plan = interest.planId;
               const open = interest.status === "accepted" && plan?.shared && !plan?.hiddenByAdmin;
@@ -299,6 +298,24 @@ export async function FunderDashboard({ user }) {
                 </Row>
               );
             })}
+          </ListPanel>
+        )}
+
+        {cards.length > 0 && (
+          <ListPanel title="Newest shared plans" actions={<TextLink href="/discover">All shared plans</TextLink>}>
+            {toPlain(cards.slice(0, 3)).map((card) => (
+              <Row key={card._id} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-10">
+                <div className="min-w-0">
+                  <p className="font-medium">{card.title}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {labelOf(SECTORS, card.sector)} · {labelOf(EMIRATES, card.emirate)}
+                  </p>
+                </div>
+                <div className="sm:w-56 sm:shrink-0">
+                  <ProgressBar percent={card.progress} />
+                </div>
+              </Row>
+            ))}
           </ListPanel>
         )}
       </Split>
@@ -323,7 +340,7 @@ export async function AdminDashboard({ user }) {
     <>
       <Greeting
         user={user}
-        description="Approve new accounts, keep the official sources checked and hide content that breaks the rules."
+        description="Approve new accounts, check official sources and hide content that breaks the rules."
         actions={
           <Link href="/admin/users?status=pending" className={buttonVariants({ size: "lg" })}>
             Review accounts
@@ -372,7 +389,7 @@ export async function AdminDashboard({ user }) {
           <ListPanel
             title="Waiting for approval"
             description="Mentors and funders can use the app once you approve them."
-            actions={pending > waiting.length && <TextLink href="/admin/users?status=pending">All {pending}</TextLink>}
+            actions={pending > waiting.length && <TextLink href="/admin/users?status=pending">See all {pending}</TextLink>}
           >
             {toPlain(waiting).map((account) => (
               <Row key={account._id} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">

@@ -32,11 +32,11 @@ export function TaskForm({ planId, phases, task = null, onDone }) {
   const field = (name) => ({ id: `${idPrefix}${name}`, name, error: errors[name] });
 
   return (
-    <form noValidate onSubmit={handleSubmit} onChange={clearError} className="space-y-4">
+    <form noValidate onSubmit={handleSubmit} onChange={clearError} className="@container space-y-4">
       <FormAlert>{formError}</FormAlert>
       <TextField label="Task" defaultValue={task?.title} {...field("title")} />
       <TextAreaField label="Details (optional)" rows={2} defaultValue={task?.description} {...field("description")} />
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 @md:grid-cols-2 @3xl:grid-cols-4">
         <SelectField
           label="Phase"
           options={phases.map((phase) => ({ value: phase._id, label: phase.title }))}

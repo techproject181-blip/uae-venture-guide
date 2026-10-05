@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CardGrid } from "@/components/layout";
 import { EmptyState, PageHeader } from "@/components/page-header";
 import { SourceCard } from "@/components/source-card";
 import { Button } from "@/components/ui/button";
@@ -38,7 +39,7 @@ export default async function SourcesPage({ searchParams }) {
       />
 
       {/* A plain GET form: the filters live in the address, so results can be shared and work without JavaScript. */}
-      <form role="search" className="mb-8 grid gap-4 md:grid-cols-[minmax(0,1fr)_12rem_12rem_auto] md:items-end">
+      <form role="search" className="panel mb-6 grid gap-4 p-4 sm:p-5 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_8rem] md:items-end">
         <div className="space-y-2">
           <label className="block text-sm font-medium" htmlFor="q">
             Search sources
@@ -90,16 +91,23 @@ export default async function SourcesPage({ searchParams }) {
         />
       ) : (
         <>
-          <p className="mb-2 text-sm text-muted-foreground" role="status">
-            {sources.length} {sources.length === 1 ? "source" : "sources"}
-          </p>
-          <ul className="divide-y border-y">
+          <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+            <p role="status">
+              {sources.length} {sources.length === 1 ? "source" : "sources"}
+            </p>
+            {filtered && (
+              <Link href="/sources" className="font-medium text-foreground decoration-primary underline underline-offset-4 hover:decoration-2">
+                Clear the filters
+              </Link>
+            )}
+          </div>
+          <CardGrid className="grid-cols-1">
             {sources.map((source) => (
               <li key={String(source._id)}>
                 <SourceCard source={source} />
               </li>
             ))}
-          </ul>
+          </CardGrid>
         </>
       )}
     </>

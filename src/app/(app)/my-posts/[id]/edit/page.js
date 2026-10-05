@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
-import { BackLink } from "@/components/back-link";
-import { PageHeader } from "@/components/page-header";
+import { PageHeader, Split } from "@/components/layout";
 import { PostForm } from "@/components/posts/post-form";
+import { PostFormHelp } from "@/components/posts/post-form-help";
+import { StatusBadge } from "@/components/status-badge";
 import { toPlain } from "@/lib/api";
 import { connectDB } from "@/lib/db";
+import { formatDate } from "@/lib/format";
 import { requireUser } from "@/lib/guards";
 import { Post } from "@/models/Post";
 
@@ -17,10 +19,13 @@ export default async function EditPostPage({ params }) {
   if (!post) notFound();
 
   return (
-    <div className="max-w-3xl">
-      <BackLink href={`/posts/${id}`}>Back to the post</BackLink>
-      <PageHeader title="Edit your post" />
-      <PostForm post={toPlain(post)} />
-    </div>
+    <>
+      <PageHeader back={{ href: `/posts/${id}`, label: "Back to the post" }} title="Edit your post" description={`Published ${formatDate(post.createdAt)}.`}>
+        {post.status === "hidden" && <StatusBadge status="hidden" label="Hidden by administrator" />}
+      </PageHeader>
+      <Split aside={<PostFormHelp />}>
+        <PostForm post={toPlain(post)} />
+      </Split>
+    </>
   );
 }

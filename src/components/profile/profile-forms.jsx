@@ -10,6 +10,7 @@ import { EMIRATES, EXPERTISE, FUNDER_TYPES, SECTORS } from "@/lib/constants";
 import { sendJson } from "@/lib/form-helpers";
 import { funderProfileSchema, mentorProfileSchema } from "@/lib/schemas/community";
 import { FormPart } from "@/components/form/form-part";
+import { FormActions } from "@/components/layout";
 
 function useProfileForm(schema) {
   const router = useRouter();
@@ -23,12 +24,11 @@ function useProfileForm(schema) {
   });
 }
 
-
 export function MentorProfileForm({ name, profile }) {
   const { errors, formError, pending, handleSubmit, clearError } = useProfileForm(mentorProfileSchema);
 
   return (
-    <form noValidate onSubmit={handleSubmit} onChange={clearError} className="space-y-8">
+    <form noValidate onSubmit={handleSubmit} onChange={clearError} className="space-y-6 lg:space-y-8">
       <FormAlert>{formError}</FormAlert>
       <FormPart legend="Who you are">
         <div className="grid gap-5 sm:grid-cols-2">
@@ -44,12 +44,14 @@ export function MentorProfileForm({ name, profile }) {
         <CheckboxGroup id="industries" label="Industries you know (optional)" options={SECTORS} defaultValues={profile?.industries ?? []} error={errors.industries} />
         <CheckboxGroup id="emirates" label="Emirates you know" options={EMIRATES} defaultValues={profile?.emirates ?? []} error={errors.emirates} />
       </FormPart>
-      <div className="space-y-6 border-t pt-6">
+      <FormPart id="requests" legend="Guidance requests" note="Turn this off when you are busy. Founders still see your profile, but cannot send you new requests.">
         <CheckboxField id="acceptingRequests" label="I am taking new guidance requests" defaultChecked={profile?.acceptingRequests ?? true} />
+      </FormPart>
+      <FormActions>
         <SubmitButton pending={pending} pendingText="Saving…">
           Save profile
         </SubmitButton>
-      </div>
+      </FormActions>
     </form>
   );
 }
@@ -58,7 +60,7 @@ export function FunderProfileForm({ name, profile }) {
   const { errors, formError, pending, handleSubmit, clearError } = useProfileForm(funderProfileSchema);
 
   return (
-    <form noValidate onSubmit={handleSubmit} onChange={clearError} className="space-y-8">
+    <form noValidate onSubmit={handleSubmit} onChange={clearError} className="space-y-6 lg:space-y-8">
       <FormAlert>{formError}</FormAlert>
       <FormPart legend="Who you are">
         <div className="grid gap-5 sm:grid-cols-2">
@@ -75,11 +77,11 @@ export function FunderProfileForm({ name, profile }) {
         <CheckboxGroup id="sectors" label="Sectors you invest in" options={SECTORS} defaultValues={profile?.sectors ?? []} error={errors.sectors} />
         <TextAreaField id="bio" label="What you look for" rows={5} hint="The kind of founders and ideas you like to support." defaultValue={profile?.bio} error={errors.bio} />
       </FormPart>
-      <div className="border-t pt-6">
+      <FormActions>
         <SubmitButton pending={pending} pendingText="Saving…">
           Save profile
         </SubmitButton>
-      </div>
+      </FormActions>
     </form>
   );
 }

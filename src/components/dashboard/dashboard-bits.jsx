@@ -19,7 +19,7 @@ export const rowLink =
 
 /** A row of a dashboard list, with the kit's row padding. `link` adds the hover tint for rows that are one big link. */
 export function Row({ link = false, className, children }) {
-  return <li className={cn("relative px-5 py-4 sm:px-6", link && "transition-colors hover:bg-slate-50/80", className)}>{children}</li>;
+  return <li className={cn("relative px-5 py-4 sm:px-6", link && "transition-colors hover:bg-ink-50/80", className)}>{children}</li>;
 }
 
 /** The one thing to do next, in its own panel at the top of the right-hand column. A dashboard shows at most one. */

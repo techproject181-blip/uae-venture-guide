@@ -1,11 +1,12 @@
 import { notFound } from "next/navigation";
-import { Section } from "@/components/document";
+import { Panel, Split } from "@/components/layout";
 import { AdviceNotice, FeeLegend, feeMarks } from "@/components/plans/plan-bits";
 import { TaskForm } from "@/components/plans/task-form";
 import { TaskRow } from "@/components/plans/task-row";
 import { connectDB } from "@/lib/db";
 import { requireUser } from "@/lib/guards";
 import { getPlanForViewer } from "@/lib/plans";
+import { cn } from "@/lib/utils";
 import { Source } from "@/models/Source";
 
 export const metadata = { title: "Steps" };
@@ -24,24 +25,61 @@ export default async function PlanTasksPage({ params }) {
   const sourcesById = Object.fromEntries(sources.map((s) => [String(s._id), { title: s.title, url: s.url }]));
   const phases = plan.phases.map(({ _id, title }) => ({ _id, title }));
 
+  // The key to the fee marks and the DONE stamp, shown only when the steps use one.
+  const marks = feeMarks(plan.tasks);
+  const anyDone = plan.tasks.some((task) => task.status === "done");
+  const showLegend = marks.official || marks.demo || marks.estimate || anyDone;
+
+  const aside = isOwner ? (
+    <Panel title="Add your own step" description="For anything the roadmap does not list. It is numbered with its phase.">
+      <TaskForm planId={plan._id} phases={phases} />
+    </Panel>
+  ) : (
+    <AdviceNotice />
+  );
+
   return (
-    <div className="space-y-10">
-      <Section title="Steps" description="Press a step to see what it involves, who you deal with and the official source." >
-        <FeeLegend {...feeMarks(plan.tasks)} done={plan.tasks.some((task) => task.status === "done")} />
-        <div className="mt-8 space-y-10">
+    <Split aside={aside}>
+      <Panel title="Steps" description="Press a step to see what it involves, who you deal with and the official source." flush>
+        <div className="divide-y">
+          {showLegend && (
+            <div className="px-5 py-3 sm:px-6">
+              <FeeLegend {...marks} done={anyDone} />
+            </div>
+          )}
           {plan.phases.map((phase, index) => {
             const tasks = plan.tasks.filter((task) => task.phaseId === phase._id);
+            const done = tasks.filter((task) => task.status === "done").length;
+            const complete = tasks.length > 0 && done === tasks.length;
             return (
               <section key={phase._id} aria-labelledby={`phase-${phase._id}`}>
-                <h3 id={`phase-${phase._id}`} className="flex gap-3 text-lg">
-                  <span className="w-8 shrink-0 tabular-nums">{index + 1}</span>
-                  <span>{phase.title}</span>
-                </h3>
-                <p className="mt-1 pl-11 text-sm text-muted-foreground">{phase.description}</p>
+                <div className="flex items-start gap-3 bg-ink-50/70 px-5 py-4 sm:px-6">
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "mt-0.5 grid size-7 shrink-0 place-items-center rounded-full border bg-card text-sm font-medium tabular-nums",
+                      complete ? "border-done bg-done-surface text-done" : "text-muted-foreground",
+                    )}
+                  >
+                    {index + 1}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <h3 id={`phase-${phase._id}`} className="leading-snug font-semibold">
+                      <span className="sr-only">{index + 1} </span>
+                      {phase.title}
+                    </h3>
+                    <p className="mt-0.5 text-sm text-muted-foreground">{phase.description}</p>
+                  </div>
+                  {tasks.length > 0 && (
+                    <span className={cn("mt-0.5 shrink-0 text-sm tabular-nums", complete ? "font-medium text-done" : "text-muted-foreground")}>
+                      {done} of {tasks.length}
+                    </span>
+                  )}
+                </div>
                 {tasks.length === 0 ? (
-                  <p className="mt-3 border-y py-4 pl-11 text-sm text-muted-foreground">No steps in this phase.</p>
+                  <p className="border-t px-5 py-4 text-sm text-muted-foreground sm:px-6">No steps in this phase.</p>
                 ) : (
-                  <ol className="mt-3 divide-y border-y">
+                  <ol className="divide-y border-t">
                     {tasks.map((task, taskIndex) => (
                       <TaskRow
                         key={task._id}
@@ -59,17 +97,9 @@ export default async function PlanTasksPage({ params }) {
             );
           })}
         </div>
-      </Section>
+      </Panel>
 
-      {isOwner && (
-        <Section title="Add your own step">
-          <div className="max-w-4xl panel p-5 sm:p-6">
-            <TaskForm planId={plan._id} phases={phases} />
-          </div>
-        </Section>
-      )}
-
-      <AdviceNotice />
-    </div>
+      {isOwner && <AdviceNotice />}
+    </Split>
   );
 }

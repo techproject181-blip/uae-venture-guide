@@ -47,10 +47,10 @@ export function AppShell({ user, children }) {
   return (
     <div className="flex min-h-dvh flex-col">
       <header className="sticky top-0 z-40 border-b bg-card/85 backdrop-blur-lg backdrop-saturate-150">
-        <div className="page-width flex h-16 items-center gap-6">
+        <div className="page-width flex h-16 items-center gap-3 sm:gap-6">
           <Logo />
           <NavLinks links={links} className="hidden self-stretch lg:flex" />
-          <div className="ml-auto flex items-center gap-3">
+          <div className="ml-auto flex shrink-0 items-center gap-3">
             <div className="hidden items-center gap-2.5 xl:flex">
               <Avatar name={user.name} className="size-9 text-xs" />
               <p className="text-sm leading-tight">

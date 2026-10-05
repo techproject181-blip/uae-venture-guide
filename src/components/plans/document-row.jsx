@@ -25,7 +25,7 @@ export function DocumentRow({ planId, document, source, canEdit }) {
   }
 
   return (
-    <li className="pt-2 pb-4">
+    <li className="px-5 pt-2 pb-4 sm:px-6">
       {/* The whole line is the tick box's label, so it is easy to tap. */}
       <label htmlFor={id} className={cn("flex min-h-11 items-center gap-4", canEdit && "cursor-pointer")}>
         <input

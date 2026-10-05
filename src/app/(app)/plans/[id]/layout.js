@@ -49,7 +49,7 @@ export default async function PlanLayout({ children, params }) {
               </div>
             )}
           </div>
-          <div className="flex shrink-0 flex-wrap gap-2">
+          <div className="flex shrink-0 flex-wrap gap-2 *:flex-1 md:*:flex-none">
             {plan.status === "ready" && (
               // A normal link: the browser downloads the PDF the API sends back.
               <a href={`/api/plans/${plan._id}/report`} className={buttonVariants({ variant: "outline", size: "lg" })}>
@@ -66,7 +66,7 @@ export default async function PlanLayout({ children, params }) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-5 border-t bg-slate-50/70 px-5 py-4 sm:px-6 lg:flex-row lg:items-center lg:gap-10">
+        <div className="flex flex-col gap-5 border-t bg-ink-50/70 px-5 py-4 sm:px-6 lg:flex-row lg:items-center lg:gap-10">
           <Fields
             className="min-w-0 flex-1"
             items={[

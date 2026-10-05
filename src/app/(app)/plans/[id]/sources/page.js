@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ExternalLink } from "lucide-react";
-import { Section } from "@/components/document";
+import { Panel, Split } from "@/components/layout";
+import { FactRows } from "@/components/plans/plan-bits";
 import { StatusBadge } from "@/components/status-badge";
 import { EMIRATES, SOURCE_CATEGORIES, labelOf } from "@/lib/constants";
 import { connectDB } from "@/lib/db";
@@ -27,33 +28,51 @@ export default async function PlanSourcesPage({ params }) {
     { key: "more", title: `More sources for ${labelOf(EMIRATES, plan.emirate)}`, sources: sources.filter((source) => !used.has(String(source._id))) },
   ].filter((group) => group.sources.length > 0);
 
+  const usedCount = groups.find((group) => group.key === "used")?.sources.length ?? 0;
+  const aside = (
+    <Panel title="About these sources" flush>
+      <p className="px-5 pt-5 text-sm leading-relaxed text-muted-foreground sm:px-6 sm:pt-6">
+        Federal pages and the pages for {labelOf(EMIRATES, plan.emirate)}. Each shows when it was last checked. Sources marked demo
+        are sample data, so check the real page before you rely on them.
+      </p>
+      <div className="mt-4 border-t">
+        <FactRows
+          rows={[
+            { label: "Used in your roadmap", value: usedCount },
+            { label: "All sources listed", value: sources.length },
+          ]}
+        />
+      </div>
+    </Panel>
+  );
+
   return (
-    <Section
-      title="Official sources"
-      description="The government and free zone pages behind the steps and fees in this plan."
-      className="max-w-3xl"
-    >
-      {groups.map((group) => (
-        <section key={group.key} aria-labelledby={`sources-${group.key}`} className="mt-8 first:mt-2">
-          <h3 id={`sources-${group.key}`} className="text-lg">
-            {group.title}
-          </h3>
-          <ul className="mt-2 divide-y border-y">
-            {group.sources.map((source) => (
-              <SourceRow key={String(source._id)} source={source} />
-            ))}
-          </ul>
-        </section>
-      ))}
-    </Section>
+    <Split aside={aside}>
+      <Panel title="Official sources" description="The government and free zone pages behind the steps and fees in this plan." flush>
+        <div className="divide-y">
+          {groups.map((group) => (
+            <section key={group.key} aria-labelledby={`sources-${group.key}`}>
+              <h3 id={`sources-${group.key}`} className="border-b bg-ink-50/70 px-5 py-3 font-semibold sm:px-6">
+                {group.title}
+              </h3>
+              <ul className="divide-y">
+                {group.sources.map((source) => (
+                  <SourceRow key={String(source._id)} source={source} />
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      </Panel>
+    </Split>
   );
 }
 
 /** One source: its title as a link, who publishes it, what it covers and when it was last checked. */
 function SourceRow({ source }) {
   return (
-    <li className="py-5">
-      <h4 className="font-bold">
+    <li className="px-5 py-5 sm:px-6">
+      <h4 className="font-semibold">
         <a
           href={source.url}
           target="_blank"

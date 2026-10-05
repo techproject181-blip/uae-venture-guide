@@ -30,10 +30,10 @@ export function BudgetItemForm({ planId, item = null, onDone }) {
   const field = (name) => ({ id: `${idPrefix}${name}`, name, error: errors[name] });
 
   return (
-    <form noValidate onSubmit={handleSubmit} onChange={clearError} className="space-y-4">
+    <form noValidate onSubmit={handleSubmit} onChange={clearError} className="@container space-y-4">
       <FormAlert>{formError}</FormAlert>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <TextField label="Cost" className="sm:col-span-2" defaultValue={item?.label} placeholder="For example: Coffee machine" {...field("label")} />
+      <div className="grid gap-4 @md:grid-cols-2 @3xl:grid-cols-4">
+        <TextField label="Cost" className="@md:col-span-2" defaultValue={item?.label} placeholder="For example: Coffee machine" {...field("label")} />
         <SelectField label="Category" options={BUDGET_CATEGORIES} defaultValue={item?.category ?? "other"} {...field("category")} />
         <SelectField label="How often" options={RECURRENCES} defaultValue={item?.recurrence ?? "one_time"} {...field("recurrence")} />
         <TextField label="Estimate (AED)" type="number" min="0" inputMode="numeric" defaultValue={item?.estimatedAed} {...field("estimatedAed")} />

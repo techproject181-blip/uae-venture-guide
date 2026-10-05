@@ -75,21 +75,22 @@ export function Panel({ title, description, actions, footer, children, flush = f
       {children !== undefined && children !== null && children !== false && (
         <div className={cn(flush ? "" : "p-5 sm:p-6", bodyClassName)}>{children}</div>
       )}
-      {footer && <div className="flex flex-wrap items-center gap-3 border-t bg-slate-50/70 px-5 py-4 sm:px-6">{footer}</div>}
+      {footer && <div className="flex flex-wrap items-center gap-3 border-t bg-ink-50/70 px-5 py-4 sm:px-6">{footer}</div>}
     </Tag>
   );
 }
 
 /**
  * Two columns from 1024px: the main content, and a narrower column on the
- * right that stays in view while the page scrolls. On phones the right column
- * comes after the main one.
+ * right for facts, help and related links. On phones the right column comes
+ * after the main one. (It does not stick while scrolling: a tall right column
+ * would hide its own end.)
  */
 export function Split({ children, aside, className }) {
   return (
     <div className={cn("grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-8 xl:grid-cols-[minmax(0,1fr)_23rem]", className)}>
       <div className="min-w-0 space-y-6 lg:space-y-8">{children}</div>
-      {aside && <aside className="min-w-0 space-y-6 lg:sticky lg:top-24">{aside}</aside>}
+      {aside && <aside className="min-w-0 space-y-6">{aside}</aside>}
     </div>
   );
 }
@@ -97,7 +98,7 @@ export function Split({ children, aside, className }) {
 /** Cards in a grid: one column on phones, two from 640px, three from 1280px (or two at most with `cols={2}`). */
 export function CardGrid({ children, cols = 3, className }) {
   return (
-    <ul className={cn("stagger grid gap-4 sm:grid-cols-2 lg:gap-6", cols === 3 && "xl:grid-cols-3", className)}>
+    <ul className={cn("stagger grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-6", cols === 3 && "xl:grid-cols-3", className)}>
       {children}
     </ul>
   );
@@ -128,26 +129,27 @@ export function StatGrid({ children, className }) {
 
 /** One number with its label. `tone="danger"` colours it red, for amounts over budget. `href` makes the whole card a link. */
 export function Stat({ label, value, hint, tone, href }) {
-  const body = (
-    <>
+  const number = (
+    <span className={cn("block font-display text-[1.375rem] leading-none font-bold tracking-[-0.02em] tabular-nums sm:text-[1.875rem]", tone === "danger" && "text-destructive")}>
+      {value}
+    </span>
+  );
+  return (
+    <div className={cn("panel relative p-5 sm:p-6", href && "panel-link")}>
       <dt className="text-sm font-medium text-muted-foreground">{label}</dt>
-      <dd className={cn("mt-2 font-display text-[1.625rem] leading-none font-bold tracking-[-0.02em] tabular-nums sm:text-[1.875rem]", tone === "danger" && "text-destructive")}>
-        {value}
+      <dd className="mt-2">
+        {href ? (
+          // The link covers the whole card; it sits in the <dd> so the list stays valid.
+          <Link href={href} className="outline-none after:absolute after:inset-0 after:rounded-xl focus-visible:after:ring-3 focus-visible:after:ring-ring/50">
+            {number}
+          </Link>
+        ) : (
+          number
+        )}
       </dd>
       {hint && <dd className="mt-2 text-sm text-muted-foreground">{hint}</dd>}
-    </>
+    </div>
   );
-  if (href) {
-    return (
-      <div className="panel panel-link relative p-5 sm:p-6">
-        {body}
-        <Link href={href} className="absolute inset-0 rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-ring/50">
-          <span className="sr-only">{label}</span>
-        </Link>
-      </div>
-    );
-  }
-  return <div className="panel p-5 sm:p-6">{body}</div>;
 }
 
 /** The buttons at the end of a form, in one row. */

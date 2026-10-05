@@ -14,15 +14,15 @@ const STEPS = [
 export function HeroVisual() {
   return (
     <figure className="relative mx-auto w-full max-w-xl lg:max-w-none">
-      <div aria-hidden="true" className="absolute -inset-x-6 -inset-y-10 -z-10 rounded-[3rem] bg-gradient-to-br from-emerald-200/60 via-teal-100/40 to-amber-100/50 blur-2xl" />
+      <div aria-hidden="true" className="absolute -inset-x-6 -inset-y-10 -z-10 rounded-[3rem] bg-gradient-to-br from-brand-200/60 via-brand-100/40 to-brand-50/60 blur-2xl" />
 
-      <div className="hero-window overflow-hidden rounded-2xl border bg-card shadow-[0_24px_60px_-12px_rgb(15_23_42/0.18)]">
+      <div className="hero-window overflow-hidden rounded-2xl border bg-card shadow-window">
         {/* Window bar */}
-        <div aria-hidden="true" className="flex items-center gap-2 border-b bg-slate-50 px-4 py-3">
-          <span className="size-2.5 rounded-full bg-slate-300" />
-          <span className="size-2.5 rounded-full bg-slate-300" />
-          <span className="size-2.5 rounded-full bg-slate-300" />
-          <span className="ml-3 truncate rounded-md bg-white px-3 py-1 text-xs text-muted-foreground ring-1 ring-border">My plans / Specialty café</span>
+        <div aria-hidden="true" className="flex items-center gap-2 border-b bg-ink-50 px-4 py-3">
+          <span className="size-2.5 rounded-full bg-ink-300" />
+          <span className="size-2.5 rounded-full bg-ink-300" />
+          <span className="size-2.5 rounded-full bg-ink-300" />
+          <span className="ml-3 truncate rounded-md bg-card px-3 py-1 text-xs text-muted-foreground ring-1 ring-border">My plans / Specialty café</span>
         </div>
 
         <div className="p-5 sm:p-6 sm:pb-20">
@@ -38,7 +38,7 @@ export function HeroVisual() {
               <span className="text-muted-foreground">2 of 15 steps done</span>
               <span className="font-medium tabular-nums">13%</span>
             </div>
-            <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-200">
+            <div className="mt-2 h-2 overflow-hidden rounded-full bg-ink-200">
               <div className="progress-fill h-full w-[13%] rounded-full bg-primary" />
             </div>
           </div>
@@ -48,7 +48,7 @@ export function HeroVisual() {
               <li key={step.number} className="flex items-start gap-3 px-3 py-3 sm:px-4">
                 <span
                   aria-hidden="true"
-                  className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md border ${step.done ? "hero-tick border-primary bg-primary text-white" : "border-slate-300"}`}
+                  className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md border ${step.done ? "hero-tick border-primary bg-primary text-primary-foreground" : "border-ink-300"}`}
                   style={step.done ? { animationDelay: `${0.5 + index * 0.45}s` } : undefined}
                 >
                   {step.done && <Check className="size-3.5" strokeWidth={3} />}
@@ -78,7 +78,7 @@ export function HeroVisual() {
         <p className="mt-1.5 font-display text-lg font-bold tabular-nums">AED 60,000</p>
         <div className="mt-2 flex h-10 items-end gap-1.5">
           {[60, 85, 40, 70, 30, 55].map((height, index) => (
-            <span key={index} className="bar-grow flex-1 rounded-t-sm bg-emerald-400/80" style={{ height: `${height}%`, animationDelay: `${0.4 + index * 0.08}s` }} />
+            <span key={index} className="bar-grow flex-1 rounded-t-sm bg-brand-400/80" style={{ height: `${height}%`, animationDelay: `${0.4 + index * 0.08}s` }} />
           ))}
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
-import { Section } from "@/components/document";
+import { Panel, Split } from "@/components/layout";
 import { DocumentRow } from "@/components/plans/document-row";
-import { ProgressBar } from "@/components/plans/plan-bits";
+import { FactRows, ProgressBar } from "@/components/plans/plan-bits";
 import { connectDB } from "@/lib/db";
 import { requireUser } from "@/lib/guards";
 import { getPlanForViewer } from "@/lib/plans";
@@ -31,29 +31,48 @@ export default async function PlanDocumentsPage({ params }) {
     { key: "optional", title: "If it applies", docs: optional },
   ].filter((group) => group.docs.length > 0);
 
-  return (
-    <Section
-      title="Documents"
-      description={isOwner ? "Collect these before you apply. Tick each one when you have it." : "Collect these before you apply."}
-      className="max-w-3xl"
-    >
+  const aside = (
+    <Panel title="Your progress" flush>
       {required.length > 0 && (
-        <div className="max-w-sm">
+        <div className="border-b p-5 sm:p-6">
           <ProgressBar percent={percent} label={`${ready} of ${required.length} required documents ready`} />
         </div>
       )}
-      {groups.map((group) => (
-        <section key={group.key} aria-labelledby={`docs-${group.key}`} className="mt-8">
-          <h3 id={`docs-${group.key}`} className="text-lg">
-            {group.title}
-          </h3>
-          <ul className="mt-2 divide-y border-y">
-            {group.docs.map((doc) => (
-              <DocumentRow key={doc._id} planId={plan._id} document={doc} source={sourcesById[doc.sourceId]} canEdit={isOwner} />
-            ))}
-          </ul>
-        </section>
-      ))}
-    </Section>
+      <FactRows
+        rows={[
+          { label: "Required", value: required.length },
+          { label: "Ready", value: ready },
+          optional.length > 0 && { label: "If it applies", value: optional.length },
+        ]}
+      />
+      <p className="border-t px-5 py-4 text-sm text-muted-foreground sm:px-6">
+        Where a document has an official page, the link is under its description.
+      </p>
+    </Panel>
+  );
+
+  return (
+    <Split aside={aside}>
+      <Panel
+        title="Documents"
+        description={isOwner ? "Collect these before you apply. Tick each one when you have it." : "Collect these before you apply."}
+        flush
+      >
+        <div className="divide-y">
+          {groups.map((group) => (
+            <section key={group.key} aria-labelledby={`docs-${group.key}`}>
+              <h3 id={`docs-${group.key}`} className="border-b bg-ink-50/70 px-5 py-3 font-semibold sm:px-6">
+                {group.title}
+              </h3>
+              <ul className="divide-y">
+                {group.docs.map((doc) => (
+                  <DocumentRow key={doc._id} planId={plan._id} document={doc} source={sourcesById[doc.sourceId]} canEdit={isOwner} />
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      </Panel>
+    </Split>
   );
 }

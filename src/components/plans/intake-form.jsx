@@ -44,38 +44,38 @@ export function IntakeForm() {
       </FormPart>
 
       <FormPart id="intake-where" legend="Where and how">
-          <div className="grid gap-5 sm:grid-cols-2">
-            <SelectField id="emirate" label="Emirate" options={EMIRATES} placeholder="Choose an emirate…" error={errors.emirate} />
-            <SelectField id="sector" label="Sector" options={SECTORS} placeholder="Choose a sector…" error={errors.sector} />
-          </div>
-          <SelectField
-            id="jurisdictionPref"
-            label="Mainland or free zone?"
-            options={JURISDICTION_PREFERENCES}
-            defaultValue="unsure"
-            hint="Not sure? The roadmap recommends one and explains why."
-            error={errors.jurisdictionPref}
+        <div className="grid gap-5 sm:grid-cols-2">
+          <SelectField id="emirate" label="Emirate" options={EMIRATES} placeholder="Choose an emirate…" error={errors.emirate} />
+          <SelectField id="sector" label="Sector" options={SECTORS} placeholder="Choose a sector…" error={errors.sector} />
+        </div>
+        <SelectField
+          id="jurisdictionPref"
+          label="Mainland or free zone?"
+          options={JURISDICTION_PREFERENCES}
+          defaultValue="unsure"
+          hint="Not sure? The roadmap recommends one and explains why."
+          error={errors.jurisdictionPref}
+        />
+        <div className="grid gap-5 sm:grid-cols-2">
+          <TextField
+            id="budgetAed"
+            label="Budget for the first year (AED)"
+            type="number"
+            min="0"
+            inputMode="numeric"
+            placeholder="50000"
+            error={errors.budgetAed}
           />
-          <div className="grid gap-5 sm:grid-cols-2">
-            <TextField
-              id="budgetAed"
-              label="Budget for the first year (AED)"
-              type="number"
-              min="0"
-              inputMode="numeric"
-              placeholder="50000"
-              error={errors.budgetAed}
-            />
-            <TextField
-              id="teamSize"
-              label="People in the team, including you"
-              type="number"
-              min="1"
-              inputMode="numeric"
-              defaultValue="1"
-              error={errors.teamSize}
-            />
-          </div>
+          <TextField
+            id="teamSize"
+            label="People in the team, including you"
+            type="number"
+            min="1"
+            inputMode="numeric"
+            defaultValue="1"
+            error={errors.teamSize}
+          />
+        </div>
       </FormPart>
 
       <FormActions>

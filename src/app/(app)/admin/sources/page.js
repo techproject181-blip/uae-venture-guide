@@ -1,4 +1,8 @@
 import Link from "next/link";
+import { Plus } from "lucide-react";
+import { AdminTabs } from "@/components/admin/admin-tabs";
+import { tableEdges } from "@/components/admin/table-edges";
+import { TablePanel } from "@/components/layout";
 import { EmptyState, PageHeader } from "@/components/page-header";
 import { Stamp } from "@/components/stamp";
 import { StatusBadge } from "@/components/status-badge";
@@ -7,19 +11,32 @@ import { EMIRATES, labelOf } from "@/lib/constants";
 import { connectDB } from "@/lib/db";
 import { formatDate } from "@/lib/format";
 import { requireUser } from "@/lib/guards";
+import { cn } from "@/lib/utils";
 import { FeeReference } from "@/models/FeeReference";
 import { Source } from "@/models/Source";
 
 export const metadata = { title: "Official sources" };
 
-export default async function AdminSourcesPage() {
+// The tabs above the table. The list is short, so it is filtered here rather than in the query.
+const FILTERS = [
+  { value: "all", label: "All", test: () => true, empty: "No sources yet" },
+  { value: "shown", label: "Shown", test: (source) => source.active, empty: "No source is shown to users" },
+  { value: "hidden", label: "Hidden", test: (source) => !source.active, empty: "No hidden sources" },
+  { value: "demo", label: "Demo data", test: (source) => source.demo, empty: "No demo sources" },
+];
+
+export default async function AdminSourcesPage({ searchParams }) {
   await requireUser({ roles: ["admin"] });
+  const params = await searchParams;
+  const filter = FILTERS.find((f) => f.value === params.show) ?? FILTERS[0];
+
   await connectDB();
-  const [sources, feeCounts] = await Promise.all([
+  const [all, feeCounts] = await Promise.all([
     Source.find().sort({ emirate: 1, title: 1 }).lean(),
     FeeReference.aggregate([{ $group: { _id: "$sourceId", count: { $sum: 1 } } }]),
   ]);
   const feesBySource = new Map(feeCounts.map((row) => [String(row._id), row.count]));
+  const sources = all.filter(filter.test);
 
   return (
     <>
@@ -28,16 +45,35 @@ export default async function AdminSourcesPage() {
         description="The government and free zone pages that roadmaps and chat may cite, and the fees taken from them."
         actions={
           <Link href="/admin/sources/new" className={buttonVariants({ size: "lg" })}>
+            <Plus aria-hidden="true" />
             Add source
           </Link>
         }
       />
 
+      {all.length > 0 && (
+        <AdminTabs
+          label="Filter sources"
+          tabs={FILTERS.map((f) => ({
+            href: f.value === "all" ? "/admin/sources" : `/admin/sources?show=${f.value}`,
+            label: f.label,
+            count: all.filter(f.test).length,
+            current: f === filter,
+          }))}
+        />
+      )}
+
       {sources.length === 0 ? (
-        <EmptyState title="No sources yet" text="Add the first official page, then add the fees it lists." />
+        <EmptyState
+          title={filter.empty}
+          text={all.length === 0 ? "Add the first official page, then add the fees it lists." : undefined}
+        />
       ) : (
-        <div className="relative overflow-x-auto panel">
-          <table className="doc-table">
+        <TablePanel
+          title={filter.value === "all" ? "All sources" : filter.label}
+          description={`${sources.length === 1 ? "1 source" : `${sources.length} sources`}, by emirate. Only shown sources reach roadmaps, chat and the public sources page.`}
+        >
+          <table className={cn("doc-table", tableEdges)}>
             <thead>
               <tr>
                 <th scope="col">Source</th>
@@ -79,7 +115,7 @@ export default async function AdminSourcesPage() {
               })}
             </tbody>
           </table>
-        </div>
+        </TablePanel>
       )}
     </>
   );

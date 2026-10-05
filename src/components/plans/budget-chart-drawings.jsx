@@ -10,16 +10,16 @@ import { formatAed } from "@/lib/format";
 // Estimates in light emerald, what was actually paid in the app's emerald.
 // They differ in lightness, which every kind of colour vision can tell apart
 // (checked with the dataviz palette validator), and the legend and labels name them too.
-const ESTIMATED = "#45c093";
-const ACTUAL = "#047857";
-const INK = "#475569"; // labels use the text colour, never the bar colour
-const RULE = "#e2e8f0";
+const ESTIMATED = "var(--chart-estimated)";
+const ACTUAL = "var(--chart-actual)";
+const INK = "var(--chart-text)"; // labels use the text colour, never the bar colour
+const RULE = "var(--chart-grid)";
 
 const axisProps = { tickLine: false, axisLine: false, tick: { fill: INK, fontSize: 13 } };
 const tooltipProps = {
   formatter: (value) => formatAed(value),
-  cursor: { fill: "#f1f5f9" },
-  contentStyle: { borderRadius: 10, border: `1px solid ${RULE}`, fontSize: 13, boxShadow: "0 8px 24px rgb(15 23 42 / 0.10)" },
+  cursor: { fill: "var(--chart-cursor)" },
+  contentStyle: { borderRadius: 10, border: `1px solid ${RULE}`, fontSize: 13, boxShadow: "var(--elevation-float)" },
 };
 
 // Legend words in the text colour; the square beside them shows the series.

@@ -10,7 +10,7 @@ A web app that helps students and first-time founders turn a business idea into 
 | Plans | Intake form, startup roadmap (phases, tasks, costs, documents, risks), task status and editing, document checklist, a new version or delete, 5 roadmaps a day per user |
 | Budget | Costs with estimate and actual amounts, first-year totals, an over-budget warning, two charts |
 | Chat | Questions about a plan, answered from the plan and the official sources, 40 messages a day |
-| Mentors | Profiles, a public directory with filters, guidance requests with an attached plan, experience posts with pictures and a chart |
+| Mentors | Profiles, a public directory with filters, guidance requests with an attached plan, a conversation on the website once the mentor accepts (saved messages, new ones appear within a few seconds, read-only after the request is completed), experience posts with pictures and a chart |
 | Funders | Plan sharing with a pitch card, a discover feed, interest requests; the full plan opens only when the owner accepts |
 | Reports | The plan as a PDF |
 | Administration | Approve and suspend users, official sources and fee references, hide posts and shared plans, AI usage |
@@ -73,4 +73,4 @@ How sign-in works: the password is checked against its bcrypt hash, then the ser
 
 ## Stack
 
-Next.js 16 with JavaScript, Tailwind CSS v4, shadcn/ui, MongoDB with Mongoose (Docker for development, a hosted database for production), bcrypt and JWT session cookies, Zod, Nodemailer over SMTP, Recharts and react-pdf. Deployed on Vercel. The AI provider is not chosen yet.
+Next.js 16 with JavaScript, Tailwind CSS v4, shadcn/ui, Motion, MongoDB with Mongoose (Docker for development, a hosted database for production), bcrypt and JWT session cookies, Zod, Nodemailer over SMTP (notification and password-reset emails only), Recharts and react-pdf. Mentors and entrepreneurs talk in conversations saved in MongoDB; the page checks for new messages every few seconds. Deployed on Vercel. The AI provider is not chosen yet.

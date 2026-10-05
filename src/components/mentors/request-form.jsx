@@ -25,16 +25,18 @@ export function RequestForm({ mentorId, mentorName, plans }) {
     <form noValidate onSubmit={handleSubmit} onChange={clearError} className="space-y-5">
       <FormAlert>{formError}</FormAlert>
       <input type="hidden" name="mentorId" value={mentorId} />
-      <TextField id="topic" label="What do you need help with?" placeholder="For example: Choosing between mainland and a free zone" error={errors.topic} />
-      <TextAreaField id="message" label="Message" rows={4} hint="Say a little about your idea and where you are stuck." error={errors.message} />
-      <SelectField
-        id="planId"
-        label="Attach a plan (optional)"
-        options={plans.map((plan) => ({ value: plan._id, label: plan.title }))}
-        placeholder="No plan"
-        hint="If the mentor accepts, they can read this plan until the request is completed."
-        error={errors.planId}
-      />
+      <div className="grid gap-5 sm:grid-cols-2">
+        <TextField id="topic" label="What do you need help with?" placeholder="For example: Choosing between mainland and a free zone" error={errors.topic} />
+        <SelectField
+          id="planId"
+          label="Attach a plan (optional)"
+          options={plans.map((plan) => ({ value: plan._id, label: plan.title }))}
+          placeholder="No plan"
+          hint="If the mentor accepts, they can read this plan until the request is completed."
+          error={errors.planId}
+        />
+      </div>
+      <TextAreaField id="message" label="Message" rows={5} hint="Say a little about your idea and where you are stuck." error={errors.message} />
       <SubmitButton pending={pending} pendingText="Sending…">Send request</SubmitButton>
     </form>
   );

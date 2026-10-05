@@ -58,13 +58,13 @@ export default function HomePage() {
         <section className="relative">
           <div
             aria-hidden="true"
-            className="absolute inset-0 -z-10 [background-image:radial-gradient(circle_at_1px_1px,rgb(15_23_42/0.07)_1px,transparent_0)] [background-size:24px_24px] [mask-image:linear-gradient(to_bottom,black,transparent_85%)]"
+            className="absolute inset-0 -z-10 [background-image:radial-gradient(circle_at_1px_1px,color-mix(in_srgb,var(--ink-900)_7%,transparent)_1px,transparent_0)] [background-size:24px_24px] [mask-image:linear-gradient(to_bottom,black,transparent_85%)]"
           />
           <div className="page-width grid items-center gap-16 py-16 sm:py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-12 lg:py-24 xl:gap-20">
             <div className="intro text-center lg:text-left">
               <p className="mx-auto inline-flex items-center gap-2 rounded-full border bg-card px-3.5 py-1.5 text-sm font-medium shadow-xs lg:mx-0">
                 <span className="relative flex size-2">
-                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand-400 opacity-75" />
                   <span className="relative inline-flex size-2 rounded-full bg-primary" />
                 </span>
                 For students and first-time founders
@@ -98,7 +98,7 @@ export default function HomePage() {
                 <li
                   key={`${emirate.value}-${index}`}
                   aria-hidden={index >= EMIRATES.length ? "true" : undefined}
-                  className="font-display text-xl font-bold tracking-[-0.02em] whitespace-nowrap text-slate-400 after:ml-4 after:text-emerald-400 after:content-['•']"
+                  className="font-display text-xl font-bold tracking-[-0.02em] whitespace-nowrap text-ink-500 after:ml-4 after:text-brand-400 after:content-['•']"
                 >
                   {emirate.label}
                 </li>
@@ -118,10 +118,10 @@ export default function HomePage() {
           <div className="page-width">
             <SectionIntro id="how-title" title="How it works" text="Three steps from idea to a plan you can follow." />
             <ol className="relative grid gap-10 md:grid-cols-3 md:gap-8">
-              <span aria-hidden="true" className="absolute top-6 right-[16%] left-[16%] hidden h-px border-t-2 border-dashed border-slate-200 md:block" />
+              <span aria-hidden="true" className="absolute top-6 right-[16%] left-[16%] hidden h-px border-t-2 border-dashed border-ink-200 md:block" />
               {STEPS.map(({ title, text }, index) => (
                 <li key={title} className="reveal relative text-center">
-                  <span className="relative mx-auto flex size-12 items-center justify-center rounded-2xl bg-primary font-display text-lg font-bold text-white shadow-[0_8px_20px_-6px_rgb(4_120_87/0.6)]">
+                  <span className="relative mx-auto flex size-12 items-center justify-center rounded-2xl bg-primary font-display text-lg font-bold text-primary-foreground shadow-[0_8px_20px_-6px_color-mix(in_srgb,var(--brand-700)_60%,transparent)]">
                     {index + 1}
                   </span>
                   <h3 className="mt-5 text-lg font-semibold">{title}</h3>
@@ -169,17 +169,17 @@ export default function HomePage() {
 
         {/* Call to action */}
         <section className="page-width pb-20 sm:pb-28">
-          <div className="reveal relative overflow-hidden rounded-3xl bg-[#053d30] px-6 py-16 text-center text-white sm:px-12 sm:py-20">
-            <div aria-hidden="true" className="absolute -top-24 left-1/2 size-[30rem] -translate-x-1/2 rounded-full bg-emerald-400/30 blur-3xl" />
+          <div className="reveal relative overflow-hidden rounded-3xl bg-brand-deep px-6 py-16 text-center text-on-brand sm:px-12 sm:py-20">
+            <div aria-hidden="true" className="absolute -top-24 left-1/2 size-[30rem] -translate-x-1/2 rounded-full bg-brand-400/30 blur-3xl" />
             <div
               aria-hidden="true"
-              className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(white_1px,transparent_1px),linear-gradient(90deg,white_1px,transparent_1px)] [background-size:36px_36px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]"
+              className="absolute inset-0 opacity-[0.08] [background-image:linear-gradient(var(--on-brand)_1px,transparent_1px),linear-gradient(90deg,var(--on-brand)_1px,transparent_1px)] [background-size:36px_36px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]"
             />
             <h2 className="relative mx-auto max-w-2xl font-display text-[2rem] leading-tight font-bold tracking-[-0.03em] sm:text-5xl">Your roadmap is a few questions away.</h2>
-            <p className="relative mx-auto mt-4 max-w-lg text-lg text-emerald-100/80">Free to use. Mentor or funder? Choose your role when you sign up.</p>
+            <p className="relative mx-auto mt-4 max-w-lg text-lg text-brand-100/80">Free to use. Mentor or funder? Choose your role when you sign up.</p>
             <Link
               href="/sign-up"
-              className={buttonVariants({ size: "lg", variant: "outline", className: "group relative mt-8 h-12 border-white bg-white px-6 text-base text-[#053d30] hover:border-white hover:bg-emerald-50" })}
+              className={buttonVariants({ size: "lg", variant: "outline", className: "group relative mt-8 h-12 border-on-brand bg-on-brand px-6 text-base text-brand-deep hover:border-on-brand hover:bg-brand-50" })}
             >
               Create a free account
               <ArrowRight className="transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
