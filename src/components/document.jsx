@@ -1,26 +1,18 @@
 import { cn } from "@/lib/utils";
 
-// Building blocks for the "official document" look: pages are made of
-// sections split by thin rules, not of cards.
+import { Panel } from "@/components/layout";
+
+// Building blocks for plan and record pages.
 
 /**
- * One part of a page, set off by a thin rule above it, with a heading and
- * optional buttons. Right under a PageHeader (which has its own rule), pass
- * className="border-t-0 pt-0" so the rule is not drawn twice.
+ * One part of a page: a panel with a heading and optional buttons. It is the
+ * layout kit's Panel under its older name.
  */
-export function Section({ title, description, actions, children, className }) {
-  const headingId = `section-${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+export function Section({ title, description, actions, children, className, flush }) {
   return (
-    <section aria-labelledby={headingId} className={cn("border-t pt-6", className)}>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 id={headingId} className="text-xl">
-          {title}
-        </h2>
-        {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
-      </div>
-      {description && <p className="mt-1 max-w-2xl text-muted-foreground">{description}</p>}
-      <div className="mt-4">{children}</div>
-    </section>
+    <Panel title={title} description={description} actions={actions} className={className} flush={flush}>
+      {children}
+    </Panel>
   );
 }
 

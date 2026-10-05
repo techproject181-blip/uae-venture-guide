@@ -1,19 +1,23 @@
 /**
- * One part of a long form: a fieldset with its legend, set off by a thin rule
- * (except when it comes first), and an optional note read out with it.
+ * One part of a long form, as its own panel: the legend (with an optional
+ * note under it) in the panel's header, then the fields. The legend floats so
+ * it can be styled as a normal header row; screen readers still read it with
+ * every field. `id` names the note for aria-describedby.
  */
 export function FormPart({ id, legend, note, children }) {
   return (
-    <div className="border-t pt-6 first:border-t-0 first:pt-0">
-      <fieldset aria-describedby={note ? `${id}-note` : undefined}>
-        <legend className="text-lg font-bold">{legend}</legend>
+    <fieldset aria-describedby={note && id ? `${id}-note` : undefined} className="panel min-w-0 overflow-hidden">
+      <legend className="float-left w-full border-b px-5 py-4 sm:px-6">
+        <span className="block text-[1.0625rem] leading-snug font-semibold tracking-[-0.01em]">{legend}</span>
+      </legend>
+      <div className="clear-left space-y-5 p-5 sm:p-6">
         {note && (
-          <p id={`${id}-note`} className="mt-1 text-sm text-muted-foreground">
+          <p id={id ? `${id}-note` : undefined} className="-mt-1 text-sm text-muted-foreground">
             {note}
           </p>
         )}
-        <div className="mt-5 space-y-5">{children}</div>
-      </fieldset>
-    </div>
+        {children}
+      </div>
+    </fieldset>
   );
 }

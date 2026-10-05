@@ -81,7 +81,7 @@ export async function EntrepreneurDashboard({ user }) {
           }
         />
       ) : (
-        <Section title="Your plans" className="border-t-0 pt-0" actions={plans.length > 5 && <TextLink href="/plans">All plans</TextLink>}>
+        <Section title="Your plans" actions={plans.length > 5 && <TextLink href="/plans">All plans</TextLink>}>
           <ul className="divide-y border-y">
             {toPlain(plans.slice(0, 5)).map((plan) => (
               <li key={plan._id} className="relative flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-10">
@@ -132,8 +132,7 @@ export async function MentorDashboard({ user }) {
         title="Requests waiting for you"
         description={accepted > 0 ? `You are guiding ${count(accepted, "founder")} now.` : undefined}
         actions={<TextLink href="/requests">All requests</TextLink>}
-        className="border-t-0 pt-0"
-      >
+        >
         {pending.length === 0 ? (
           <p className="text-muted-foreground">No requests are waiting. New ones are emailed to you.</p>
         ) : (
@@ -158,7 +157,7 @@ export async function MentorDashboard({ user }) {
         description={postCount > 0 ? `You have written ${count(postCount, "post")}.` : undefined}
         actions={postCount > 0 && <TextLink href="/my-posts">All posts</TextLink>}
         // The request list above closes with its own rule, so this section needs space, not a second rule.
-        className="mt-12 border-t-0 pt-0"
+        className="mt-12"
       >
         {posts.length === 0 ? (
           <p className="text-muted-foreground">
@@ -213,8 +212,7 @@ export async function FunderDashboard({ user }) {
       <Section
         title="Your interests"
         actions={interests.length > 0 && <TextLink href="/interests">All interests</TextLink>}
-        className="border-t-0 pt-0"
-      >
+        >
         {interests.length === 0 ? (
           <p className="text-muted-foreground">You have not asked about a plan yet. Tell an owner from their pitch card when a plan interests you.</p>
         ) : (
@@ -288,7 +286,7 @@ export async function AdminDashboard({ user }) {
         </p>
       )}
 
-      <Section title="Admin pages" className="border-t-0 pt-0">
+      <Section title="Admin pages" >
         <ul className="divide-y border-y">
           {pages.map(({ href, label, detail }) => (
             <li key={href} className="relative flex flex-col gap-1 py-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">

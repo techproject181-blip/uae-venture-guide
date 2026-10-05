@@ -2,14 +2,21 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
-/** The navigation links. The current section is underlined in emerald. `compact` is the phone row: less padding, so all links fit on one line. */
+/**
+ * The navigation links. On wide screens the current section has an emerald
+ * line under it that slides from link to link; `compact` is the phone and
+ * tablet row, a single line that scrolls sideways, where the current section
+ * sits on a pale emerald pill that slides the same way.
+ */
 export function NavLinks({ links, className, compact = false }) {
   const pathname = usePathname();
+  const layoutId = compact ? "nav-pill" : "nav-line";
 
   return (
-    <nav aria-label="Main" className={cn(compact ? "gap-0" : "gap-1", className)}>
+    <nav aria-label="Main" className={cn(compact ? "no-scrollbar gap-1 overflow-x-auto" : "gap-1", className)}>
       {links.map(({ href, label }) => {
         const active = pathname === href || pathname.startsWith(`${href}/`);
         return (
@@ -18,13 +25,21 @@ export function NavLinks({ links, className, compact = false }) {
             href={href}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "flex shrink-0 items-center border-b-2 py-3 whitespace-nowrap",
-              compact ? "px-2 text-[0.8125rem]" : "px-3 text-sm",
-              "transition-[color,border-color] duration-200 outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset",
-              active ? "border-primary font-medium text-foreground" : "border-transparent text-muted-foreground hover:border-slate-300 hover:text-foreground",
+              "relative flex shrink-0 items-center whitespace-nowrap outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset",
+              compact ? "my-2 rounded-full px-3.5 py-2 text-sm" : "px-3 text-sm",
+              "transition-colors duration-200",
+              active ? "font-medium text-foreground" : "text-muted-foreground hover:text-foreground",
             )}
           >
-            {label}
+            {active && (
+              <motion.span
+                layoutId={layoutId}
+                aria-hidden="true"
+                className={compact ? "absolute inset-0 -z-0 rounded-full bg-accent ring-1 ring-primary/15" : "absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-primary"}
+                transition={{ type: "spring", stiffness: 500, damping: 38 }}
+              />
+            )}
+            <span className={cn("relative", compact && active && "text-accent-foreground")}>{label}</span>
           </Link>
         );
       })}

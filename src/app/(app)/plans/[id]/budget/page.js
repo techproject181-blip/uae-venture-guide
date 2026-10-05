@@ -34,7 +34,7 @@ export default async function PlanBudgetPage({ params }) {
 
   return (
     <div className="space-y-10">
-      <Section title="First-year budget" className="border-t-0 pt-0">
+      <Section title="First-year budget" >
         <Fields
           items={[
             { label: "Your budget", value: formatAed(plan.budgetAed) },

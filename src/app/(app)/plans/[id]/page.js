@@ -32,7 +32,7 @@ export default async function PlanOverviewPage({ params }) {
   if (plan.status === "failed") {
     return (
       <div className="space-y-10">
-        <Section title="The roadmap could not be made" className="border-t-0 pt-0">
+        <Section title="The roadmap could not be made" >
           <p>{plan.failureReason}</p>
         </Section>
         {settings}
@@ -78,7 +78,7 @@ export default async function PlanOverviewPage({ params }) {
         </section>
       )}
 
-      <Section title="Money" className={cn(numbered.length === 0 && "border-t-0 pt-0")}>
+      <Section title="Money" >
         <Fields
           items={[
             { label: "First-year estimate", value: formatAed(total) },

@@ -21,7 +21,7 @@ export default async function PlanRisksPage({ params }) {
 
   return (
     <div className="max-w-3xl space-y-10">
-      <Section title="Risks" description="What could go wrong, most serious first, and what to do about it." className="border-t-0 pt-0">
+      <Section title="Risks" description="What could go wrong, most serious first, and what to do about it." >
         <ul className="divide-y border-y">
           {risks.map((risk) => (
             <li key={risk._id} className="py-5">

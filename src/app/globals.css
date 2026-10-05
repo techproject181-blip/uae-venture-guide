@@ -1,6 +1,6 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
 
 /* The app has no dark theme. This keeps the `dark:` classes in the shadcn
    components switched off, instead of following the computer's dark mode. */
@@ -10,7 +10,8 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-display);
+  --font-display: var(--font-display);
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
   --color-ring: var(--ring);
   --color-input: var(--input);
@@ -98,13 +99,16 @@
     color: var(--foreground);
   }
   button:not(:disabled),
-  [role="button"]:not(:disabled) {
+  [role='button']:not(:disabled) {
     cursor: pointer;
   }
   h1,
   h2,
   h3 {
-    @apply font-bold tracking-[-0.01em] text-balance;
+    @apply font-semibold tracking-[-0.015em] text-balance;
+  }
+  h1 {
+    @apply font-display font-bold tracking-[-0.03em];
   }
   a {
     text-underline-offset: 3px;
@@ -145,7 +149,7 @@
 
   /* A small uppercase label above a value, like the field names on a licence. */
   .field-label {
-    @apply text-xs font-medium tracking-[0.06em] text-muted-foreground uppercase;
+    @apply text-xs font-medium tracking-[0.04em] text-muted-foreground uppercase;
   }
 
   /* A ruled table: a quiet header row, then rows split by thin lines. */
@@ -441,4 +445,137 @@ details[open]::details-content {
   opacity: 1;
   transition: none;
   animation: nav-progress 6s cubic-bezier(0.1, 0.7, 0.2, 1) forwards;
+}
+
+/* Lists and grids marked .stagger let their items rise in one after another. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+.stagger > * {
+  animation: rise 420ms var(--ease-out) backwards;
+}
+.stagger > :nth-child(2) {
+  animation-delay: 40ms;
+}
+.stagger > :nth-child(3) {
+  animation-delay: 80ms;
+}
+.stagger > :nth-child(4) {
+  animation-delay: 120ms;
+}
+.stagger > :nth-child(5) {
+  animation-delay: 160ms;
+}
+.stagger > :nth-child(6) {
+  animation-delay: 200ms;
+}
+.stagger > :nth-child(7) {
+  animation-delay: 240ms;
+}
+.stagger > :nth-child(n + 8) {
+  animation-delay: 280ms;
+}
+
+/* Sections of the home page fade up as they scroll into view, in browsers
+   that can tie an animation to scrolling. Elsewhere they simply show. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 25%;
+    }
+  }
+}
+
+/* A row that scrolls sideways without showing a scrollbar (the phone menu). */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* The plan on the sign-in page floats gently, and its first steps tick themselves off. */
+@keyframes float-slow {
+  50% {
+    translate: 0 -8px;
+  }
+}
+.float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+@keyframes tick-in {
+  from {
+    background-color: transparent;
+    border-color: rgb(255 255 255 / 0.3);
+    scale: 0.6;
+    opacity: 0.4;
+  }
+  to {
+    background-color: #10b981;
+    border-color: #10b981;
+    scale: 1;
+    opacity: 1;
+  }
+}
+.tick-in-done {
+  animation: tick-in 420ms var(--ease-out) both;
+}
+
+/* Home page picture: the window rises in, the first steps tick, the budget bars grow. */
+@keyframes window-in {
+  from {
+    opacity: 0;
+    translate: 0 24px;
+    scale: 0.98;
+  }
+}
+.hero-window {
+  animation: window-in 700ms 150ms var(--ease-out) backwards;
+}
+@keyframes hero-tick {
+  from {
+    background-color: transparent;
+    border-color: #cbd5e1;
+    color: transparent;
+    scale: 0.7;
+  }
+}
+.hero-tick {
+  animation: hero-tick 360ms var(--ease-out) backwards;
+}
+@keyframes bar-grow {
+  from {
+    scale: 1 0;
+  }
+}
+.bar-grow {
+  transform-origin: bottom;
+  animation: bar-grow 600ms var(--ease-out) backwards;
+}
+
+/* The home page headline and buttons come in one after another. */
+.intro > * {
+  animation: rise 600ms var(--ease-out) backwards;
+}
+.intro > :nth-child(2) { animation-delay: 80ms; }
+.intro > :nth-child(3) { animation-delay: 160ms; }
+.intro > :nth-child(4) { animation-delay: 240ms; }
+.intro > :nth-child(5) { animation-delay: 320ms; }
+
+/* The emirates slide past in a loop. */
+@keyframes marquee {
+  to {
+    translate: -50% 0;
+  }
+}
+.marquee {
+  animation: marquee 40s linear infinite;
+}
+.marquee-frame:hover .marquee {
+  animation-play-state: paused;
 }
