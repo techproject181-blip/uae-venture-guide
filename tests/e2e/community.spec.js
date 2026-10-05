@@ -110,8 +110,8 @@ test("a mentor and a funder see a plan only after its owner says yes", async ({ 
   await test.step("the funder can open the full plan once the owner accepts", async () => {
     await owner.goto("/requests");
     await expectAccessible(owner);
-    owner.once("dialog", (dialog) => dialog.accept()); // "Accept? This funder can then read your full plan…"
     await owner.getByRole("button", { name: "Accept and share the plan" }).click();
+    await owner.getByRole("alertdialog").getByRole("button", { name: "Accept" }).click();
     await expect(owner.getByText("Interest accepted.")).toBeVisible();
     await funder.goto(planPath);
     await expect(funder.getByRole("heading", { level: 1 })).toHaveText(title);
