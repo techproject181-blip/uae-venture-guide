@@ -53,6 +53,30 @@ export const getPlanForViewer = cache(async (planId, user) => {
 export async function createPlanWithRoadmap(ownerId, intake) {
   await connectDB();
   const plan = new Plan({ ...intake, ownerId, status: "generating" });
+  await fillRoadmap(plan, intake);
+  return plan;
+}
+
+/** Builds the roadmap again on an existing plan (used to retry a failed one), keeping its title and answers. */
+export async function rebuildRoadmap(plan) {
+  const intake = {
+    title: plan.title,
+    idea: plan.idea,
+    emirate: plan.emirate,
+    sector: plan.sector,
+    jurisdictionPref: plan.jurisdictionPref,
+    budgetAed: plan.budgetAed,
+    targetCustomers: plan.targetCustomers,
+    teamSize: plan.teamSize,
+  };
+  plan.status = "generating";
+  plan.failureReason = undefined;
+  await fillRoadmap(plan, intake);
+  return plan;
+}
+
+async function fillRoadmap(plan, intake) {
+  await connectDB();
   try {
     Object.assign(plan, await generateRoadmap(intake), { status: "ready" });
   } catch (error) {
@@ -61,5 +85,4 @@ export async function createPlanWithRoadmap(ownerId, intake) {
     plan.failureReason = "The roadmap could not be made. Please try again.";
   }
   await plan.save();
-  return plan;
 }

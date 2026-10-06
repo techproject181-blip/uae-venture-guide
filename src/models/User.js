@@ -11,6 +11,10 @@ const userSchema = new mongoose.Schema(
     // Password reset: only a hash of the emailed token is stored, so a database leak cannot reset passwords.
     passwordResetHash: String,
     passwordResetExpires: Date,
+    // Sessions signed in before this moment stop working, so a password change signs out other devices.
+    passwordChangedAt: Date,
+    // True when an administrator rejected the sign-up, as opposed to suspending a working account.
+    rejected: { type: Boolean, default: false },
   },
   { timestamps: true },
 );

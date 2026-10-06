@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { BookOpen, Compass, FileText, Gauge, HandCoins, Inbox, Landmark, Newspaper, Plus, UserRound, Users } from "lucide-react";
-import { UserActions } from "@/components/admin/user-actions";
+import { Compass, HandCoins, Inbox, Landmark, Newspaper, Plus, UserRound, Users } from "lucide-react";
+import { AcceptingSwitch } from "@/components/dashboard/accepting-switch";
 import { Greeting, NextStep, Row, Shortcuts, TextLink, count, rowLink } from "@/components/dashboard/dashboard-bits";
 import { ListPanel, Panel, Split, Stat, StatGrid } from "@/components/layout";
 import { EmptyState } from "@/components/page-header";
@@ -9,18 +9,15 @@ import { StatusBadge } from "@/components/status-badge";
 import { buttonVariants } from "@/components/ui/button";
 import { toPlain } from "@/lib/api";
 import { progressPercent } from "@/lib/budget";
-import { EMIRATES, ROLE_LABELS, SECTORS, labelOf } from "@/lib/constants";
+import { EMIRATES, SECTORS, labelOf } from "@/lib/constants";
 import { connectDB } from "@/lib/db";
 import { formatDate } from "@/lib/format";
 import { listInterestsForFunder, listInterestsForOwner, listPitchCards } from "@/lib/funding";
-import { FeeReference } from "@/models/FeeReference";
 import { FunderProfile } from "@/models/FunderProfile";
 import { MentorProfile } from "@/models/MentorProfile";
 import { MentorRequest } from "@/models/MentorRequest";
 import { Plan } from "@/models/Plan";
 import { Post } from "@/models/Post";
-import { Source } from "@/models/Source";
-import { User } from "@/models/User";
 
 // One dashboard per role, all on the same skeleton: the greeting with the
 // role's main button, four numbers that link to their lists, then the role's
@@ -130,7 +127,7 @@ export async function EntrepreneurDashboard({ user }) {
 export async function MentorDashboard({ user }) {
   await connectDB();
   const [profile, pending, accepted, completed, posts, postCount] = await Promise.all([
-    MentorProfile.exists({ userId: user.id }),
+    MentorProfile.findOne({ userId: user.id }).select("acceptingRequests").lean(),
     MentorRequest.find({ mentorId: user.id, status: "pending" }).sort({ createdAt: -1 }).populate("entrepreneurId", "name").lean(),
     MentorRequest.countDocuments({ mentorId: user.id, status: "accepted" }),
     MentorRequest.countDocuments({ mentorId: user.id, status: "completed" }),
@@ -161,6 +158,7 @@ export async function MentorDashboard({ user }) {
       <Split
         aside={
           <>
+            {profile && <AcceptingSwitch initial={profile.acceptingRequests} />}
             {!profile && (
               <NextStep title="Complete your profile" href="/profile" linkText="Edit profile">
                 Founders find you in the mentor directory through your profile.
@@ -228,10 +226,12 @@ export async function MentorDashboard({ user }) {
 
 export async function FunderDashboard({ user }) {
   await connectDB();
-  const [profile, cards, interests] = await Promise.all([
+  const [profile, cards, interests, sharedCount] = await Promise.all([
     FunderProfile.exists({ userId: user.id }),
     listPitchCards(),
     listInterestsForFunder(user.id),
+    // Counted apart, because listPitchCards stops at 60 cards.
+    Plan.countDocuments({ shared: true, hiddenByAdmin: { $ne: true }, status: "ready" }),
   ]);
   const accepted = interests.filter((interest) => interest.status === "accepted").length;
   const waiting = interests.filter((interest) => interest.status === "pending").length;
@@ -240,7 +240,7 @@ export async function FunderDashboard({ user }) {
     <>
       <Greeting
         user={user}
-        description={`${count(cards.length, "shared plan")} to explore.`}
+        description={`${count(sharedCount, "shared plan")} to explore.`}
         actions={
           <Link href="/discover" className={buttonVariants({ size: "lg" })}>
             Discover plans
@@ -249,7 +249,7 @@ export async function FunderDashboard({ user }) {
       />
 
       <StatGrid className="mb-6 lg:mb-8">
-        <Stat label="Shared plans" value={cards.length} href="/discover" />
+        <Stat label="Shared plans" value={sharedCount} href="/discover" />
         <Stat label="Interests sent" value={interests.length} href="/interests" />
         <Stat label="Accepted" value={accepted} href="/interests" />
         <Stat label="Waiting for reply" value={waiting} href="/interests" />
@@ -314,94 +314,6 @@ export async function FunderDashboard({ user }) {
                 <div className="sm:w-56 sm:shrink-0">
                   <ProgressBar percent={card.progress} />
                 </div>
-              </Row>
-            ))}
-          </ListPanel>
-        )}
-      </Split>
-    </>
-  );
-}
-
-export async function AdminDashboard({ user }) {
-  await connectDB();
-  const [pending, waiting, users, plans, sources, demoSources, fees, posts] = await Promise.all([
-    User.countDocuments({ status: "pending" }),
-    User.find({ status: "pending" }).sort({ createdAt: -1 }).limit(5).select("name email role createdAt").lean(),
-    User.countDocuments(),
-    Plan.countDocuments(),
-    Source.countDocuments({ active: true }),
-    Source.countDocuments({ demo: true }),
-    FeeReference.countDocuments({ active: true }),
-    Post.countDocuments({ status: "published" }),
-  ]);
-
-  return (
-    <>
-      <Greeting
-        user={user}
-        description="Approve new accounts, check official sources and hide content that breaks the rules."
-        actions={
-          <Link href="/admin/users?status=pending" className={buttonVariants({ size: "lg" })}>
-            Review accounts
-          </Link>
-        }
-      />
-
-      <StatGrid className="mb-6 lg:mb-8">
-        <Stat label="Awaiting approval" value={pending} href="/admin/users?status=pending" />
-        <Stat label="Accounts" value={users} href="/admin/users?status=all" />
-        <Stat label="Sources shown" value={sources} href="/admin/sources" />
-        <Stat label="Published posts" value={posts} href="/admin/content" />
-      </StatGrid>
-
-      <Split
-        aside={
-          <>
-            {demoSources > 0 && (
-              <Panel title="Demo data">
-                <p className="text-sm">
-                  <strong className="font-medium">{demoSources === 1 ? "1 source is" : `${demoSources} sources are`} demo data.</strong> Check each one
-                  against the official page, then untick “demo” before real users rely on it.
-                </p>
-                <Link href="/admin/sources?show=demo" className={buttonVariants({ variant: "outline", size: "lg", className: "mt-5 w-full" })}>
-                  Review sources
-                </Link>
-              </Panel>
-            )}
-            <Shortcuts
-              title="Admin pages"
-              items={[
-                { href: "/admin/users?status=all", label: "Users", detail: count(users, "account"), icon: Users },
-                { href: "/admin/sources", label: "Sources", detail: `${count(sources, "source")} shown · ${count(fees, "fee")} in use`, icon: BookOpen },
-                { href: "/admin/content", label: "Content", detail: `${count(posts, "post")} · ${count(plans, "plan")}`, icon: FileText },
-                { href: "/admin/usage", label: "AI usage", detail: "Roadmaps and chat per day", icon: Gauge },
-              ]}
-            />
-          </>
-        }
-      >
-        {waiting.length === 0 ? (
-          <Panel title="Waiting for approval">
-            <p className="text-muted-foreground">No accounts are waiting for approval.</p>
-          </Panel>
-        ) : (
-          <ListPanel
-            title="Waiting for approval"
-            description="Mentors and funders can use the app once you approve them."
-            actions={pending > waiting.length && <TextLink href="/admin/users?status=pending">See all {pending}</TextLink>}
-          >
-            {toPlain(waiting).map((account) => (
-              <Row key={account._id} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-                <div className="min-w-0">
-                  <Link href={`/admin/users/${account._id}`} className="font-medium text-foreground decoration-primary underline-offset-4 hover:underline">
-                    {account.name}
-                  </Link>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {ROLE_LABELS[account.role]} · <span className="wrap-anywhere">{account.email}</span> · joined {formatDate(account.createdAt)}
-                  </p>
-                </div>
-                <UserActions userId={account._id} status="pending" className="justify-start sm:justify-end" />
               </Row>
             ))}
           </ListPanel>

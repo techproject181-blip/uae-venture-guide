@@ -1,4 +1,3 @@
-import { Info } from "lucide-react";
 import { Stamp } from "@/components/stamp";
 import { formatAedRange } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -93,19 +92,6 @@ export function LevelBadge({ label, level }) {
     <span className={cn("text-sm", level === "high" ? "font-bold text-destructive" : level === "medium" ? "font-medium" : "text-muted-foreground")}>
       {label}: {level.charAt(0).toUpperCase() + level.slice(1)}
     </span>
-  );
-}
-
-/** The notice every roadmap, chat answer and report shows (FR-12). It is its own small panel. */
-export function AdviceNotice() {
-  return (
-    <div role="note" className="panel flex gap-3 px-5 py-4 text-sm sm:px-6">
-      <Info className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-      <p>
-        <strong className="font-medium">Guidance only.</strong> Check each step and fee with the official source before you pay or
-        sign anything. This is not legal or financial advice.
-      </p>
-    </div>
   );
 }
 

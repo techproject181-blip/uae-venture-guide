@@ -219,7 +219,7 @@ export function PlanReport({ plan, sources }) {
         )}
 
         <View style={s.footer} fixed>
-          <Text>Guidance only. Not legal or financial advice. Check each fee with the official source.</Text>
+          <Text>Check each fee with the official source.</Text>
           <Text render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`} />
         </View>
       </Page>

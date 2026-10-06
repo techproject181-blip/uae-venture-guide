@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/logo";
+import { MobileNav } from "@/components/mobile-nav";
 import { NavLinks } from "@/components/nav-links";
 import { buttonVariants } from "@/components/ui/button";
 
@@ -17,16 +18,21 @@ export function SiteHeader() {
         <Logo />
         <NavLinks links={LINKS} className="hidden self-stretch lg:flex" />
         <div className="ml-auto flex shrink-0 items-center gap-2">
-          <Link href="/sign-in" className={buttonVariants({ variant: "ghost", size: "lg", className: "max-sm:px-3" })}>
+          <Link href="/sign-in" className={buttonVariants({ variant: "ghost", size: "lg", className: "hidden lg:inline-flex" })}>
             Sign in
           </Link>
-          <Link href="/sign-up" className={buttonVariants({ size: "lg", className: "hidden sm:inline-flex" })}>
+          <Link href="/sign-up" className={buttonVariants({ size: "lg", className: "hidden lg:inline-flex" })}>
             Create account
           </Link>
+          <MobileNav links={LINKS}>
+            <Link href="/sign-up" className={buttonVariants({ size: "lg", className: "w-full" })}>
+              Create account
+            </Link>
+            <Link href="/sign-in" className={buttonVariants({ variant: "outline", size: "lg", className: "w-full" })}>
+              Sign in
+            </Link>
+          </MobileNav>
         </div>
-      </div>
-      <div className="border-t lg:hidden">
-        <NavLinks links={LINKS} compact className="page-width flex" />
       </div>
     </header>
   );

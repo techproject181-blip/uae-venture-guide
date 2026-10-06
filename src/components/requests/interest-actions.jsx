@@ -14,8 +14,8 @@ export function InterestActions({ interestId }) {
   const confirm = useConfirm();
 
   async function act(action) {
-    if (action === "accept" && !(await confirm({ title: "Accept this funder?", description: "They can then read your full plan and see your email.", confirmLabel: "Accept" }))) return;
-    setPending(true);
+    if (action === "accept" && !(await confirm({ title: "Accept this funder?", description: "They can then read your full plan, and you can message each other here.", confirmLabel: "Accept" }))) return;
+    setPending(action);
     const result = await sendJson("PATCH", `/api/interests/${interestId}`, { action });
     setPending(false);
     if (!result.ok) {
@@ -28,11 +28,11 @@ export function InterestActions({ interestId }) {
 
   return (
     <div className="flex flex-wrap gap-2">
-      <Button size="lg" onClick={() => act("accept")} disabled={pending}>
-        Accept and share the plan
+      <Button size="lg" onClick={() => act("accept")} disabled={Boolean(pending)}>
+        {pending === "accept" ? "Saving…" : "Accept and share the plan"}
       </Button>
-      <Button variant="destructive" size="lg" onClick={() => act("decline")} disabled={pending}>
-        Decline
+      <Button variant="destructive" size="lg" onClick={() => act("decline")} disabled={Boolean(pending)}>
+        {pending === "decline" ? "Saving…" : "Decline"}
       </Button>
     </div>
   );

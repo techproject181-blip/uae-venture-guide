@@ -2,6 +2,7 @@ import { ApiError, readBody, requireApiUser, route } from "@/lib/api";
 import { connectDB } from "@/lib/db";
 import { appUrl, sendEmail } from "@/lib/email";
 import { interestSchema } from "@/lib/schemas/community";
+import { FunderProfile } from "@/models/FunderProfile";
 import { FundingInterest } from "@/models/FundingInterest";
 import { Plan } from "@/models/Plan";
 import { User } from "@/models/User";
@@ -13,8 +14,10 @@ export const POST = route(async (request, { params }) => {
   const { message } = await readBody(request, interestSchema);
 
   await connectDB();
-  const plan = await Plan.findOne({ _id: id, shared: true, hiddenByAdmin: false }).select("title ownerId").lean();
+  const plan = await Plan.findOne({ _id: id, status: "ready", shared: true, hiddenByAdmin: false }).select("title ownerId").lean();
   if (!plan) throw new ApiError(404, "This plan is not shared any more.");
+  // Owners decide from the funder's profile, so one must exist first.
+  if (!(await FunderProfile.exists({ userId: funder.id }))) throw new ApiError(400, "Complete your profile before sending interest.");
 
   try {
     const interest = await FundingInterest.create({ planId: plan._id, funderId: funder.id, message });

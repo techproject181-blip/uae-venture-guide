@@ -36,9 +36,17 @@ Thumbs.db
 .vscode/*
 !.vscode/settings.json
 
-# design tool working files (screenshots, mock-ups, answers); the design
-# itself is described in DESIGN.md
+# local tool files, kept on this computer only
 /.impeccable/
+/.claude/
+/.cursor/
+/.agents/
+/.windsurf/
+.aider*
+/CLAUDE.md
+/AGENTS.md
+/DESIGN.md
+/PRODUCT.md
 
 # debug
 npm-debug.log*
@@ -60,3 +68,6 @@ next-env.d.ts
 
 # database exports hold real user data
 /backups/
+
+# Local demo logins
+*.local.txt

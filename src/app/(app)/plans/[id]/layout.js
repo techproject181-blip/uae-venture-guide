@@ -36,16 +36,24 @@ export default async function PlanLayout({ children, params }) {
 
   return (
     <>
-      {isOwner && <BackLink href="/plans">My plans</BackLink>}
+      {/* Back to where each reader came from: the owner's plans, a funder's interests, a mentor's requests. */}
+      {isOwner ? (
+        <BackLink href="/plans">My plans</BackLink>
+      ) : user.role === "funder" ? (
+        <BackLink href="/interests">My interests</BackLink>
+      ) : user.role === "mentor" ? (
+        <BackLink href="/requests">Requests</BackLink>
+      ) : null}
       {/* The plan's header: one panel with the title, its buttons, the facts and how far the plan is. */}
       <div className="panel overflow-hidden">
         <div className="flex flex-col gap-5 p-5 sm:p-6 md:flex-row md:items-start md:justify-between">
           <div className="min-w-0">
             <h1 className="font-display text-[1.75rem] leading-[1.15] font-bold tracking-[-0.03em] sm:text-[2.125rem]">{plan.title}</h1>
-            {(plan.status !== "ready" || !isOwner) && (
+            {(plan.status !== "ready" || !isOwner || (isOwner && plan.hiddenByAdmin)) && (
               <div className="mt-3 flex flex-wrap gap-2">
                 {plan.status !== "ready" && <StatusBadge status={plan.status} />}
-                {!isOwner && <StatusBadge status="todo" label="Read-only view" />}
+                {!isOwner && <StatusBadge status="info" label="Read-only view" />}
+                {isOwner && plan.hiddenByAdmin && <StatusBadge status="hidden" label="Hidden from funders by an administrator" />}
               </div>
             )}
           </div>
@@ -57,7 +65,7 @@ export default async function PlanLayout({ children, params }) {
                 Download PDF
               </a>
             )}
-            {isOwner && (
+            {isOwner && plan.status === "ready" && (
               <Link href={`/plans/${plan._id}/sharing`} className={buttonVariants({ variant: "outline", size: "lg" })}>
                 <Share2 aria-hidden="true" />
                 Share with funders
@@ -86,7 +94,8 @@ export default async function PlanLayout({ children, params }) {
         </div>
       </div>
 
-      <PlanTabs planId={plan._id} tabs={isOwner ? OWNER_TABS : TABS} />
+      {/* Without a roadmap the other tabs would be empty. */}
+      <PlanTabs planId={plan._id} tabs={plan.status !== "ready" ? TABS.slice(0, 1) : isOwner ? OWNER_TABS : TABS} />
       {children}
     </>
   );

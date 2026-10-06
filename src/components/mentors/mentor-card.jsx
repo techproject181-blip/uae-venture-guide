@@ -52,7 +52,7 @@ export function MentorCard({ mentor, preview = false, as: Heading = "h2" }) {
           <Briefcase className="size-4 shrink-0" aria-hidden="true" />
           {mentor.yearsExperience} years
         </span>
-        {!mentor.acceptingRequests && <StatusBadge status="todo" label="Not taking requests" className="ml-auto" />}
+        {!mentor.acceptingRequests && <StatusBadge status="info" label="Not taking requests" className="ml-auto" />}
       </div>
     </article>
   );

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { ListPanel, Panel, Split } from "@/components/layout";
-import { AdviceNotice, FactRows, LevelBadge } from "@/components/plans/plan-bits";
+import { FactRows, LevelBadge } from "@/components/plans/plan-bits";
 import { requireUser } from "@/lib/guards";
 import { getPlanForViewer } from "@/lib/plans";
 
@@ -35,7 +35,6 @@ export default async function PlanRisksPage({ params }) {
           />
         </div>
       </Panel>
-      <AdviceNotice />
     </>
   );
 

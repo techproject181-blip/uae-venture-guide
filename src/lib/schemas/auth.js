@@ -31,3 +31,14 @@ export const resetPasswordSchema = z.object({
   token: z.string().min(1, "This reset link is not complete."),
   password,
 });
+
+/** The account page: the name everyone sees. */
+export const accountSchema = z.object({
+  name: z.string("Enter your full name.").trim().min(2, "Enter your full name.").max(80, "Use 80 characters or fewer."),
+});
+
+/** The account page: a new password, given the current one. */
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1, "Enter your current password."),
+  password,
+});

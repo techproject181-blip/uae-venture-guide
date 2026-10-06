@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Pencil } from "lucide-react";
 import { Avatar } from "@/components/avatar";
+import { HideButton } from "@/components/admin/hide-button";
 import { DeleteButton } from "@/components/delete-button";
 import { ListPanel, PageHeader, Panel, Split } from "@/components/layout";
 import { Markdown } from "@/components/posts/markdown";
@@ -23,7 +24,10 @@ const linkClass = "font-medium text-foreground decoration-primary underline unde
 export default async function PostPage({ params }) {
   const { id } = await params;
   await connectDB();
-  const raw = await Post.findById(id).populate("authorId", "name").lean().catch(() => null);
+  const raw = await Post.findById(id)
+    .populate("authorId", "name")
+    .lean()
+    .catch(() => null);
   const viewer = await getCurrentUser();
   const isAuthor = raw && viewer && String(raw.authorId?._id) === viewer.id;
   // A hidden post is gone for everyone except its author and administrators.
@@ -36,7 +40,11 @@ export default async function PostPage({ params }) {
   const [mentor, others] = authorId
     ? await Promise.all([
         getMentor(authorId),
-        Post.find({ authorId, status: "published", _id: { $ne: post._id } }).select("title createdAt").sort({ createdAt: -1 }).limit(4).lean(),
+        Post.find({ authorId, status: "published", _id: { $ne: post._id } })
+          .select("title createdAt")
+          .sort({ createdAt: -1 })
+          .limit(4)
+          .lean(),
       ])
     : [null, []];
 
@@ -47,14 +55,23 @@ export default async function PostPage({ params }) {
         title={post.title}
         description={`By ${author} · ${formatDate(post.createdAt)}`}
         actions={
-          isAuthor && (
-            <>
-              <Link href={`/my-posts/${post._id}/edit`} className={buttonVariants({ variant: "outline", size: "lg" })}>
-                <Pencil aria-hidden="true" />
-                Edit
-              </Link>
-              <DeleteButton url={`/api/posts/${post._id}`} confirmText="Delete this post for good?" redirectTo="/my-posts" doneText="Post deleted." />
-            </>
+          viewer?.role === "admin" && !isAuthor ? (
+            <HideButton url={`/api/admin/posts/${post._id}`} hidden={post.status === "hidden"} what="post" />
+          ) : (
+            isAuthor && (
+              <>
+                <Link href={`/my-posts/${post._id}/edit`} className={buttonVariants({ variant: "outline", size: "lg" })}>
+                  <Pencil aria-hidden="true" />
+                  Edit
+                </Link>
+                <DeleteButton
+                  url={`/api/posts/${post._id}`}
+                  confirmText="Delete this post for good?"
+                  redirectTo="/my-posts"
+                  doneText="Post deleted."
+                />
+              </>
+            )
           )
         }
       >
@@ -77,7 +94,10 @@ export default async function PostPage({ params }) {
                 </div>
               </div>
               {mentor && (
-                <Link href={`/mentors/${authorId}`} className={buttonVariants({ variant: "outline", size: "lg", className: "mt-5 w-full" })}>
+                <Link
+                  href={`/mentors/${authorId}`}
+                  className={buttonVariants({ variant: "outline", size: "lg", className: "mt-5 w-full" })}
+                >
                   See {author.split(" ")[0]}&rsquo;s mentor profile
                 </Link>
               )}
@@ -126,11 +146,19 @@ export default async function PostPage({ params }) {
         {post.images.length > 0 && (
           <Panel title="Pictures">
             <div className="grid gap-5 sm:grid-cols-2">
-              {post.images.map((image) => (
-                <figure key={image.url}>
+              {post.images.map((image, index) => (
+                // The same picture can be added twice, so the index keeps keys unique.
+                <figure key={`${index}-${image.url}`}>
                   <div className="relative aspect-4/3 overflow-hidden rounded-lg bg-secondary">
                     {/* unoptimized: pictures come from any address the mentor pastes */}
-                    <Image src={image.url} alt={image.alt} fill unoptimized sizes="(min-width: 640px) 50vw, 100vw" className="object-cover" />
+                    <Image
+                      src={image.url}
+                      alt={image.alt}
+                      fill
+                      unoptimized
+                      sizes="(min-width: 640px) 50vw, 100vw"
+                      className="object-cover"
+                    />
                   </div>
                   <figcaption className="mt-2 text-sm text-muted-foreground">{image.alt}</figcaption>
                 </figure>

@@ -53,7 +53,6 @@ export function AuthShowcase() {
         </div>
       </div>
 
-      <p className="relative text-sm text-brand-100/60">Not a government service. Guidance only, not legal or financial advice.</p>
     </div>
   );
 }

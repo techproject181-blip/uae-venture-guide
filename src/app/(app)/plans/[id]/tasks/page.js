@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { Panel, Split } from "@/components/layout";
-import { AdviceNotice, FeeLegend, feeMarks } from "@/components/plans/plan-bits";
+import { FeeLegend, feeMarks } from "@/components/plans/plan-bits";
 import { TaskForm } from "@/components/plans/task-form";
 import { TaskRow } from "@/components/plans/task-row";
 import { connectDB } from "@/lib/db";
@@ -34,9 +34,7 @@ export default async function PlanTasksPage({ params }) {
     <Panel title="Add your own step" description="For anything the roadmap does not list. It is numbered with its phase.">
       <TaskForm planId={plan._id} phases={phases} />
     </Panel>
-  ) : (
-    <AdviceNotice />
-  );
+  ) : null;
 
   return (
     <Split aside={aside}>
@@ -99,7 +97,6 @@ export default async function PlanTasksPage({ params }) {
         </div>
       </Panel>
 
-      {isOwner && <AdviceNotice />}
     </Split>
   );
 }

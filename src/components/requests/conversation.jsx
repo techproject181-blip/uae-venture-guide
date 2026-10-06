@@ -34,12 +34,22 @@ function merge(list, incoming) {
 }
 
 /**
- * The conversation between a founder and a mentor about one request: the
+ * A saved conversation between two people: a founder and a mentor about a
+ * request, or a founder and a funder about a plan (pass `apiUrl`): the
  * original request first, then the messages as bubbles (yours on the right),
  * and the box to write in. New messages arrive by asking the server every few
  * seconds while the tab is visible.
  */
-export function Conversation({ requestId, opening, initialMessages, initialCanSend, otherName }) {
+export function Conversation({
+  requestId,
+  apiUrl = `/api/requests/${requestId}/messages`,
+  closedText = "This request is completed, so the conversation is closed. You can still read every message here.",
+  opening,
+  openingLabel = "Original request",
+  initialMessages,
+  initialCanSend,
+  otherName,
+}) {
   const [messages, setMessages] = useState(initialMessages);
   const [canSend, setCanSend] = useState(initialCanSend);
   const [draft, setDraft] = useState("");
@@ -66,7 +76,7 @@ export function Conversation({ requestId, opening, initialMessages, initialCanSe
       const last = latest.current.findLast((message) => !message.id.startsWith("reply-"));
       const query = last ? `?after=${encodeURIComponent(last.createdAt)}` : "";
       try {
-        const response = await fetch(`/api/requests/${requestId}/messages${query}`, { signal, cache: "no-store" });
+        const response = await fetch(`${apiUrl}${query}`, { signal, cache: "no-store" });
         if (!response.ok) return response.status === 404 ? "gone" : null;
         const body = await response.json();
         setMessages((list) => merge(list, body.messages));
@@ -76,7 +86,7 @@ export function Conversation({ requestId, opening, initialMessages, initialCanSe
         return null; // offline or cancelled: try again on the next tick
       }
     },
-    [requestId],
+    [apiUrl],
   );
 
   // Ask for new messages every few seconds while the tab is visible, and at
@@ -113,7 +123,7 @@ export function Conversation({ requestId, opening, initialMessages, initialCanSe
     }
     setError(null);
     setSending(true);
-    const result = await sendJson("POST", `/api/requests/${requestId}/messages`, { body });
+    const result = await sendJson("POST", apiUrl, { body });
     setSending(false);
     if (!result.ok) {
       setError(result.fieldErrors?.body ?? result.error ?? "Something went wrong. Please try again.");
@@ -134,7 +144,7 @@ export function Conversation({ requestId, opening, initialMessages, initialCanSe
         tabIndex={0}
         className="max-h-[60vh] min-h-64 space-y-5 overflow-y-auto bg-ink-50 px-4 py-5 outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset sm:px-6"
       >
-        <Bubble message={opening} label="Original request" />
+        <Bubble message={opening} label={openingLabel} />
         {messages.map((message) => (
           <Bubble key={message.id} message={message} />
         ))}
@@ -188,7 +198,7 @@ export function Conversation({ requestId, opening, initialMessages, initialCanSe
         ) : (
           <div className="flex gap-3 rounded-lg border border-dashed border-ink-300 bg-ink-50 p-4 text-sm text-muted-foreground">
             <Lock className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-            <p>This request is completed, so the conversation is closed. You can still read every message here.</p>
+            <p>{closedText}</p>
           </div>
         )}
       </div>

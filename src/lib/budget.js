@@ -13,6 +13,11 @@ export function firstYearTotal(items, field = "estimatedAed") {
   return items.reduce((sum, item) => (item[field] == null ? sum : sum + firstYearCost(item[field], item.recurrence)), 0);
 }
 
+/** Plain sum of one amount field, as entered. Used for what was actually paid, which is not repeated per month. */
+export function sumAmounts(items, field = "actualAed") {
+  return items.reduce((sum, item) => sum + (item[field] ?? 0), 0);
+}
+
 /** First-year totals per budget category, for the donut chart. */
 export function totalsByCategory(items, field = "estimatedAed") {
   const totals = {};

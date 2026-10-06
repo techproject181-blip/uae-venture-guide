@@ -44,6 +44,12 @@ export async function POST(request) {
     }
     await LoginAttempt.deleteOne({ email });
     if (user.status === "suspended") {
+      if (user.rejected) {
+        return Response.json(
+          { error: "This account was not approved. Please contact the administrator." },
+          { status: 403 },
+        );
+      }
       return Response.json(
         { error: "This account is suspended. Please contact the administrator." },
         { status: 403 },

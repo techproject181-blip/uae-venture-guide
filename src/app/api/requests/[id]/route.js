@@ -48,3 +48,17 @@ export const PATCH = route(async (request, { params }) => {
   }
   return Response.json({ status: guidance.status });
 });
+
+// DELETE /api/requests/:id
+// The founder withdraws a request the mentor has not answered yet, so they can
+// ask again later or ask someone else.
+export const DELETE = route(async (_request, { params }) => {
+  const entrepreneur = await requireApiUser("entrepreneur");
+  const { id } = await params;
+  await connectDB();
+  const guidance = await MentorRequest.findOne({ _id: id, entrepreneurId: entrepreneur.id });
+  if (!guidance) throw new ApiError(404, "Request not found.");
+  if (guidance.status !== "pending") throw new ApiError(400, `This request is already ${guidance.status}, so it cannot be withdrawn.`);
+  await guidance.deleteOne();
+  return Response.json({ ok: true });
+});

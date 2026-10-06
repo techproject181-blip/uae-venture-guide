@@ -1,4 +1,4 @@
-import { Bot, Check, FileCheck2, Landmark, ListChecks, Users, Wallet } from "lucide-react";
+import { Bot, Check, FileCheck2, Landmark, ListChecks, Send, Users, Wallet } from "lucide-react";
 import { Stamp } from "@/components/stamp";
 import { cn } from "@/lib/utils";
 
@@ -74,25 +74,84 @@ export function Features() {
         </div>
       </Feature>
 
-      <Feature icon={Bot} title="Ask about your plan" text="Questions about your own plan, answered with links to the official sources." className="lg:col-span-2">
-        <div className="space-y-2 text-sm">
-          <p className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-md bg-primary px-3.5 py-2 text-primary-foreground">Which documents do I need?</p>
-          <p className="w-fit max-w-[85%] rounded-2xl rounded-bl-md border bg-card px-3.5 py-2">You still need your tenancy contract…</p>
+      <Feature icon={Bot} title="Chat with your plan" text="Ask anything about your own plan. Every answer links to the official source it came from." className="lg:col-span-2">
+        {/* A small chat window: who you are talking to, two messages with a source, the assistant typing, and the message box. */}
+        <div className="overflow-hidden rounded-xl border bg-card text-sm shadow-xs">
+          <div className="flex items-center gap-2.5 border-b bg-ink-50/70 px-3.5 py-2.5">
+            <span className="flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground">
+              <Bot className="size-4" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-xs font-semibold">Plan assistant</span>
+              <span className="block truncate text-xs text-muted-foreground">Specialty café · Dubai</span>
+            </span>
+            <span className="flex items-center gap-1 text-xs text-muted-foreground">
+              <span className="size-1.5 rounded-full bg-primary" />
+              Online
+            </span>
+          </div>
+          <div className="space-y-2.5 p-3.5">
+            <p className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-md bg-primary px-3.5 py-2 text-primary-foreground">Which documents do I need for the licence?</p>
+            <div className="max-w-[90%] rounded-2xl rounded-bl-md bg-ink-100 px-3.5 py-2.5">
+              <p>Your passport copy, the initial approval and a registered tenancy contract (Ejari).</p>
+              <span className="mt-2 inline-flex items-center gap-1 rounded-md bg-card px-2 py-0.5 text-xs font-medium text-primary ring-1 ring-border">
+                <Landmark className="size-3" />
+                Dubai Department of Economy
+              </span>
+            </div>
+            <p className="ml-auto w-fit rounded-2xl rounded-br-md bg-primary px-3.5 py-2 text-primary-foreground">And the fee?</p>
+            <span className="flex w-fit gap-1 rounded-2xl rounded-bl-md bg-ink-100 px-3.5 py-3">
+              {[0, 1, 2].map((dot) => (
+                <span key={dot} className="typing-dot size-1.5 rounded-full bg-ink-400" style={{ animationDelay: `${dot * 0.15}s` }} />
+              ))}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 border-t px-3.5 py-2.5">
+            <span className="flex-1 truncate text-muted-foreground">Ask about your plan…</span>
+            <span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+              <Send className="size-3.5" />
+            </span>
+          </div>
         </div>
       </Feature>
 
       <Feature icon={Users} title="Mentors and funders" text="Ask a checked mentor for guidance, and share a summary with funders when you are ready.">
-        <div className="flex items-center">
-          {["FA", "OS", "DO", "LH"].map((initials, index) => (
-            <span
-              key={initials}
-              className={cn("-ml-2 flex size-9 items-center justify-center rounded-full border-2 border-card text-xs font-bold first:ml-0", index % 2 ? "bg-gold-100 text-gold-800" : "bg-accent text-accent-foreground")}
-            >
-              {initials}
-            </span>
+        {/* Who helps you: two mentors (one has accepted and replied) and a funder who sent interest. */}
+        <ul className="divide-y overflow-hidden rounded-xl border bg-card text-sm shadow-xs">
+          {[
+            { initials: "OS", name: "Omar Saeed", role: "Mentor · Food and drink", status: "Accepted", tone: "brand" },
+            { initials: "FA", name: "Fatima Al Nuaimi", role: "Mentor · Marketing", status: "Pending", tone: "brand" },
+            { initials: "LH", name: "Layla Haddad", role: "Funder · Angel investor", status: "Interested", tone: "gold" },
+          ].map((person) => (
+            <li key={person.name} className="flex items-center gap-3 px-3.5 py-3">
+              <span
+                className={cn(
+                  "flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-bold",
+                  person.tone === "gold" ? "bg-gold-100 text-gold-800" : "bg-accent text-accent-foreground",
+                )}
+              >
+                {person.initials}
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate font-medium">{person.name}</span>
+                <span className="block truncate text-xs text-muted-foreground">{person.role}</span>
+              </span>
+              <span
+                className={cn(
+                  "shrink-0 rounded-full px-2 py-0.5 text-xs font-medium",
+                  person.status === "Pending" ? "bg-ink-100 text-muted-foreground" : person.tone === "gold" ? "bg-gold-100 text-gold-800" : "bg-accent text-primary",
+                )}
+              >
+                {person.status}
+              </span>
+            </li>
           ))}
-          <span className="ml-3 text-sm text-muted-foreground">approved by an administrator</span>
+        </ul>
+        <div className="mt-3 rounded-xl rounded-tl-md border bg-ink-50/70 px-3.5 py-2.5 text-sm">
+          <span className="block text-xs font-semibold text-primary">Omar replied</span>
+          <span className="text-muted-foreground">Take the small shop by the gate and keep the rest as reserve.</span>
         </div>
+        <p className="mt-3 text-xs text-muted-foreground">Every mentor and funder is approved by an administrator.</p>
       </Feature>
     </ul>
   );

@@ -4,6 +4,7 @@ import { CardGrid } from "@/components/layout";
 import { EmptyState, PageHeader } from "@/components/page-header";
 import { PostCard } from "@/components/posts/post-card";
 import { StatusBadge } from "@/components/status-badge";
+import { DeleteButton } from "@/components/delete-button";
 import { buttonVariants } from "@/components/ui/button";
 import { toPlain } from "@/lib/api";
 import { connectDB } from "@/lib/db";
@@ -37,11 +38,14 @@ export default async function MyPostsPage() {
                 post={post}
                 badge={post.status === "hidden" && <StatusBadge status="hidden" label="Hidden by administrator" />}
                 actions={
-                  <Link href={`/my-posts/${post._id}/edit`} className={buttonVariants({ variant: "ghost", size: "lg", className: "-my-2 px-3 text-sm text-muted-foreground" })}>
-                    <Pencil aria-hidden="true" />
-                    Edit
-                    <span className="sr-only">{post.title}</span>
-                  </Link>
+                  <div className="-my-2 flex items-center gap-1">
+                    <Link href={`/my-posts/${post._id}/edit`} className={buttonVariants({ variant: "ghost", size: "lg", className: "px-3 text-sm text-muted-foreground" })}>
+                      <Pencil aria-hidden="true" />
+                      Edit
+                      <span className="sr-only">{post.title}</span>
+                    </Link>
+                    <DeleteButton url={`/api/posts/${post._id}`} confirmText={`“${post.title}” is deleted for good.`} doneText="Post deleted." size="default" />
+                  </div>
                 }
               />
             </li>

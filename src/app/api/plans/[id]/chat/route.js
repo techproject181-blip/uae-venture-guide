@@ -1,4 +1,4 @@
-import { readBody, requireApiUser, route } from "@/lib/api";
+import { ApiError, readBody, requireApiUser, route } from "@/lib/api";
 import { answerQuestion } from "@/lib/chat/answer";
 import { findOwnPlan } from "@/lib/plans";
 import { consumeQuota } from "@/lib/quota";
@@ -12,6 +12,8 @@ export const POST = route(async (request, { params }) => {
   const { id } = await params;
   const { message } = await readBody(request, chatSchema);
   const plan = await findOwnPlan(id, user);
+  // There is nothing to answer from until the roadmap is made.
+  if (plan.status !== "ready") throw new ApiError(409, "The roadmap is not ready yet.");
   await consumeQuota(user.id, "chatMessages"); // counts against the daily limit, or answers 429
 
   await ChatMessage.create({ planId: plan._id, role: "user", content: message });

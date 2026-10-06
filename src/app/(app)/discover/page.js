@@ -9,6 +9,7 @@ import { toPlain } from "@/lib/api";
 import { EMIRATES, SECTORS, valuesOf } from "@/lib/constants";
 import { listPitchCards } from "@/lib/funding";
 import { requireUser } from "@/lib/guards";
+import { FunderProfile } from "@/models/FunderProfile";
 import { FundingInterest } from "@/models/FundingInterest";
 
 export const metadata = { title: "Discover" };
@@ -26,8 +27,11 @@ export default async function DiscoverPage({ searchParams }) {
   const emirate = valuesOf(EMIRATES).includes(params.emirate) ? params.emirate : "";
 
   const cards = toPlain(await listPitchCards({ sector, emirate }));
-  const sent = await FundingInterest.find({ funderId: user.id, planId: { $in: cards.map((c) => c._id) } }).select("planId status").lean();
-  const statusByPlan = new Map(sent.map((interest) => [String(interest.planId), interest.status]));
+  const [sent, hasProfile] = await Promise.all([
+    FundingInterest.find({ funderId: user.id, planId: { $in: cards.map((c) => c._id) } }).select("planId status").lean(),
+    FunderProfile.exists({ userId: user.id }),
+  ]);
+  const interestByPlan = new Map(sent.map((interest) => [String(interest.planId), interest]));
   const filtered = Boolean(sector || emirate);
 
   return (
@@ -66,6 +70,16 @@ export default async function DiscoverPage({ searchParams }) {
         </Button>
       </form>
 
+      {/* Owners decide on interest from the funder's profile, so one is needed first. */}
+      {!hasProfile && (
+        <p role="status" className="panel mb-6 p-4 text-sm sm:p-5">
+          You need a funder profile before you can send interest.{" "}
+          <Link href="/profile" className={linkClass}>
+            Set up your profile
+          </Link>
+        </p>
+      )}
+
       {cards.length === 0 ? (
         <EmptyState
           title={filtered ? "No plans match" : "No shared plans yet"}
@@ -92,15 +106,31 @@ export default async function DiscoverPage({ searchParams }) {
           </div>
           <CardGrid cols={2} className="grid-cols-1 [&>li>article]:h-full">
             {cards.map((card) => {
-              const status = statusByPlan.get(card._id);
+              const interest = interestByPlan.get(String(card._id));
+              const status = interest?.status;
               return (
                 <li key={card._id}>
                   <PitchCard card={card}>
                     {status ? (
-                      <p className="flex flex-wrap items-center gap-3 text-sm">
-                        Your interest
-                        <StatusBadge status={status} />
-                      </p>
+                      <div className="space-y-3">
+                        <p className="flex flex-wrap items-center gap-3 text-sm">
+                          Your interest
+                          <StatusBadge status={status} />
+                        </p>
+                        {status === "accepted" && (
+                          <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+                            <Link href={`/plans/${card._id}`} className={linkClass}>
+                              Read the full plan
+                            </Link>
+                            <Link href={`/interests/${interest._id}`} className={linkClass}>
+                              Message the owner
+                            </Link>
+                          </div>
+                        )}
+                        {status === "declined" && (
+                          <p className="text-sm text-muted-foreground">The owner declined. You cannot send interest in this plan again.</p>
+                        )}
+                      </div>
                     ) : (
                       <InterestForm planId={card._id} />
                     )}

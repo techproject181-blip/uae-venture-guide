@@ -721,3 +721,25 @@ select:not([multiple]) {
   background-size: 1.125rem;
   background-repeat: no-repeat;
 }
+
+/* The three dots of someone typing in a chat. */
+@keyframes typing {
+  0%,
+  60%,
+  100% {
+    opacity: 0.35;
+    translate: 0 0;
+  }
+  30% {
+    opacity: 1;
+    translate: 0 -3px;
+  }
+}
+.typing-dot {
+  animation: typing 1.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .typing-dot {
+    animation: none;
+  }
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { ExternalLink } from "lucide-react";
 import { toast } from "sonner";
@@ -10,18 +10,26 @@ import { cn } from "@/lib/utils";
 /** One document in the checklist. The owner ticks it off once they have it. */
 export function DocumentRow({ planId, document, source, canEdit }) {
   const router = useRouter();
-  const [saving, setSaving] = useState(false);
+  // The tick the owner just made, shown until the saved plan comes back.
+  const [pending, setPending] = useState(null);
+  const [, startTransition] = useTransition();
+  const obtained = pending ?? document.obtained;
   const id = `doc-${document._id}`;
 
   async function toggle(event) {
-    setSaving(true);
-    const result = await sendJson("PATCH", `/api/plans/${planId}/documents/${document._id}`, { obtained: event.target.checked });
-    setSaving(false);
+    const next = event.target.checked;
+    setPending(next);
+    const result = await sendJson("PATCH", `/api/plans/${planId}/documents/${document._id}`, { obtained: next });
     if (!result.ok) {
+      setPending(null);
       toast.error(result.error ?? "Something went wrong. Please try again.");
       return;
     }
-    router.refresh();
+    // Load the saved plan and drop the local copy in one step, so nothing flickers.
+    startTransition(() => {
+      router.refresh();
+      setPending(null);
+    });
   }
 
   return (
@@ -31,13 +39,13 @@ export function DocumentRow({ planId, document, source, canEdit }) {
         <input
           id={id}
           type="checkbox"
-          checked={document.obtained}
+          checked={obtained}
           onChange={toggle}
-          disabled={!canEdit || saving}
+          disabled={!canEdit || pending !== null}
           aria-describedby={`${id}-text`}
           className="size-5 shrink-0 cursor-pointer accent-primary disabled:cursor-default"
         />
-        <span className={cn("font-medium", document.obtained && "text-muted-foreground line-through")}>{document.name}</span>
+        <span className={cn("font-medium", obtained && "text-muted-foreground line-through")}>{document.name}</span>
       </label>
       <div className="-mt-1.5 pl-9">
         <p id={`${id}-text`} className="max-w-2xl text-sm text-muted-foreground">

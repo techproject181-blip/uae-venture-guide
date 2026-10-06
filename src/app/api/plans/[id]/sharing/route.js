@@ -1,4 +1,4 @@
-import { readBody, requireApiUser, route } from "@/lib/api";
+import { ApiError, readBody, requireApiUser, route } from "@/lib/api";
 import { findOwnPlan } from "@/lib/plans";
 import { sharingSchema } from "@/lib/schemas/community";
 
@@ -10,9 +10,13 @@ export const PATCH = route(async (request, { params }) => {
   const { id } = await params;
   const { shared, pitchSummary } = await readBody(request, sharingSchema);
   const plan = await findOwnPlan(id, user);
+  // A plan without a finished roadmap has nothing to show funders.
+  if (plan.status !== "ready") throw new ApiError(400, "Only a finished roadmap can be shared.");
 
   plan.shared = shared;
-  if (pitchSummary !== undefined) plan.pitchSummary = pitchSummary;
+  // The form always sends the summary, and an empty box comes through as
+  // undefined, so a missing value means the owner cleared it.
+  plan.pitchSummary = pitchSummary ?? "";
   await plan.save();
   return Response.json({ shared: plan.shared });
 });

@@ -85,7 +85,7 @@ export default async function RequestConversationPage({ params }) {
             />
             <p className="mt-5 text-sm text-muted-foreground">
               {canSend
-                ? "Talk here instead of by email: every message is saved for both of you."
+                ? "Every message is saved here for both of you."
                 : "The request is completed. The conversation stays here to read."}
             </p>
           </Panel>

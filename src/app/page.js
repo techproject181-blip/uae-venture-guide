@@ -30,6 +30,10 @@ const QUESTIONS = [
     a: "People with experience of starting businesses in the UAE. An administrator approves every mentor before they appear. Once a mentor accepts your request, you talk with them in a conversation on the website.",
   },
   {
+    q: "Which emirates are covered?",
+    a: "All seven, on the mainland or in a free zone. Official fee sources so far cover Federal, Abu Dhabi, Dubai, Sharjah and Ras Al Khaimah. Other costs are marked as estimates.",
+  },
+  {
     q: "Who can see my plan?",
     a: "Only you. A mentor can read it while they are guiding you, and a funder only after you accept their interest. You can stop sharing at any time.",
   },
@@ -40,7 +44,7 @@ const linkClass = "font-medium text-foreground underline decoration-primary unde
 /** A section heading, centred, with a short line under it. */
 function SectionIntro({ id, title, text }) {
   return (
-    <div className="reveal mx-auto mb-10 max-w-2xl text-center lg:mb-12">
+    <div className="reveal mx-auto mb-8 max-w-2xl text-center lg:mb-10">
       <h2 id={id} className="font-display text-[2rem] leading-tight font-bold tracking-[-0.03em] sm:text-[2.5rem]">
         {title}
       </h2>
@@ -60,7 +64,7 @@ export default function HomePage() {
             aria-hidden="true"
             className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_1px_1px,color-mix(in_srgb,var(--ink-900)_7%,transparent)_1px,transparent_0)] bg-size-[24px_24px] mask-[linear-gradient(to_bottom,black,transparent_85%)]"
           />
-          <div className="page-width grid items-center gap-16 py-16 sm:py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-12 lg:py-24 xl:gap-20">
+          <div className="page-width grid items-center gap-12 py-12 sm:py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-12 lg:py-20 xl:gap-20">
             <div className="intro text-center lg:text-left">
               <p className="mx-auto inline-flex items-center gap-2 rounded-full border bg-card px-3.5 py-1.5 text-sm font-medium shadow-xs lg:mx-0">
                 <span className="relative flex size-2">
@@ -116,13 +120,13 @@ export default function HomePage() {
         </section>
 
         {/* Features */}
-        <section aria-labelledby="features-title" className="page-width py-16 sm:py-20 lg:py-24">
+        <section aria-labelledby="features-title" className="page-width py-12 sm:py-14 lg:py-16">
           <SectionIntro id="features-title" title="Everything a first business needs, in one place" text="One plan holds your steps, costs, documents and questions, so you always know what comes next." />
           <Features />
         </section>
 
         {/* How it works */}
-        <section aria-labelledby="how-title" className="border-y bg-card py-16 sm:py-20 lg:py-24">
+        <section aria-labelledby="how-title" className="border-y bg-card py-12 sm:py-14 lg:py-16">
           <div className="page-width">
             <SectionIntro id="how-title" title="How it works" text="Three steps from idea to a plan you can follow." />
             <ol className="relative grid gap-10 md:grid-cols-3 md:gap-8">
@@ -141,15 +145,14 @@ export default function HomePage() {
         </section>
 
         {/* Who it is for */}
-        <section aria-labelledby="roles-title" className="page-width py-16 sm:py-20 lg:py-24">
-          <SectionIntro id="roles-title" title="Made for founders, mentors and funders" text="Mentors and funders are approved by an administrator first." />
-          <RoleTabs />
+        <section aria-labelledby="roles-title" className="page-width py-12 sm:py-14 lg:py-16">
+          <RoleTabs titleId="roles-title" />
         </section>
 
         {/* Questions */}
-        <section aria-labelledby="faq-title" className="border-t bg-card py-16 sm:py-20 lg:py-24">
-          <div className="page-width grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-16">
-            <div className="reveal text-center lg:text-left">
+        <section aria-labelledby="faq-title" className="border-t bg-card py-12 sm:py-14 lg:py-16">
+          <div className="page-width">
+            <div className="reveal mx-auto mb-8 max-w-2xl text-center lg:mb-10">
               <h2 id="faq-title" className="font-display text-[2rem] leading-tight font-bold tracking-[-0.03em] sm:text-[2.5rem]">
                 Questions
               </h2>
@@ -165,9 +168,9 @@ export default function HomePage() {
                 .
               </p>
             </div>
-            <div className="divide-y rounded-2xl border">
+            <div className="grid items-start gap-4 md:grid-cols-2">
               {QUESTIONS.map(({ q, a }) => (
-                <details key={q} className="group px-5 sm:px-6">
+                <details key={q} className="group rounded-2xl border bg-card px-5 transition-shadow open:shadow-panel sm:px-6">
                   <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-semibold outline-none focus-visible:ring-3 focus-visible:ring-ring/50 [&::-webkit-details-marker]:hidden">
                     {q}
                     <ChevronDown className="size-5 shrink-0 text-muted-foreground transition-transform duration-300 group-open:rotate-180" aria-hidden="true" />

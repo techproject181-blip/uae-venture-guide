@@ -35,6 +35,8 @@ export const getCurrentUser = cache(async () => {
   await connectDB();
   const user = await User.findById(session.sub).lean();
   if (!user) return null;
+  // A token issued before the last password change is no longer valid. iat is in seconds; allow 1s slack.
+  if (user.passwordChangedAt && (session.iat ?? 0) * 1000 < user.passwordChangedAt.getTime() - 1000) return null;
 
   return { id: String(user._id), name: user.name, email: user.email, role: user.role, status: user.status };
 });

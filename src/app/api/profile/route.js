@@ -12,12 +12,24 @@ export const PUT = route(async (request) => {
   const isMentor = user.role === "mentor";
   const { name, ...profile } = await readBody(request, isMentor ? mentorProfileSchema : funderProfileSchema);
 
+  // Optional fields left empty are removed. The schema drops them, so a plain
+  // $set would keep the old value.
+  const optionalKeys = isMentor ? ["linkedinUrl"] : [];
+  const set = { userId: user.id };
+  const unset = {};
+  for (const [key, value] of Object.entries(profile)) {
+    if (value === undefined || value === null || value === "") unset[key] = "";
+    else set[key] = value;
+  }
+  for (const key of optionalKeys) if (!(key in set)) unset[key] = "";
+  const update = Object.keys(unset).length > 0 ? { $set: set, $unset: unset } : { $set: set };
+
   await connectDB();
   const Profile = isMentor ? MentorProfile : FunderProfile;
   await Promise.all([
     User.updateOne({ _id: user.id }, { $set: { name } }),
     // upsert: the first save creates the profile.
-    Profile.updateOne({ userId: user.id }, { $set: { ...profile, userId: user.id } }, { upsert: true, runValidators: true }),
+    Profile.updateOne({ userId: user.id }, update, { upsert: true, runValidators: true }),
   ]);
   return Response.json({ ok: true });
 });

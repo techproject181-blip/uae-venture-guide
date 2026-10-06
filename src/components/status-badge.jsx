@@ -17,6 +17,7 @@ const TONE = {
   failed: "stopped",
   hidden: "stopped",
   todo: "quiet",
+  info: "quiet",
 };
 
 const LABELS = {
