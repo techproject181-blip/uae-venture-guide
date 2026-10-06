@@ -136,7 +136,7 @@ export default async function AdminUsersPage({ searchParams }) {
                       </div>
                     </td>
                     <td className="hidden md:table-cell">
-                      <span className="rounded-md bg-ink-100 px-2 py-0.5 text-xs font-medium">{ROLE_LABELS[user.role]}</span>
+                      <span className="text-sm text-ink-700">{ROLE_LABELS[user.role]}</span>
                     </td>
                     <td className="hidden md:table-cell">
                       <StatusBadge status={user.status} />

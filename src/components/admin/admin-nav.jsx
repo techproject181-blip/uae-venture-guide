@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, ExternalLink, FileText, Gauge, LayoutDashboard, UserCog, Users } from "lucide-react";
+import { BookOpen, ExternalLink, FileText, Gauge, LayoutDashboard, LogOut, UserRound, Users } from "lucide-react";
+import { Avatar } from "@/components/avatar";
+import { useSignOut } from "@/components/auth/sign-out-button";
 import { cn } from "@/lib/utils";
 
 export const ADMIN_LINKS = [
@@ -11,12 +13,13 @@ export const ADMIN_LINKS = [
   { href: "/admin/sources", label: "Sources and fees", icon: BookOpen },
   { href: "/admin/content", label: "Content", icon: FileText },
   { href: "/admin/usage", label: "AI usage", icon: Gauge },
-  { href: "/account", label: "Account", icon: UserCog },
+  { href: "/account", label: "Profile", icon: UserRound },
 ];
 
 /** The admin sidebar links, with an icon each and the number of accounts waiting for approval next to Users. */
-export function AdminNav({ counts = {}, onNavigate }) {
+export function AdminNav({ counts = {}, user, onNavigate }) {
   const pathname = usePathname();
+  const { signOut, pending } = useSignOut();
 
   return (
     <nav aria-label="Admin" className="flex flex-1 flex-col gap-1">
@@ -48,6 +51,19 @@ export function AdminNav({ counts = {}, onNavigate }) {
       })}
 
       <div className="mt-auto border-t border-on-brand/10 pt-3">
+        {user && (
+          <Link
+            href="/account"
+            onClick={onNavigate}
+            className="mb-2 flex items-center gap-3 rounded-xl bg-on-brand/5 p-2.5 outline-none hover:bg-on-brand/10 focus-visible:ring-3 focus-visible:ring-brand-400/50"
+          >
+            <Avatar name={user.name} className="size-9 bg-brand-300/15 text-xs text-brand-300 ring-0" />
+            <div className="min-w-0 flex-1 text-sm leading-tight">
+              <p className="truncate font-medium text-on-brand">{user.name}</p>
+              <p className="truncate text-ink-400">{user.email}</p>
+            </div>
+          </Link>
+        )}
         <Link
           href="/mentors"
           onClick={onNavigate}
@@ -56,6 +72,15 @@ export function AdminNav({ counts = {}, onNavigate }) {
           <ExternalLink className="size-4.5 text-ink-400" aria-hidden="true" />
           View public pages
         </Link>
+        <button
+          type="button"
+          onClick={signOut}
+          disabled={pending}
+          className="flex min-h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium text-ink-300 outline-none hover:bg-destructive/15 hover:text-on-brand focus-visible:ring-3 focus-visible:ring-brand-400/50 disabled:opacity-60"
+        >
+          <LogOut className="size-4.5 text-ink-400" aria-hidden="true" />
+          {pending ? "Signing out…" : "Sign out"}
+        </button>
       </div>
     </nav>
   );

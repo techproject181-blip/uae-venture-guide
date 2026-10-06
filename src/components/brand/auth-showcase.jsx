@@ -14,7 +14,7 @@ export function AuthShowcase() {
   return (
     <div className="relative hidden overflow-hidden bg-brand-deep text-on-brand lg:flex lg:flex-col lg:justify-between lg:p-12 xl:p-16">
       {/* A soft glow and a faint grid, behind everything. */}
-      <div aria-hidden="true" className="absolute -top-40 -right-40 size-[36rem] rounded-full bg-brand-400/25 blur-3xl" />
+      <div aria-hidden="true" className="absolute -top-40 -right-40 size-144 rounded-full bg-brand-400/25 blur-3xl" />
       <div aria-hidden="true" className="absolute -bottom-48 -left-32 size-120 rounded-full bg-brand-300/10 blur-3xl" />
       <div
         aria-hidden="true"

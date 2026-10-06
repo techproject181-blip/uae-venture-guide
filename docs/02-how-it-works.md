@@ -85,7 +85,7 @@ Funders and plan owners talk the same way, with the same chat box (`src/lib/inte
 
 ## Accounts and the admin console
 
-- Every role can change their name and password on the **Account** page (`/account`). The current password is checked first, with the same 5-try limit as sign-in. Changing or resetting a password signs out every other device.
+- Every role can change their name and password on the **Profile** page (`/account`), opened from the avatar menu in the top bar. The current password is checked first, with the same 5-try limit as sign-in. Changing or resetting a password signs out every other device.
 - A founder can **withdraw** a request a mentor has not answered yet, and a funder can withdraw interest the same way.
 - A mentor can pause new requests with the **Taking new requests** switch on their dashboard.
 - When the administrator rejects a waiting mentor or funder, that person gets an email saying so, and sign-in tells them the account was not approved. A mentor or funder can only be approved after filling in their profile.

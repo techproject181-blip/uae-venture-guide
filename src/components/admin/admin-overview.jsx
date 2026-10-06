@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, BookOpen, FileText, ShieldAlert, UserPlus, Users } from "lucide-react";
+import { ArrowRight, Plus, BookOpen, FileText, ShieldAlert, UserPlus, Users } from "lucide-react";
 import { UserActions } from "@/components/admin/user-actions";
 import { Avatar } from "@/components/avatar";
 import { PageHeader } from "@/components/page-header";
@@ -94,13 +94,14 @@ export async function AdminOverview({ user }) {
         title="Overview"
         description={`Welcome back, ${firstName}. Here is what needs your attention.`}
         actions={
-          <Link href="/admin/sources/new" className={buttonVariants({ variant: "outline", size: "lg" })}>
-            Add a source
+          <Link href="/admin/sources/new" className={buttonVariants({ size: "lg" })}>
+            <Plus aria-hidden="true" />
+            Add source
           </Link>
         }
       />
 
-      <div className="stagger mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="stagger mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Kpi
           icon={UserPlus}
           label="Waiting for approval"
@@ -114,8 +115,8 @@ export async function AdminOverview({ user }) {
         <Kpi icon={FileText} label="Published posts" value={posts} hint={`${plans} plans · ${sharedPlans} shared`} href="/admin/content" />
       </div>
 
-      <div className="grid items-start gap-6 xl:grid-cols-3">
-        <div className="space-y-6 xl:col-span-2">
+      <div className="grid items-start gap-4 xl:grid-cols-3">
+        <div className="space-y-4 xl:col-span-2">
           <Card title="Waiting for approval" action={pending > waiting.length && <CardLink href="/admin/users?status=pending">See all {pending}</CardLink>}>
             {waiting.length === 0 ? (
               <p className="px-5 py-8 text-center text-sm text-muted-foreground">No accounts are waiting. New mentors and funders will appear here.</p>
@@ -171,7 +172,7 @@ export async function AdminOverview({ user }) {
                         </div>
                       </td>
                       <td className="hidden sm:table-cell">
-                        <span className="rounded-md bg-ink-100 px-2 py-0.5 text-xs font-medium">{ROLE_LABELS[account.role]}</span>
+                        <span className="text-sm text-ink-700">{ROLE_LABELS[account.role]}</span>
                       </td>
                       <td>
                         <StatusBadge status={account.status} />
@@ -185,7 +186,7 @@ export async function AdminOverview({ user }) {
           </Card>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4">
           <Card title="Accounts by role">
             <ul className="space-y-3 px-5 py-4">
               {ROLE_ORDER.map((role) => {

@@ -3,6 +3,7 @@ import { AdminShell } from "@/components/admin/admin-shell";
 import { Avatar } from "@/components/avatar";
 import { Logo } from "@/components/logo";
 import { MobileNav } from "@/components/mobile-nav";
+import { UserMenu } from "@/components/user-menu";
 import { NavLinks } from "@/components/nav-links";
 import { SiteFooter } from "@/components/site-footer";
 import { SignOutButton } from "@/components/auth/sign-out-button";
@@ -75,20 +76,9 @@ export async function AppShell({ user, children }) {
           <Logo />
           <NavLinks links={links} className="hidden self-stretch lg:flex" />
           <div className="ml-auto flex shrink-0 items-center gap-3">
-            <Link
-              href="/account"
-              aria-label="Your account"
-              className="hidden items-center gap-2.5 rounded-lg px-1.5 py-1 outline-none hover:bg-ink-50 focus-visible:ring-3 focus-visible:ring-ring/50 lg:flex"
-            >
-              <Avatar name={user.name} className="size-9 text-xs" />
-              <p className="hidden text-sm leading-tight xl:block">
-                <span className="block font-medium">{user.name}</span>
-                <span className="text-muted-foreground">{ROLE_LABELS[user.role]}</span>
-              </p>
-            </Link>
-            <SignOutButton className="hidden lg:inline-flex" />
+            <UserMenu name={user.name} email={user.email} role={ROLE_LABELS[user.role]} className="hidden lg:flex" />
             {/* Phones and tablets: the links and the account in a side panel. */}
-            <MobileNav links={[...links, { href: "/account", label: "Account" }]}>
+            <MobileNav links={[...links, { href: "/account", label: "Profile" }]}>
               <div className="flex items-center gap-3">
                 <Avatar name={user.name} className="size-10 text-xs" />
                 <p className="min-w-0 text-sm leading-tight">
