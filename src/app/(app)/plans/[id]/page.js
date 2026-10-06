@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { Fields } from "@/components/document";
 import { Panel, Split } from "@/components/layout";
-import { AdviceNotice, Cost, FactRows } from "@/components/plans/plan-bits";
+import { Cost, FactRows } from "@/components/plans/plan-bits";
 import { PlanActions } from "@/components/plans/plan-actions";
 import { buttonVariants } from "@/components/ui/button";
 import { firstYearTotal, remainingBudget } from "@/lib/budget";
@@ -25,9 +25,12 @@ export default async function PlanOverviewPage({ params }) {
   const { plan, isOwner } = found;
 
   const settings = isOwner && (
-    <Panel title="Plan settings" description="New version builds a fresh roadmap from the same answers and keeps this one.">
+    <Panel
+      title="Plan settings"
+      description={plan.status === "failed" ? "Try again builds the roadmap once more from the same answers." : "New version builds a fresh roadmap from the same answers and keeps this one."}
+    >
       <div className="flex flex-wrap gap-3">
-        <PlanActions planId={plan._id} />
+        <PlanActions planId={plan._id} failed={plan.status === "failed"} />
       </div>
     </Panel>
   );
@@ -174,7 +177,6 @@ export default async function PlanOverviewPage({ params }) {
         />
       </Panel>
 
-      <AdviceNotice />
     </Split>
   );
 }

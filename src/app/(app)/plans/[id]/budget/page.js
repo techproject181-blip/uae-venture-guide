@@ -4,7 +4,7 @@ import { BudgetCharts } from "@/components/plans/budget-charts";
 import { BudgetItemForm } from "@/components/plans/budget-item-form";
 import { BudgetItemRow } from "@/components/plans/budget-item-row";
 import { FeeLegend, feeMarks } from "@/components/plans/plan-bits";
-import { firstYearTotal, remainingBudget, totalsByCategory } from "@/lib/budget";
+import { firstYearTotal, remainingBudget, sumAmounts, totalsByCategory } from "@/lib/budget";
 import { BUDGET_CATEGORIES } from "@/lib/constants";
 import { formatAed } from "@/lib/format";
 import { requireUser } from "@/lib/guards";
@@ -21,13 +21,14 @@ export default async function PlanBudgetPage({ params }) {
   const items = plan.budgetItems;
 
   const estimated = firstYearTotal(items, "estimatedAed");
-  const actual = firstYearTotal(items, "actualAed");
+  // Paid amounts are what was really paid, so they are not multiplied by 12.
+  const actual = sumAmounts(items, "actualAed");
   const remaining = remainingBudget(plan.budgetAed, items);
   const estimatedByCategory = totalsByCategory(items, "estimatedAed");
   const actualByCategory = totalsByCategory(items, "actualAed");
-  const chartRows = BUDGET_CATEGORIES.filter((c) => estimatedByCategory[c.value] > 0).map((c) => ({
+  const chartRows = BUDGET_CATEGORIES.filter((c) => estimatedByCategory[c.value] > 0 || actualByCategory[c.value] > 0).map((c) => ({
     label: c.label,
-    estimated: estimatedByCategory[c.value],
+    estimated: estimatedByCategory[c.value] ?? 0,
     actual: actualByCategory[c.value] ?? 0,
   }));
   const columns = isOwner ? 6 : 5;

@@ -27,8 +27,8 @@ export function PostChart({ chart }) {
       <div className="sr-only">
         <table>
           <tbody>
-            {data.map((row) => (
-              <tr key={row.label}>
+            {data.map((row, index) => (
+              <tr key={`${index}-${row.label}`}>
                 <th scope="row">{row.label}</th>
                 <td>{row.value}</td>
               </tr>

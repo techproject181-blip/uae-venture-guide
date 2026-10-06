@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { ChatPanel } from "@/components/chat/chat-panel";
 import { Panel, Split } from "@/components/layout";
-import { AdviceNotice } from "@/components/plans/plan-bits";
 import { toPlain } from "@/lib/api";
 import { connectDB } from "@/lib/db";
 import { requireUser } from "@/lib/guards";
@@ -43,7 +42,6 @@ export default async function PlanChatPage({ params }) {
           ))}
         </ul>
       </Panel>
-      <AdviceNotice />
     </>
   );
 

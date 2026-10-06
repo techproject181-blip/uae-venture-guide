@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { MessagesSquare } from "lucide-react";
+import { MessagesSquare, Undo2 } from "lucide-react";
 import { Fields } from "@/components/document";
 import { Panel, Stack } from "@/components/layout";
 import { EmptyState, PageHeader } from "@/components/page-header";
 import { InterestList } from "@/components/requests/interest-list";
 import { RequestActions } from "@/components/requests/request-actions";
 import { StatusBadge } from "@/components/status-badge";
+import { DeleteButton } from "@/components/delete-button";
 import { buttonVariants } from "@/components/ui/button";
 import { toPlain } from "@/lib/api";
 import { connectDB } from "@/lib/db";
@@ -78,6 +79,13 @@ export default async function RequestsPage() {
           </Panel>
         )}
         {list}
+        {!isMentor && !showInterests && (
+          <Panel title="Funder interest in your plans">
+            <p className="text-sm text-muted-foreground">
+              No funder interest yet. Open a plan and choose <span className="font-medium text-foreground">Share with funders</span> so funders can find it.
+            </p>
+          </Panel>
+        )}
       </Stack>
     </>
   );
@@ -127,6 +135,18 @@ function RequestEntry({ request, isMentor }) {
             },
           ]}
         />
+      )}
+
+      {!isMentor && request.status === "pending" && (
+        <div className="mt-5">
+          <DeleteButton
+            url={`/api/requests/${request._id}`}
+            label="Withdraw request"
+            confirmText="The mentor will no longer see it. You can send a new request later."
+            doneText="Request withdrawn."
+            icon={Undo2}
+          />
+        </div>
       )}
 
       {hasChat && (

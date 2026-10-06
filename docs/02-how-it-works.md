@@ -81,6 +81,17 @@ The rules are in `src/lib/messages.js`.
 - The page asks the server for new messages every 4 seconds (polling). It does not keep a live connection, because the host (Vercel) does not allow that.
 - One person can send at most 30 messages a minute.
 
+Funders and plan owners talk the same way, with the same chat box (`src/lib/interest-messages.js`, model `InterestMessage`). Their conversation opens when the owner **accepts** the funder's interest, and closes when the plan stops being shared. Nobody's email address is shown to the other person.
+
+## Accounts and the admin console
+
+- Every role can change their name and password on the **Account** page (`/account`). The current password is checked first, with the same 5-try limit as sign-in. Changing or resetting a password signs out every other device.
+- A founder can **withdraw** a request a mentor has not answered yet, and a funder can withdraw interest the same way.
+- A mentor can pause new requests with the **Taking new requests** switch on their dashboard.
+- When the administrator rejects a waiting mentor or funder, that person gets an email saying so, and sign-in tells them the account was not approved. A mentor or funder can only be approved after filling in their profile.
+- List pages and dashboards show grey placeholder shapes while their data loads (`src/components/loaders/page-skeleton.jsx`). Each loading file sits in a folder of its own, such as `plans/(list)/`, so it never covers a page that can answer "not found".
+- The administrator gets a separate console (`src/components/admin/admin-shell.jsx`): a sidebar with Overview, Users, Sources and fees, Content, AI usage and Account, and the number of accounts waiting for approval next to Users. The users list can be searched by name or email.
+
 ## Security
 
 - Passwords are stored only as bcrypt hashes.

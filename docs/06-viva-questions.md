@@ -60,7 +60,7 @@ Vercel's serverless functions do not keep long connections open, so WebSockets w
 The route src/app/api/plans/[id]/report/route.js checks the user can read the plan, then renders a React component (src/lib/report/plan-report.jsx) to a PDF with @react-pdf/renderer. The file is created on the server and downloaded.
 
 **18. How are emails sent?**
-src/lib/email.js uses Nodemailer over SMTP. Emails go out for password reset, account approval, mentor requests and funder interest. Without SMTP settings, the email is printed in the terminal so the flows still work in development.
+src/lib/email.js uses Nodemailer over SMTP. Emails go out for password reset, account approval, mentor requests and funder interest. They are only notices: the actual conversations happen on the website. Without SMTP settings, the email is printed in the terminal so the flows still work in development.
 
 ## Database
 

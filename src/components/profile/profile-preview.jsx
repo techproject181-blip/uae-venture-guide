@@ -13,7 +13,7 @@ const WHO_SEES = {
   funder: [
     "The administrator reads it before approving your account.",
     "When you tell an owner a plan interests you, they see your name, organisation, type of funder, investment range and sectors.",
-    "Your email address is shared with an owner only after they accept your interest.",
+    "Once they accept, you can read the full plan and message the owner here.",
   ],
 };
 

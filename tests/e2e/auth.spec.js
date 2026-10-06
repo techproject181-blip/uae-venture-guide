@@ -7,6 +7,9 @@ test("an entrepreneur signs up, signs out and signs in again", async ({ page }) 
   const { email } = await signUp(page, "entrepreneur");
   await expectAccessible(page);
 
+  // Below 1024px, sign out sits in the side menu.
+  const menu = page.getByRole("button", { name: "Open menu" });
+  if (await menu.isVisible()) await menu.click();
   await page.getByRole("button", { name: "Sign out" }).click();
   await page.waitForURL((url) => url.pathname === "/");
   await expectAccessible(page);

@@ -24,7 +24,7 @@ export async function listPitchCards({ sector, emirate } = {}) {
 /** One plan as a pitch card, or null when it is not shared. */
 export async function getPitchCard(planId) {
   await connectDB();
-  const plan = await Plan.findOne({ _id: planId, shared: true, hiddenByAdmin: false }).select(PITCH_FIELDS).lean().catch(() => null);
+  const plan = await Plan.findOne({ _id: planId, status: "ready", shared: true, hiddenByAdmin: false }).select(PITCH_FIELDS).lean().catch(() => null);
   return plan && toPitchCard(plan);
 }
 
@@ -37,7 +37,7 @@ export async function listInterestsForOwner(ownerId) {
   await connectDB();
   const planIds = await Plan.find({ ownerId }).distinct("_id");
   const interests = await FundingInterest.find({ planId: { $in: planIds } })
-    .populate("funderId", "name email")
+    .populate("funderId", "name")
     .populate("planId", "title")
     .sort({ createdAt: -1 })
     .lean();
@@ -50,7 +50,7 @@ export async function listInterestsForOwner(ownerId) {
 export async function listInterestsForFunder(funderId) {
   await connectDB();
   return FundingInterest.find({ funderId })
-    .populate({ path: "planId", select: "title shared hiddenByAdmin ownerId", populate: { path: "ownerId", select: "name email" } })
+    .populate({ path: "planId", select: "title shared hiddenByAdmin ownerId", populate: { path: "ownerId", select: "name" } })
     .sort({ createdAt: -1 })
     .lean();
 }

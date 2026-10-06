@@ -132,7 +132,7 @@ export function ChatPanel({ planId, messages, sources, left, title = "Ask about 
             <span className="sr-only sm:not-sr-only">Send</span>
           </Button>
         </form>
-        <p className="mt-3 text-sm text-muted-foreground">{left} questions left today. Answers are guidance, not legal or financial advice.</p>
+        <p className="mt-3 text-sm text-muted-foreground">{left} questions left today.</p>
       </div>
     </section>
   );

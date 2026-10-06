@@ -18,7 +18,7 @@ export function RequestActions({ requestId, status }) {
 
   async function act(action) {
     if (action === "complete" && !(await confirm({ title: "Mark as completed?", description: "The founder's plan is no longer shared with you, and the conversation becomes read-only.", confirmLabel: "Mark completed" }))) return;
-    setPending(true);
+    setPending(action);
     const result = await sendJson("PATCH", `/api/requests/${requestId}`, { action, reply: reply.trim() || undefined });
     setPending(false);
     if (!result.ok) {
@@ -31,8 +31,8 @@ export function RequestActions({ requestId, status }) {
 
   if (status === "accepted") {
     return (
-      <Button variant="outline" size="lg" onClick={() => act("complete")} disabled={pending}>
-        Mark as completed
+      <Button variant="outline" size="lg" onClick={() => act("complete")} disabled={Boolean(pending)}>
+        {pending === "complete" ? "Saving…" : "Mark as completed"}
       </Button>
     );
   }
@@ -53,11 +53,11 @@ export function RequestActions({ requestId, status }) {
         />
       </div>
       <div className="flex flex-wrap gap-2">
-        <Button size="lg" onClick={() => act("accept")} disabled={pending}>
-          Accept
+        <Button size="lg" onClick={() => act("accept")} disabled={Boolean(pending)}>
+          {pending === "accept" ? "Saving…" : "Accept"}
         </Button>
-        <Button variant="destructive" size="lg" onClick={() => act("decline")} disabled={pending}>
-          Decline
+        <Button variant="destructive" size="lg" onClick={() => act("decline")} disabled={Boolean(pending)}>
+          {pending === "decline" ? "Saving…" : "Decline"}
         </Button>
       </div>
     </div>

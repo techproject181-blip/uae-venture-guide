@@ -1,48 +1,48 @@
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { ExternalLink } from 'lucide-react'
-import { Avatar } from '@/components/avatar'
-import { BackLink, ListPanel, Panel, Split } from '@/components/layout'
-import { Chips } from '@/components/mentors/chips'
-import { RequestForm } from '@/components/mentors/request-form'
-import { StatusBadge } from '@/components/status-badge'
-import { buttonVariants } from '@/components/ui/button'
-import { toPlain } from '@/lib/api'
-import { getMentor } from '@/lib/community'
-import { EMIRATES, EXPERTISE, SECTORS, labelOf } from '@/lib/constants'
-import { formatDate } from '@/lib/format'
-import { getCurrentUser } from '@/lib/session'
-import { Plan } from '@/models/Plan'
-import { Post } from '@/models/Post'
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ExternalLink } from "lucide-react";
+import { Avatar } from "@/components/avatar";
+import { BackLink, ListPanel, Panel, Split } from "@/components/layout";
+import { Chips } from "@/components/mentors/chips";
+import { RequestForm } from "@/components/mentors/request-form";
+import { StatusBadge } from "@/components/status-badge";
+import { buttonVariants } from "@/components/ui/button";
+import { toPlain } from "@/lib/api";
+import { getMentor } from "@/lib/community";
+import { EMIRATES, EXPERTISE, SECTORS, labelOf } from "@/lib/constants";
+import { formatDate } from "@/lib/format";
+import { getCurrentUser } from "@/lib/session";
+import { Plan } from "@/models/Plan";
+import { Post } from "@/models/Post";
 
-export const metadata = { title: 'Mentor' }
+export const metadata = { title: "Mentor" };
 
 const STEPS = [
-  'You send a short request: what you need help with, and one of your plans if you like.',
-  'The mentor gets an email and accepts or declines it.',
-  'Once accepted, you talk in a conversation saved here on the website. The mentor can read the plan you attached until the request is completed.',
-]
+  "You send a short request: what you need help with, and one of your plans if you like.",
+  "The mentor is notified and accepts or declines it.",
+  "Once accepted, you talk in a conversation saved here on the website. The mentor can read the plan you attached until the request is completed.",
+];
 
 export default async function MentorPage({ params }) {
-  const { id } = await params
-  const mentor = await getMentor(id)
-  if (!mentor) notFound()
+  const { id } = await params;
+  const mentor = await getMentor(id);
+  if (!mentor) notFound();
 
-  const viewer = await getCurrentUser()
-  const canAsk = viewer?.role === 'entrepreneur' && viewer.status === 'active'
+  const viewer = await getCurrentUser();
+  const canAsk = viewer?.role === "entrepreneur" && viewer.status === "active";
   const [plans, posts] = await Promise.all([
-    canAsk ? Plan.find({ ownerId: viewer.id }).select('title').sort({ updatedAt: -1 }).lean() : [],
-    Post.find({ authorId: id, status: 'published' }).select('title createdAt').sort({ createdAt: -1 }).limit(5).lean(),
-  ])
+    canAsk ? Plan.find({ ownerId: viewer.id, status: "ready" }).select("title").sort({ updatedAt: -1 }).lean() : [],
+    Post.find({ authorId: id, status: "published" }).select("title createdAt").sort({ createdAt: -1 }).limit(5).lean(),
+  ]);
 
-  const firstName = mentor.name.split(' ')[0]
+  const firstName = mentor.name.split(" ")[0];
 
   const facts = [
-    { label: 'Can help with', value: <Chips items={mentor.expertise.map((a) => labelOf(EXPERTISE, a))} /> },
-    mentor.industries.length > 0 && { label: 'Industries', value: <Chips items={mentor.industries.map((s) => labelOf(SECTORS, s))} /> },
-    { label: 'Emirates', value: <span className="font-medium">{mentor.emirates.map((e) => labelOf(EMIRATES, e)).join(', ')}</span> },
-    { label: 'Experience', value: <span className="font-medium tabular-nums">{mentor.yearsExperience} years</span> },
-  ].filter(Boolean)
+    { label: "Can help with", value: <Chips items={mentor.expertise.map((a) => labelOf(EXPERTISE, a))} /> },
+    mentor.industries.length > 0 && { label: "Industries", value: <Chips items={mentor.industries.map((s) => labelOf(SECTORS, s))} /> },
+    { label: "Emirates", value: <span className="font-medium">{mentor.emirates.map((e) => labelOf(EMIRATES, e)).join(", ")}</span> },
+    { label: "Experience", value: <span className="font-medium tabular-nums">{mentor.yearsExperience} years</span> },
+  ].filter(Boolean);
 
   return (
     <>
@@ -61,7 +61,7 @@ export default async function MentorPage({ params }) {
               {mentor.acceptingRequests ? (
                 <StatusBadge status="active" label="Taking requests" />
               ) : (
-                <StatusBadge status="todo" label="Not taking requests" />
+                <StatusBadge status="info" label="Not taking requests" />
               )}
             </div>
           </div>
@@ -70,7 +70,7 @@ export default async function MentorPage({ params }) {
               href={mentor.linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className={buttonVariants({ variant: 'outline', size: 'lg', className: 'self-start sm:self-center' })}
+              className={buttonVariants({ variant: "outline", size: "lg", className: "self-start sm:self-center" })}
             >
               LinkedIn profile
               <ExternalLink aria-hidden="true" />
@@ -92,7 +92,7 @@ export default async function MentorPage({ params }) {
         aside={
           <Panel
             title="Ask for guidance"
-            description={mentor.acceptingRequests && canAsk ? `${mentor.name} gets an email with your request.` : undefined}
+            description={mentor.acceptingRequests && canAsk ? `${mentor.name} is notified of your request.` : undefined}
             footer={
               <ol className="w-full space-y-3 text-sm">
                 {STEPS.map((step, index) => (
@@ -118,7 +118,7 @@ export default async function MentorPage({ params }) {
             ) : (
               <>
                 <p className="text-muted-foreground">Create a free account to ask {firstName} for help with your plan.</p>
-                <Link href="/sign-up" className={buttonVariants({ size: 'lg', className: 'mt-4 w-full' })}>
+                <Link href="/sign-up" className={buttonVariants({ size: "lg", className: "mt-4 w-full" })}>
                   Create an account
                 </Link>
               </>
@@ -160,5 +160,5 @@ export default async function MentorPage({ params }) {
         )}
       </Split>
     </>
-  )
+  );
 }

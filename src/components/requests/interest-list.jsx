@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Fields } from "@/components/document";
 import { InterestActions } from "@/components/requests/interest-actions";
 import { StatusBadge } from "@/components/status-badge";
+import { buttonVariants } from "@/components/ui/button";
 import { FUNDER_TYPES, SECTORS, labelOf } from "@/lib/constants";
 import { formatAedRange, formatDate } from "@/lib/format";
 
@@ -21,9 +22,13 @@ export function InterestList({ interests }) {
                 <h3 className="text-[1.0625rem] font-semibold">{funder?.name ?? "A removed account"}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">
                   Interested in{" "}
-                  <Link href={`/plans/${interest.planId?._id}`} className={`font-medium ${link}`}>
-                    {interest.planId?.title}
-                  </Link>{" "}
+                  {interest.planId ? (
+                    <Link href={`/plans/${interest.planId._id}`} className={`font-medium ${link}`}>
+                      {interest.planId.title}
+                    </Link>
+                  ) : (
+                    "a deleted plan"
+                  )}{" "}
                   · {formatDate(interest.createdAt)}
                 </p>
               </div>
@@ -45,19 +50,9 @@ export function InterestList({ interests }) {
             <p className="mt-5 max-w-prose whitespace-pre-line">{interest.message}</p>
 
             {interest.status === "accepted" && funder && (
-              <Fields
-                className="mt-5"
-                items={[
-                  {
-                    label: "Email",
-                    value: (
-                      <a href={`mailto:${funder.email}`} className={`wrap-anywhere ${link}`}>
-                        {funder.email}
-                      </a>
-                    ),
-                  },
-                ]}
-              />
+              <Link href={`/interests/${interest._id}`} className={buttonVariants({ variant: "outline", size: "lg", className: "mt-5" })}>
+                Message {funder.name.split(" ")[0]}
+              </Link>
             )}
 
             {interest.status === "pending" && (

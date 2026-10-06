@@ -95,6 +95,15 @@ export const postSchema = z
     if (post.chartType) {
       const rows = [1, 2, 3, 4, 5, 6].filter((n) => post[`chartLabel${n}`] && post[`chartValue${n}`] !== undefined);
       if (rows.length < 2) ctx.addIssue({ code: "custom", path: ["chartLabel1"], message: "A chart needs at least two rows with a label and a number." });
+      // A pie shows parts of a whole, so it needs no negative slices and something to share out.
+      if (post.chartType === "pie") {
+        const negative = rows.find((n) => post[`chartValue${n}`] < 0);
+        if (negative) {
+          ctx.addIssue({ code: "custom", path: [`chartValue${negative}`], message: "A pie chart cannot have negative numbers." });
+        } else if (rows.length > 0 && rows.reduce((sum, n) => sum + post[`chartValue${n}`], 0) <= 0) {
+          ctx.addIssue({ code: "custom", path: [`chartValue${rows[0]}`], message: "A pie chart needs at least one number above zero." });
+        }
+      }
     }
   });
 

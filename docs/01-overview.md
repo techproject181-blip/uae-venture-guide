@@ -18,7 +18,7 @@ This app puts the steps, the costs and the official links in one place. It also 
 | --- | --- |
 | Entrepreneur | Make plans, edit the budget, tick off tasks, ask the chat assistant about a plan, ask a mentor for guidance, share a plan with funders, download a PDF report. |
 | Mentor | Fill in a profile, accept or decline guidance requests, message the entrepreneur after accepting, write posts about their experience. |
-| Funder | Browse shared plans as short pitch cards, send an interest request, see the full plan and the owner's email after the owner accepts. |
+| Funder | Browse shared plans as short pitch cards, send an interest request, read the full plan and message the owner on the website after the owner accepts. |
 | Admin | Approve or suspend users, hide posts and shared plans, manage official sources and fees, see chat assistant usage. |
 
 Entrepreneurs can use the site right after sign-up. Mentors and funders wait until an admin approves them. The admin account is made with a script (`npm run create-admin`), not through sign-up.
@@ -42,7 +42,7 @@ Entrepreneurs can use the site right after sign-up. Mentors and funders wait unt
 
 ## What it does NOT do
 
-- It is **not a government service**. It does not register a company. It gives guidance only, not legal or financial advice. Every plan links to the real authority.
+- It is **not a government service**. It does not register a company. Every plan links to the real authority.
 - It takes **no payments**. No subscriptions, no investments through the site.
 - The **AI provider is not chosen yet**. So the roadmap and the chat run in **sample mode**: they use fixed rules and text search, not a language model. Only two files would change when a provider is added.
 - No chat between entrepreneurs, or between funders and owners.

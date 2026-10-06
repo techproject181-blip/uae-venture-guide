@@ -2,6 +2,7 @@ import { ApiError, readBody, requireApiUser, route } from "@/lib/api";
 import { connectDB } from "@/lib/db";
 import { feeSchema } from "@/lib/schemas/sources";
 import { FeeReference } from "@/models/FeeReference";
+import { Source } from "@/models/Source";
 
 // PATCH /api/admin/fees/:id: edit a fee reference. Administrators only.
 export const PATCH = route(async (request, { params }) => {
@@ -10,6 +11,7 @@ export const PATCH = route(async (request, { params }) => {
   const data = await readBody(request, feeSchema);
 
   await connectDB();
+  if (data.sourceId && !(await Source.exists({ _id: data.sourceId }))) throw new ApiError(400, "Source not found.");
   const fee = await FeeReference.findByIdAndUpdate(id, data, { returnDocument: "after", runValidators: true });
   if (!fee) throw new ApiError(404, "Fee reference not found.");
   return Response.json({ id });

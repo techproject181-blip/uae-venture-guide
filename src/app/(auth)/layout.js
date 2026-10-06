@@ -17,7 +17,6 @@ export default function AuthLayout({ children }) {
         <main id="main" className="flex flex-1 items-center justify-center px-4 py-10 sm:px-8 lg:py-16">
           <div className="w-full max-w-md">{children}</div>
         </main>
-        <p className="px-4 pb-6 text-center text-sm text-muted-foreground sm:px-8 lg:hidden">Not a government service. Guidance only.</p>
       </div>
     </div>
   );

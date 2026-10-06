@@ -1,14 +1,20 @@
 import { requireApiUser, route } from "@/lib/api";
-import { createPlanWithRoadmap, findOwnPlan } from "@/lib/plans";
+import { createPlanWithRoadmap, findOwnPlan, rebuildRoadmap } from "@/lib/plans";
 import { consumeQuota } from "@/lib/quota";
 
 // POST /api/plans/:id/regenerate: make a fresh roadmap from the same answers,
-// as a new plan, so the earlier one is kept. Owner only.
+// as a new plan, so the earlier one is kept. A failed plan has nothing worth
+// keeping, so it is rebuilt in place instead. Owner only.
 export const POST = route(async (request, { params }) => {
   const user = await requireApiUser("entrepreneur");
   const { id } = await params;
   const plan = await findOwnPlan(id, user);
   await consumeQuota(user.id, "generations");
+
+  if (plan.status === "failed") {
+    await rebuildRoadmap(plan);
+    return Response.json({ id: String(plan._id), status: plan.status });
+  }
 
   const intake = {
     title: `${plan.title} (new version)`.slice(0, 80),

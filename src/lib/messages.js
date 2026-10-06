@@ -36,7 +36,10 @@ export async function getConversation(requestId, user) {
   await connectDB();
   const request = await MentorRequest.findOne({ _id: requestId, $or: [{ entrepreneurId: user.id }, { mentorId: user.id }] }).lean();
   if (!request || !WITH_CONVERSATION.includes(request.status)) return null;
-  return { request, isMentor: String(request.mentorId) === user.id, canSend: request.status === "accepted" };
+  const isMentor = String(request.mentorId) === user.id;
+  // No point sending to someone whose account is suspended or removed.
+  const otherActive = Boolean(await User.exists({ _id: isMentor ? request.entrepreneurId : request.mentorId, status: "active" }));
+  return { request, isMentor, canSend: request.status === "accepted" && otherActive };
 }
 
 /** Like getConversation(), but throws a 404 for API routes. */

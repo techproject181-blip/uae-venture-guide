@@ -6,7 +6,7 @@ import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { postJson } from "@/lib/form-helpers";
 
-export function SignOutButton() {
+export function SignOutButton({ className }) {
   const router = useRouter();
   const [pending, setPending] = useState(false);
 
@@ -18,7 +18,7 @@ export function SignOutButton() {
   }
 
   return (
-    <Button variant="outline" size="lg" onClick={signOut} disabled={pending} className="max-sm:h-10 max-sm:px-3 max-sm:[&_svg]:hidden">
+    <Button variant="outline" size="lg" onClick={signOut} disabled={pending} className={className}>
       <LogOut aria-hidden="true" />
       {pending ? "Signing out…" : "Sign out"}
     </Button>

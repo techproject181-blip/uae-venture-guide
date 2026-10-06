@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { ApiError, readBody, requireApiUser, route } from "@/lib/api";
 import { connectDB } from "@/lib/db";
 import { appUrl, sendEmail } from "@/lib/email";
@@ -19,6 +20,10 @@ export const POST = route(async (request) => {
   ]);
   if (!mentor || !profile) throw new ApiError(404, "Mentor not found.");
   if (!profile.acceptingRequests) throw new ApiError(400, "This mentor is not taking new requests right now.");
+  // A malformed id would make the lookup below throw instead of answering 400.
+  if (data.planId && !mongoose.isValidObjectId(data.planId)) {
+    throw new ApiError(400, "Choose one of your plans.", { planId: "Choose one of your plans." });
+  }
   if (data.planId && !(await Plan.exists({ _id: data.planId, ownerId: user.id }))) {
     throw new ApiError(400, "Choose one of your own plans.", { planId: "Choose one of your own plans." });
   }

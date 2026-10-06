@@ -19,6 +19,7 @@ import { ChatMessage } from "../src/models/ChatMessage.js";
 import { FeeReference } from "../src/models/FeeReference.js";
 import { FunderProfile } from "../src/models/FunderProfile.js";
 import { FundingInterest } from "../src/models/FundingInterest.js";
+import { InterestMessage } from "../src/models/InterestMessage.js";
 import { MentorProfile } from "../src/models/MentorProfile.js";
 import { MentorRequest } from "../src/models/MentorRequest.js";
 import { Plan } from "../src/models/Plan.js";
@@ -87,7 +88,7 @@ const FEES = [
 
 await connectDB();
 // Build every index first (unique emails, text search, one waiting request per pair, and so on).
-await Promise.all([User, Source, FeeReference, MentorProfile, FunderProfile, Plan, Post, MentorRequest, RequestMessage, FundingInterest, ChatMessage].map((model) => model.init()));
+await Promise.all([User, Source, FeeReference, MentorProfile, FunderProfile, Plan, Post, MentorRequest, RequestMessage, FundingInterest, InterestMessage, ChatMessage].map((model) => model.init()));
 const now = new Date();
 
 /** Deletes these accounts and everything they made or were part of. */
@@ -99,6 +100,7 @@ async function removeAccounts(userIds) {
     RequestMessage.deleteMany({ requestId: { $in: requestIds } }),
     MentorRequest.deleteMany({ _id: { $in: requestIds } }),
     ChatMessage.deleteMany({ planId: { $in: planIds } }),
+    InterestMessage.deleteMany({ authorId: { $in: userIds } }),
     FundingInterest.deleteMany({ $or: [{ planId: { $in: planIds } }, { funderId: { $in: userIds } }] }),
     Plan.deleteMany({ _id: { $in: planIds } }),
     Post.deleteMany({ authorId: { $in: userIds } }),
@@ -182,6 +184,7 @@ await Promise.all([
   Plan.deleteMany({ _id: { $in: demoPlans } }),
   ChatMessage.deleteMany({ planId: { $in: demoPlans } }),
   FundingInterest.deleteMany({ planId: { $in: demoPlans } }),
+  InterestMessage.deleteMany({ authorId: { $in: [ids.aisha, ids.yousef, ids.layla, ids.khalid] } }),
   MentorRequest.deleteMany({ entrepreneurId: { $in: [ids.aisha, ids.yousef] } }),
   Post.deleteMany({ authorId: { $in: Object.keys(MENTORS).map((name) => ids[name]) } }),
 ]);
@@ -229,13 +232,23 @@ await RequestMessage.insertMany(
   CAFE_CHAT.map(({ author, hours, body }) => ({ requestId: cafeRequest._id, authorId: ids[author], body, createdAt: hoursAgo(hours), updatedAt: hoursAgo(hours) })),
 );
 
-await FundingInterest.create([
+const [cafeInterest] = await FundingInterest.create([
   { planId: plans[0]._id, funderId: ids.layla, message: "I back student food businesses and would like to learn more about your café.", status: "accepted", respondedAt: now },
   { planId: plans[1]._id, funderId: ids.khalid, message: "I ran tours for ten years and like your idea. Can we talk about your first season?", status: "pending" },
 ]);
 
+// The conversation Layla and Aisha had after Aisha accepted her interest.
+const FUNDER_CHAT = [
+  { author: "layla", hours: 20, body: "Thank you for sharing the plan. What would the first AED 60,000 go towards?" },
+  { author: "aisha", hours: 18, body: "Mostly the fit-out and the first year's rent. The budget tab shows each item, and I keep the actual costs up to date." },
+  { author: "layla", hours: 6, body: "That is clear. Could we meet near campus next week to talk about a first cheque?" },
+];
+await InterestMessage.insertMany(
+  FUNDER_CHAT.map(({ author, hours, body }) => ({ interestId: cafeInterest._id, authorId: ids[author], body, createdAt: hoursAgo(hours), updatedAt: hoursAgo(hours) })),
+);
+
 await mongoose.disconnect();
 console.log(
   `Demo data ready: ${USERS.length} accounts (password ${DEMO_PASSWORD}), ${SOURCES.length} sources, ${FEES.length} fee references, ` +
-    `${PLANS.length} plans, ${POSTS.length} posts, 2 guidance requests (${CAFE_CHAT.length} chat messages) and 2 funder interests.`,
+    `${PLANS.length} plans, ${POSTS.length} posts, 2 guidance requests (${CAFE_CHAT.length} chat messages) and 2 funder interests (${FUNDER_CHAT.length} chat messages).`,
 );

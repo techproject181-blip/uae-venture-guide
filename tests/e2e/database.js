@@ -3,6 +3,7 @@ import { AiUsage } from "../../src/models/AiUsage.js";
 import { ChatMessage } from "../../src/models/ChatMessage.js";
 import { FunderProfile } from "../../src/models/FunderProfile.js";
 import { FundingInterest } from "../../src/models/FundingInterest.js";
+import { InterestMessage } from "../../src/models/InterestMessage.js";
 import { LoginAttempt } from "../../src/models/LoginAttempt.js";
 import { MentorProfile } from "../../src/models/MentorProfile.js";
 import { MentorRequest } from "../../src/models/MentorRequest.js";
@@ -42,6 +43,7 @@ export async function removeTestAccounts(run) {
     Plan.deleteMany({ _id: { $in: planIds } }),
     ChatMessage.deleteMany({ planId: { $in: planIds } }),
     FundingInterest.deleteMany({ $or: [{ planId: { $in: planIds } }, { funderId: { $in: userIds } }] }),
+    InterestMessage.deleteMany({ authorId: { $in: userIds } }),
     MentorRequest.deleteMany({ _id: { $in: requestIds } }),
     RequestMessage.deleteMany({ $or: [{ requestId: { $in: requestIds } }, { authorId: { $in: userIds } }] }),
     Post.deleteMany({ authorId: { $in: userIds } }),

@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Undo2 } from "lucide-react";
+import { DeleteButton } from "@/components/delete-button";
 import { Fields } from "@/components/document";
 import { CardGrid } from "@/components/layout";
 import { EmptyState, PageHeader } from "@/components/page-header";
@@ -53,29 +55,39 @@ export default async function InterestsPage() {
                       <Fields
                         items={[
                           { label: "Owner", value: plan.ownerId?.name },
-                          {
-                            label: "Email",
-                            value: (
-                              <a
-                                href={`mailto:${plan.ownerId?.email}`}
-                                className="text-foreground decoration-primary underline underline-offset-4 wrap-anywhere hover:decoration-2"
-                              >
-                                {plan.ownerId?.email}
-                              </a>
-                            ),
-                          },
                         ]}
                       />
-                      <Link href={`/plans/${plan._id}`} className={buttonVariants({ size: "lg", className: "w-full" })}>
-                        Read the full plan
-                      </Link>
+                      <div className="grid gap-2 sm:grid-cols-2">
+                        <Link href={`/plans/${plan._id}`} className={buttonVariants({ size: "lg" })}>
+                          Read the full plan
+                        </Link>
+                        <Link href={`/interests/${interest._id}`} className={buttonVariants({ variant: "outline", size: "lg" })}>
+                          Message the owner
+                        </Link>
+                      </div>
                     </div>
                   )}
                   {interest.status === "accepted" && !open && (
-                    <p className="mt-5 border-t pt-4 text-sm text-muted-foreground">The owner has stopped sharing this plan.</p>
+                    <div className="mt-5 space-y-3 border-t pt-4">
+                      <p className="text-sm text-muted-foreground">The owner has stopped sharing this plan.</p>
+                      {/* The plan is closed, but the messages you already sent stay readable. */}
+                      <Link href={`/interests/${interest._id}`} className={buttonVariants({ variant: "outline", size: "lg" })}>
+                        Read the conversation
+                      </Link>
+                    </div>
                   )}
                   {interest.status === "pending" && (
-                    <p className="mt-5 border-t pt-4 text-sm text-muted-foreground">Waiting for the owner to answer. You will get an email.</p>
+                    <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t pt-4">
+                      <p className="text-sm text-muted-foreground">Waiting for the owner to answer. You will see their answer here.</p>
+                      <DeleteButton
+                        url={`/api/interests/${interest._id}`}
+                        label="Withdraw"
+                        confirmText="The owner will no longer see your interest. You can send it again later."
+                        doneText="Interest withdrawn."
+                        icon={Undo2}
+                        size="default"
+                      />
+                    </div>
                   )}
                 </article>
               </li>

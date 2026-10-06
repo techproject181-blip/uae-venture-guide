@@ -16,6 +16,7 @@ We use Mongoose, a library that lets us describe each collection in a model file
 | mentorrequests | An entrepreneur asking a mentor for guidance | entrepreneurId, mentorId, planId, topic, status |
 | requestmessages | Chat messages inside a mentor request | requestId, authorId, body |
 | fundinginterests | A funder showing interest in a shared plan | planId, funderId, message, status |
+| interestmessages | Chat messages between a plan's owner and a funder, after the owner accepts | interestId, authorId, body |
 | posts | Experience posts written by mentors | authorId, title, body, images, chart, status |
 | chatmessages | Questions and answers in a plan's AI chat | planId, role, content, sourceIds |
 | aiusages | How many roadmaps and chat messages a user made in a day | userId, day, generations, chatMessages |
@@ -30,7 +31,7 @@ Collections link by storing the id of another document (a reference).
 - A fee reference belongs to one source (`sourceId`). A plan step can point to a fee reference and to sources.
 - A mentor request links an entrepreneur, a mentor and an optional plan.
 - Request messages belong to a mentor request (`requestId`) and have an author (`authorId`).
-- A funding interest links one plan and one funder.
+- A funding interest links one plan and one funder. Interest messages belong to a funding interest (`interestId`).
 - Chat messages belong to a plan. A post belongs to its author.
 - AI usage belongs to a user, one document per user per day.
 

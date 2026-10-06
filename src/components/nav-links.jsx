@@ -17,7 +17,7 @@ export function NavLinks({ links, className, compact = false }) {
 
   return (
     <nav aria-label="Main" className={cn(compact ? "no-scrollbar gap-1 overflow-x-auto" : "gap-1", className)}>
-      {links.map(({ href, label }) => {
+      {links.map(({ href, label, count }) => {
         const active = pathname === href || pathname.startsWith(`${href}/`);
         return (
           <Link
@@ -40,6 +40,12 @@ export function NavLinks({ links, className, compact = false }) {
               />
             )}
             <span className={cn("relative", compact && active && "text-accent-foreground")}>{label}</span>
+            {count > 0 && (
+              <span className="relative ml-1.5 rounded-full bg-primary px-1.5 py-0.5 text-[0.6875rem] leading-none font-semibold text-primary-foreground tabular-nums">
+                {count}
+                <span className="sr-only"> new</span>
+              </span>
+            )}
           </Link>
         );
       })}

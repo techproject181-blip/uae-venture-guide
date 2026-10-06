@@ -12,7 +12,7 @@ import { sendJson } from "@/lib/form-helpers";
  * Asks for confirmation, then sends DELETE to `url`. Afterwards it goes to
  * `redirectTo`, or reloads the current page's data when there is none.
  */
-export function DeleteButton({ url, confirmText, redirectTo, label = "Delete", doneText = "Deleted.", size = "lg" }) {
+export function DeleteButton({ url, confirmText, redirectTo, label = "Delete", doneText = "Deleted.", size = "lg", icon: Icon = Trash2 }) {
   const router = useRouter();
   const [pending, setPending] = useState(false);
   const confirm = useConfirm();
@@ -33,8 +33,8 @@ export function DeleteButton({ url, confirmText, redirectTo, label = "Delete", d
 
   return (
     <Button variant="destructive" size={size} onClick={remove} disabled={pending}>
-      <Trash2 aria-hidden="true" />
-      {label}
+      <Icon aria-hidden="true" />
+      {pending ? "Working…" : label}
     </Button>
   );
 }
