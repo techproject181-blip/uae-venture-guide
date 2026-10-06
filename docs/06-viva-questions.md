@@ -65,7 +65,7 @@ src/lib/email.js uses Nodemailer over SMTP. Emails go out for password reset, ac
 ## Database
 
 **19. Which collections do you have?**
-User, MentorProfile, FunderProfile, Plan, ChatMessage, MentorRequest, RequestMessage, FundingInterest, Post, FeeReference, Source, AiUsage and LoginAttempt (src/models). Docs are in docs/03-database.md.
+User, MentorProfile, FunderProfile, Plan, ChatMessage, MentorRequest, RequestMessage, FundingInterest, InterestMessage, Post, FeeReference, Source, AiUsage and LoginAttempt (src/models). Docs are in docs/03-database.md.
 
 **20. How are they related?**
 By ObjectId references. A Plan has ownerId to a User; a MentorRequest links an entrepreneur and a mentor; a FundingInterest links a plan and a funder; a FeeReference points to its Source. Phases, tasks and budget items are embedded inside the Plan because they are always read with it.
@@ -82,7 +82,7 @@ Examples: a unique email on User, a unique (userId, day) on AiUsage for daily li
 Hashed with bcrypt, cost 10, never in plain text (src/app/api/auth/sign-up/route.js). Sign-in uses bcrypt.compare, and compares against a dummy hash when the email is unknown, so timing does not reveal which emails exist.
 
 **24. How do sessions work?**
-On sign-in the server signs a JWT with HS256 using JWT_SECRET, holding the user id and role, valid for 7 days. It is stored in an httpOnly cookie, so page JavaScript cannot read it, Secure in production and SameSite=Lax (src/lib/session.js).
+On sign-in the server signs a JWT with HS256 using JWT_SECRET, holding the user id and role, valid for 7 days. It is stored in an httpOnly cookie, so page JavaScript cannot read it, Secure in production and SameSite=Lax (src/lib/session.js). The user is loaded again from the database on every request, and a token made before the user's passwordChangedAt is refused, so changing a password signs out other devices. There are no refresh tokens, by design: after 7 days the user signs in again, which keeps the code small.
 
 **25. How are roles checked?**
 The proxy only checks the token. Each page and API route loads the user fresh from the database and checks role and status (requireUser in src/lib/guards.js). So if the admin suspends someone, it takes effect on the next request, even with an old token.
@@ -111,7 +111,7 @@ Someone could forge a token for any user id, so it is serious. The fix is to cha
 Unit tests for logic and schemas (src/lib/*.test.js), integration tests against a real MongoDB (tests/integration: access, chat, messages, quota, roadmap), and Playwright end-to-end tests in the browser (tests/e2e: auth, plans, community, security, keyboard, pages). Unit and integration run with Vitest.
 
 **33. How many tests?**
-About 80 Vitest test cases in 16 test files, plus the Playwright specs. The test plan is in docs/04-testing.md.
+About 60 Vitest test cases in 10 test files (5 unit, 5 integration), plus the Playwright specs. The test plan is in docs/04-testing.md.
 
 **34. Do you have CI?**
 Yes. .github/workflows/check.yml runs on every push and pull request: lint, Vitest, production build, seed data, then Playwright on Chrome, Firefox, WebKit and two phone sizes, with its own MongoDB container.
@@ -128,7 +128,7 @@ No. There are no payments. Fees shown are information only, and users pay the au
 Not automatically. An admin must enter and check each fee from its official page, and fees change. Seeded fees are marked Demo until checked, and anything without a fee is only an Estimate.
 
 **38. What other limits are there?**
-Mentor chat uses polling, not real-time push. The free Atlas tier has no automatic backups, so backups are manual exports (docs/05-setup-and-deploy.md). The app is English only.
+Mentor and funder chat use polling, not real-time push. The free Atlas tier has no automatic backups, so backups are manual exports (docs/05-setup-and-deploy.md). The app is English only.
 
 **39. What would you add next?**
 Connect an AI provider for planning and chat, add Arabic, real-time chat if traffic grows, automatic backups on a paid tier, and alerts when a source page changes.

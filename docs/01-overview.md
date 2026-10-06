@@ -31,7 +31,7 @@ Entrepreneurs can use the site right after sign-up. Mentors and funders wait unt
 - **Documents.** A checklist of papers the user needs, such as passport copies and a lease.
 - **Chat assistant (sample mode).** Answers questions about one plan, using the plan and the official sources. It shows which sources it used.
 - **Mentors.** A mentor list. An entrepreneur sends a request. When the mentor accepts, a conversation opens on the site. Messages are saved in the database.
-- **Funders.** Owners can choose to share a plan. Funders see a pitch card and can send interest. There is no chat with funders.
+- **Funders.** Owners can choose to share a plan. Funders see a pitch card and can send interest. When the owner accepts, the two can message each other on the site.
 - **Posts.** Mentors write experience posts with up to five pictures (by web address) and one simple chart.
 - **Official sources and fees.** A list of government and free-zone links. Each cost has a mark:
   - **Official**: the fee comes from a source an admin checked.
@@ -45,5 +45,5 @@ Entrepreneurs can use the site right after sign-up. Mentors and funders wait unt
 - It is **not a government service**. It does not register a company. Every plan links to the real authority.
 - It takes **no payments**. No subscriptions, no investments through the site.
 - The **AI provider is not chosen yet**. So the roadmap and the chat run in **sample mode**: they use fixed rules and text search, not a language model. Only two files would change when a provider is added.
-- No chat between entrepreneurs, or between funders and owners.
+- No chat between two entrepreneurs.
 - English only. No mobile app; the website works on phones.

@@ -4,7 +4,7 @@ The app has three kinds of automated tests.
 
 ## 1. Unit tests (Vitest)
 
-Vitest is a test runner for JavaScript. Unit tests sit next to the code, in `src/**/*.test.js`. They need no database.
+Vitest is a test runner for JavaScript. Unit tests sit next to the code, in `src/**/*.test.js` (5 files). They need no database.
 
 - Form rules for sign-up and plans (`src/lib/schemas`).
 - Budget totals (`budget.test.js`) and the daily AI limit (`quota.test.js`).
@@ -12,7 +12,7 @@ Vitest is a test runner for JavaScript. Unit tests sit next to the code, in `src
 
 ## 2. Database tests (Vitest)
 
-These are in `tests/integration`. They use the MongoDB from `.env.local`. Each test file gets its own empty database, which is deleted at the end.
+These are in `tests/integration` (5 files). They use the MongoDB from `.env.local`. Each test file gets its own empty database, which is deleted at the end.
 
 - Who can open which plan or request (`access.test.js`).
 - Request messages: only the two people in a request can read them, and no new messages after it is completed (`messages.test.js`).

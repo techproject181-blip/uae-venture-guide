@@ -42,9 +42,11 @@
 ## How sign-in works
 
 - **Sign-up:** the password is hashed with bcrypt (cost 10) and only the hash is saved.
-- **Sign-in:** bcrypt compares the typed password with the hash. If it matches, the server makes a JWT that holds the user id and role. It lasts 7 days.
+- **Sign-in:** bcrypt compares the typed password with the hash. If it matches, the server makes a JWT that holds the user id and role. It is signed with HS256 and lasts 7 days. There are no refresh tokens; after 7 days the user signs in again.
 - **Cookie:** the JWT goes into a cookie named `session`. It is `httpOnly` (page JavaScript cannot read it), `secure` in production (HTTPS only) and `sameSite: lax` (not sent from other sites' forms).
 - **proxy.js:** before private pages (dashboard, plans, requests, admin and others) it checks the token. No valid token means a redirect to `/sign-in`. A signed-in user who opens the home or sign-in page goes to the dashboard.
+- **Password change:** the user has a `passwordChangedAt` date. A token made before that date is refused, so a password change signs out other devices.
+- **Loading:** sign-in and sign-up show a full-screen loading overlay while the server answers (`src/components/loaders/loading-overlay.jsx`).
 - **Roles:** each page and route then loads the user and checks the role and account status. For example, only an admin can open `/admin`, and a pending mentor sees the pending page.
 
 ## How the roadmap is made
@@ -90,7 +92,7 @@ Funders and plan owners talk the same way, with the same chat box (`src/lib/inte
 - A mentor can pause new requests with the **Taking new requests** switch on their dashboard.
 - When the administrator rejects a waiting mentor or funder, that person gets an email saying so, and sign-in tells them the account was not approved. A mentor or funder can only be approved after filling in their profile.
 - List pages and dashboards show grey placeholder shapes while their data loads (`src/components/loaders/page-skeleton.jsx`). Each loading file sits in a folder of its own, such as `plans/(list)/`, so it never covers a page that can answer "not found".
-- The administrator gets a separate console (`src/components/admin/admin-shell.jsx`): a sidebar with Overview, Users, Sources and fees, Content, AI usage and Account, and the number of accounts waiting for approval next to Users. The users list can be searched by name or email.
+- The administrator gets a separate console (`src/components/admin/admin-shell.jsx`): a sidebar with Overview, Users, Sources and fees, Content and AI usage, and the number of accounts waiting for approval next to Users. At the bottom of the sidebar are a Profile card, View public pages and Sign out. The top bar shows an ADMIN tag on desktop and the section name in the middle on tablets and phones. The users list can be searched by name or email.
 
 ## Security
 
@@ -105,4 +107,6 @@ Funders and plan owners talk the same way, with the same chat box (`src/lib/inte
 
 - Main colours are emerald (green, for main actions) and ink (dark grey for text). They are CSS variables in `src/app/globals.css`.
 - Page layout parts are in one kit: `src/components/layout.jsx`.
+- Status badges (such as Pending, Accepted, Done) come from one component: `src/components/stamp.jsx`. Buttons that delete or reject are solid red.
+- `.vscode/settings.json` tells the editor to read CSS files as Tailwind CSS, so `@theme` and similar rules show no warnings.
 - Animations use Motion. `src/components/motion-provider.jsx` sets `reducedMotion="user"`, so animations are reduced if the user's device asks for less motion.

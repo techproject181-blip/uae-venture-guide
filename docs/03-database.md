@@ -7,7 +7,7 @@ We use Mongoose, a library that lets us describe each collection in a model file
 
 | Collection | What it stores | Key fields |
 | --- | --- | --- |
-| users | Every account | name, email, passwordHash, role (entrepreneur, mentor, funder, admin), status (active, pending, suspended) |
+| users | Every account | name, email, passwordHash, role (entrepreneur, mentor, funder, admin), status (active, pending, suspended), rejected, passwordChangedAt |
 | plans | A business plan and its roadmap | ownerId, idea, emirate, sector, budgetAed, phases, tasks, budgetItems, documents, risks, shared, pitchSummary |
 | sources | Official government websites | title, publisher, url, emirate, categories, summary, active |
 | feereferences | Official fees, each tied to a source | sourceId, kind, item, emirate, amountMinAed, amountMaxAed, recurrence |
@@ -50,5 +50,5 @@ An index is a lookup list that makes searches fast or forces a rule.
 
 - It makes 9 demo accounts (see `docs/05-setup-and-deploy.md`). All use the password `Demo2026pass`.
 - It adds 13 official sources and 15 fee references. The fee amounts are demo values.
-- It adds mentor and funder profiles, two plans, two posts, two mentor requests (one with a saved conversation) and funding interest.
+- It adds mentor and funder profiles, two plans, two posts, two mentor requests (one with a saved conversation), two funding interests (one accepted, with a saved conversation).
 - It also deletes accounts ending in `@e2e.test`, which the browser tests leave behind.
