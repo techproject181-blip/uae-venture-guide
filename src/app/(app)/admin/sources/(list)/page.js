@@ -38,17 +38,19 @@ export default async function AdminSourcesPage({ searchParams }) {
   const feesBySource = new Map(feeCounts.map((row) => [String(row._id), row.count]));
   const sources = all.filter(filter.test);
 
+  const addButton = (
+    <Link href="/admin/sources/new" className={cn(buttonVariants(), "h-9 px-3.5")}>
+      <Plus aria-hidden="true" />
+      Add source
+    </Link>
+  );
+
   return (
     <>
       <PageHeader
         title="Official sources"
         description="The government and free zone pages that roadmaps and chat may cite, and the fees taken from them."
-        actions={
-          <Link href="/admin/sources/new" className={buttonVariants({ size: "lg" })}>
-            <Plus aria-hidden="true" />
-            Add source
-          </Link>
-        }
+        actions={all.length === 0 && addButton}
       />
 
       {all.length > 0 && (
@@ -60,7 +62,9 @@ export default async function AdminSourcesPage({ searchParams }) {
             count: all.filter(f.test).length,
             current: f === filter,
           }))}
-        />
+        >
+          {addButton}
+        </AdminTabs>
       )}
 
       {sources.length === 0 ? (

@@ -13,7 +13,7 @@ const variants = cva(
         outline: "border-ink-300 bg-card text-foreground shadow-xs hover:border-ink-400 hover:bg-ink-50 aria-expanded:bg-secondary",
         secondary: "bg-foreground text-primary-foreground hover:bg-ink-800",
         ghost: "hover:bg-secondary hover:text-foreground aria-expanded:bg-secondary",
-        destructive: "border-destructive bg-card text-destructive hover:bg-destructive-surface focus-visible:border-destructive focus-visible:ring-destructive/20",
+        destructive: "bg-destructive text-ink-0 shadow-xs hover:bg-destructive/90 focus-visible:border-destructive focus-visible:ring-destructive/30",
         link: "text-foreground underline decoration-primary underline-offset-4 hover:decoration-2",
       },
       size: {

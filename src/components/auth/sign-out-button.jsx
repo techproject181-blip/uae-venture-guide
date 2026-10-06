@@ -6,7 +6,8 @@ import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { postJson } from "@/lib/form-helpers";
 
-export function SignOutButton({ className }) {
+/** Signs out, then goes to the home page. `pending` is true while it runs. */
+export function useSignOut() {
   const router = useRouter();
   const [pending, setPending] = useState(false);
 
@@ -16,6 +17,12 @@ export function SignOutButton({ className }) {
     router.replace("/");
     router.refresh();
   }
+
+  return { signOut, pending };
+}
+
+export function SignOutButton({ className }) {
+  const { signOut, pending } = useSignOut();
 
   return (
     <Button variant="outline" size="lg" onClick={signOut} disabled={pending} className={className}>

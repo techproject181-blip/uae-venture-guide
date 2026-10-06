@@ -257,7 +257,7 @@
   }
   /* A panel that is a link: it lifts a little under the pointer. */
   .panel-link {
-    @apply transition-[box-shadow,border-color,translate] duration-200 ease-(--ease-out) hover:-translate-y-px hover:border-border-strong hover:shadow-lift;
+    @apply transition-[box-shadow,border-color,translate] duration-200 ease-out hover:-translate-y-px hover:border-border-strong hover:shadow-lift;
   }
 
   /* A small uppercase label above a value, like the field names on a licence. */

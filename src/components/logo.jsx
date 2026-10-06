@@ -37,7 +37,7 @@ export function Logo({ className }) {
         className,
       )}
     >
-      <LogoMark className="transition-transform duration-300 ease-(--ease-out) group-hover/logo:-rotate-6" />
+      <LogoMark className="transition-transform duration-300 ease-out group-hover/logo:-rotate-6" />
       <Wordmark />
     </Link>
   );

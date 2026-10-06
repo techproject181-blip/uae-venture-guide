@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useConfirm } from "@/components/confirm-dialog";
+import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { sendJson } from "@/lib/form-helpers";
 
@@ -27,7 +28,8 @@ export function HideButton({ url, hidden, what }) {
   }
 
   return (
-    <Button variant={hidden ? "outline" : "destructive"} size="lg" onClick={toggle} disabled={pending}>
+    <Button variant={hidden ? "default" : "destructive"} onClick={toggle} disabled={pending} className="h-9 gap-1.5 px-3.5">
+      {hidden ? <Eye aria-hidden="true" /> : <EyeOff aria-hidden="true" />}
       {hidden ? "Show" : "Hide"}
     </Button>
   );
