@@ -30,7 +30,11 @@ async function firstFeePage(page) {
   const sources = await page.locator('a[href^="/admin/sources/"]').evaluateAll((links) => links.map((link) => link.getAttribute("href")));
   for (const source of sources.filter((href) => /^\/admin\/sources\/[0-9a-f]{24}$/.test(href))) {
     await page.goto(source);
-    const fee = await page.locator(`a[href^="${source}/fees/"]`).first().getAttribute("href", { timeout: 1000 }).catch(() => null);
+    const fee = await page
+      .locator(`a[href^="${source}/fees/"]`)
+      .first()
+      .getAttribute("href", { timeout: 1000 })
+      .catch(() => null);
     if (fee) return fee;
   }
   throw new Error("No source with fee references (run npm run seed).");
@@ -82,6 +86,17 @@ test("every page works for the administrator", async ({ page }) => {
   const user = await firstLink(page, "/admin/users?status=all", "/admin/users/");
   const source = await firstLink(page, "/admin/sources", "/admin/sources/");
   const fee = await firstFeePage(page);
-  const pages = ["/dashboard", "/admin/users", "/admin/users?status=all", user, "/admin/sources", "/admin/sources/new", source, fee, "/admin/content", "/admin/usage"];
+  const pages = [
+    "/dashboard",
+    "/admin/users",
+    "/admin/users?status=all",
+    user,
+    "/admin/sources",
+    "/admin/sources/new",
+    source,
+    fee,
+    "/admin/content",
+    "/admin/usage",
+  ];
   for (const path of pages) await checkPage(page, path);
 });

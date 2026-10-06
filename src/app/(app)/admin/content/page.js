@@ -121,7 +121,11 @@ export default async function AdminContentPage({ searchParams }) {
                       {row.owner} · {row.detail}
                     </p>
                     <p className="mt-0.5 hidden text-muted-foreground md:block lg:hidden">{row.detail}</p>
-                    <StatusBadge className="mt-2 sm:hidden" status={row.hidden ? "hidden" : "published"} label={row.hidden ? "Hidden" : "Visible"} />
+                    <StatusBadge
+                      className="mt-2 sm:hidden"
+                      status={row.hidden ? "hidden" : "published"}
+                      label={row.hidden ? "Hidden" : "Visible"}
+                    />
                   </td>
                   <td className="hidden md:table-cell">{row.owner}</td>
                   <td className="hidden lg:table-cell">{row.detail}</td>

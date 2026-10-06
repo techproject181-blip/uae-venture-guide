@@ -28,7 +28,11 @@ export default async function PlansPage() {
 
   return (
     <>
-      <PageHeader title="My plans" description="Each plan has its own steps, budget, documents and chat." actions={plans.length > 0 && newPlan} />
+      <PageHeader
+        title="My plans"
+        description="Each plan has its own steps, budget, documents and chat."
+        actions={plans.length > 0 && newPlan}
+      />
       {plans.length === 0 ? (
         <EmptyState
           title="No plans yet"

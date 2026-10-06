@@ -159,17 +159,88 @@ export const STEPS = [
 
 // One extra launch step for each sector.
 export const SECTOR_STEPS = {
-  technology: { title: "Build and test your first product version", description: "Release a small first version to a few users and collect feedback before spending more.", estimate: [5000, 30000], days: 30, budget: { category: "technology", label: "First product version" } },
-  ecommerce: { title: "Set up your online shop and payments", description: "Choose a shop platform and a UAE payment provider, and plan your deliveries.", estimate: [2000, 8000], days: 14, budget: { category: "technology", label: "Online shop setup" } },
-  food_beverage: { title: "Get food safety approval for your premises", description: "Food businesses need approval from the municipality's food safety department before opening.", authority: "municipality", estimate: [2000, 8000], days: 21, budget: { category: "legal", label: "Food safety approval" } },
-  retail: { title: "Fit out your shop and order stock", description: "Plan the shop layout, signs and your first stock order.", estimate: [10000, 50000], days: 30, budget: { category: "equipment", label: "Shop fit-out and stock" } },
-  consulting: { title: "Prepare your service packages and contracts", description: "Write clear service packages and a standard client contract.", estimate: [1000, 5000], days: 7, budget: { category: "legal", label: "Client contract template" } },
-  education: { title: "Check whether your courses need education approval", description: "Some training activities need approval from the emirate's education authority.", authority: "education", estimate: [1000, 10000], days: 21, budget: { category: "legal", label: "Education approval" } },
-  health_wellness: { title: "Get the health authority licence for your services", description: "Health and wellness services may need a facility or practitioner licence.", authority: "health", estimate: [3000, 15000], days: 30, budget: { category: "legal", label: "Health authority licence" } },
-  creative_media: { title: "Check whether your work needs a media licence", description: "Publishing and some media activities need approval from the UAE Media Council.", authority: "media", estimate: [0, 5000], days: 14, budget: { category: "legal", label: "Media licence" } },
-  tourism_events: { title: "Get the tourism or events permit you need", description: "Tour and event businesses often need a permit from the emirate's tourism department.", authority: "tourism", estimate: [1000, 10000], days: 21, budget: { category: "legal", label: "Tourism or events permit" } },
-  logistics: { title: "Arrange vehicles, insurance and transport permits", description: "Plan your vehicles or delivery partners, insurance and any transport permits.", estimate: [5000, 40000], days: 21, budget: { category: "equipment", label: "Vehicles and insurance" } },
-  other: { title: "Check whether your activity needs extra approvals", description: "Some activities need approval from another government body before the licence is issued.", estimate: [0, 5000], days: 14, budget: { category: "legal", label: "Extra approvals" } },
+  technology: {
+    title: "Build and test your first product version",
+    description: "Release a small first version to a few users and collect feedback before spending more.",
+    estimate: [5000, 30000],
+    days: 30,
+    budget: { category: "technology", label: "First product version" },
+  },
+  ecommerce: {
+    title: "Set up your online shop and payments",
+    description: "Choose a shop platform and a UAE payment provider, and plan your deliveries.",
+    estimate: [2000, 8000],
+    days: 14,
+    budget: { category: "technology", label: "Online shop setup" },
+  },
+  food_beverage: {
+    title: "Get food safety approval for your premises",
+    description: "Food businesses need approval from the municipality's food safety department before opening.",
+    authority: "municipality",
+    estimate: [2000, 8000],
+    days: 21,
+    budget: { category: "legal", label: "Food safety approval" },
+  },
+  retail: {
+    title: "Fit out your shop and order stock",
+    description: "Plan the shop layout, signs and your first stock order.",
+    estimate: [10000, 50000],
+    days: 30,
+    budget: { category: "equipment", label: "Shop fit-out and stock" },
+  },
+  consulting: {
+    title: "Prepare your service packages and contracts",
+    description: "Write clear service packages and a standard client contract.",
+    estimate: [1000, 5000],
+    days: 7,
+    budget: { category: "legal", label: "Client contract template" },
+  },
+  education: {
+    title: "Check whether your courses need education approval",
+    description: "Some training activities need approval from the emirate's education authority.",
+    authority: "education",
+    estimate: [1000, 10000],
+    days: 21,
+    budget: { category: "legal", label: "Education approval" },
+  },
+  health_wellness: {
+    title: "Get the health authority licence for your services",
+    description: "Health and wellness services may need a facility or practitioner licence.",
+    authority: "health",
+    estimate: [3000, 15000],
+    days: 30,
+    budget: { category: "legal", label: "Health authority licence" },
+  },
+  creative_media: {
+    title: "Check whether your work needs a media licence",
+    description: "Publishing and some media activities need approval from the UAE Media Council.",
+    authority: "media",
+    estimate: [0, 5000],
+    days: 14,
+    budget: { category: "legal", label: "Media licence" },
+  },
+  tourism_events: {
+    title: "Get the tourism or events permit you need",
+    description: "Tour and event businesses often need a permit from the emirate's tourism department.",
+    authority: "tourism",
+    estimate: [1000, 10000],
+    days: 21,
+    budget: { category: "legal", label: "Tourism or events permit" },
+  },
+  logistics: {
+    title: "Arrange vehicles, insurance and transport permits",
+    description: "Plan your vehicles or delivery partners, insurance and any transport permits.",
+    estimate: [5000, 40000],
+    days: 21,
+    budget: { category: "equipment", label: "Vehicles and insurance" },
+  },
+  other: {
+    title: "Check whether your activity needs extra approvals",
+    description: "Some activities need approval from another government body before the licence is issued.",
+    estimate: [0, 5000],
+    days: 14,
+    budget: { category: "legal", label: "Extra approvals" },
+  },
 };
 
 export const DOCUMENTS = [
@@ -177,19 +248,67 @@ export const DOCUMENTS = [
   { name: "Passport-size photo", description: "A recent photo with a white background.", required: true },
   { name: "Current visa or entry stamp", description: "Your UAE residence visa, or the entry stamp if you are visiting.", required: true },
   { name: "Emirates ID copy", description: "If you already live in the UAE.", required: false },
-  { name: "No-objection letter from your employer", description: "If you work in the UAE and another company sponsors your visa.", required: false },
-  { only: "mainland", name: "Registered tenancy contract", description: "The registered lease for your business location (Ejari in Dubai).", required: true },
-  { only: "free_zone", name: "Free zone application form", description: "The free zone's own application form, filled in and signed.", required: true },
-  { name: "Short business plan", description: "One or two pages on what you sell, to whom, and your first-year numbers. Banks and some free zones ask for it.", required: false },
+  {
+    name: "No-objection letter from your employer",
+    description: "If you work in the UAE and another company sponsors your visa.",
+    required: false,
+  },
+  {
+    only: "mainland",
+    name: "Registered tenancy contract",
+    description: "The registered lease for your business location (Ejari in Dubai).",
+    required: true,
+  },
+  {
+    only: "free_zone",
+    name: "Free zone application form",
+    description: "The free zone's own application form, filled in and signed.",
+    required: true,
+  },
+  {
+    name: "Short business plan",
+    description: "One or two pages on what you sell, to whom, and your first-year numbers. Banks and some free zones ask for it.",
+    required: false,
+  },
 ];
 
 // Sector-specific risks; other sectors get the general ones only.
 export const SECTOR_RISKS = {
-  food_beverage: { title: "Failing a food safety inspection", description: "An inspection can delay opening if the kitchen or storage does not meet the rules.", likelihood: "medium", impact: "high", mitigation: "Read the food safety rules before fitting out, and book a pre-opening inspection." },
-  health_wellness: { title: "Missing a health authority approval", description: "Offering a service that needs a health licence without one can close the business.", likelihood: "medium", impact: "high", mitigation: "Confirm with the health authority which licences your services need before you start." },
-  technology: { title: "The product takes longer to build than planned", description: "Software often takes longer and costs more than the first estimate.", likelihood: "high", impact: "medium", mitigation: "Launch a small first version, and add features only after users ask for them." },
-  ecommerce: { title: "Delivery and returns cost more than expected", description: "Delivery fees and returns can eat most of the margin on small orders.", likelihood: "medium", impact: "medium", mitigation: "Compare delivery partners, and set a minimum order value or a delivery fee." },
-  retail: { title: "Stock does not sell as fast as planned", description: "Unsold stock ties up cash that the business needs for rent and salaries.", likelihood: "medium", impact: "high", mitigation: "Start with a small order, and reorder only the items that sell." },
+  food_beverage: {
+    title: "Failing a food safety inspection",
+    description: "An inspection can delay opening if the kitchen or storage does not meet the rules.",
+    likelihood: "medium",
+    impact: "high",
+    mitigation: "Read the food safety rules before fitting out, and book a pre-opening inspection.",
+  },
+  health_wellness: {
+    title: "Missing a health authority approval",
+    description: "Offering a service that needs a health licence without one can close the business.",
+    likelihood: "medium",
+    impact: "high",
+    mitigation: "Confirm with the health authority which licences your services need before you start.",
+  },
+  technology: {
+    title: "The product takes longer to build than planned",
+    description: "Software often takes longer and costs more than the first estimate.",
+    likelihood: "high",
+    impact: "medium",
+    mitigation: "Launch a small first version, and add features only after users ask for them.",
+  },
+  ecommerce: {
+    title: "Delivery and returns cost more than expected",
+    description: "Delivery fees and returns can eat most of the margin on small orders.",
+    likelihood: "medium",
+    impact: "medium",
+    mitigation: "Compare delivery partners, and set a minimum order value or a delivery fee.",
+  },
+  retail: {
+    title: "Stock does not sell as fast as planned",
+    description: "Unsold stock ties up cash that the business needs for rent and salaries.",
+    likelihood: "medium",
+    impact: "high",
+    mitigation: "Start with a small order, and reorder only the items that sell.",
+  },
 };
 
 // The mainland licensing authority of each emirate.

@@ -44,7 +44,9 @@ export async function findOwnPlan(planId, user) {
  */
 export const getPlanForViewer = cache(async (planId, user) => {
   await connectDB();
-  const plan = await Plan.findById(planId).lean().catch(() => null);
+  const plan = await Plan.findById(planId)
+    .lean()
+    .catch(() => null);
   if (!plan || !(await canReadPlan(user, plan))) return null;
   return { plan: toPlain(plan), isOwner: String(plan.ownerId) === user.id };
 });

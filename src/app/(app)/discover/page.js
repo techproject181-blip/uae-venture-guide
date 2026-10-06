@@ -28,7 +28,9 @@ export default async function DiscoverPage({ searchParams }) {
 
   const cards = toPlain(await listPitchCards({ sector, emirate }));
   const [sent, hasProfile] = await Promise.all([
-    FundingInterest.find({ funderId: user.id, planId: { $in: cards.map((c) => c._id) } }).select("planId status").lean(),
+    FundingInterest.find({ funderId: user.id, planId: { $in: cards.map((c) => c._id) } })
+      .select("planId status")
+      .lean(),
     FunderProfile.exists({ userId: user.id }),
   ]);
   const interestByPlan = new Map(sent.map((interest) => [String(interest.planId), interest]));
@@ -36,7 +38,10 @@ export default async function DiscoverPage({ searchParams }) {
 
   return (
     <>
-      <PageHeader title="Discover" description="Plans that founders chose to share. You see a full plan only if its owner accepts your interest." />
+      <PageHeader
+        title="Discover"
+        description="Plans that founders chose to share. You see a full plan only if its owner accepts your interest."
+      />
 
       <form className="panel mb-6 grid gap-4 p-4 sm:p-5 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_10rem] md:items-end">
         <div className="space-y-2">

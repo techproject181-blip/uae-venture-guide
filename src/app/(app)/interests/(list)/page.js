@@ -42,21 +42,21 @@ export default async function InterestsPage() {
                   <div className="flex-1">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <h2 className="text-[1.0625rem] leading-snug font-semibold tracking-[-0.01em]">{plan?.title ?? "A deleted plan"}</h2>
+                        <h2 className="text-[1.0625rem] leading-snug font-semibold tracking-[-0.01em]">
+                          {plan?.title ?? "A deleted plan"}
+                        </h2>
                         <p className="mt-1 text-sm text-muted-foreground tabular-nums">Sent {formatDate(interest.createdAt)}</p>
                       </div>
                       <StatusBadge status={interest.status} className="shrink-0" />
                     </div>
-                    <p className="mt-4 line-clamp-4 text-sm leading-relaxed whitespace-pre-line text-muted-foreground">{interest.message}</p>
+                    <p className="mt-4 line-clamp-4 text-sm leading-relaxed whitespace-pre-line text-muted-foreground">
+                      {interest.message}
+                    </p>
                   </div>
 
                   {open && (
                     <div className="mt-5 space-y-4 border-t pt-4">
-                      <Fields
-                        items={[
-                          { label: "Owner", value: plan.ownerId?.name },
-                        ]}
-                      />
+                      <Fields items={[{ label: "Owner", value: plan.ownerId?.name }]} />
                       <div className="grid gap-2 sm:grid-cols-2">
                         <Link href={`/plans/${plan._id}`} className={buttonVariants({ size: "lg" })}>
                           Read the full plan

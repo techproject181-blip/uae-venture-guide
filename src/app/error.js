@@ -12,7 +12,9 @@ export default function ErrorPage({ retry }) {
         <AlertTriangle className="size-6" aria-hidden="true" />
       </span>
       <h1 className="mt-5 text-[1.875rem] leading-[1.15] sm:text-[2.25rem]">Something went wrong</h1>
-      <p className="mt-2 max-w-md text-muted-foreground">This page could not load. Try again in a moment. If it keeps happening, go back to the home page.</p>
+      <p className="mt-2 max-w-md text-muted-foreground">
+        This page could not load. Try again in a moment. If it keeps happening, go back to the home page.
+      </p>
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         <Button size="lg" onClick={() => retry()}>
           Try again

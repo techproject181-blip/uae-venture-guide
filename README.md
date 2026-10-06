@@ -30,13 +30,13 @@ All demo accounts use the password `Demo2026pass`:
 
 ## Docs
 
-| Doc | What it covers |
-| --- | --- |
-| [01-overview.md](docs/01-overview.md) | What the app does and the four roles |
-| [02-how-it-works.md](docs/02-how-it-works.md) | Tech, folders, sign-in, roadmap, chat, security |
-| [03-database.md](docs/03-database.md) | The collections and how they link |
-| [04-testing.md](docs/04-testing.md) | The tests and how to run them |
-| [05-setup-and-deploy.md](docs/05-setup-and-deploy.md) | Running locally and putting it online |
+| Doc                                                   | What it covers                                  |
+| ----------------------------------------------------- | ----------------------------------------------- |
+| [01-overview.md](docs/01-overview.md)                 | What the app does and the four roles            |
+| [02-how-it-works.md](docs/02-how-it-works.md)         | Tech, folders, sign-in, roadmap, chat, security |
+| [03-database.md](docs/03-database.md)                 | The collections and how they link               |
+| [04-testing.md](docs/04-testing.md)                   | The tests and how to run them                   |
+| [05-setup-and-deploy.md](docs/05-setup-and-deploy.md) | Running locally and putting it online           |
 
 ## Stack
 

@@ -24,7 +24,10 @@ const QUESTIONS = [
     q: "How do I know a fee is right?",
     a: "Each fee shows where it comes from. Official means an administrator checked it against a government or free zone page, and the page is linked. Demo fees and estimates are labelled as such. Always check the official page before you pay.",
   },
-  { q: "Does it cost anything?", a: "No. Creating an account and making plans is free. Each account can make five new roadmaps and ask 40 questions a day." },
+  {
+    q: "Does it cost anything?",
+    a: "No. Creating an account and making plans is free. Each account can make five new roadmaps and ask 40 questions a day.",
+  },
   {
     q: "Who are the mentors?",
     a: "People with experience of starting businesses in the UAE. An administrator approves every mentor before they appear. Once a mentor accepts your request, you talk with them in a conversation on the website.",
@@ -77,7 +80,8 @@ export default function HomePage() {
                 Plan your UAE startup, <span className="text-primary">step by step.</span>
               </h1>
               <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground sm:text-xl lg:mx-0">
-                Describe your business idea and get a roadmap: every step to start it in the UAE, what each step costs, and where to check it.
+                Describe your business idea and get a roadmap: every step to start it in the UAE, what each step costs, and where to check
+                it.
               </p>
               <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
                 <Link href="/sign-up" className={buttonVariants({ size: "lg", className: "group h-12 px-6 text-base" })}>
@@ -103,7 +107,10 @@ export default function HomePage() {
 
         {/* Emirates strip */}
         <section aria-label="Emirates covered" className="border-y bg-card py-6">
-          <p className="page-width mb-4 text-center text-sm text-muted-foreground">Plans for every emirate, mainland or free zone. Official sources so far for Federal, Abu Dhabi, Dubai, Sharjah and Ras Al Khaimah.</p>
+          <p className="page-width mb-4 text-center text-sm text-muted-foreground">
+            Plans for every emirate, mainland or free zone. Official sources so far for Federal, Abu Dhabi, Dubai, Sharjah and Ras Al
+            Khaimah.
+          </p>
           <div className="marquee-frame relative overflow-hidden mask-[linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
             <ul className="marquee flex w-max gap-4">
               {[...EMIRATES, ...EMIRATES, ...EMIRATES, ...EMIRATES].map((emirate, index) => (
@@ -121,7 +128,11 @@ export default function HomePage() {
 
         {/* Features */}
         <section aria-labelledby="features-title" className="page-width py-12 sm:py-14 lg:py-16">
-          <SectionIntro id="features-title" title="Everything a first business needs, in one place" text="One plan holds your steps, costs, documents and questions, so you always know what comes next." />
+          <SectionIntro
+            id="features-title"
+            title="Everything a first business needs, in one place"
+            text="One plan holds your steps, costs, documents and questions, so you always know what comes next."
+          />
           <Features />
         </section>
 
@@ -130,7 +141,10 @@ export default function HomePage() {
           <div className="page-width">
             <SectionIntro id="how-title" title="How it works" text="Three steps from idea to a plan you can follow." />
             <ol className="relative grid gap-10 md:grid-cols-3 md:gap-8">
-              <span aria-hidden="true" className="absolute top-6 right-[16%] left-[16%] hidden h-px border-t-2 border-dashed border-ink-200 md:block" />
+              <span
+                aria-hidden="true"
+                className="absolute top-6 right-[16%] left-[16%] hidden h-px border-t-2 border-dashed border-ink-200 md:block"
+              />
               {STEPS.map(({ title, text }, index) => (
                 <li key={title} className="reveal relative text-center">
                   <span className="relative mx-auto flex size-12 items-center justify-center rounded-2xl bg-primary font-display text-lg font-bold text-primary-foreground shadow-[0_8px_20px_-6px_color-mix(in_srgb,var(--brand-700)_60%,transparent)]">
@@ -173,7 +187,10 @@ export default function HomePage() {
                 <details key={q} className="group rounded-2xl border bg-card px-5 transition-shadow open:shadow-panel sm:px-6">
                   <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-semibold outline-none focus-visible:ring-3 focus-visible:ring-ring/50 [&::-webkit-details-marker]:hidden">
                     {q}
-                    <ChevronDown className="size-5 shrink-0 text-muted-foreground transition-transform duration-300 group-open:rotate-180" aria-hidden="true" />
+                    <ChevronDown
+                      className="size-5 shrink-0 text-muted-foreground transition-transform duration-300 group-open:rotate-180"
+                      aria-hidden="true"
+                    />
                   </summary>
                   <p className="pb-5 text-muted-foreground">{a}</p>
                 </details>

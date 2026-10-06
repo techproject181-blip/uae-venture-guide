@@ -20,7 +20,10 @@ export function ProgressBar({ percent, label = "Progress" }) {
         aria-valuemin={0}
         aria-valuemax={100}
       >
-        <div className="progress-fill h-full rounded-full bg-done transition-[width] duration-700 ease-out" style={{ width: `${percent}%` }} />
+        <div
+          className="progress-fill h-full rounded-full bg-done transition-[width] duration-700 ease-out"
+          style={{ width: `${percent}%` }}
+        />
       </div>
     </div>
   );
@@ -89,7 +92,12 @@ export function FeeLegend({ official = false, demo = false, estimate = false, do
 /** "Likelihood: High" style text for risks. High is in red; colour is never the only signal. */
 export function LevelBadge({ label, level }) {
   return (
-    <span className={cn("text-sm", level === "high" ? "font-bold text-destructive" : level === "medium" ? "font-medium" : "text-muted-foreground")}>
+    <span
+      className={cn(
+        "text-sm",
+        level === "high" ? "font-bold text-destructive" : level === "medium" ? "font-medium" : "text-muted-foreground",
+      )}
+    >
       {label}: {level.charAt(0).toUpperCase() + level.slice(1)}
     </span>
   );

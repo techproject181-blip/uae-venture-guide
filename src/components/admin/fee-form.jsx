@@ -36,14 +36,67 @@ export function FeeForm({ sourceId, fee = null, defaultEmirate = null }) {
       <FormAlert>{formError}</FormAlert>
       <input type="hidden" name="sourceId" value={sourceId} />
       <div className="grid gap-5 sm:grid-cols-2">
-        <SelectField id="kind" label="What the fee is for" options={FEE_KINDS} defaultValue={fee?.kind} placeholder="Choose…" error={errors.kind} />
-        <TextField id="item" label="Description" hint="For example: Trade licence, professional activity" defaultValue={fee?.item} error={errors.item} />
-        <SelectField id="emirate" label="Emirate" options={EMIRATE_OPTIONS} defaultValue={fee?.emirate ?? defaultEmirate ?? ""} error={errors.emirate} />
-        <SelectField id="jurisdiction" label="Applies to" options={JURISDICTION_OPTIONS} defaultValue={fee?.jurisdiction ?? "any"} error={errors.jurisdiction} />
-        <TextField id="amountMinAed" label="Lowest amount (AED)" type="number" min="0" inputMode="numeric" defaultValue={fee?.amountMinAed} error={errors.amountMinAed} />
-        <TextField id="amountMaxAed" label="Highest amount (AED)" type="number" min="0" inputMode="numeric" defaultValue={fee?.amountMaxAed} error={errors.amountMaxAed} />
-        <SelectField id="recurrence" label="How often" options={RECURRENCES} defaultValue={fee?.recurrence ?? "one_time"} error={errors.recurrence} />
-        <TextField id="verifiedAt" label="Last checked on" type="date" defaultValue={toDateInput(fee?.verifiedAt ?? new Date())} error={errors.verifiedAt} />
+        <SelectField
+          id="kind"
+          label="What the fee is for"
+          options={FEE_KINDS}
+          defaultValue={fee?.kind}
+          placeholder="Choose…"
+          error={errors.kind}
+        />
+        <TextField
+          id="item"
+          label="Description"
+          hint="For example: Trade licence, professional activity"
+          defaultValue={fee?.item}
+          error={errors.item}
+        />
+        <SelectField
+          id="emirate"
+          label="Emirate"
+          options={EMIRATE_OPTIONS}
+          defaultValue={fee?.emirate ?? defaultEmirate ?? ""}
+          error={errors.emirate}
+        />
+        <SelectField
+          id="jurisdiction"
+          label="Applies to"
+          options={JURISDICTION_OPTIONS}
+          defaultValue={fee?.jurisdiction ?? "any"}
+          error={errors.jurisdiction}
+        />
+        <TextField
+          id="amountMinAed"
+          label="Lowest amount (AED)"
+          type="number"
+          min="0"
+          inputMode="numeric"
+          defaultValue={fee?.amountMinAed}
+          error={errors.amountMinAed}
+        />
+        <TextField
+          id="amountMaxAed"
+          label="Highest amount (AED)"
+          type="number"
+          min="0"
+          inputMode="numeric"
+          defaultValue={fee?.amountMaxAed}
+          error={errors.amountMaxAed}
+        />
+        <SelectField
+          id="recurrence"
+          label="How often"
+          options={RECURRENCES}
+          defaultValue={fee?.recurrence ?? "one_time"}
+          error={errors.recurrence}
+        />
+        <TextField
+          id="verifiedAt"
+          label="Last checked on"
+          type="date"
+          defaultValue={toDateInput(fee?.verifiedAt ?? new Date())}
+          error={errors.verifiedAt}
+        />
       </div>
       <TextAreaField id="notes" label="Notes (optional)" rows={2} defaultValue={fee?.notes} error={errors.notes} />
       <CheckboxField id="active" label="Use this fee in roadmaps" defaultChecked={fee?.active ?? true} />

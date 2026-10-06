@@ -35,7 +35,9 @@ test("a funder waiting for approval cannot use funder pages or send interest", a
   await page.goto("/discover");
   await expect(page).toHaveURL(/\/pending$/);
 
-  const response = await page.request.post(`/api/plans/${"0".repeat(24)}/interest`, { data: { message: "I would like to see this plan." } });
+  const response = await page.request.post(`/api/plans/${"0".repeat(24)}/interest`, {
+    data: { message: "I would like to see this plan." },
+  });
   expect(response.status()).toBe(403);
 });
 

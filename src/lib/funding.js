@@ -24,7 +24,10 @@ export async function listPitchCards({ sector, emirate } = {}) {
 /** One plan as a pitch card, or null when it is not shared. */
 export async function getPitchCard(planId) {
   await connectDB();
-  const plan = await Plan.findOne({ _id: planId, status: "ready", shared: true, hiddenByAdmin: false }).select(PITCH_FIELDS).lean().catch(() => null);
+  const plan = await Plan.findOne({ _id: planId, status: "ready", shared: true, hiddenByAdmin: false })
+    .select(PITCH_FIELDS)
+    .lean()
+    .catch(() => null);
   return plan && toPitchCard(plan);
 }
 

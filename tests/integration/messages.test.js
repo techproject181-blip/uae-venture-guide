@@ -17,12 +17,25 @@ setupTestDatabase("messages");
 
 // The user object the app passes around after sign-in (see lib/session.js).
 async function makeUser(role, status = "active") {
-  const user = await User.create({ name: `Test ${role} ${Math.random().toString(36).slice(2, 6)}`, email: `${role}-${Math.random()}@test.local`, passwordHash: "x", role, status });
+  const user = await User.create({
+    name: `Test ${role} ${Math.random().toString(36).slice(2, 6)}`,
+    email: `${role}-${Math.random()}@test.local`,
+    passwordHash: "x",
+    role,
+    status,
+  });
   return { id: String(user._id), name: user.name, email: user.email, role: user.role, status: user.status };
 }
 
 function makeRequest(founder, mentor, status, extra = {}) {
-  return MentorRequest.create({ entrepreneurId: founder.id, mentorId: mentor.id, topic: "Choosing a location", message: "Could you look at my plan?", status, ...extra });
+  return MentorRequest.create({
+    entrepreneurId: founder.id,
+    mentorId: mentor.id,
+    topic: "Choosing a location",
+    message: "Could you look at my plan?",
+    status,
+    ...extra,
+  });
 }
 
 /** Calls a route handler as `user`, like the browser would. */
@@ -125,7 +138,10 @@ describe("sending and reading messages", () => {
   });
 
   test("a mentor's reply saved on an older request shows as the first message", async () => {
-    const request = await makeRequest(founder, mentor, "accepted", { mentorReply: "Happy to help.", respondedAt: new Date(Date.now() - 60_000) });
+    const request = await makeRequest(founder, mentor, "accepted", {
+      mentorReply: "Happy to help.",
+      respondedAt: new Date(Date.now() - 60_000),
+    });
     const conversation = await getConversation(request._id, founder);
     await sendMessage(conversation, founder, "Thank you!");
     const list = await listMessages(conversation.request, founder.id);
@@ -143,7 +159,9 @@ describe("sending and reading messages", () => {
     );
     await expect(sendMessage(conversation, mentor, "One too many")).rejects.toMatchObject({ status: 429 });
     // The other person is not held back.
-    await expect(sendMessage(await getConversation(request._id, founder), founder, "Still fine")).resolves.toMatchObject({ body: "Still fine" });
+    await expect(sendMessage(await getConversation(request._id, founder), founder, "Still fine")).resolves.toMatchObject({
+      body: "Still fine",
+    });
   });
 });
 
@@ -211,6 +229,8 @@ describe("the messages API", () => {
     );
     expect(response.status).toBe(200);
     const read = await call(GET, founder, request._id);
-    expect(read.body.messages.map(({ body, mine }) => ({ body, mine }))).toEqual([{ body: "Happy to help. Send me your budget.", mine: false }]);
+    expect(read.body.messages.map(({ body, mine }) => ({ body, mine }))).toEqual([
+      { body: "Happy to help. Send me your budget.", mine: false },
+    ]);
   });
 });

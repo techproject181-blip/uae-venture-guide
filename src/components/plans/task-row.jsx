@@ -79,7 +79,9 @@ export function TaskRow({ planId, task, number, phases, sources, canEdit }) {
               onClick={() => setOpen((shown) => !shown)}
               className="group/toggle flex min-h-11 w-full flex-wrap items-center gap-x-3 gap-y-1 rounded-sm py-2.5 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
             >
-              <span className={cn("leading-6 font-medium underline-offset-4 group-hover/toggle:underline", done && "text-muted-foreground")}>
+              <span
+                className={cn("leading-6 font-medium underline-offset-4 group-hover/toggle:underline", done && "text-muted-foreground")}
+              >
                 {task.title}
               </span>
               {done && (
@@ -97,7 +99,12 @@ export function TaskRow({ planId, task, number, phases, sources, canEdit }) {
         </div>
 
         {/* A fixed column on wide screens, so the amounts line up from row to row. */}
-        <div className={cn("pb-2 lg:flex lg:min-h-11 lg:w-60 lg:items-center lg:justify-end lg:pb-0", canEdit ? "pl-23 lg:pl-0" : "pl-10 lg:pl-0")}>
+        <div
+          className={cn(
+            "pb-2 lg:flex lg:min-h-11 lg:w-60 lg:items-center lg:justify-end lg:pb-0",
+            canEdit ? "pl-23 lg:pl-0" : "pl-10 lg:pl-0",
+          )}
+        >
           <Cost min={task.costMinAed} max={task.costMaxAed} basis={task.costBasis} />
         </div>
       </div>
@@ -116,7 +123,12 @@ export function TaskRow({ planId, task, number, phases, sources, canEdit }) {
             <ul className="mt-1 space-y-1">
               {links.map((source) => (
                 <li key={source.url}>
-                  <a href={source.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-medium text-foreground underline decoration-primary underline-offset-4 hover:decoration-2">
+                  <a
+                    href={source.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 font-medium text-foreground underline decoration-primary underline-offset-4 hover:decoration-2"
+                  >
                     {source.title}
                     <ExternalLink className="size-3.5 shrink-0" aria-hidden="true" />
                     <span className="sr-only">(opens in a new tab)</span>

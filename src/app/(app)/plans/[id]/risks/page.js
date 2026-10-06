@@ -15,9 +15,7 @@ export default async function PlanRisksPage({ params }) {
   if (!found) notFound();
 
   // Most serious first: likelihood times impact, as in the project's own risk table.
-  const risks = [...found.plan.risks].sort(
-    (a, b) => WEIGHT[b.likelihood] * WEIGHT[b.impact] - WEIGHT[a.likelihood] * WEIGHT[a.impact],
-  );
+  const risks = [...found.plan.risks].sort((a, b) => WEIGHT[b.likelihood] * WEIGHT[b.impact] - WEIGHT[a.likelihood] * WEIGHT[a.impact]);
 
   const isHigh = (risk) => risk.likelihood === "high" || risk.impact === "high";
   const aside = (

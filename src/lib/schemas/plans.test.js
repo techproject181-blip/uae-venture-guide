@@ -38,7 +38,13 @@ describe("taskSchema", () => {
 
 describe("budgetItemSchema", () => {
   test("lets the actual amount stay empty until it is known", () => {
-    const item = budgetItemSchema.parse({ category: "office", label: "Shop rent", estimatedAed: "3000", actualAed: "", recurrence: "monthly" });
+    const item = budgetItemSchema.parse({
+      category: "office",
+      label: "Shop rent",
+      estimatedAed: "3000",
+      actualAed: "",
+      recurrence: "monthly",
+    });
     expect(item.actualAed).toBeUndefined();
   });
 });

@@ -9,11 +9,52 @@ const verifiedAt = new Date("2026-09-01");
  */
 export async function addReferenceData() {
   const [det, added, dmcc, icp, inactive] = await Source.create([
-    { title: "Business licences in Dubai", publisher: "Dubai Department of Economy and Tourism", url: "https://www.dubaidet.gov.ae", emirate: "dubai", categories: ["licensing"], summary: "Trade name reservation, initial approval and trade licences for Dubai mainland companies.", verifiedAt },
-    { title: "Business licences in Abu Dhabi", publisher: "Abu Dhabi Department of Economic Development", url: "https://www.added.gov.ae", emirate: "abu_dhabi", categories: ["licensing"], summary: "Trade licences and fees for Abu Dhabi mainland companies.", verifiedAt },
-    { title: "DMCC free zone company setup", publisher: "Dubai Multi Commodities Centre", url: "https://www.dmcc.ae", emirate: "dubai", categories: ["free_zones", "licensing"], summary: "Company setup packages and licence fees in the DMCC free zone.", verifiedAt },
-    { title: "Residence visas and Emirates ID", publisher: "Federal Authority for Identity, Citizenship, Customs and Port Security", url: "https://icp.gov.ae", emirate: null, categories: ["visas"], summary: "Applying for the establishment card, residence visas and the Emirates ID card.", verifiedAt },
-    { title: "Old Dubai licence fee list", publisher: "Dubai Department of Economy and Tourism", url: "https://www.dubaidet.gov.ae/old", emirate: "dubai", categories: ["licensing"], summary: "An outdated list of trade licence fees and costs.", verifiedAt, active: false },
+    {
+      title: "Business licences in Dubai",
+      publisher: "Dubai Department of Economy and Tourism",
+      url: "https://www.dubaidet.gov.ae",
+      emirate: "dubai",
+      categories: ["licensing"],
+      summary: "Trade name reservation, initial approval and trade licences for Dubai mainland companies.",
+      verifiedAt,
+    },
+    {
+      title: "Business licences in Abu Dhabi",
+      publisher: "Abu Dhabi Department of Economic Development",
+      url: "https://www.added.gov.ae",
+      emirate: "abu_dhabi",
+      categories: ["licensing"],
+      summary: "Trade licences and fees for Abu Dhabi mainland companies.",
+      verifiedAt,
+    },
+    {
+      title: "DMCC free zone company setup",
+      publisher: "Dubai Multi Commodities Centre",
+      url: "https://www.dmcc.ae",
+      emirate: "dubai",
+      categories: ["free_zones", "licensing"],
+      summary: "Company setup packages and licence fees in the DMCC free zone.",
+      verifiedAt,
+    },
+    {
+      title: "Residence visas and Emirates ID",
+      publisher: "Federal Authority for Identity, Citizenship, Customs and Port Security",
+      url: "https://icp.gov.ae",
+      emirate: null,
+      categories: ["visas"],
+      summary: "Applying for the establishment card, residence visas and the Emirates ID card.",
+      verifiedAt,
+    },
+    {
+      title: "Old Dubai licence fee list",
+      publisher: "Dubai Department of Economy and Tourism",
+      url: "https://www.dubaidet.gov.ae/old",
+      emirate: "dubai",
+      categories: ["licensing"],
+      summary: "An outdated list of trade licence fees and costs.",
+      verifiedAt,
+      active: false,
+    },
   ]);
 
   const fee = (source, kind, emirate, jurisdiction, amount, extra = {}) => ({

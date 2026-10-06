@@ -61,7 +61,14 @@ export function ActualChart({ rows, height }) {
         <XAxis type="number" domain={[0, ticks.at(-1)]} ticks={ticks} tickFormatter={shortAed} {...axisProps} />
         <YAxis type="category" dataKey="label" width={96} {...axisProps} />
         <Tooltip {...tooltipProps} />
-        <Legend verticalAlign="top" align="left" iconType="square" itemSorter={null} formatter={legendText} wrapperStyle={{ fontSize: 13, paddingBottom: 8 }} />
+        <Legend
+          verticalAlign="top"
+          align="left"
+          iconType="square"
+          itemSorter={null}
+          formatter={legendText}
+          wrapperStyle={{ fontSize: 13, paddingBottom: 8 }}
+        />
         <Bar dataKey="estimated" name="Estimated" fill={ESTIMATED} radius={[0, 4, 4, 0]} maxBarSize={16} animationDuration={600} />
         <Bar dataKey="actual" name="Actual" fill={ACTUAL} radius={[0, 4, 4, 0]} maxBarSize={16} animationDuration={600} />
       </BarChart>
@@ -72,7 +79,14 @@ export function ActualChart({ rows, height }) {
 /** The amount at the end of a bar, on one line (Recharts' own label wraps at spaces). */
 function ValueLabel({ x, y, width, height, value }) {
   return (
-    <text x={x + width + 6} y={y + height / 2} dominantBaseline="middle" fill={INK} fontSize={12} style={{ fontVariantNumeric: "tabular-nums" }}>
+    <text
+      x={x + width + 6}
+      y={y + height / 2}
+      dominantBaseline="middle"
+      fill={INK}
+      fontSize={12}
+      style={{ fontVariantNumeric: "tabular-nums" }}
+    >
       {formatAed(value)}
     </text>
   );

@@ -30,7 +30,12 @@ function Kpi({ icon: Icon, label, value, hint, href, alert }) {
     >
       <div className="flex items-center justify-between">
         <span className="text-sm font-medium text-muted-foreground">{label}</span>
-        <span className={cn("flex size-9 items-center justify-center rounded-lg", alert ? "bg-gold-100 text-gold-800" : "bg-accent text-primary")}>
+        <span
+          className={cn(
+            "flex size-9 items-center justify-center rounded-lg",
+            alert ? "bg-gold-100 text-gold-800" : "bg-accent text-primary",
+          )}
+        >
           <Icon className="size-4.5" aria-hidden="true" />
         </span>
       </div>
@@ -67,22 +72,35 @@ function CardLink({ href, children }) {
 /** The administrator's overview: the numbers that matter, who is waiting, the newest accounts, and the state of sources and content. */
 export async function AdminOverview({ user }) {
   await connectDB();
-  const [pending, waiting, newest, roleCounts, plans, sharedPlans, hiddenPlans, sources, hiddenSources, demoSources, fees, posts, hiddenPosts] =
-    await Promise.all([
-      User.countDocuments({ status: "pending" }),
-      User.find({ status: "pending" }).sort({ createdAt: -1 }).limit(5).select("name email role createdAt").lean(),
-      User.find().sort({ createdAt: -1 }).limit(6).select("name email role status createdAt").lean(),
-      User.aggregate([{ $group: { _id: "$role", count: { $sum: 1 } } }]),
-      Plan.countDocuments(),
-      Plan.countDocuments({ shared: true }),
-      Plan.countDocuments({ hiddenByAdmin: true }),
-      Source.countDocuments({ active: true }),
-      Source.countDocuments({ active: false }),
-      Source.countDocuments({ demo: true }),
-      FeeReference.countDocuments({ active: true }),
-      Post.countDocuments({ status: "published" }),
-      Post.countDocuments({ status: "hidden" }),
-    ]);
+  const [
+    pending,
+    waiting,
+    newest,
+    roleCounts,
+    plans,
+    sharedPlans,
+    hiddenPlans,
+    sources,
+    hiddenSources,
+    demoSources,
+    fees,
+    posts,
+    hiddenPosts,
+  ] = await Promise.all([
+    User.countDocuments({ status: "pending" }),
+    User.find({ status: "pending" }).sort({ createdAt: -1 }).limit(5).select("name email role createdAt").lean(),
+    User.find().sort({ createdAt: -1 }).limit(6).select("name email role status createdAt").lean(),
+    User.aggregate([{ $group: { _id: "$role", count: { $sum: 1 } } }]),
+    Plan.countDocuments(),
+    Plan.countDocuments({ shared: true }),
+    Plan.countDocuments({ hiddenByAdmin: true }),
+    Source.countDocuments({ active: true }),
+    Source.countDocuments({ active: false }),
+    Source.countDocuments({ demo: true }),
+    FeeReference.countDocuments({ active: true }),
+    Post.countDocuments({ status: "published" }),
+    Post.countDocuments({ status: "hidden" }),
+  ]);
 
   const byRole = Object.fromEntries(roleCounts.map((row) => [row._id, row.count]));
   const accounts = Object.values(byRole).reduce((sum, n) => sum + n, 0);
@@ -110,16 +128,27 @@ export async function AdminOverview({ user }) {
           href="/admin/users?status=pending"
           alert={pending > 0}
         />
-        <Kpi icon={Users} label="Accounts" value={accounts} hint={`${byRole.entrepreneur ?? 0} founders · ${byRole.mentor ?? 0} mentors`} href="/admin/users?status=all" />
+        <Kpi
+          icon={Users}
+          label="Accounts"
+          value={accounts}
+          hint={`${byRole.entrepreneur ?? 0} founders · ${byRole.mentor ?? 0} mentors`}
+          href="/admin/users?status=all"
+        />
         <Kpi icon={BookOpen} label="Sources shown" value={sources} hint={`${fees} fees in use`} href="/admin/sources" />
         <Kpi icon={FileText} label="Published posts" value={posts} hint={`${plans} plans · ${sharedPlans} shared`} href="/admin/content" />
       </div>
 
       <div className="grid items-start gap-4 xl:grid-cols-3">
         <div className="space-y-4 xl:col-span-2">
-          <Card title="Waiting for approval" action={pending > waiting.length && <CardLink href="/admin/users?status=pending">See all {pending}</CardLink>}>
+          <Card
+            title="Waiting for approval"
+            action={pending > waiting.length && <CardLink href="/admin/users?status=pending">See all {pending}</CardLink>}
+          >
             {waiting.length === 0 ? (
-              <p className="px-5 py-8 text-center text-sm text-muted-foreground">No accounts are waiting. New mentors and funders will appear here.</p>
+              <p className="px-5 py-8 text-center text-sm text-muted-foreground">
+                No accounts are waiting. New mentors and funders will appear here.
+              </p>
             ) : (
               <ul className="divide-y">
                 {toPlain(waiting).map((account) => (
@@ -177,7 +206,9 @@ export async function AdminOverview({ user }) {
                       <td>
                         <StatusBadge status={account.status} />
                       </td>
-                      <td className="hidden text-right whitespace-nowrap text-muted-foreground md:table-cell">{formatDate(account.createdAt)}</td>
+                      <td className="hidden text-right whitespace-nowrap text-muted-foreground md:table-cell">
+                        {formatDate(account.createdAt)}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -198,7 +229,10 @@ export async function AdminOverview({ user }) {
                       <span className="font-medium tabular-nums">{n}</span>
                     </div>
                     <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-ink-100">
-                      <div className="h-full rounded-full bg-primary" style={{ width: `${accounts ? Math.round((n / accounts) * 100) : 0}%` }} />
+                      <div
+                        className="h-full rounded-full bg-primary"
+                        style={{ width: `${accounts ? Math.round((n / accounts) * 100) : 0}%` }}
+                      />
                     </div>
                   </li>
                 );
@@ -231,8 +265,8 @@ export async function AdminOverview({ user }) {
             <div role="note" className="flex gap-3 rounded-xl border border-gold-400 bg-gold-50 p-4 text-sm">
               <ShieldAlert className="mt-0.5 size-4 shrink-0 text-gold-700" aria-hidden="true" />
               <p>
-                <strong className="font-medium">Check the demo sources.</strong> Compare each one with the official page, then untick “demo” so its fees count as
-                official.
+                <strong className="font-medium">Check the demo sources.</strong> Compare each one with the official page, then untick “demo”
+                so its fees count as official.
               </p>
             </div>
           )}

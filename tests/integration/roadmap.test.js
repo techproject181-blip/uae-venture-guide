@@ -81,7 +81,10 @@ describe("mainland or free zone", () => {
 
   test("a free zone plan uses the free zone's licence fee", async () => {
     const roadmap = await generateRoadmap(intake({ jurisdictionPref: "free_zone" }));
-    expect(task(roadmap, "Pay for and collect your trade licence")).toMatchObject({ costMaxAed: 20000, feeReferenceId: fees.dmccLicence._id });
+    expect(task(roadmap, "Pay for and collect your trade licence")).toMatchObject({
+      costMaxAed: 20000,
+      feeReferenceId: fees.dmccLicence._id,
+    });
     expect(task(roadmap, "Reserve your trade name")).toBeUndefined();
   });
 });

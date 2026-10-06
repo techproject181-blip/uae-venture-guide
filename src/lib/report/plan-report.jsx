@@ -11,14 +11,32 @@ import { reportColors } from "@/lib/theme-colors";
 // colours come from the app's palette (src/lib/theme-colors.js mirrors
 // globals.css, because the PDF is drawn on the server and cannot read CSS).
 
-const { ink: INK, muted: MUTED, rule: RULE, strongRule: STRONG_RULE, fill: FILL, seal: GOLD, done: GREEN, danger: RED, estimate: BAR } = reportColors;
+const {
+  ink: INK,
+  muted: MUTED,
+  rule: RULE,
+  strongRule: STRONG_RULE,
+  fill: FILL,
+  seal: GOLD,
+  done: GREEN,
+  danger: RED,
+  estimate: BAR,
+} = reportColors;
 
 const s = StyleSheet.create({
   page: { paddingTop: 40, paddingBottom: 56, paddingHorizontal: 40, fontFamily: "Helvetica", fontSize: 10, color: INK, lineHeight: 1.4 },
   brand: { fontSize: 8, color: MUTED, fontFamily: "Helvetica-Bold", letterSpacing: 1 },
   title: { fontSize: 22, fontFamily: "Helvetica-Bold", marginTop: 6, lineHeight: 1.25 },
   label: { fontSize: 7, color: MUTED, fontFamily: "Helvetica-Bold", letterSpacing: 0.6, textTransform: "uppercase" },
-  fields: { flexDirection: "row", flexWrap: "wrap", marginTop: 12, borderTopWidth: 1, borderBottomWidth: 1, borderColor: RULE, paddingVertical: 8 },
+  fields: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 12,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: RULE,
+    paddingVertical: 8,
+  },
   field: { paddingRight: 14, marginRight: 14, borderRightWidth: 1, borderRightColor: RULE },
   fieldLast: { paddingRight: 0, marginRight: 0, borderRightWidth: 0 },
   fieldValue: { fontSize: 10, fontFamily: "Helvetica-Bold", marginTop: 2 },
@@ -34,7 +52,19 @@ const s = StyleSheet.create({
   bullet: { flexDirection: "row", marginBottom: 3 },
   barTrack: { flex: 1, height: 8, backgroundColor: FILL },
   link: { color: GREEN },
-  footer: { position: "absolute", bottom: 24, left: 40, right: 40, flexDirection: "row", justifyContent: "space-between", fontSize: 8, color: MUTED, borderTopWidth: 1, borderTopColor: RULE, paddingTop: 6 },
+  footer: {
+    position: "absolute",
+    bottom: 24,
+    left: 40,
+    right: 40,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    fontSize: 8,
+    color: MUTED,
+    borderTopWidth: 1,
+    borderTopColor: RULE,
+    paddingTop: 6,
+  },
 });
 
 const cell = (flex, extra) => ({ flex, paddingRight: 6, ...extra });
@@ -195,7 +225,10 @@ export function PlanReport({ plan, sources }) {
         {plan.risks.map((risk) => (
           <View key={risk._id} style={{ marginBottom: 6 }} wrap={false}>
             <Text style={{ fontFamily: "Helvetica-Bold" }}>
-              {risk.title} <Text style={s.muted}>(likelihood {risk.likelihood}, impact {risk.impact})</Text>
+              {risk.title}{" "}
+              <Text style={s.muted}>
+                (likelihood {risk.likelihood}, impact {risk.impact})
+              </Text>
             </Text>
             <Text>{risk.description}</Text>
             <Text>What to do: {risk.mitigation}</Text>

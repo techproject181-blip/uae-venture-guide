@@ -33,7 +33,9 @@ export function AcceptingSwitch({ initial }) {
         <p id="accepting-label" className="font-semibold">
           Taking new requests
         </p>
-        <p className="mt-0.5 text-sm text-muted-foreground">{on ? "Founders can ask you for guidance." : "Paused: founders see you are not taking requests."}</p>
+        <p className="mt-0.5 text-sm text-muted-foreground">
+          {on ? "Founders can ask you for guidance." : "Paused: founders see you are not taking requests."}
+        </p>
       </div>
       <button
         type="button"
@@ -47,7 +49,12 @@ export function AcceptingSwitch({ initial }) {
           on ? "bg-primary" : "bg-ink-300",
         )}
       >
-        <span className={cn("inline-block size-5 rounded-full bg-card shadow-sm transition-transform duration-200", on ? "translate-x-6" : "translate-x-1")} />
+        <span
+          className={cn(
+            "inline-block size-5 rounded-full bg-card shadow-sm transition-transform duration-200",
+            on ? "translate-x-6" : "translate-x-1",
+          )}
+        />
       </button>
     </div>
   );

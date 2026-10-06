@@ -4,7 +4,18 @@ import { SESSION_COOKIE, verifySessionToken } from "@/lib/jwt";
 // Runs before the matched pages. It only checks that the session cookie is
 // valid; each page then loads the user to check their role and status.
 // Signed-in people skip the home, sign-in and sign-up pages and go to their dashboard.
-const PRIVATE_PAGES = ["/dashboard", "/pending", "/plans", "/requests", "/profile", "/my-posts", "/discover", "/interests", "/admin", "/account"];
+const PRIVATE_PAGES = [
+  "/dashboard",
+  "/pending",
+  "/plans",
+  "/requests",
+  "/profile",
+  "/my-posts",
+  "/discover",
+  "/interests",
+  "/admin",
+  "/account",
+];
 const GUEST_PAGES = ["/", "/sign-in", "/sign-up"];
 
 export async function proxy(request) {

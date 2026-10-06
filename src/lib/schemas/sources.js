@@ -15,7 +15,11 @@ const checkedOn = z.coerce
 
 export const sourceSchema = z.object({
   title: z.string("Enter a title.").trim().min(3, "Enter a title.").max(160, "Use 160 characters or fewer."),
-  publisher: z.string("Enter who publishes this page.").trim().min(2, "Enter who publishes this page.").max(120, "Use 120 characters or fewer."),
+  publisher: z
+    .string("Enter who publishes this page.")
+    .trim()
+    .min(2, "Enter who publishes this page.")
+    .max(120, "Use 120 characters or fewer."),
   url: webUrl(),
   emirate,
   categories: multiChoice(valuesOf(SOURCE_CATEGORIES), "Choose valid categories.").refine(

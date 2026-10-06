@@ -27,7 +27,9 @@ export default async function EditSourcePage({ params }) {
   const { id } = await params;
 
   await connectDB();
-  const source = await Source.findById(id).lean().catch(() => null);
+  const source = await Source.findById(id)
+    .lean()
+    .catch(() => null);
   if (!source) notFound();
   const fees = await FeeReference.find({ sourceId: id }).sort({ kind: 1 }).lean();
 
@@ -49,7 +51,12 @@ export default async function EditSourcePage({ params }) {
               title="Official page"
               footer={
                 <>
-                  <a href={source.url} target="_blank" rel="noopener noreferrer" className={buttonVariants({ variant: "outline", size: "lg" })}>
+                  <a
+                    href={source.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={buttonVariants({ variant: "outline", size: "lg" })}
+                  >
                     Open page
                     <ExternalLink aria-hidden="true" />
                   </a>
@@ -106,9 +113,13 @@ export default async function EditSourcePage({ params }) {
                 <tr>
                   <th scope="col">Fee</th>
                   <th scope="col">Applies to</th>
-                  <th scope="col" className="text-right">Amount</th>
+                  <th scope="col" className="text-right">
+                    Amount
+                  </th>
                   <th scope="col">Checked</th>
-                  <th scope="col" className="text-right">Edit</th>
+                  <th scope="col" className="text-right">
+                    Edit
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -117,9 +128,7 @@ export default async function EditSourcePage({ params }) {
                     <td>
                       <p className="font-medium">{fee.item}</p>
                       {/* The kind is shown only when it says something the description does not. */}
-                      {labelOf(FEE_KINDS, fee.kind) !== fee.item && (
-                        <p className="text-muted-foreground">{labelOf(FEE_KINDS, fee.kind)}</p>
-                      )}
+                      {labelOf(FEE_KINDS, fee.kind) !== fee.item && <p className="text-muted-foreground">{labelOf(FEE_KINDS, fee.kind)}</p>}
                       <div className="mt-2 flex flex-wrap gap-1.5">
                         {!fee.active && <StatusBadge status="hidden" label="Not used" />}
                         {fee.demo && <Stamp tone="waiting">Demo</Stamp>}

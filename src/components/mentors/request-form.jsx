@@ -26,7 +26,12 @@ export function RequestForm({ mentorId, mentorName, plans }) {
       <FormAlert>{formError}</FormAlert>
       <input type="hidden" name="mentorId" value={mentorId} />
       <div className="grid gap-5 sm:grid-cols-2">
-        <TextField id="topic" label="What do you need help with?" placeholder="For example: Choosing between mainland and a free zone" error={errors.topic} />
+        <TextField
+          id="topic"
+          label="What do you need help with?"
+          placeholder="For example: Choosing between mainland and a free zone"
+          error={errors.topic}
+        />
         <SelectField
           id="planId"
           label="Attach a plan (optional)"
@@ -36,8 +41,16 @@ export function RequestForm({ mentorId, mentorName, plans }) {
           error={errors.planId}
         />
       </div>
-      <TextAreaField id="message" label="Message" rows={5} hint="Say a little about your idea and where you are stuck." error={errors.message} />
-      <SubmitButton pending={pending} pendingText="Sending…">Send request</SubmitButton>
+      <TextAreaField
+        id="message"
+        label="Message"
+        rows={5}
+        hint="Say a little about your idea and where you are stuck."
+        error={errors.message}
+      />
+      <SubmitButton pending={pending} pendingText="Sending…">
+        Send request
+      </SubmitButton>
     </form>
   );
 }

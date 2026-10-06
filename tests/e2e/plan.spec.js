@@ -19,7 +19,10 @@ test("an entrepreneur builds a roadmap and works through it", async ({ page }) =
     await page.goto(`${planPath}/tasks`);
     await expectAccessible(page);
     const saved = page.waitForResponse((response) => response.url().endsWith("/status") && response.ok());
-    await page.getByRole("checkbox", { name: /^Mark as done:/ }).first().check();
+    await page
+      .getByRole("checkbox", { name: /^Mark as done:/ })
+      .first()
+      .check();
     await saved;
     // The header updates in place once the saved plan has reloaded.
     await expect(page.getByText(/^1 of \d+ steps done$/)).toBeVisible();

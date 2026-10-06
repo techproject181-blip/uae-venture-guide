@@ -98,9 +98,7 @@ export default async function PendingPage() {
           }
         >
           {profile ? (
-            <p>
-              Your profile is saved (last changed {formatDate(profile.updatedAt)}). You can still improve it while you wait.
-            </p>
+            <p>Your profile is saved (last changed {formatDate(profile.updatedAt)}). You can still improve it while you wait.</p>
           ) : (
             <p>While you wait, complete your profile so the administrator can review it.</p>
           )}

@@ -4,7 +4,10 @@ import { ADMIN_EMAIL, createPlan, expectAccessible, expectNotFound, signIn, sign
 /** The administrator approves a waiting account from the users page. */
 async function approve(admin, name) {
   await admin.goto("/admin/users");
-  await admin.getByRole("row", { name: new RegExp(name) }).getByRole("button", { name: "Approve" }).click();
+  await admin
+    .getByRole("row", { name: new RegExp(name) })
+    .getByRole("button", { name: "Approve" })
+    .click();
   await expect(admin.getByText("Account approved.")).toBeVisible();
 }
 

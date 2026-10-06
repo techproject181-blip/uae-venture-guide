@@ -53,7 +53,9 @@ export async function answerQuestion(plan, question) {
     }
   }
   // The sources are shown as links under the answer, so the text does not list them.
-  parts.push("This is a sample answer from the built-in assistant, while the AI service is not connected. Check the official source before you act.");
+  parts.push(
+    "This is a sample answer from the built-in assistant, while the AI service is not connected. Check the official source before you act.",
+  );
 
   return { text: parts.join("\n\n"), sourceIds: sources.map((source) => source._id) };
 }
@@ -88,7 +90,9 @@ const SECTIONS = {
   },
   risk(plan) {
     const weight = { low: 1, medium: 2, high: 3 };
-    const top = [...plan.risks].sort((a, b) => weight[b.likelihood] * weight[b.impact] - weight[a.likelihood] * weight[a.impact]).slice(0, 2);
+    const top = [...plan.risks]
+      .sort((a, b) => weight[b.likelihood] * weight[b.impact] - weight[a.likelihood] * weight[a.impact])
+      .slice(0, 2);
     return `Your biggest risks:\n${top.map((risk) => `- ${risk.title}. What to do: ${risk.mitigation}`).join("\n")}`;
   },
   tax(plan) {

@@ -22,7 +22,10 @@ const BUDGET = [
 export function HeroVisual() {
   return (
     <figure className="relative mx-auto w-full max-w-xl lg:max-w-none">
-      <div aria-hidden="true" className="absolute -inset-x-6 -inset-y-10 -z-10 rounded-[3rem] bg-linear-to-br from-brand-200/60 via-brand-100/40 to-brand-50/60 blur-2xl" />
+      <div
+        aria-hidden="true"
+        className="absolute -inset-x-6 -inset-y-10 -z-10 rounded-[3rem] bg-linear-to-br from-brand-200/60 via-brand-100/40 to-brand-50/60 blur-2xl"
+      />
 
       <div className="hero-window overflow-hidden rounded-2xl border bg-card shadow-window">
         {/* Window bar */}
@@ -30,7 +33,9 @@ export function HeroVisual() {
           <span className="size-2.5 rounded-full bg-ink-300" />
           <span className="size-2.5 rounded-full bg-ink-300" />
           <span className="size-2.5 rounded-full bg-ink-300" />
-          <span className="ml-3 truncate rounded-md bg-card px-3 py-1 text-xs text-muted-foreground ring-1 ring-border">My plans / Specialty café</span>
+          <span className="ml-3 truncate rounded-md bg-card px-3 py-1 text-xs text-muted-foreground ring-1 ring-border">
+            My plans / Specialty café
+          </span>
         </div>
 
         <div className="p-5 sm:p-6">
@@ -85,7 +90,11 @@ export function HeroVisual() {
           </div>
           <div className="mt-3 flex h-2.5 gap-0.5 overflow-hidden rounded-full">
             {BUDGET.map((part, index) => (
-              <span key={part.label} className={`bar-fill h-full ${part.className}`} style={{ width: `${part.share}%`, animationDelay: `${0.4 + index * 0.1}s` }} />
+              <span
+                key={part.label}
+                className={`bar-fill h-full ${part.className}`}
+                style={{ width: `${part.share}%`, animationDelay: `${0.4 + index * 0.1}s` }}
+              />
             ))}
           </div>
           <ul className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">

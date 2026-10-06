@@ -56,7 +56,9 @@ export function ConfirmProvider({ children }) {
               </span>
               <div className="min-w-0">
                 <AlertDialog.Title className="text-lg font-semibold">{request?.title}</AlertDialog.Title>
-                {request?.description && <AlertDialog.Description className="mt-1.5 text-muted-foreground">{request.description}</AlertDialog.Description>}
+                {request?.description && (
+                  <AlertDialog.Description className="mt-1.5 text-muted-foreground">{request.description}</AlertDialog.Description>
+                )}
               </div>
             </div>
             <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
@@ -65,7 +67,9 @@ export function ConfirmProvider({ children }) {
                 size="lg"
                 autoFocus
                 onClick={() => close(true)}
-                className={danger ? "border-danger-700 bg-danger-700 text-primary-foreground shadow-none hover:bg-danger-700/90" : undefined}
+                className={
+                  danger ? "border-danger-700 bg-danger-700 text-primary-foreground shadow-none hover:bg-danger-700/90" : undefined
+                }
               >
                 {request?.confirmLabel ?? "Confirm"}
               </Button>

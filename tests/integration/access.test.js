@@ -10,7 +10,13 @@ setupTestDatabase("access");
 
 // The user object the app passes around after sign-in (see lib/session.js).
 async function makeUser(role, status = "active") {
-  const user = await User.create({ name: `Test ${role}`, email: `${role}-${status}-${Math.random()}@test.local`, passwordHash: "x", role, status });
+  const user = await User.create({
+    name: `Test ${role}`,
+    email: `${role}-${status}-${Math.random()}@test.local`,
+    passwordHash: "x",
+    role,
+    status,
+  });
   return { id: String(user._id), role: user.role, status: user.status };
 }
 
@@ -31,7 +37,14 @@ async function makePlan(ownerId, extra = {}) {
 }
 
 function askMentor(mentor, plan, status) {
-  return MentorRequest.create({ entrepreneurId: plan.ownerId, mentorId: mentor.id, planId: plan._id, topic: "Licence", message: "Can you help?", status });
+  return MentorRequest.create({
+    entrepreneurId: plan.ownerId,
+    mentorId: mentor.id,
+    planId: plan._id,
+    topic: "Licence",
+    message: "Can you help?",
+    status,
+  });
 }
 
 function showInterest(funder, plan, status) {

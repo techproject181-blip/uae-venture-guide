@@ -33,19 +33,73 @@ export function MentorProfileForm({ name, profile }) {
       <FormPart legend="Who you are">
         <div className="grid gap-5 sm:grid-cols-2">
           <TextField id="name" label="Full name" autoComplete="name" defaultValue={name} error={errors.name} />
-          <TextField id="yearsExperience" label="Years of experience" type="number" min="0" inputMode="numeric" defaultValue={profile?.yearsExperience ?? 0} error={errors.yearsExperience} />
+          <TextField
+            id="yearsExperience"
+            label="Years of experience"
+            type="number"
+            min="0"
+            inputMode="numeric"
+            defaultValue={profile?.yearsExperience ?? 0}
+            error={errors.yearsExperience}
+          />
         </div>
-        <TextField id="headline" label="Headline" placeholder="For example: Founder of two cafés in Dubai" defaultValue={profile?.headline} error={errors.headline} />
-        <TextAreaField id="bio" label="About you" rows={5} hint="Your experience, and how you like to help founders." defaultValue={profile?.bio} error={errors.bio} />
-        <TextField id="linkedinUrl" label="LinkedIn profile (optional)" type="url" placeholder="https://www.linkedin.com/in/…" defaultValue={profile?.linkedinUrl} error={errors.linkedinUrl} />
+        <TextField
+          id="headline"
+          label="Headline"
+          placeholder="For example: Founder of two cafés in Dubai"
+          defaultValue={profile?.headline}
+          error={errors.headline}
+        />
+        <TextAreaField
+          id="bio"
+          label="About you"
+          rows={5}
+          hint="Your experience, and how you like to help founders."
+          defaultValue={profile?.bio}
+          error={errors.bio}
+        />
+        <TextField
+          id="linkedinUrl"
+          label="LinkedIn profile (optional)"
+          type="url"
+          placeholder="https://www.linkedin.com/in/…"
+          defaultValue={profile?.linkedinUrl}
+          error={errors.linkedinUrl}
+        />
       </FormPart>
       <FormPart legend="Where you can help">
-        <CheckboxGroup id="expertise" label="What you can help with" options={EXPERTISE} defaultValues={profile?.expertise ?? []} error={errors.expertise} />
-        <CheckboxGroup id="industries" label="Industries you know (optional)" options={SECTORS} defaultValues={profile?.industries ?? []} error={errors.industries} />
-        <CheckboxGroup id="emirates" label="Emirates you know" options={EMIRATES} defaultValues={profile?.emirates ?? []} error={errors.emirates} />
+        <CheckboxGroup
+          id="expertise"
+          label="What you can help with"
+          options={EXPERTISE}
+          defaultValues={profile?.expertise ?? []}
+          error={errors.expertise}
+        />
+        <CheckboxGroup
+          id="industries"
+          label="Industries you know (optional)"
+          options={SECTORS}
+          defaultValues={profile?.industries ?? []}
+          error={errors.industries}
+        />
+        <CheckboxGroup
+          id="emirates"
+          label="Emirates you know"
+          options={EMIRATES}
+          defaultValues={profile?.emirates ?? []}
+          error={errors.emirates}
+        />
       </FormPart>
-      <FormPart id="requests" legend="Guidance requests" note="Turn this off when you are busy. Founders still see your profile, but cannot send you new requests.">
-        <CheckboxField id="acceptingRequests" label="I am taking new guidance requests" defaultChecked={profile?.acceptingRequests ?? true} />
+      <FormPart
+        id="requests"
+        legend="Guidance requests"
+        note="Turn this off when you are busy. Founders still see your profile, but cannot send you new requests."
+      >
+        <CheckboxField
+          id="acceptingRequests"
+          label="I am taking new guidance requests"
+          defaultChecked={profile?.acceptingRequests ?? true}
+        />
       </FormPart>
       <FormActions>
         <SubmitButton pending={pending} pendingText="Saving…">
@@ -65,17 +119,61 @@ export function FunderProfileForm({ name, profile }) {
       <FormPart legend="Who you are">
         <div className="grid gap-5 sm:grid-cols-2">
           <TextField id="name" label="Full name" autoComplete="name" defaultValue={name} error={errors.name} />
-          <TextField id="organization" label="Organisation" hint="Or your own name if you invest alone." defaultValue={profile?.organization} error={errors.organization} />
-          <SelectField id="funderType" label="Type of funder" options={FUNDER_TYPES} placeholder="Choose…" defaultValue={profile?.funderType} error={errors.funderType} />
+          <TextField
+            id="organization"
+            label="Organisation"
+            hint="Or your own name if you invest alone."
+            defaultValue={profile?.organization}
+            error={errors.organization}
+          />
+          <SelectField
+            id="funderType"
+            label="Type of funder"
+            options={FUNDER_TYPES}
+            placeholder="Choose…"
+            defaultValue={profile?.funderType}
+            error={errors.funderType}
+          />
         </div>
       </FormPart>
       <FormPart legend="What you invest in">
         <div className="grid gap-5 sm:grid-cols-2">
-          <TextField id="ticketMinAed" label="Smallest investment (AED)" type="number" min="0" inputMode="numeric" className="tabular-nums" defaultValue={profile?.ticketMinAed} error={errors.ticketMinAed} />
-          <TextField id="ticketMaxAed" label="Largest investment (AED)" type="number" min="0" inputMode="numeric" className="tabular-nums" defaultValue={profile?.ticketMaxAed} error={errors.ticketMaxAed} />
+          <TextField
+            id="ticketMinAed"
+            label="Smallest investment (AED)"
+            type="number"
+            min="0"
+            inputMode="numeric"
+            className="tabular-nums"
+            defaultValue={profile?.ticketMinAed}
+            error={errors.ticketMinAed}
+          />
+          <TextField
+            id="ticketMaxAed"
+            label="Largest investment (AED)"
+            type="number"
+            min="0"
+            inputMode="numeric"
+            className="tabular-nums"
+            defaultValue={profile?.ticketMaxAed}
+            error={errors.ticketMaxAed}
+          />
         </div>
-        <CheckboxGroup id="sectors" label="Sectors you invest in" options={SECTORS} defaultValues={profile?.sectors ?? []} error={errors.sectors} />
-        <TextAreaField id="bio" label="What you look for" rows={5} hint="The kind of founders and ideas you like to support." defaultValue={profile?.bio} error={errors.bio} />
+        <CheckboxGroup
+          id="sectors"
+          label="Sectors you invest in"
+          options={SECTORS}
+          defaultValues={profile?.sectors ?? []}
+          error={errors.sectors}
+        />
+        <TextAreaField
+          id="bio"
+          label="What you look for"
+          rows={5}
+          hint="The kind of founders and ideas you like to support."
+          defaultValue={profile?.bio}
+          error={errors.bio}
+        />
       </FormPart>
       <FormActions>
         <SubmitButton pending={pending} pendingText="Saving…">

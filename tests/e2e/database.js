@@ -38,7 +38,9 @@ export async function removeTestAccounts(run) {
   const anHourAgo = new Date(Date.now() - 60 * 60 * 1000);
   const userIds = await User.find({ $or: [{ email: thisRun }, { email: testEmail, createdAt: { $lt: anHourAgo } }] }).distinct("_id");
   const planIds = await Plan.find({ ownerId: { $in: userIds } }).distinct("_id");
-  const requestIds = await MentorRequest.find({ $or: [{ entrepreneurId: { $in: userIds } }, { mentorId: { $in: userIds } }] }).distinct("_id");
+  const requestIds = await MentorRequest.find({ $or: [{ entrepreneurId: { $in: userIds } }, { mentorId: { $in: userIds } }] }).distinct(
+    "_id",
+  );
   await Promise.all([
     Plan.deleteMany({ _id: { $in: planIds } }),
     ChatMessage.deleteMany({ planId: { $in: planIds } }),

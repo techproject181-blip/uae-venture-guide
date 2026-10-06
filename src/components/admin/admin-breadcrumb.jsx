@@ -21,7 +21,9 @@ export function AdminBreadcrumb() {
 
   return (
     <>
-      {section && <p className="pointer-events-none absolute inset-x-20 truncate text-center font-semibold md:text-xl lg:hidden">{section.label}</p>}
+      {section && (
+        <p className="pointer-events-none absolute inset-x-20 truncate text-center font-semibold md:text-xl lg:hidden">{section.label}</p>
+      )}
       <nav aria-label="Breadcrumb" className="hidden min-w-0 lg:block">
         <ol className="flex items-center gap-1.5 text-sm">
           <li className="shrink-0">
@@ -46,7 +48,10 @@ export function AdminBreadcrumb() {
 export function AdminMain({ children }) {
   const { root } = useSection();
   return (
-    <div data-root={root || undefined} className="w-full max-lg:data-root:[&>div:first-child]:mb-4 max-lg:data-root:[&>div:first-child>div:first-child]:sr-only">
+    <div
+      data-root={root || undefined}
+      className="w-full max-lg:data-root:[&>div:first-child]:mb-4 max-lg:data-root:[&>div:first-child>div:first-child]:sr-only"
+    >
       {children}
     </div>
   );

@@ -20,7 +20,9 @@ const ids = (list) => list.map(String);
 describe("the sample chat assistant", () => {
   test("answers a cost question from the plan's own budget", async () => {
     const { text } = await answerQuestion(plan, "How much will everything cost?");
-    expect(text).toMatch(/^Your estimated first-year cost is AED [\d,]+ against a budget of AED 40,000, so you are AED [\d,]+ over budget\./);
+    expect(text).toMatch(
+      /^Your estimated first-year cost is AED [\d,]+ against a budget of AED 40,000, so you are AED [\d,]+ over budget\./,
+    );
   });
 
   test("links only active sources for the plan's emirate or the whole UAE", async () => {

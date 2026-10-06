@@ -24,15 +24,17 @@ export default async function PlanChatPage({ params }) {
   await connectDB();
   const messages = toPlain(await ChatMessage.find({ planId: id }).sort({ createdAt: 1 }).limit(200).lean());
   const sourceIds = [...new Set(messages.flatMap((message) => message.sourceIds))];
-  const sources = await Source.find({ _id: { $in: sourceIds } }).select("title url").lean();
+  const sources = await Source.find({ _id: { $in: sourceIds } })
+    .select("title url")
+    .lean();
   const sourcesById = Object.fromEntries(sources.map((s) => [String(s._id), { title: s.title, url: s.url }]));
 
   const aside = (
     <>
       <Panel title="What it can answer">
         <p className="text-sm leading-relaxed text-muted-foreground">
-          The assistant reads your roadmap, budget and documents, and the official sources. It says so when a question is outside
-          what the plan covers.
+          The assistant reads your roadmap, budget and documents, and the official sources. It says so when a question is outside what the
+          plan covers.
         </p>
         <ul className="mt-4 flex flex-wrap gap-2 text-sm">
           {TOPICS.map((topic) => (

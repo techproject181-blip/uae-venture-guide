@@ -10,10 +10,7 @@ export async function POST(request) {
   const body = await request.json().catch(() => null);
   const parsed = signUpSchema.safeParse(body ?? {});
   if (!parsed.success) {
-    return Response.json(
-      { error: "Please fix the highlighted fields.", fieldErrors: fieldErrors(parsed.error) },
-      { status: 400 },
-    );
+    return Response.json({ error: "Please fix the highlighted fields.", fieldErrors: fieldErrors(parsed.error) }, { status: 400 });
   }
   const { name, email, password, role } = parsed.data;
 
@@ -30,10 +27,7 @@ export async function POST(request) {
     });
     await createSession(user);
 
-    return Response.json(
-      { redirectTo: user.status === "active" ? "/dashboard" : "/pending" },
-      { status: 201 },
-    );
+    return Response.json({ redirectTo: user.status === "active" ? "/dashboard" : "/pending" }, { status: 201 });
   } catch (error) {
     // 11000 is MongoDB's duplicate-key error: two sign-ups with the same email at the same moment.
     if (error?.code === 11000) return emailTaken();

@@ -84,7 +84,12 @@ export function ChatPanel({ planId, messages, sources, left, title = "Ask about 
       >
         {empty && <p className="py-10 text-center text-sm text-muted-foreground">No questions yet. Pick one below or type your own.</p>}
         {messages.map((message) => (
-          <Message key={message._id} role={message.role} text={message.content} sources={message.sourceIds.map((id) => sources[id]).filter(Boolean)} />
+          <Message
+            key={message._id}
+            role={message.role}
+            text={message.content}
+            sources={message.sourceIds.map((id) => sources[id]).filter(Boolean)}
+          />
         ))}
         {live && (
           <>
@@ -117,7 +122,9 @@ export function ChatPanel({ planId, messages, sources, left, title = "Ask about 
             ask(draft);
           }}
         >
-          <label htmlFor="chat-message" className="sr-only">Your question</label>
+          <label htmlFor="chat-message" className="sr-only">
+            Your question
+          </label>
           <input
             id="chat-message"
             value={draft}
@@ -150,24 +157,24 @@ function Message({ role, text, sources = [] }) {
         )}
       >
         <ChatText text={text} />
-      {sources.length > 0 && (
-        <ul className="mt-3 space-y-1 border-t pt-3 text-sm">
-          {sources.map((source) => (
-            <li key={source.url}>
-              <a
-                href={source.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 font-medium text-foreground decoration-primary underline underline-offset-4 hover:decoration-2"
-              >
-                {source.title}
-                <ExternalLink className="size-3.5 shrink-0" aria-hidden="true" />
-                <span className="sr-only">(opens in a new tab)</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
+        {sources.length > 0 && (
+          <ul className="mt-3 space-y-1 border-t pt-3 text-sm">
+            {sources.map((source) => (
+              <li key={source.url}>
+                <a
+                  href={source.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 font-medium text-foreground decoration-primary underline underline-offset-4 hover:decoration-2"
+                >
+                  {source.title}
+                  <ExternalLink className="size-3.5 shrink-0" aria-hidden="true" />
+                  <span className="sr-only">(opens in a new tab)</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

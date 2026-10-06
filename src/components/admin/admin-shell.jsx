@@ -20,7 +20,10 @@ export async function AdminShell({ user, children }) {
     <div className="flex min-h-dvh">
       {/* Desktop sidebar */}
       <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col bg-ink-900 lg:flex">
-        <Link href="/dashboard" className="flex h-16 items-center gap-2.5 px-5 outline-none focus-visible:ring-3 focus-visible:ring-brand-400/50 focus-visible:ring-inset">
+        <Link
+          href="/dashboard"
+          className="flex h-16 items-center gap-2.5 px-5 outline-none focus-visible:ring-3 focus-visible:ring-brand-400/50 focus-visible:ring-inset"
+        >
           <LogoMark />
           <span className="flex flex-col leading-tight">
             <Wordmark className="text-on-brand [&>span]:text-brand-300" />

@@ -1,6 +1,6 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
-@import 'shadcn/tailwind.css';
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
 /* The app has no dark theme. This keeps the `dark:` classes in the shadcn
    components switched off, instead of following the computer's dark mode. */
@@ -182,7 +182,8 @@
   --chart-6: #008300;
 
   /* Shadows */
-  --elevation-panel: 0 1px 2px color-mix(in srgb, var(--ink-900) 4%, transparent), 0 1px 3px color-mix(in srgb, var(--ink-900) 4%, transparent);
+  --elevation-panel:
+    0 1px 2px color-mix(in srgb, var(--ink-900) 4%, transparent), 0 1px 3px color-mix(in srgb, var(--ink-900) 4%, transparent);
   --elevation-lift: 0 4px 12px color-mix(in srgb, var(--ink-900) 8%, transparent);
   --elevation-float: 0 8px 24px color-mix(in srgb, var(--ink-900) 12%, transparent);
   --elevation-window: 0 24px 60px -12px color-mix(in srgb, var(--ink-900) 18%, transparent);
@@ -212,7 +213,7 @@
     color: var(--foreground);
   }
   button:not(:disabled),
-  [role='button']:not(:disabled) {
+  [role="button"]:not(:disabled) {
     cursor: pointer;
   }
   h1,
@@ -693,10 +694,18 @@ details[open]::details-content {
 .intro > * {
   animation: rise 600ms var(--ease-out) backwards;
 }
-.intro > :nth-child(2) { animation-delay: 80ms; }
-.intro > :nth-child(3) { animation-delay: 160ms; }
-.intro > :nth-child(4) { animation-delay: 240ms; }
-.intro > :nth-child(5) { animation-delay: 320ms; }
+.intro > :nth-child(2) {
+  animation-delay: 80ms;
+}
+.intro > :nth-child(3) {
+  animation-delay: 160ms;
+}
+.intro > :nth-child(4) {
+  animation-delay: 240ms;
+}
+.intro > :nth-child(5) {
+  animation-delay: 320ms;
+}
 
 /* The emirates slide past in a loop. */
 @keyframes marquee {

@@ -1,6 +1,20 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 // The Recharts drawing for post-chart.jsx, which loads this file after the page
 // is shown. One series is drawn in the document's dark grey ink. Pie slices take the validated categorical order
@@ -20,7 +34,16 @@ export default function PostChartDrawing({ type, title, data, height }) {
     <ResponsiveContainer width="100%" height={height}>
       {type === "pie" ? (
         <PieChart accessibilityLayer={false}>
-          <Pie data={data} dataKey="value" nameKey="label" innerRadius="55%" outerRadius="85%" paddingAngle={2} rootTabIndex={-1} animationDuration={600}>
+          <Pie
+            data={data}
+            dataKey="value"
+            nameKey="label"
+            innerRadius="55%"
+            outerRadius="85%"
+            paddingAngle={2}
+            rootTabIndex={-1}
+            animationDuration={600}
+          >
             {data.map((row, i) => (
               <Cell key={row.label} fill={SLICES[i]} />
             ))}

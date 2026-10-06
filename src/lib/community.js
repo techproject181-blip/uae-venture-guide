@@ -25,8 +25,13 @@ export async function listMentors({ expertise, emirate } = {}) {
 export async function getMentor(userId) {
   await connectDB();
   const [user, profile] = await Promise.all([
-    User.findOne({ _id: userId, role: "mentor", status: "active" }).select("name").lean().catch(() => null),
-    MentorProfile.findOne({ userId }).lean().catch(() => null),
+    User.findOne({ _id: userId, role: "mentor", status: "active" })
+      .select("name")
+      .lean()
+      .catch(() => null),
+    MentorProfile.findOne({ userId })
+      .lean()
+      .catch(() => null),
   ]);
   if (!user || !profile) return null;
   return { ...profile, name: user.name };

@@ -36,7 +36,16 @@ export function UserActions({ userId, status, className }) {
   const confirm = useConfirm();
 
   async function change(action) {
-    if (action.confirm && !(await confirm({ title: action.confirm, description: action.detail, confirmLabel: action.label, danger: action.danger || action.variant === "destructive" }))) return;
+    if (
+      action.confirm &&
+      !(await confirm({
+        title: action.confirm,
+        description: action.detail,
+        confirmLabel: action.label,
+        danger: action.danger || action.variant === "destructive",
+      }))
+    )
+      return;
     setPending(true);
     const result = await sendJson("PATCH", `/api/admin/users/${userId}`, { status: action.status });
     setPending(false);
@@ -51,7 +60,13 @@ export function UserActions({ userId, status, className }) {
   return (
     <div className={cn("flex flex-wrap justify-end gap-2", className)}>
       {ACTIONS[status]?.map((action) => (
-        <Button key={action.label} className="h-9 px-3.5 text-sm" variant={action.variant} disabled={pending} onClick={() => change(action)}>
+        <Button
+          key={action.label}
+          className="h-9 px-3.5 text-sm"
+          variant={action.variant}
+          disabled={pending}
+          onClick={() => change(action)}
+        >
           {action.label}
         </Button>
       ))}

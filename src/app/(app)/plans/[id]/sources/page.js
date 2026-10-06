@@ -21,19 +21,25 @@ export default async function PlanSourcesPage({ params }) {
   const { plan } = found;
 
   await connectDB();
-  const sources = await Source.find({ active: true, emirate: { $in: [plan.emirate, null] } }).sort({ title: 1 }).lean();
+  const sources = await Source.find({ active: true, emirate: { $in: [plan.emirate, null] } })
+    .sort({ title: 1 })
+    .lean();
   const used = new Set(plan.tasks.flatMap((task) => task.sourceIds));
   const groups = [
     { key: "used", title: "Used in your roadmap", sources: sources.filter((source) => used.has(String(source._id))) },
-    { key: "more", title: `More sources for ${labelOf(EMIRATES, plan.emirate)}`, sources: sources.filter((source) => !used.has(String(source._id))) },
+    {
+      key: "more",
+      title: `More sources for ${labelOf(EMIRATES, plan.emirate)}`,
+      sources: sources.filter((source) => !used.has(String(source._id))),
+    },
   ].filter((group) => group.sources.length > 0);
 
   const usedCount = groups.find((group) => group.key === "used")?.sources.length ?? 0;
   const aside = (
     <Panel title="About these sources" flush>
       <p className="px-5 pt-5 text-sm leading-relaxed text-muted-foreground sm:px-6 sm:pt-6">
-        Federal pages and the pages for {labelOf(EMIRATES, plan.emirate)}. Each shows when it was last checked. Sources marked demo
-        are sample data, so check the real page before you rely on them.
+        Federal pages and the pages for {labelOf(EMIRATES, plan.emirate)}. Each shows when it was last checked. Sources marked demo are
+        sample data, so check the real page before you rely on them.
       </p>
       <div className="mt-4 border-t">
         <FactRows

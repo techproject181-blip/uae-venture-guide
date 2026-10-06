@@ -26,7 +26,9 @@ export default async function RequestConversationPage({ params }) {
   const { request, isMentor, canSend } = conversation;
 
   const [people, plan, messages] = await Promise.all([
-    User.find({ _id: { $in: [request.entrepreneurId, request.mentorId] } }).select("name").lean(),
+    User.find({ _id: { $in: [request.entrepreneurId, request.mentorId] } })
+      .select("name")
+      .lean(),
     request.planId ? Plan.findById(request.planId).select("title").lean() : null,
     listMessages(request, user.id),
   ]);
@@ -55,7 +57,10 @@ export default async function RequestConversationPage({ params }) {
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-muted-foreground">
           <StatusBadge status={request.status} />
           {planReadable && (
-            <Link href={`/plans/${plan._id}`} className="font-medium text-foreground decoration-primary underline underline-offset-4 hover:decoration-2">
+            <Link
+              href={`/plans/${plan._id}`}
+              className="font-medium text-foreground decoration-primary underline underline-offset-4 hover:decoration-2"
+            >
               Open the plan: {plan.title}
             </Link>
           )}
@@ -72,7 +77,10 @@ export default async function RequestConversationPage({ params }) {
                 plan && {
                   label: "Attached plan",
                   value: planReadable ? (
-                    <Link href={`/plans/${plan._id}`} className="text-foreground decoration-primary underline underline-offset-4 hover:decoration-2">
+                    <Link
+                      href={`/plans/${plan._id}`}
+                      className="text-foreground decoration-primary underline underline-offset-4 hover:decoration-2"
+                    >
                       {plan.title}
                     </Link>
                   ) : (
@@ -84,9 +92,7 @@ export default async function RequestConversationPage({ params }) {
               ]}
             />
             <p className="mt-5 text-sm text-muted-foreground">
-              {canSend
-                ? "Every message is saved here for both of you."
-                : "The request is completed. The conversation stays here to read."}
+              {canSend ? "Every message is saved here for both of you." : "The request is completed. The conversation stays here to read."}
             </p>
           </Panel>
         }

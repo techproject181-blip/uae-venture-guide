@@ -15,11 +15,11 @@ GitHub Actions (`.github/workflows/check.yml`) runs lint, tests, build, seed and
 
 ## Key manual checks
 
-| Test | Expected |
-| --- | --- |
-| Sign up as mentor or funder | "Waiting for approval" |
-| Five wrong passwords | Locked for 15 minutes |
-| Make a sixth roadmap in a day | Refused, daily limit |
-| Open someone else's plan | 404 not found |
-| Message after a request is completed | No send box, API returns 409 |
-| Owner accepts funder interest | Funder can read the full plan |
+| Test                                 | Expected                      |
+| ------------------------------------ | ----------------------------- |
+| Sign up as mentor or funder          | "Waiting for approval"        |
+| Five wrong passwords                 | Locked for 15 minutes         |
+| Make a sixth roadmap in a day        | Refused, daily limit          |
+| Open someone else's plan             | 404 not found                 |
+| Message after a request is completed | No send box, API returns 409  |
+| Owner accepts funder interest        | Funder can read the full plan |

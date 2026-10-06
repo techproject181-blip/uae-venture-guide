@@ -9,7 +9,11 @@ const noSubscription = () => () => {};
 
 /** False in the HTML the server sends, true once the page's JavaScript is running. */
 function useReady() {
-  return useSyncExternalStore(noSubscription, () => true, () => false);
+  return useSyncExternalStore(
+    noSubscription,
+    () => true,
+    () => false,
+  );
 }
 
 /**

@@ -59,11 +59,7 @@ export async function listMessages(request, viewerId, { after } = {}) {
   await connectDB();
   const filter = { requestId: request._id };
   if (after) filter.createdAt = { $gt: after };
-  const messages = await RequestMessage.find(filter)
-    .sort({ createdAt: 1, _id: 1 })
-    .limit(MAX_MESSAGES)
-    .populate("authorId", "name")
-    .lean();
+  const messages = await RequestMessage.find(filter).sort({ createdAt: 1, _id: 1 }).limit(MAX_MESSAGES).populate("authorId", "name").lean();
   const list = messages.map((message) => toMessage(message, viewerId));
 
   if (!after && request.mentorReply && request.status !== "declined") {

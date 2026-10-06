@@ -23,8 +23,13 @@ export default async function EditFeePage({ params }) {
 
   await connectDB();
   const [fee, source] = await Promise.all([
-    FeeReference.findOne({ _id: feeId, sourceId: id }).lean().catch(() => null),
-    Source.findById(id).select("title").lean().catch(() => null),
+    FeeReference.findOne({ _id: feeId, sourceId: id })
+      .lean()
+      .catch(() => null),
+    Source.findById(id)
+      .select("title")
+      .lean()
+      .catch(() => null),
   ]);
   if (!fee) notFound();
   const where = fee.emirate ? labelOf(EMIRATES, fee.emirate) : "every emirate";
@@ -58,7 +63,10 @@ export default async function EditFeePage({ params }) {
                   source && {
                     label: "Source",
                     value: (
-                      <Link href={`/admin/sources/${id}`} className="text-foreground decoration-primary underline underline-offset-4 hover:decoration-2">
+                      <Link
+                        href={`/admin/sources/${id}`}
+                        className="text-foreground decoration-primary underline underline-offset-4 hover:decoration-2"
+                      >
                         {source.title}
                       </Link>
                     ),
@@ -70,7 +78,11 @@ export default async function EditFeePage({ params }) {
             <Panel title="How this is used">
               <ul className="list-disc space-y-2 pl-5 text-sm text-muted-foreground marker:text-ink-300">
                 <li>While “Use this fee in roadmaps” is ticked, new roadmaps for {where} can use it for a step’s cost.</li>
-                <li>{fee.demo ? "It is marked demo, so roadmaps show it as “Demo fee”, not official." : "Roadmaps show it with an Official stamp."}</li>
+                <li>
+                  {fee.demo
+                    ? "It is marked demo, so roadmaps show it as “Demo fee”, not official."
+                    : "Roadmaps show it with an Official stamp."}
+                </li>
               </ul>
             </Panel>
           </>
