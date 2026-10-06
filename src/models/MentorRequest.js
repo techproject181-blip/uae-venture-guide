@@ -19,10 +19,7 @@ const mentorRequestSchema = new mongoose.Schema(
 );
 
 // Only one waiting request per entrepreneur and mentor at a time.
-mentorRequestSchema.index(
-  { entrepreneurId: 1, mentorId: 1 },
-  { unique: true, partialFilterExpression: { status: "pending" } },
-);
+mentorRequestSchema.index({ entrepreneurId: 1, mentorId: 1 }, { unique: true, partialFilterExpression: { status: "pending" } });
 mentorRequestSchema.index({ mentorId: 1, status: 1, createdAt: -1 });
 
 if (mongoose.models.MentorRequest) mongoose.deleteModel("MentorRequest");

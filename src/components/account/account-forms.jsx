@@ -37,14 +37,14 @@ export function AccountDetailsForm({ name, email }) {
       <div className="space-y-5 p-5">
         <FormAlert>{formError}</FormAlert>
         <div className="grid gap-5 md:grid-cols-2">
-        <TextField id="name" label="Full name" autoComplete="name" defaultValue={name} error={errors.name} />
-        <div>
-          <p className="text-sm font-medium">Email</p>
-          <p className="mt-2 flex items-center gap-2 rounded-lg bg-ink-50 px-3 py-2.5 text-base text-ink-700">
-            <Lock className="size-4 shrink-0 text-ink-400" aria-hidden="true" />
-            <span className="truncate">{email}</span>
-          </p>
-        </div>
+          <TextField id="name" label="Full name" autoComplete="name" defaultValue={name} error={errors.name} />
+          <div>
+            <p className="text-sm font-medium">Email</p>
+            <p className="mt-2 flex items-center gap-2 rounded-lg bg-ink-50 px-3 py-2.5 text-base text-ink-700">
+              <Lock className="size-4 shrink-0 text-ink-400" aria-hidden="true" />
+              <span className="truncate">{email}</span>
+            </p>
+          </div>
         </div>
       </div>
       <CardFooter note="Your email is your sign-in name, so it cannot be changed.">

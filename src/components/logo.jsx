@@ -11,7 +11,14 @@ export function LogoMark({ className }) {
       {/* A solid tile with a lighter top-left corner. (No SVG gradient: its id would clash when the mark appears twice on a page.) */}
       <rect width="32" height="32" rx="9" fill="var(--primary)" />
       <path d="M9 0h14L0 23V9a9 9 0 0 1 9-9Z" fill="var(--on-brand)" opacity="0.08" />
-      <path d="M8.5 23.5c5 0 4-8 7.5-8s2.5-7 7.5-7" fill="none" stroke="var(--on-brand)" strokeWidth="2.6" strokeLinecap="round" opacity="0.95" />
+      <path
+        d="M8.5 23.5c5 0 4-8 7.5-8s2.5-7 7.5-7"
+        fill="none"
+        stroke="var(--on-brand)"
+        strokeWidth="2.6"
+        strokeLinecap="round"
+        opacity="0.95"
+      />
       <circle cx="8.5" cy="23.5" r="2.6" fill="var(--brand-800)" stroke="var(--on-brand)" strokeWidth="2" />
       <circle cx="23.5" cy="8.5" r="3" fill="var(--highlight)" />
     </svg>
@@ -21,7 +28,9 @@ export function LogoMark({ className }) {
 /** The wordmark: "UAE" in emerald, "Venture Guide" in ink, set in the display face. */
 export function Wordmark({ className }) {
   return (
-    <span className={cn("font-display text-base leading-none font-bold tracking-[-0.03em] whitespace-nowrap sm:text-[1.125rem]", className)}>
+    <span
+      className={cn("font-display text-base leading-none font-bold tracking-[-0.03em] whitespace-nowrap sm:text-[1.125rem]", className)}
+    >
       <span className="text-primary">UAE</span> Venture Guide
     </span>
   );

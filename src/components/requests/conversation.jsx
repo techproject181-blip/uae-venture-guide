@@ -217,7 +217,16 @@ function Bubble({ message, label }) {
           mine ? "rounded-br-md bg-primary text-primary-foreground" : "panel rounded-bl-md",
         )}
       >
-        {label && <p className={cn("mb-1 text-xs font-semibold tracking-[0.04em] uppercase", mine ? "text-primary-foreground" : "text-muted-foreground")}>{label}</p>}
+        {label && (
+          <p
+            className={cn(
+              "mb-1 text-xs font-semibold tracking-[0.04em] uppercase",
+              mine ? "text-primary-foreground" : "text-muted-foreground",
+            )}
+          >
+            {label}
+          </p>
+        )}
         {message.body}
       </div>
       <p className="mt-1 px-1 text-xs text-muted-foreground">

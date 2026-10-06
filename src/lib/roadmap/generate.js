@@ -3,14 +3,7 @@ import { estimatedWeeks, firstYearTotal } from "../budget.js";
 import { EMIRATES, JURISDICTIONS, SECTORS, labelOf } from "../constants.js";
 import { connectDB } from "../db.js";
 import { formatAed } from "../format.js";
-import {
-  DOCUMENTS,
-  LICENSING_AUTHORITIES,
-  PHASES,
-  SECTOR_RISKS,
-  SECTOR_STEPS,
-  STEPS,
-} from "./templates.js";
+import { DOCUMENTS, LICENSING_AUTHORITIES, PHASES, SECTOR_RISKS, SECTOR_STEPS, STEPS } from "./templates.js";
 import { FeeReference } from "../../models/FeeReference.js";
 import { Source } from "../../models/Source.js";
 
@@ -96,15 +89,27 @@ export async function generateRoadmap(intake) {
 
 function recommendJurisdiction({ jurisdictionPref, sector }) {
   if (jurisdictionPref === "mainland") {
-    return { jurisdiction: "mainland", reason: "You chose mainland. A mainland licence lets you trade directly with customers across the UAE." };
+    return {
+      jurisdiction: "mainland",
+      reason: "You chose mainland. A mainland licence lets you trade directly with customers across the UAE.",
+    };
   }
   if (jurisdictionPref === "free_zone") {
-    return { jurisdiction: "free_zone", reason: "You chose a free zone. Free zone packages usually include the licence, a desk and a visa allowance in one price." };
+    return {
+      jurisdiction: "free_zone",
+      reason: "You chose a free zone. Free zone packages usually include the licence, a desk and a visa allowance in one price.",
+    };
   }
   if (LOCAL_SECTORS.includes(sector)) {
-    return { jurisdiction: "mainland", reason: "Your customers will mostly visit you in person in the emirate, which is what a mainland licence is for." };
+    return {
+      jurisdiction: "mainland",
+      reason: "Your customers will mostly visit you in person in the emirate, which is what a mainland licence is for.",
+    };
   }
-  return { jurisdiction: "free_zone", reason: "Your business can work online or from a shared desk, and a free zone package is usually the simplest way to start." };
+  return {
+    jurisdiction: "free_zone",
+    reason: "Your business can work online or from a shared desk, and a free zone package is usually the simplest way to start.",
+  };
 }
 
 /**
@@ -170,7 +175,12 @@ function runningCosts({ teamSize }) {
     { category: "marketing", label: "Ongoing marketing", estimatedAed: 1500, recurrence: "monthly" },
   ];
   if (teamSize > 1) {
-    items.push({ category: "staff", label: `Salaries for ${teamSize - 1} ${teamSize === 2 ? "employee" : "employees"}`, estimatedAed: 5000 * (teamSize - 1), recurrence: "monthly" });
+    items.push({
+      category: "staff",
+      label: `Salaries for ${teamSize - 1} ${teamSize === 2 ? "employee" : "employees"}`,
+      estimatedAed: 5000 * (teamSize - 1),
+      recurrence: "monthly",
+    });
   }
   return items.map((item) => ({ ...item, costBasis: "estimate", origin: "planner" }));
 }
@@ -192,9 +202,14 @@ function authorityName(key, { intake, jurisdiction }) {
     tax: "Federal Tax Authority",
     bank: "Your chosen bank",
     education:
-      { dubai: "Knowledge and Human Development Authority", abu_dhabi: "Department of Education and Knowledge", sharjah: "Sharjah Private Education Authority" }[intake.emirate] ??
-      "Ministry of Education",
-    tourism: { dubai: "Dubai Department of Economy and Tourism", abu_dhabi: "Department of Culture and Tourism Abu Dhabi" }[intake.emirate] ?? `${emirate} tourism department`,
+      {
+        dubai: "Knowledge and Human Development Authority",
+        abu_dhabi: "Department of Education and Knowledge",
+        sharjah: "Sharjah Private Education Authority",
+      }[intake.emirate] ?? "Ministry of Education",
+    tourism:
+      { dubai: "Dubai Department of Economy and Tourism", abu_dhabi: "Department of Culture and Tourism Abu Dhabi" }[intake.emirate] ??
+      `${emirate} tourism department`,
     media: "UAE Media Council",
   };
   return names[key] ?? "";

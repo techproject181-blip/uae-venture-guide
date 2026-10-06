@@ -24,11 +24,21 @@ function Feature({ icon: Icon, title, text, className, children }) {
 export function Features() {
   return (
     <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-      <Feature icon={ListChecks} title="A roadmap in the right order" text="Licence, visas, bank and tax, as numbered steps you tick off." className="lg:col-span-2">
+      <Feature
+        icon={ListChecks}
+        title="A roadmap in the right order"
+        text="Licence, visas, bank and tax, as numbered steps you tick off."
+        className="lg:col-span-2"
+      >
         <ol className="grid gap-2 sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
           {["Choose your licence", "Reserve the trade name", "Open a bank account"].map((step, index) => (
             <li key={step} className="flex items-center gap-2.5 rounded-lg border bg-ink-50/70 px-3 py-2.5 text-sm">
-              <span className={cn("flex size-5 shrink-0 items-center justify-center rounded-md border", index < 2 ? "border-primary bg-primary text-primary-foreground" : "border-ink-300 bg-card")}>
+              <span
+                className={cn(
+                  "flex size-5 shrink-0 items-center justify-center rounded-md border",
+                  index < 2 ? "border-primary bg-primary text-primary-foreground" : "border-ink-300 bg-card",
+                )}
+              >
                 {index < 2 && <Check className="size-3.5" strokeWidth={3} />}
               </span>
               <span className="truncate">{step}</span>
@@ -37,7 +47,11 @@ export function Features() {
         </ol>
       </Feature>
 
-      <Feature icon={Landmark} title="Fees you can check" text="Every fee says where it comes from: an official page, demo data or our estimate.">
+      <Feature
+        icon={Landmark}
+        title="Fees you can check"
+        text="Every fee says where it comes from: an official page, demo data or our estimate."
+      >
         <div className="flex flex-wrap items-center gap-2">
           <Stamp tone="official">Official</Stamp>
           <Stamp tone="quiet">Demo fee</Stamp>
@@ -56,7 +70,12 @@ export function Features() {
         </ul>
       </Feature>
 
-      <Feature icon={Wallet} title="A budget that adds up" text="Your first-year costs by category, with what you actually paid beside each estimate." className="lg:col-span-2">
+      <Feature
+        icon={Wallet}
+        title="A budget that adds up"
+        text="Your first-year costs by category, with what you actually paid beside each estimate."
+        className="lg:col-span-2"
+      >
         <div className="space-y-2">
           {[
             ["Licensing", 72, 60],
@@ -66,7 +85,10 @@ export function Features() {
             <div key={label} className="flex items-center gap-3 text-xs">
               <span className="w-16 text-muted-foreground">{label}</span>
               <span className="relative h-2.5 flex-1 overflow-hidden rounded-full bg-ink-100">
-                <span className="bar-grow absolute inset-y-0 left-0 origin-left rounded-full bg-brand-300" style={{ width: `${estimated}%` }} />
+                <span
+                  className="bar-grow absolute inset-y-0 left-0 origin-left rounded-full bg-brand-300"
+                  style={{ width: `${estimated}%` }}
+                />
                 <span className="absolute inset-y-0 left-0 rounded-full bg-primary" style={{ width: `${paid}%` }} />
               </span>
             </div>
@@ -74,7 +96,12 @@ export function Features() {
         </div>
       </Feature>
 
-      <Feature icon={Bot} title="Chat with your plan" text="Ask anything about your own plan. Every answer links to the official source it came from." className="lg:col-span-2">
+      <Feature
+        icon={Bot}
+        title="Chat with your plan"
+        text="Ask anything about your own plan. Every answer links to the official source it came from."
+        className="lg:col-span-2"
+      >
         {/* A small chat window: who you are talking to, two messages with a source, the assistant typing, and the message box. */}
         <div className="overflow-hidden rounded-xl border bg-card text-sm shadow-xs">
           <div className="flex items-center gap-2.5 border-b bg-ink-50/70 px-3.5 py-2.5">
@@ -91,7 +118,9 @@ export function Features() {
             </span>
           </div>
           <div className="space-y-2.5 p-3.5">
-            <p className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-md bg-primary px-3.5 py-2 text-primary-foreground">Which documents do I need for the licence?</p>
+            <p className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-md bg-primary px-3.5 py-2 text-primary-foreground">
+              Which documents do I need for the licence?
+            </p>
             <div className="max-w-[90%] rounded-2xl rounded-bl-md bg-ink-100 px-3.5 py-2.5">
               <p>Your passport copy, the initial approval and a registered tenancy contract (Ejari).</p>
               <span className="mt-2 inline-flex items-center gap-1 rounded-md bg-card px-2 py-0.5 text-xs font-medium text-primary ring-1 ring-border">
@@ -115,7 +144,11 @@ export function Features() {
         </div>
       </Feature>
 
-      <Feature icon={Users} title="Mentors and funders" text="Ask a checked mentor for guidance, and share a summary with funders when you are ready.">
+      <Feature
+        icon={Users}
+        title="Mentors and funders"
+        text="Ask a checked mentor for guidance, and share a summary with funders when you are ready."
+      >
         {/* Who helps you: two mentors (one has accepted and replied) and a funder who sent interest. */}
         <ul className="divide-y overflow-hidden rounded-xl border bg-card text-sm shadow-xs">
           {[
@@ -139,7 +172,11 @@ export function Features() {
               <span
                 className={cn(
                   "shrink-0 rounded-full px-2 py-0.5 text-xs font-medium",
-                  person.status === "Pending" ? "bg-ink-100 text-muted-foreground" : person.tone === "gold" ? "bg-gold-100 text-gold-800" : "bg-accent text-primary",
+                  person.status === "Pending"
+                    ? "bg-ink-100 text-muted-foreground"
+                    : person.tone === "gold"
+                      ? "bg-gold-100 text-gold-800"
+                      : "bg-accent text-primary",
                 )}
               >
                 {person.status}

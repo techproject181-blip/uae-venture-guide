@@ -72,9 +72,15 @@ export default async function AdminUsagePage() {
                 <thead>
                   <tr>
                     <th scope="col">Day</th>
-                    <th scope="col" className="text-right">Roadmaps</th>
-                    <th scope="col" className="text-right">Chat messages</th>
-                    <th scope="col" className="text-right">Users</th>
+                    <th scope="col" className="text-right">
+                      Roadmaps
+                    </th>
+                    <th scope="col" className="text-right">
+                      Chat messages
+                    </th>
+                    <th scope="col" className="text-right">
+                      Users
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -100,8 +106,12 @@ export default async function AdminUsagePage() {
                   <thead>
                     <tr>
                       <th scope="col">User</th>
-                      <th scope="col" className="text-right">Roadmaps</th>
-                      <th scope="col" className="text-right">Chat</th>
+                      <th scope="col" className="text-right">
+                        Roadmaps
+                      </th>
+                      <th scope="col" className="text-right">
+                        Chat
+                      </th>
                     </tr>
                   </thead>
                   <tbody>

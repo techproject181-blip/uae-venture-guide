@@ -14,7 +14,15 @@ export function InterestActions({ interestId }) {
   const confirm = useConfirm();
 
   async function act(action) {
-    if (action === "accept" && !(await confirm({ title: "Accept this funder?", description: "They can then read your full plan, and you can message each other here.", confirmLabel: "Accept" }))) return;
+    if (
+      action === "accept" &&
+      !(await confirm({
+        title: "Accept this funder?",
+        description: "They can then read your full plan, and you can message each other here.",
+        confirmLabel: "Accept",
+      }))
+    )
+      return;
     setPending(action);
     const result = await sendJson("PATCH", `/api/interests/${interestId}`, { action });
     setPending(false);

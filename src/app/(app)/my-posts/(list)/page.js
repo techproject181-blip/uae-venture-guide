@@ -27,7 +27,11 @@ export default async function MyPostsPage() {
 
   return (
     <>
-      <PageHeader title="My posts" description="Share what you learned, so new founders can avoid the same mistakes." actions={posts.length > 0 && newPost} />
+      <PageHeader
+        title="My posts"
+        description="Share what you learned, so new founders can avoid the same mistakes."
+        actions={posts.length > 0 && newPost}
+      />
       {posts.length === 0 ? (
         <EmptyState title="No posts yet" text="Write about a lesson from your own business journey." action={newPost} />
       ) : (
@@ -39,12 +43,20 @@ export default async function MyPostsPage() {
                 badge={post.status === "hidden" && <StatusBadge status="hidden" label="Hidden by administrator" />}
                 actions={
                   <div className="-my-2 flex items-center gap-1">
-                    <Link href={`/my-posts/${post._id}/edit`} className={buttonVariants({ variant: "ghost", size: "lg", className: "px-3 text-sm text-muted-foreground" })}>
+                    <Link
+                      href={`/my-posts/${post._id}/edit`}
+                      className={buttonVariants({ variant: "ghost", size: "lg", className: "px-3 text-sm text-muted-foreground" })}
+                    >
                       <Pencil aria-hidden="true" />
                       Edit
                       <span className="sr-only">{post.title}</span>
                     </Link>
-                    <DeleteButton url={`/api/posts/${post._id}`} confirmText={`“${post.title}” is deleted for good.`} doneText="Post deleted." size="default" />
+                    <DeleteButton
+                      url={`/api/posts/${post._id}`}
+                      confirmText={`“${post.title}” is deleted for good.`}
+                      doneText="Post deleted."
+                      size="default"
+                    />
                   </div>
                 }
               />

@@ -26,7 +26,11 @@ export function Stamp({ tone = "quiet", pressed = false, className, children }) 
         className,
       )}
     >
-      {dot ? <span aria-hidden="true" className={cn("size-1.5 shrink-0 rounded-full", dot)} /> : <Check className="size-3 shrink-0" strokeWidth={3} aria-hidden="true" />}
+      {dot ? (
+        <span aria-hidden="true" className={cn("size-1.5 shrink-0 rounded-full", dot)} />
+      ) : (
+        <Check className="size-3 shrink-0" strokeWidth={3} aria-hidden="true" />
+      )}
       {children}
     </span>
   );

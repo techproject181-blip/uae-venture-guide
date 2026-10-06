@@ -47,7 +47,11 @@ export async function EntrepreneurDashboard({ user }) {
     <>
       <Greeting
         user={user}
-        description={latest ? `Pick up where you left off on ${latest.title}.` : "Describe your business idea to get a step-by-step roadmap with official costs."}
+        description={
+          latest
+            ? `Pick up where you left off on ${latest.title}.`
+            : "Describe your business idea to get a step-by-step roadmap with official costs."
+        }
         actions={
           <Link href="/plans/new" className={buttonVariants({ size: "lg" })}>
             <Plus aria-hidden="true" />
@@ -95,10 +99,7 @@ export async function EntrepreneurDashboard({ user }) {
             }
           />
         ) : (
-          <ListPanel
-            title="Your plans"
-            actions={plans.length > 5 && <TextLink href="/plans">All plans</TextLink>}
-          >
+          <ListPanel title="Your plans" actions={plans.length > 5 && <TextLink href="/plans">All plans</TextLink>}>
             {toPlain(plans.slice(0, 5)).map((plan) => (
               <Row key={plan._id} link className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-10">
                 <div className="min-w-0">
@@ -139,7 +140,9 @@ export async function MentorDashboard({ user }) {
     <>
       <Greeting
         user={user}
-        description={accepted > 0 ? `You are guiding ${count(accepted, "founder")} now.` : "Founders who need your help ask for guidance here."}
+        description={
+          accepted > 0 ? `You are guiding ${count(accepted, "founder")} now.` : "Founders who need your help ask for guidance here."
+        }
         actions={
           <Link href="/my-posts/new" className={buttonVariants({ size: "lg" })}>
             <Plus aria-hidden="true" />
@@ -275,7 +278,9 @@ export async function FunderDashboard({ user }) {
       >
         {interests.length === 0 ? (
           <Panel title="Your interests">
-            <p className="text-muted-foreground">You have not asked about a plan yet. Tell an owner from their pitch card when a plan interests you.</p>
+            <p className="text-muted-foreground">
+              You have not asked about a plan yet. Tell an owner from their pitch card when a plan interests you.
+            </p>
           </Panel>
         ) : (
           <ListPanel title="Your interests" actions={<TextLink href="/interests">All interests</TextLink>}>

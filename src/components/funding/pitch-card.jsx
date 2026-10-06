@@ -26,7 +26,11 @@ export function PitchCard({ card, children, framed = true }) {
       <div aria-hidden="true" className="mt-3 h-1.5 overflow-hidden rounded-full bg-ink-200">
         <div className="h-full rounded-full bg-done" style={{ width: `${card.progress}%` }} />
       </div>
-      {children && <div className="mt-auto pt-5"><div className="border-t pt-5">{children}</div></div>}
+      {children && (
+        <div className="mt-auto pt-5">
+          <div className="border-t pt-5">{children}</div>
+        </div>
+      )}
     </article>
   );
 }

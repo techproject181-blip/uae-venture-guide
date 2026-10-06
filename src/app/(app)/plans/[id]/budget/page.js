@@ -58,9 +58,12 @@ export default async function PlanBudgetPage({ params }) {
           />
         </StatGrid>
         {remaining < 0 && (
-          <p role="alert" className="mt-4 rounded-xl border border-destructive/30 bg-destructive-surface px-5 py-4 text-destructive lg:mt-6">
-            <strong className="font-bold">Over budget.</strong> The estimated first-year cost is {formatAed(-remaining)} more than
-            your budget. Remove or lower some costs, or plan more funding.
+          <p
+            role="alert"
+            className="mt-4 rounded-xl border border-destructive/30 bg-destructive-surface px-5 py-4 text-destructive lg:mt-6"
+          >
+            <strong className="font-bold">Over budget.</strong> The estimated first-year cost is {formatAed(-remaining)} more than your
+            budget. Remove or lower some costs, or plan more funding.
           </p>
         )}
       </section>
@@ -78,11 +81,19 @@ export default async function PlanBudgetPage({ params }) {
             <table className="doc-table min-w-180">
               <thead>
                 <tr>
-                  <th scope="col" className="pl-5 sm:pl-6">Cost</th>
+                  <th scope="col" className="pl-5 sm:pl-6">
+                    Cost
+                  </th>
                   <th scope="col">How often</th>
-                  <th scope="col" className="text-right">Estimate</th>
-                  <th scope="col" className="text-right">Actually paid</th>
-                  <th scope="col" className="text-right">First year</th>
+                  <th scope="col" className="text-right">
+                    Estimate
+                  </th>
+                  <th scope="col" className="text-right">
+                    Actually paid
+                  </th>
+                  <th scope="col" className="text-right">
+                    First year
+                  </th>
                   {isOwner && (
                     <th scope="col">
                       <span className="sr-only">Edit</span>

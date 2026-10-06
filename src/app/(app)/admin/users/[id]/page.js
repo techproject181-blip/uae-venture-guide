@@ -20,7 +20,10 @@ export default async function AdminUserPage({ params }) {
   const { id } = await params;
 
   await connectDB();
-  const user = await User.findById(id).select("name email role status createdAt").lean().catch(() => null);
+  const user = await User.findById(id)
+    .select("name email role status createdAt")
+    .lean()
+    .catch(() => null);
   if (!user) notFound();
   const Profile = user.role === "mentor" ? MentorProfile : user.role === "funder" ? FunderProfile : null;
   const profile = Profile && (await Profile.findOne({ userId: id }).lean());
@@ -105,7 +108,9 @@ export default async function AdminUserPage({ params }) {
         {Profile && (
           <Panel
             title="Profile"
-            description={user.role === "mentor" ? "What founders see in the mentor directory." : "What owners read when this funder sends interest."}
+            description={
+              user.role === "mentor" ? "What founders see in the mentor directory." : "What owners read when this funder sends interest."
+            }
             flush={Boolean(profile)}
           >
             {profile ? (

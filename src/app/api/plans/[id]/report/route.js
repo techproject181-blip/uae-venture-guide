@@ -19,7 +19,12 @@ export const GET = route(async (request, { params }) => {
     .lean();
 
   const pdf = await renderToBuffer(<PlanReport plan={toPlain(plan)} sources={toPlain(sources)} />);
-  const filename = `${plan.title.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase() || "plan"}-report.pdf`;
+  const filename = `${
+    plan.title
+      .replace(/[^a-z0-9]+/gi, "-")
+      .replace(/^-|-$/g, "")
+      .toLowerCase() || "plan"
+  }-report.pdf`;
   return new Response(pdf, {
     headers: {
       "Content-Type": "application/pdf",

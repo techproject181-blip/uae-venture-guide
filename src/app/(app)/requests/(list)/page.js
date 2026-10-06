@@ -82,7 +82,8 @@ export default async function RequestsPage() {
         {!isMentor && !showInterests && (
           <Panel title="Funder interest in your plans">
             <p className="text-sm text-muted-foreground">
-              No funder interest yet. Open a plan and choose <span className="font-medium text-foreground">Share with funders</span> so funders can find it.
+              No funder interest yet. Open a plan and choose <span className="font-medium text-foreground">Share with funders</span> so
+              funders can find it.
             </p>
           </Panel>
         )}
@@ -121,7 +122,10 @@ function RequestEntry({ request, isMentor }) {
               label: "Attached plan",
               value:
                 accepted || !isMentor ? (
-                  <Link href={`/plans/${plan._id}`} className="text-foreground decoration-primary underline underline-offset-4 hover:decoration-2">
+                  <Link
+                    href={`/plans/${plan._id}`}
+                    className="text-foreground decoration-primary underline underline-offset-4 hover:decoration-2"
+                  >
                     {plan.title}
                   </Link>
                 ) : (

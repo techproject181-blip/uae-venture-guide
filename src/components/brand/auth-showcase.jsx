@@ -21,7 +21,10 @@ export function AuthShowcase() {
         className="absolute inset-0 opacity-[0.07] bg-[linear-gradient(var(--on-brand)_1px,transparent_1px),linear-gradient(90deg,var(--on-brand)_1px,transparent_1px)] bg-size-[40px_40px] mask-[radial-gradient(ellipse_at_center,black,transparent_75%)]"
       />
 
-      <Link href="/" className="relative flex w-fit items-center gap-2.5 rounded-lg outline-none focus-visible:ring-3 focus-visible:ring-on-brand/50">
+      <Link
+        href="/"
+        className="relative flex w-fit items-center gap-2.5 rounded-lg outline-none focus-visible:ring-3 focus-visible:ring-on-brand/50"
+      >
         <LogoMark className="ring-1 ring-on-brand/20 rounded-[9px]" />
         <Wordmark className="text-on-brand [&>span]:text-brand-300" />
       </Link>
@@ -32,9 +35,14 @@ export function AuthShowcase() {
           <br />
           one clear step at a time.
         </p>
-        <p className="mt-4 max-w-md text-lg text-brand-100/80">Licence, visas, bank and tax: every step with its cost, in the order you take them.</p>
+        <p className="mt-4 max-w-md text-lg text-brand-100/80">
+          Licence, visas, bank and tax: every step with its cost, in the order you take them.
+        </p>
 
-        <div aria-hidden="true" className="float-slow mt-10 max-w-md rounded-2xl border border-on-brand/15 bg-on-brand/[0.07] p-2 shadow-2xl backdrop-blur-md">
+        <div
+          aria-hidden="true"
+          className="float-slow mt-10 max-w-md rounded-2xl border border-on-brand/15 bg-on-brand/[0.07] p-2 shadow-2xl backdrop-blur-md"
+        >
           <ol className="divide-y divide-on-brand/10">
             {STEPS.map((step, index) => (
               <li key={step.number} className="flex items-center gap-3 px-3 py-3">
@@ -52,7 +60,6 @@ export function AuthShowcase() {
           </ol>
         </div>
       </div>
-
     </div>
   );
 }

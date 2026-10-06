@@ -80,7 +80,13 @@ export function RoleTabs({ titleId }) {
         </h2>
         <p className="mt-3 text-muted-foreground">Mentors and funders are approved by an administrator first.</p>
 
-        <div role="tablist" aria-label="Who it is for" aria-orientation="vertical" onKeyDown={onKeyDown} className="mt-6 grid gap-2 sm:grid-cols-3 lg:mt-8 lg:grid-cols-1">
+        <div
+          role="tablist"
+          aria-label="Who it is for"
+          aria-orientation="vertical"
+          onKeyDown={onKeyDown}
+          className="mt-6 grid gap-2 sm:grid-cols-3 lg:mt-8 lg:grid-cols-1"
+        >
           {ROLES.map((r) => {
             const Icon = r.icon;
             const selected = r.id === active;
@@ -97,7 +103,12 @@ export function RoleTabs({ titleId }) {
                 className="relative flex items-center gap-3 rounded-xl p-3 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
               >
                 {selected && (
-                  <motion.span layoutId="role-pill" aria-hidden="true" className="absolute inset-0 rounded-xl border bg-card shadow-panel" transition={{ type: "spring", stiffness: 420, damping: 34 }} />
+                  <motion.span
+                    layoutId="role-pill"
+                    aria-hidden="true"
+                    className="absolute inset-0 rounded-xl border bg-card shadow-panel"
+                    transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                  />
                 )}
                 <span
                   className={cn(

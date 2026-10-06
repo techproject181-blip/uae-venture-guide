@@ -29,7 +29,10 @@ export function AdminMobileNav({ counts, user, children }) {
                 <span className="text-xs font-medium tracking-[0.06em] text-ink-400 uppercase">Admin console</span>
               </span>
             </Dialog.Title>
-            <Dialog.Close aria-label="Close menu" className="flex size-10 items-center justify-center rounded-lg text-ink-300 outline-none hover:bg-on-brand/10 hover:text-on-brand focus-visible:ring-3 focus-visible:ring-brand-400/50">
+            <Dialog.Close
+              aria-label="Close menu"
+              className="flex size-10 items-center justify-center rounded-lg text-ink-300 outline-none hover:bg-on-brand/10 hover:text-on-brand focus-visible:ring-3 focus-visible:ring-brand-400/50"
+            >
               <X className="size-5" aria-hidden="true" />
             </Dialog.Close>
           </div>

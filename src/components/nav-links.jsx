@@ -35,7 +35,11 @@ export function NavLinks({ links, className, compact = false }) {
               <motion.span
                 layoutId={layoutId}
                 aria-hidden="true"
-                className={compact ? "absolute inset-0 z-0 rounded-full bg-accent ring-1 ring-primary/15" : "absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-primary"}
+                className={
+                  compact
+                    ? "absolute inset-0 z-0 rounded-full bg-accent ring-1 ring-primary/15"
+                    : "absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-primary"
+                }
                 transition={{ type: "spring", stiffness: 500, damping: 38 }}
               />
             )}

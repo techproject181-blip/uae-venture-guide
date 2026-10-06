@@ -18,7 +18,9 @@ export default async function PlanDocumentsPage({ params }) {
 
   await connectDB();
   const ids = plan.documents.map((doc) => doc.sourceId).filter(Boolean);
-  const sources = await Source.find({ _id: { $in: ids }, active: true }).select("title url").lean();
+  const sources = await Source.find({ _id: { $in: ids }, active: true })
+    .select("title url")
+    .lean();
   const sourcesById = Object.fromEntries(sources.map((s) => [String(s._id), { title: s.title, url: s.url }]));
 
   const required = plan.documents.filter((doc) => doc.required);

@@ -20,7 +20,15 @@ export function PlanActions({ planId, failed = false }) {
 
   async function regenerate() {
     // A failed plan has nothing to keep, so retrying needs no confirmation.
-    if (!failed && !(await confirm({ title: "Make a new version?", description: "A new roadmap is built from your answers. This plan is kept as it is.", confirmLabel: "Make new version" }))) return;
+    if (
+      !failed &&
+      !(await confirm({
+        title: "Make a new version?",
+        description: "A new roadmap is built from your answers. This plan is kept as it is.",
+        confirmLabel: "Make new version",
+      }))
+    )
+      return;
     setPending(true);
     const result = await postJson(`/api/plans/${planId}/regenerate`);
     setPending(false);

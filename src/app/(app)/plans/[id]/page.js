@@ -27,7 +27,11 @@ export default async function PlanOverviewPage({ params }) {
   const settings = isOwner && (
     <Panel
       title="Plan settings"
-      description={plan.status === "failed" ? "Try again builds the roadmap once more from the same answers." : "New version builds a fresh roadmap from the same answers and keeps this one."}
+      description={
+        plan.status === "failed"
+          ? "Try again builds the roadmap once more from the same answers."
+          : "New version builds a fresh roadmap from the same answers and keeps this one."
+      }
     >
       <div className="flex flex-wrap gap-3">
         <PlanActions planId={plan._id} failed={plan.status === "failed"} />
@@ -59,14 +63,23 @@ export default async function PlanOverviewPage({ params }) {
 
   const aside = (
     <>
-      <Panel title="Money" flush actions={<Link href={`/plans/${plan._id}/budget`} className={cn(linkClass, "text-sm")}>Budget</Link>}>
+      <Panel
+        title="Money"
+        flush
+        actions={
+          <Link href={`/plans/${plan._id}/budget`} className={cn(linkClass, "text-sm")}>
+            Budget
+          </Link>
+        }
+      >
         <FactRows
           rows={[
             { label: "First-year estimate", value: formatAed(total) },
             { label: "Your budget", value: formatAed(plan.budgetAed) },
             {
               label: "Against budget",
-              value: remaining < 0 ? <span className="text-destructive">{formatAed(-remaining)} over</span> : `${formatAed(remaining)} left`,
+              value:
+                remaining < 0 ? <span className="text-destructive">{formatAed(-remaining)} over</span> : `${formatAed(remaining)} left`,
             },
           ]}
         />
@@ -156,7 +169,12 @@ export default async function PlanOverviewPage({ params }) {
                   <span aria-hidden="true" className="hidden h-1.5 w-24 overflow-hidden rounded-full bg-ink-200 sm:block">
                     <span className="block h-full rounded-full bg-done" style={{ width: `${percent}%` }} />
                   </span>
-                  <span className={cn("w-20 shrink-0 text-right text-sm tabular-nums", complete ? "font-medium text-done" : "text-muted-foreground")}>
+                  <span
+                    className={cn(
+                      "w-20 shrink-0 text-right text-sm tabular-nums",
+                      complete ? "font-medium text-done" : "text-muted-foreground",
+                    )}
+                  >
                     {done} of {phase.tasks.length} done
                   </span>
                 </li>
@@ -176,7 +194,6 @@ export default async function PlanOverviewPage({ params }) {
           ]}
         />
       </Panel>
-
     </Split>
   );
 }

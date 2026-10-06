@@ -17,7 +17,15 @@ export function RequestActions({ requestId, status }) {
   const confirm = useConfirm();
 
   async function act(action) {
-    if (action === "complete" && !(await confirm({ title: "Mark as completed?", description: "The founder's plan is no longer shared with you, and the conversation becomes read-only.", confirmLabel: "Mark completed" }))) return;
+    if (
+      action === "complete" &&
+      !(await confirm({
+        title: "Mark as completed?",
+        description: "The founder's plan is no longer shared with you, and the conversation becomes read-only.",
+        confirmLabel: "Mark completed",
+      }))
+    )
+      return;
     setPending(action);
     const result = await sendJson("PATCH", `/api/requests/${requestId}`, { action, reply: reply.trim() || undefined });
     setPending(false);

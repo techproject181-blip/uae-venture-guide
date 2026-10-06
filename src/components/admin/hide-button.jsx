@@ -15,7 +15,16 @@ export function HideButton({ url, hidden, what }) {
   const confirm = useConfirm();
 
   async function toggle() {
-    if (!hidden && !(await confirm({ title: `Hide this ${what}?`, description: "Other users will no longer see it. It stays saved, and you can show it again.", confirmLabel: "Hide", danger: true }))) return;
+    if (
+      !hidden &&
+      !(await confirm({
+        title: `Hide this ${what}?`,
+        description: "Other users will no longer see it. It stays saved, and you can show it again.",
+        confirmLabel: "Hide",
+        danger: true,
+      }))
+    )
+      return;
     setPending(true);
     const result = await sendJson("PATCH", url, { hidden: !hidden });
     setPending(false);

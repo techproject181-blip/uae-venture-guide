@@ -58,7 +58,13 @@ export function Stack({ children, className }) {
  * the inner padding, for tables and lists that run edge to edge.
  */
 export function Panel({ title, description, actions, footer, children, flush = false, className, bodyClassName, as: Tag = "section", id }) {
-  const headingId = id ?? (title ? `panel-${String(title).toLowerCase().replace(/[^a-z0-9]+/g, "-")}` : undefined);
+  const headingId =
+    id ??
+    (title
+      ? `panel-${String(title)
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")}`
+      : undefined);
   return (
     <Tag aria-labelledby={title ? headingId : undefined} className={cn("panel overflow-hidden", className)}>
       {title && (
@@ -98,9 +104,7 @@ export function Split({ children, aside, className }) {
 /** Cards in a grid: one column on phones, two from 640px, three from 1280px (or two at most with `cols={2}`). */
 export function CardGrid({ children, cols = 3, className }) {
   return (
-    <ul className={cn("stagger grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-6", cols === 3 && "xl:grid-cols-3", className)}>
-      {children}
-    </ul>
+    <ul className={cn("stagger grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-6", cols === 3 && "xl:grid-cols-3", className)}>{children}</ul>
   );
 }
 
@@ -130,7 +134,12 @@ export function StatGrid({ children, className }) {
 /** One number with its label. `tone="danger"` colours it red, for amounts over budget. `href` makes the whole card a link. */
 export function Stat({ label, value, hint, tone, href }) {
   const number = (
-    <span className={cn("block font-display text-[1.375rem] leading-none font-bold tracking-[-0.02em] tabular-nums sm:text-[1.875rem]", tone === "danger" && "text-destructive")}>
+    <span
+      className={cn(
+        "block font-display text-[1.375rem] leading-none font-bold tracking-[-0.02em] tabular-nums sm:text-[1.875rem]",
+        tone === "danger" && "text-destructive",
+      )}
+    >
       {value}
     </span>
   );
@@ -140,7 +149,10 @@ export function Stat({ label, value, hint, tone, href }) {
       <dd className="mt-2">
         {href ? (
           // The link covers the whole card; it sits in the <dd> so the list stays valid.
-          <Link href={href} className="outline-none after:absolute after:inset-0 after:rounded-xl focus-visible:after:ring-3 focus-visible:after:ring-ring/50">
+          <Link
+            href={href}
+            className="outline-none after:absolute after:inset-0 after:rounded-xl focus-visible:after:ring-3 focus-visible:after:ring-ring/50"
+          >
             {number}
           </Link>
         ) : (

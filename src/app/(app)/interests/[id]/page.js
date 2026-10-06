@@ -23,7 +23,9 @@ export default async function InterestConversationPage({ params }) {
   const { interest, plan, isFunder, canSend } = conversation;
 
   const [people, messages] = await Promise.all([
-    User.find({ _id: { $in: [interest.funderId, plan.ownerId] } }).select("name").lean(),
+    User.find({ _id: { $in: [interest.funderId, plan.ownerId] } })
+      .select("name")
+      .lean(),
     listInterestMessages(interest, user.id),
   ]);
   const nameOf = (userId) => people.find((person) => String(person._id) === String(userId))?.name ?? "A removed account";
@@ -56,7 +58,10 @@ export default async function InterestConversationPage({ params }) {
                 {
                   label: "Plan",
                   value: canSend ? (
-                    <Link href={`/plans/${plan._id}`} className="text-foreground decoration-primary underline underline-offset-4 hover:decoration-2">
+                    <Link
+                      href={`/plans/${plan._id}`}
+                      className="text-foreground decoration-primary underline underline-offset-4 hover:decoration-2"
+                    >
                       {plan.title}
                     </Link>
                   ) : (
@@ -68,7 +73,9 @@ export default async function InterestConversationPage({ params }) {
               ]}
             />
             <p className="mt-5 text-sm text-muted-foreground">
-              {canSend ? "Every message is saved here for both of you." : "The plan is no longer shared. The conversation stays here to read."}
+              {canSend
+                ? "Every message is saved here for both of you."
+                : "The plan is no longer shared. The conversation stays here to read."}
             </p>
           </Panel>
         }

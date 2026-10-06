@@ -18,7 +18,12 @@ const components = {
   ol: styled("ol", "my-4 list-decimal space-y-1 pl-6 marker:text-muted-foreground"),
   blockquote: styled("blockquote", "my-4 border-l-2 border-foreground/30 pl-4 text-muted-foreground"),
   a: ({ href, children }) => (
-    <a href={href} target="_blank" rel="noopener noreferrer nofollow" className="font-medium text-foreground decoration-primary underline underline-offset-4 hover:decoration-2">
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer nofollow"
+      className="font-medium text-foreground decoration-primary underline underline-offset-4 hover:decoration-2"
+    >
       {children}
     </a>
   ),

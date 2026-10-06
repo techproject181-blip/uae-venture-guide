@@ -21,7 +21,9 @@ export default async function PlanTasksPage({ params }) {
 
   await connectDB();
   const sourceIds = [...new Set(plan.tasks.flatMap((task) => task.sourceIds))];
-  const sources = await Source.find({ _id: { $in: sourceIds }, active: true }).select("title url").lean();
+  const sources = await Source.find({ _id: { $in: sourceIds }, active: true })
+    .select("title url")
+    .lean();
   const sourcesById = Object.fromEntries(sources.map((s) => [String(s._id), { title: s.title, url: s.url }]));
   const phases = plan.phases.map(({ _id, title }) => ({ _id, title }));
 
@@ -69,7 +71,9 @@ export default async function PlanTasksPage({ params }) {
                     <p className="mt-0.5 text-sm text-muted-foreground">{phase.description}</p>
                   </div>
                   {tasks.length > 0 && (
-                    <span className={cn("mt-0.5 shrink-0 text-sm tabular-nums", complete ? "font-medium text-done" : "text-muted-foreground")}>
+                    <span
+                      className={cn("mt-0.5 shrink-0 text-sm tabular-nums", complete ? "font-medium text-done" : "text-muted-foreground")}
+                    >
                       {done} of {tasks.length}
                     </span>
                   )}
@@ -96,7 +100,6 @@ export default async function PlanTasksPage({ params }) {
           })}
         </div>
       </Panel>
-
     </Split>
   );
 }

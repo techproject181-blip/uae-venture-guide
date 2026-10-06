@@ -16,8 +16,21 @@ export default function NotFound() {
       <main id="main" className="page-width flex flex-1 flex-col items-center justify-center py-16 text-center sm:py-24">
         {/* A road that runs out before its last stop. */}
         <svg viewBox="0 0 160 48" aria-hidden="true" className="h-12 w-40">
-          <path d="M12 34 C 34 34, 34 14, 56 14 S 82 34, 104 34" fill="none" stroke="var(--primary)" strokeWidth="3" strokeLinecap="round" />
-          <path d="M104 34 S 126 14, 148 14" fill="none" stroke="var(--ink-300)" strokeWidth="3" strokeLinecap="round" strokeDasharray="1 7" />
+          <path
+            d="M12 34 C 34 34, 34 14, 56 14 S 82 34, 104 34"
+            fill="none"
+            stroke="var(--primary)"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+          <path
+            d="M104 34 S 126 14, 148 14"
+            fill="none"
+            stroke="var(--ink-300)"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeDasharray="1 7"
+          />
           <circle cx="12" cy="34" r="5.5" fill="var(--primary)" />
           <circle cx="56" cy="14" r="5.5" fill="var(--primary)" />
           <circle cx="104" cy="34" r="5.5" fill="var(--primary)" />

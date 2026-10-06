@@ -18,8 +18,7 @@ export function SourceForm({ source = null }) {
   const router = useRouter();
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: sourceSchema,
-    send: (data) =>
-      source ? sendJson("PATCH", `/api/admin/sources/${source._id}`, data) : sendJson("POST", "/api/admin/sources", data),
+    send: (data) => (source ? sendJson("PATCH", `/api/admin/sources/${source._id}`, data) : sendJson("POST", "/api/admin/sources", data)),
     onSuccess: (result) => {
       toast.success(source ? "Source saved." : "Source added.");
       if (source) router.refresh();
@@ -32,12 +31,30 @@ export function SourceForm({ source = null }) {
       <FormAlert>{formError}</FormAlert>
       <TextField id="title" label="Title" defaultValue={source?.title} error={errors.title} />
       <div className="grid gap-5 sm:grid-cols-2">
-        <TextField id="publisher" label="Publisher" hint="For example: Dubai Department of Economy and Tourism" defaultValue={source?.publisher} error={errors.publisher} />
+        <TextField
+          id="publisher"
+          label="Publisher"
+          hint="For example: Dubai Department of Economy and Tourism"
+          defaultValue={source?.publisher}
+          error={errors.publisher}
+        />
         <SelectField id="emirate" label="Emirate" options={EMIRATE_OPTIONS} defaultValue={source?.emirate ?? ""} error={errors.emirate} />
       </div>
       <TextField id="url" label="Web address" type="url" placeholder="https://" defaultValue={source?.url} error={errors.url} />
-      <TextAreaField id="summary" label="Summary" hint="What a founder can find on this page, in one or two sentences." defaultValue={source?.summary} error={errors.summary} />
-      <CheckboxGroup id="categories" label="Categories" options={SOURCE_CATEGORIES} defaultValues={source?.categories ?? []} error={errors.categories} />
+      <TextAreaField
+        id="summary"
+        label="Summary"
+        hint="What a founder can find on this page, in one or two sentences."
+        defaultValue={source?.summary}
+        error={errors.summary}
+      />
+      <CheckboxGroup
+        id="categories"
+        label="Categories"
+        options={SOURCE_CATEGORIES}
+        defaultValues={source?.categories ?? []}
+        error={errors.categories}
+      />
       <TextField
         id="verifiedAt"
         label="Last checked on"

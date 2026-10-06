@@ -41,7 +41,10 @@ export const optionalText = (max) => z.preprocess(emptyToUndefined, z.string().t
 
 /** A web address starting with http:// or https://. */
 export const webUrl = (message = "Enter a full web address starting with https://.") =>
-  z.string().trim().pipe(z.url({ protocol: /^https?$/, error: message }));
+  z
+    .string()
+    .trim()
+    .pipe(z.url({ protocol: /^https?$/, error: message }));
 
 function emptyToUndefined(value) {
   return typeof value === "string" && value.trim() === "" ? undefined : value;

@@ -39,7 +39,10 @@ export default async function SourcesPage({ searchParams }) {
       />
 
       {/* A plain GET form: the filters live in the address, so results can be shared and work without JavaScript. */}
-      <form role="search" className="panel mb-6 grid gap-4 p-4 sm:p-5 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_8rem] md:items-end">
+      <form
+        role="search"
+        className="panel mb-6 grid gap-4 p-4 sm:p-5 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_8rem] md:items-end"
+      >
         <div className="space-y-2">
           <label className="block text-sm font-medium" htmlFor="q">
             Search sources
@@ -83,7 +86,10 @@ export default async function SourcesPage({ searchParams }) {
           text={filtered ? "Try fewer words or another filter." : "The administrator has not added any official sources yet."}
           action={
             filtered && (
-              <Link href="/sources" className="font-medium text-foreground decoration-primary underline underline-offset-4 hover:decoration-2">
+              <Link
+                href="/sources"
+                className="font-medium text-foreground decoration-primary underline underline-offset-4 hover:decoration-2"
+              >
                 Clear the filters
               </Link>
             )
@@ -96,7 +102,10 @@ export default async function SourcesPage({ searchParams }) {
               {sources.length} {sources.length === 1 ? "source" : "sources"}
             </p>
             {filtered && (
-              <Link href="/sources" className="font-medium text-foreground decoration-primary underline underline-offset-4 hover:decoration-2">
+              <Link
+                href="/sources"
+                className="font-medium text-foreground decoration-primary underline underline-offset-4 hover:decoration-2"
+              >
                 Clear the filters
               </Link>
             )}

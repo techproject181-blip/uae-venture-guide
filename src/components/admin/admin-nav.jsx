@@ -38,7 +38,10 @@ export function AdminNav({ counts = {}, user, onNavigate }) {
               active ? "bg-on-brand/10 text-on-brand" : "text-ink-300 hover:bg-on-brand/5 hover:text-on-brand",
             )}
           >
-            <Icon className={cn("size-4.5 shrink-0", active ? "text-brand-300" : "text-ink-400 group-hover:text-ink-300")} aria-hidden="true" />
+            <Icon
+              className={cn("size-4.5 shrink-0", active ? "text-brand-300" : "text-ink-400 group-hover:text-ink-300")}
+              aria-hidden="true"
+            />
             <span className="flex-1">{label}</span>
             {count > 0 && (
               <span className="rounded-full bg-gold-400 px-1.5 py-0.5 text-xs leading-none font-semibold text-ink-900 tabular-nums">

@@ -10,9 +10,7 @@ export const metadata = { title: "Experience posts" };
 
 export default async function PostsPage() {
   await connectDB();
-  const posts = toPlain(
-    await Post.find({ status: "published" }).sort({ createdAt: -1 }).limit(50).populate("authorId", "name").lean(),
-  );
+  const posts = toPlain(await Post.find({ status: "published" }).sort({ createdAt: -1 }).limit(50).populate("authorId", "name").lean());
 
   return (
     <>

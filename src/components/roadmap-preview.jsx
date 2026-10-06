@@ -71,8 +71,8 @@ export function RoadmapPreview() {
         </table>
       </div>
       <figcaption className="mt-3 text-sm text-muted-foreground">
-        An example. In a real plan, the Official stamp means the fee was checked against a government or free zone page;
-        the rest are estimates.
+        An example. In a real plan, the Official stamp means the fee was checked against a government or free zone page; the rest are
+        estimates.
       </figcaption>
     </figure>
   );

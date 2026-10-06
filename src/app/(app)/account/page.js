@@ -75,10 +75,18 @@ export default async function AccountPage() {
         </aside>
 
         <div className="space-y-6">
-          <SettingsCard icon={UserRound} title="Personal details" description="The name other people see on your plans, requests and messages.">
+          <SettingsCard
+            icon={UserRound}
+            title="Personal details"
+            description="The name other people see on your plans, requests and messages."
+          >
             <AccountDetailsForm name={account.name} email={account.email} />
           </SettingsCard>
-          <SettingsCard icon={KeyRound} title="Password" description="Changing it signs you out on your other devices. You stay signed in here.">
+          <SettingsCard
+            icon={KeyRound}
+            title="Password"
+            description="Changing it signs you out on your other devices. You stay signed in here."
+          >
             <ChangePasswordForm />
           </SettingsCard>
         </div>

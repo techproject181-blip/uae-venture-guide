@@ -8,5 +8,8 @@ export const requestMessageSchema = z.object({
 
 /** The query of GET /api/requests/:id/messages: only messages newer than `after`, when given. */
 export const messagesQuerySchema = z.object({
-  after: z.preprocess((value) => (value === null || value === "" ? undefined : value), z.iso.datetime("Use a date and time such as YYYY-MM-DDTHH:mm:ss.sssZ.").optional()),
+  after: z.preprocess(
+    (value) => (value === null || value === "" ? undefined : value),
+    z.iso.datetime("Use a date and time such as YYYY-MM-DDTHH:mm:ss.sssZ.").optional(),
+  ),
 });

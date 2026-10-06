@@ -18,7 +18,6 @@ const CHART_TYPES = [
   { value: "pie", label: "Pie chart" },
 ];
 
-
 /** Writes a new experience post, or edits `post`. Five picture slots and six chart rows keep the form simple. */
 export function PostForm({ post = null }) {
   const router = useRouter();
@@ -54,8 +53,20 @@ export function PostForm({ post = null }) {
       >
         {[1, 2, 3, 4, 5].map((n) => (
           <div key={n} className="grid gap-3 sm:grid-cols-2">
-            <TextField id={`imageUrl${n}`} label={`Picture ${n} address`} type="url" placeholder="https://" defaultValue={post?.images?.[n - 1]?.url} error={errors[`imageUrl${n}`]} />
-            <TextField id={`imageAlt${n}`} label={`Picture ${n} description`} defaultValue={post?.images?.[n - 1]?.alt} error={errors[`imageAlt${n}`]} />
+            <TextField
+              id={`imageUrl${n}`}
+              label={`Picture ${n} address`}
+              type="url"
+              placeholder="https://"
+              defaultValue={post?.images?.[n - 1]?.url}
+              error={errors[`imageUrl${n}`]}
+            />
+            <TextField
+              id={`imageAlt${n}`}
+              label={`Picture ${n} description`}
+              defaultValue={post?.images?.[n - 1]?.alt}
+              error={errors[`imageAlt${n}`]}
+            />
           </div>
         ))}
       </FormPart>
@@ -68,7 +79,12 @@ export function PostForm({ post = null }) {
         <div className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
           {[1, 2, 3, 4, 5, 6].map((n) => (
             <div key={n} className="grid grid-cols-[2fr_1fr] gap-2">
-              <TextField id={`chartLabel${n}`} label={`Label ${n}`} defaultValue={post?.chart?.labels?.[n - 1]} error={errors[`chartLabel${n}`]} />
+              <TextField
+                id={`chartLabel${n}`}
+                label={`Label ${n}`}
+                defaultValue={post?.chart?.labels?.[n - 1]}
+                error={errors[`chartLabel${n}`]}
+              />
               <TextField
                 id={`chartValue${n}`}
                 label={`Value ${n}`}

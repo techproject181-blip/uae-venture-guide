@@ -4,7 +4,8 @@ import { optionalText, optionalWholeNumber, wholeNumber } from "@/lib/schemas/he
 
 export const intakeSchema = z.object({
   title: z.string("Give the plan a short name.").trim().min(3, "Give the plan a short name.").max(80, "Use 80 characters or fewer."),
-  idea: z.string("Describe your idea in a few sentences (at least 30 characters).")
+  idea: z
+    .string("Describe your idea in a few sentences (at least 30 characters).")
     .trim()
     .min(30, "Describe your idea in a few sentences (at least 30 characters).")
     .max(2000, "Use 2,000 characters or fewer."),
@@ -12,7 +13,11 @@ export const intakeSchema = z.object({
   sector: z.enum(valuesOf(SECTORS), "Choose a sector."),
   jurisdictionPref: z.enum(valuesOf(JURISDICTION_PREFERENCES), "Choose one of the options."),
   budgetAed: wholeNumber(0, 100_000_000, "Enter your budget in whole dirhams."),
-  targetCustomers: z.string("Describe who your customers are.").trim().min(5, "Describe who your customers are.").max(1000, "Use 1,000 characters or fewer."),
+  targetCustomers: z
+    .string("Describe who your customers are.")
+    .trim()
+    .min(5, "Describe who your customers are.")
+    .max(1000, "Use 1,000 characters or fewer."),
   teamSize: wholeNumber(1, 500, "Enter how many people, including you (1 to 500)."),
 });
 

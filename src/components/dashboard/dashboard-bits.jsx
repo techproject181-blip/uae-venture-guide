@@ -45,7 +45,10 @@ export function Shortcuts({ title = "Shortcuts", items }) {
       {items.map(({ href, label, detail, icon: Icon }) => (
         <Row key={href} link className="flex items-center gap-3.5">
           {Icon && (
-            <span aria-hidden="true" className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-foreground">
+            <span
+              aria-hidden="true"
+              className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-foreground"
+            >
               <Icon className="size-4" />
             </span>
           )}

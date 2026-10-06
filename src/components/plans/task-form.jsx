@@ -16,9 +16,7 @@ export function TaskForm({ planId, phases, task = null, onDone }) {
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: taskSchema,
     send: (data) =>
-      task
-        ? sendJson("PATCH", `/api/plans/${planId}/tasks/${task._id}`, data)
-        : sendJson("POST", `/api/plans/${planId}/tasks`, data),
+      task ? sendJson("PATCH", `/api/plans/${planId}/tasks/${task._id}`, data) : sendJson("POST", `/api/plans/${planId}/tasks`, data),
     onSuccess: (result, form) => {
       toast.success(task ? "Task saved." : "Task added.");
       if (!task) form.reset();
@@ -44,8 +42,22 @@ export function TaskForm({ planId, phases, task = null, onDone }) {
           {...field("phaseId")}
         />
         <TextField label="Days needed" type="number" min="0" inputMode="numeric" defaultValue={task?.estDays ?? 1} {...field("estDays")} />
-        <TextField label="Lowest cost (AED)" type="number" min="0" inputMode="numeric" defaultValue={task?.costMinAed ?? 0} {...field("costMinAed")} />
-        <TextField label="Highest cost (AED)" type="number" min="0" inputMode="numeric" defaultValue={task?.costMaxAed ?? 0} {...field("costMaxAed")} />
+        <TextField
+          label="Lowest cost (AED)"
+          type="number"
+          min="0"
+          inputMode="numeric"
+          defaultValue={task?.costMinAed ?? 0}
+          {...field("costMinAed")}
+        />
+        <TextField
+          label="Highest cost (AED)"
+          type="number"
+          min="0"
+          inputMode="numeric"
+          defaultValue={task?.costMaxAed ?? 0}
+          {...field("costMaxAed")}
+        />
       </div>
       {(task?.costBasis === "reference" || task?.costBasis === "demo") && (
         <p className="text-sm text-muted-foreground">Changing the cost turns this fee into your own estimate.</p>

@@ -68,10 +68,7 @@ export default async function AdminSourcesPage({ searchParams }) {
       )}
 
       {sources.length === 0 ? (
-        <EmptyState
-          title={filter.empty}
-          text={all.length === 0 ? "Add the first official page, then add the fees it lists." : undefined}
-        />
+        <EmptyState title={filter.empty} text={all.length === 0 ? "Add the first official page, then add the fees it lists." : undefined} />
       ) : (
         <TablePanel
           title={filter.value === "all" ? "All sources" : filter.label}
@@ -81,10 +78,16 @@ export default async function AdminSourcesPage({ searchParams }) {
             <thead>
               <tr>
                 <th scope="col">Source</th>
-                <th scope="col" className="hidden md:table-cell">Emirate</th>
+                <th scope="col" className="hidden md:table-cell">
+                  Emirate
+                </th>
                 <th scope="col">Status</th>
-                <th scope="col" className="hidden md:table-cell">Last checked</th>
-                <th scope="col" className="hidden text-right md:table-cell">Fees</th>
+                <th scope="col" className="hidden md:table-cell">
+                  Last checked
+                </th>
+                <th scope="col" className="hidden text-right md:table-cell">
+                  Fees
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -95,7 +98,10 @@ export default async function AdminSourcesPage({ searchParams }) {
                 return (
                   <tr key={id}>
                     <td>
-                      <Link href={`/admin/sources/${id}`} className="font-medium text-foreground decoration-primary underline-offset-4 hover:underline">
+                      <Link
+                        href={`/admin/sources/${id}`}
+                        className="font-medium text-foreground decoration-primary underline-offset-4 hover:underline"
+                      >
                         {source.title}
                       </Link>
                       <p className="text-muted-foreground">{source.publisher}</p>

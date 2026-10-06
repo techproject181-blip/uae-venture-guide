@@ -17,10 +17,7 @@ export async function POST(request) {
   const body = await request.json().catch(() => null);
   const parsed = signInSchema.safeParse(body ?? {});
   if (!parsed.success) {
-    return Response.json(
-      { error: "Please fix the highlighted fields.", fieldErrors: fieldErrors(parsed.error) },
-      { status: 400 },
-    );
+    return Response.json({ error: "Please fix the highlighted fields.", fieldErrors: fieldErrors(parsed.error) }, { status: 400 });
   }
   const { email, password } = parsed.data;
 
@@ -29,10 +26,7 @@ export async function POST(request) {
     // After too many wrong passwords for this email, stop checking for a while.
     const attempts = await LoginAttempt.findOne({ email }).lean();
     if (attempts?.failures >= MAX_FAILURES) {
-      return Response.json(
-        { error: `Too many failed attempts. Wait ${LOCK_MINUTES} minutes, or reset your password.` },
-        { status: 429 },
-      );
+      return Response.json({ error: `Too many failed attempts. Wait ${LOCK_MINUTES} minutes, or reset your password.` }, { status: 429 });
     }
 
     const user = await User.findOne({ email });
@@ -45,15 +39,9 @@ export async function POST(request) {
     await LoginAttempt.deleteOne({ email });
     if (user.status === "suspended") {
       if (user.rejected) {
-        return Response.json(
-          { error: "This account was not approved. Please contact the administrator." },
-          { status: 403 },
-        );
+        return Response.json({ error: "This account was not approved. Please contact the administrator." }, { status: 403 });
       }
-      return Response.json(
-        { error: "This account is suspended. Please contact the administrator." },
-        { status: 403 },
-      );
+      return Response.json({ error: "This account is suspended. Please contact the administrator." }, { status: 403 });
     }
 
     await createSession(user);
