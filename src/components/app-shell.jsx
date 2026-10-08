@@ -9,6 +9,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { ROLE_LABELS } from "@/lib/constants";
 import { connectDB } from "@/lib/db";
+import { DASHBOARD_ONLY } from "@/lib/limited-mode";
 import { FundingInterest } from "@/models/FundingInterest";
 import { MentorRequest } from "@/models/MentorRequest";
 import { Plan } from "@/models/Plan";
@@ -73,7 +74,8 @@ export async function AppShell({ user, children }) {
     <div className="flex min-h-dvh flex-col">
       <header className="sticky top-0 z-40 border-b bg-card/85 backdrop-blur-lg backdrop-saturate-150">
         <div className="page-width flex h-16 items-center gap-3 sm:gap-6">
-          <Logo />
+          {/* While the app stops at the dashboard the logo stays inside it, instead of leaving for the landing page. */}
+          <Logo href={DASHBOARD_ONLY ? "/dashboard" : "/"} />
           <NavLinks links={links} className="hidden self-stretch lg:flex" />
           <div className="ml-auto flex shrink-0 items-center gap-3">
             <UserMenu name={user.name} email={user.email} role={ROLE_LABELS[user.role]} className="hidden lg:flex" />

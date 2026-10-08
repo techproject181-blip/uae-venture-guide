@@ -5,6 +5,7 @@ import { Menu } from "@base-ui/react/menu";
 import { ChevronDown, LogOut, UserRound } from "lucide-react";
 import { useSignOut } from "@/components/auth/sign-out-button";
 import { Avatar } from "@/components/avatar";
+import { DASHBOARD_ONLY, DISABLED_CLASS, DISABLED_TITLE } from "@/lib/limited-mode";
 import { cn } from "@/lib/utils";
 
 const ITEM =
@@ -39,7 +40,13 @@ export function UserMenu({ name, email, role, className }) {
               </div>
             </div>
             <Menu.Separator className="my-1 h-px bg-border" />
-            <Menu.Item render={<Link href="/account" />} className={ITEM}>
+            {/* Switched off while the submission build stops at the dashboard (lib/limited-mode.js). */}
+            <Menu.Item
+              render={DASHBOARD_ONLY ? <span /> : <Link href="/account" />}
+              disabled={DASHBOARD_ONLY}
+              title={DASHBOARD_ONLY ? DISABLED_TITLE : undefined}
+              className={cn(ITEM, DASHBOARD_ONLY && DISABLED_CLASS)}
+            >
               <UserRound aria-hidden="true" />
               Account
             </Menu.Item>

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Compass, HandCoins, Inbox, Landmark, Newspaper, Plus, UserRound, Users } from "lucide-react";
 import { AcceptingSwitch } from "@/components/dashboard/accepting-switch";
 import { Greeting, NextStep, Row, Shortcuts, TextLink, count, rowLink } from "@/components/dashboard/dashboard-bits";
@@ -7,6 +6,7 @@ import { EmptyState } from "@/components/page-header";
 import { Cost, ProgressBar } from "@/components/plans/plan-bits";
 import { StatusBadge } from "@/components/status-badge";
 import { buttonVariants } from "@/components/ui/button";
+import { OffLink } from "@/components/off-link";
 import { toPlain } from "@/lib/api";
 import { progressPercent } from "@/lib/budget";
 import { EMIRATES, SECTORS, labelOf } from "@/lib/constants";
@@ -18,6 +18,10 @@ import { MentorProfile } from "@/models/MentorProfile";
 import { MentorRequest } from "@/models/MentorRequest";
 import { Plan } from "@/models/Plan";
 import { Post } from "@/models/Post";
+
+// The submission build stops at the dashboard (lib/limited-mode.js), so every
+// link on it is drawn but switched off. Turn the flag off for real links.
+const Link = OffLink;
 
 // One dashboard per role, all on the same skeleton: the greeting with the
 // role's main button, four numbers that link to their lists, then the role's

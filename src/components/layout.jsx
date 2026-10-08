@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { DASHBOARD_ONLY, DISABLED_TITLE, DISABLED_WRAP } from "@/lib/limited-mode";
 import { cn } from "@/lib/utils";
 
 // The layout kit. Every page is built from these few pieces, so pages of the
@@ -133,6 +134,10 @@ export function StatGrid({ children, className }) {
 
 /** One number with its label. `tone="danger"` colours it red, for amounts over budget. `href` makes the whole card a link. */
 export function Stat({ label, value, hint, tone, href }) {
+  // A stat card covers itself with a link, and that link is switched off while
+  // the submission build stops at the dashboard (lib/limited-mode.js). The
+  // card keeps its normal look, so only the pointer says it leads nowhere.
+  const off = DASHBOARD_ONLY && Boolean(href);
   const number = (
     <span
       className={cn(
@@ -144,10 +149,13 @@ export function Stat({ label, value, hint, tone, href }) {
     </span>
   );
   return (
-    <div className={cn("panel relative p-5 sm:p-6", href && "panel-link")}>
+    <div
+      className={cn("panel relative p-5 sm:p-6", href && !off && "panel-link", off && DISABLED_WRAP)}
+      title={off ? DISABLED_TITLE : undefined}
+    >
       <dt className="text-sm font-medium text-muted-foreground">{label}</dt>
       <dd className="mt-2">
-        {href ? (
+        {href && !off ? (
           // The link covers the whole card; it sits in the <dd> so the list stays valid.
           <Link
             href={href}
