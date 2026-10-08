@@ -41,7 +41,7 @@ export function UserMenu({ name, email, role, className }) {
             <Menu.Separator className="my-1 h-px bg-border" />
             <Menu.Item render={<Link href="/account" />} className={ITEM}>
               <UserRound aria-hidden="true" />
-              Profile
+              Account
             </Menu.Item>
             <Menu.Separator className="my-1 h-px bg-border" />
             <Menu.Item onClick={signOut} disabled={pending} className={cn(ITEM, "text-destructive [&_svg]:text-destructive")}>

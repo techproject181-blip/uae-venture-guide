@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Undo2 } from "lucide-react";
 import { DeleteButton } from "@/components/delete-button";
 import { Fields } from "@/components/document";
 import { CardGrid } from "@/components/layout";
@@ -84,7 +83,7 @@ export default async function InterestsPage() {
                         label="Withdraw"
                         confirmText="The owner will no longer see your interest. You can send it again later."
                         doneText="Interest withdrawn."
-                        icon={Undo2}
+                        icon="undo"
                         size="default"
                       />
                     </div>
