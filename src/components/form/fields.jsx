@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AlertCircle, Eye, EyeOff } from "lucide-react";
+import { AlertCircle, Eye, EyeOff, Lock } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
@@ -52,6 +52,26 @@ export function TextField({ id, label, hint, error, className, ...inputProps }) 
   return (
     <Field id={id} label={label} hint={hint} error={error} className={className}>
       <input id={id} name={id} className={cn(controlClass, "h-11")} {...describedBy(id, hint, error)} {...inputProps} />
+    </Field>
+  );
+}
+
+/**
+ * A value that cannot be edited, such as the email on the account page. It is
+ * built like a real field so it lines up with the ones beside it, then faded and
+ * given the "no entry" cursor so it reads as closed rather than broken.
+ */
+export function ReadOnlyField({ id, label, hint, value, title = "This cannot be changed.", className }) {
+  return (
+    <Field id={id} label={label} hint={hint} className={className}>
+      <p
+        id={id}
+        title={title}
+        className={cn(controlClass, "flex h-11 items-center gap-2 bg-ink-50 opacity-60 cursor-not-allowed")}
+      >
+        <Lock className="size-4 shrink-0 text-ink-400" aria-hidden="true" />
+        <span className="truncate">{value}</span>
+      </p>
     </Field>
   );
 }

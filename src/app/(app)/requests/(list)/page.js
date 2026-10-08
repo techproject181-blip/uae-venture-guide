@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { MessagesSquare, Undo2 } from "lucide-react";
-import { Fields } from "@/components/document";
+import { MessagesSquare } from "lucide-react";
 import { Panel, Stack } from "@/components/layout";
 import { EmptyState, PageHeader } from "@/components/page-header";
 import { InterestList } from "@/components/requests/interest-list";
@@ -18,6 +17,8 @@ import "@/models/Plan"; // registers the models that populate() reads from
 import "@/models/User";
 
 export const metadata = { title: "Requests" };
+
+const rowLink = "text-foreground decoration-primary underline underline-offset-4 hover:decoration-2";
 
 const STATUS_ORDER = { pending: 0, accepted: 1, completed: 2, declined: 3 };
 
@@ -92,86 +93,80 @@ export default async function RequestsPage() {
   );
 }
 
-/** One guidance request: who and when, the message, the attached plan, the chat link or reply, and the mentor's buttons. */
+/**
+ * One guidance request as a row: who, when and the attached plan on the left,
+ * the status and the buttons on the right. The mentor's reply box is a form, so
+ * it sits under the row at full width instead of in the narrow right column.
+ */
 function RequestEntry({ request, isMentor }) {
   const other = isMentor ? request.entrepreneurId : request.mentorId;
   const accepted = request.status === "accepted";
   // Accepted and completed requests have a conversation (lib/messages.js); a completed one is read-only.
   const hasChat = accepted || request.status === "completed";
   const plan = request.planId;
+  const planReadable = accepted || !isMentor;
 
   return (
-    <li className="px-5 py-5 sm:px-6 sm:py-6">
-      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
-        <div className="min-w-0">
-          <h3 className="text-[1.0625rem] font-semibold">{request.topic}</h3>
+    <li className="px-5 py-4 sm:px-6 sm:py-5">
+      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-6">
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
+            <h3 className="text-base font-semibold">{request.topic}</h3>
+            <StatusBadge status={request.status} />
+          </div>
+
           <p className="mt-1 text-sm text-muted-foreground">
             {isMentor ? "From" : "To"} {other?.name ?? "a removed account"} · {formatDate(request.createdAt)}
-          </p>
-        </div>
-        <StatusBadge status={request.status} />
-      </div>
-
-      <p className="mt-3 max-w-prose whitespace-pre-line text-foreground/90">{request.message}</p>
-
-      {plan && (
-        <Fields
-          className="mt-5"
-          items={[
-            plan && {
-              label: "Attached plan",
-              value:
-                accepted || !isMentor ? (
-                  <Link
-                    href={`/plans/${plan._id}`}
-                    className="text-foreground decoration-primary underline underline-offset-4 hover:decoration-2"
-                  >
+            {plan && (
+              <>
+                {" · "}
+                {planReadable ? (
+                  <Link href={`/plans/${plan._id}`} className={rowLink}>
                     {plan.title}
                   </Link>
                 ) : (
                   <>
-                    {plan.title}{" "}
-                    <span className="font-normal text-muted-foreground">
-                      {request.status === "pending" ? "(readable once you accept)" : "(no longer shared)"}
-                    </span>
+                    {plan.title} <span>{request.status === "pending" ? "(readable once you accept)" : "(no longer shared)"}</span>
                   </>
-                ),
-            },
-          ]}
-        />
-      )}
+                )}
+              </>
+            )}
+          </p>
 
-      {!isMentor && request.status === "pending" && (
-        <div className="mt-5">
-          <DeleteButton
-            url={`/api/requests/${request._id}`}
-            label="Withdraw request"
-            confirmText="The mentor will no longer see it. You can send a new request later."
-            doneText="Request withdrawn."
-            icon={Undo2}
-          />
+          <p className="mt-2 max-w-prose text-sm whitespace-pre-line text-foreground/80">{request.message}</p>
+
+          {/* A declined request has no chat, so the mentor's reason is shown here. */}
+          {request.status === "declined" && request.mentorReply && (
+            <p className="mt-2 max-w-prose text-sm whitespace-pre-line text-muted-foreground">
+              <span className="font-medium text-foreground">Mentor&apos;s reply: </span>
+              {request.mentorReply}
+            </p>
+          )}
         </div>
-      )}
 
-      {hasChat && (
-        <div className="mt-5">
-          <Link href={`/requests/${request._id}`} className={buttonVariants({ variant: accepted ? "default" : "outline", size: "lg" })}>
-            <MessagesSquare aria-hidden="true" />
-            Open chat<span className="sr-only"> about {request.topic}</span>
-          </Link>
+        <div className="flex shrink-0 flex-wrap gap-2 md:justify-end">
+          {hasChat && (
+            <Link href={`/requests/${request._id}`} className={buttonVariants({ variant: accepted ? "default" : "outline" })}>
+              <MessagesSquare aria-hidden="true" />
+              Open chat<span className="sr-only"> about {request.topic}</span>
+            </Link>
+          )}
+          {!isMentor && request.status === "pending" && (
+            <DeleteButton
+              url={`/api/requests/${request._id}`}
+              label="Withdraw request"
+              confirmText="The mentor will no longer see it. You can send a new request later."
+              doneText="Request withdrawn."
+              icon="undo"
+              size="default"
+            />
+          )}
+          {isMentor && accepted && <RequestActions requestId={request._id} status={request.status} />}
         </div>
-      )}
+      </div>
 
-      {/* A declined request has no chat, so the mentor's reason is shown here. */}
-      {request.status === "declined" && request.mentorReply && (
-        <dl className="mt-5">
-          <dt className="field-label">Mentor&apos;s reply</dt>
-          <dd className="mt-1 max-w-prose whitespace-pre-line">{request.mentorReply}</dd>
-        </dl>
-      )}
-
-      {isMentor && (request.status === "pending" || accepted) && (
-        <div className="mt-6">
+      {isMentor && request.status === "pending" && (
+        <div className="mt-4">
           <RequestActions requestId={request._id} status={request.status} />
         </div>
       )}

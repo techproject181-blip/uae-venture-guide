@@ -78,7 +78,7 @@ export async function AppShell({ user, children }) {
           <div className="ml-auto flex shrink-0 items-center gap-3">
             <UserMenu name={user.name} email={user.email} role={ROLE_LABELS[user.role]} className="hidden lg:flex" />
             {/* Phones and tablets: the links and the account in a side panel. */}
-            <MobileNav links={[...links, { href: "/account", label: "Profile" }]}>
+            <MobileNav links={[...links, { href: "/account", label: "Account" }]}>
               <div className="flex items-center gap-3">
                 <Avatar name={user.name} className="size-10 text-xs" />
                 <p className="min-w-0 text-sm leading-tight">

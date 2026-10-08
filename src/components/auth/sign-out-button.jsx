@@ -6,7 +6,7 @@ import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { postJson } from "@/lib/form-helpers";
 
-/** Signs out, then goes to the home page. `pending` is true while it runs. */
+/** Signs out, then goes to the sign-in page. `pending` is true while it runs. */
 export function useSignOut() {
   const router = useRouter();
   const [pending, setPending] = useState(false);
@@ -14,7 +14,7 @@ export function useSignOut() {
   async function signOut() {
     setPending(true);
     await postJson("/api/auth/sign-out");
-    router.replace("/");
+    router.replace("/sign-in");
     router.refresh();
   }
 

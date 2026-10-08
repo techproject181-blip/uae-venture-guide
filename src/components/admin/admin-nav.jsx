@@ -13,7 +13,7 @@ export const ADMIN_LINKS = [
   { href: "/admin/sources", label: "Sources and fees", icon: BookOpen },
   { href: "/admin/content", label: "Content", icon: FileText },
   { href: "/admin/usage", label: "AI usage", icon: Gauge },
-  { href: "/account", label: "Profile", icon: UserRound },
+  { href: "/account", label: "Account", icon: UserRound },
 ];
 
 /** The admin sidebar links, with an icon each and the number of accounts waiting for approval next to Users. */

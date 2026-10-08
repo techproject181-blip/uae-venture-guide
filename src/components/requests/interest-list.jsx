@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Fields } from "@/components/document";
 import { InterestActions } from "@/components/requests/interest-actions";
 import { StatusBadge } from "@/components/status-badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -15,11 +14,23 @@ export function InterestList({ interests }) {
       {interests.map((interest) => {
         const funder = interest.funderId;
         const profile = interest.funderProfile;
+        // The funder's facts read as one quiet line, so the row stays scannable.
+        const facts = [
+          profile?.organization,
+          profile && labelOf(FUNDER_TYPES, profile.funderType),
+          profile && formatAedRange(profile.ticketMinAed, profile.ticketMaxAed),
+          profile?.sectors.length > 0 && profile.sectors.map((s) => labelOf(SECTORS, s)).join(", "),
+        ].filter(Boolean);
+
         return (
-          <li key={interest._id} className="px-5 py-5 sm:px-6 sm:py-6">
-            <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
-              <div className="min-w-0">
-                <h3 className="text-[1.0625rem] font-semibold">{funder?.name ?? "A removed account"}</h3>
+          <li key={interest._id} className="px-5 py-4 sm:px-6 sm:py-5">
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-6">
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
+                  <h3 className="text-base font-semibold">{funder?.name ?? "A removed account"}</h3>
+                  <StatusBadge status={interest.status} />
+                </div>
+
                 <p className="mt-1 text-sm text-muted-foreground">
                   Interested in{" "}
                   {interest.planId ? (
@@ -31,35 +42,21 @@ export function InterestList({ interests }) {
                   )}{" "}
                   · {formatDate(interest.createdAt)}
                 </p>
+
+                {facts.length > 0 && <p className="mt-1 text-sm text-muted-foreground">{facts.join(" · ")}</p>}
+
+                <p className="mt-2 max-w-prose text-sm whitespace-pre-line text-foreground/80">{interest.message}</p>
               </div>
-              <StatusBadge status={interest.status} />
+
+              <div className="flex shrink-0 flex-wrap gap-2 md:justify-end">
+                {interest.status === "accepted" && funder && (
+                  <Link href={`/interests/${interest._id}`} className={buttonVariants({ variant: "outline" })}>
+                    Message {funder.name.split(" ")[0]}
+                  </Link>
+                )}
+                {interest.status === "pending" && <InterestActions interestId={interest._id} />}
+              </div>
             </div>
-
-            {profile && (
-              <Fields
-                className="mt-5"
-                items={[
-                  { label: "Organisation", value: profile.organization },
-                  { label: "Type of funder", value: labelOf(FUNDER_TYPES, profile.funderType) },
-                  { label: "Invests", value: formatAedRange(profile.ticketMinAed, profile.ticketMaxAed) },
-                  profile.sectors.length > 0 && { label: "Sectors", value: profile.sectors.map((s) => labelOf(SECTORS, s)).join(", ") },
-                ]}
-              />
-            )}
-
-            <p className="mt-5 max-w-prose whitespace-pre-line">{interest.message}</p>
-
-            {interest.status === "accepted" && funder && (
-              <Link href={`/interests/${interest._id}`} className={buttonVariants({ variant: "outline", size: "lg", className: "mt-5" })}>
-                Message {funder.name.split(" ")[0]}
-              </Link>
-            )}
-
-            {interest.status === "pending" && (
-              <div className="mt-6">
-                <InterestActions interestId={interest._id} />
-              </div>
-            )}
           </li>
         );
       })}

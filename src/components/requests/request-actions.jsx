@@ -39,7 +39,7 @@ export function RequestActions({ requestId, status }) {
 
   if (status === "accepted") {
     return (
-      <Button variant="outline" size="lg" onClick={() => act("complete")} disabled={Boolean(pending)}>
+      <Button variant="outline" onClick={() => act("complete")} disabled={Boolean(pending)}>
         {pending === "complete" ? "Saving…" : "Mark as completed"}
       </Button>
     );
@@ -61,10 +61,10 @@ export function RequestActions({ requestId, status }) {
         />
       </div>
       <div className="flex flex-wrap gap-2">
-        <Button size="lg" onClick={() => act("accept")} disabled={Boolean(pending)}>
+        <Button onClick={() => act("accept")} disabled={Boolean(pending)}>
           {pending === "accept" ? "Saving…" : "Accept"}
         </Button>
-        <Button variant="destructive" size="lg" onClick={() => act("decline")} disabled={Boolean(pending)}>
+        <Button variant="destructive" onClick={() => act("decline")} disabled={Boolean(pending)}>
           {pending === "decline" ? "Saving…" : "Decline"}
         </Button>
       </div>
