@@ -12,7 +12,7 @@ const STEPS = [
 /** The emerald side of the sign-in and sign-up pages: the promise of the app, with a small plan that ticks itself off. */
 export function AuthShowcase() {
   return (
-    <div className="relative hidden overflow-hidden bg-brand-deep text-on-brand lg:flex lg:flex-col lg:justify-between lg:p-12 xl:p-16">
+    <div className="relative hidden overflow-hidden bg-brand-deep text-on-brand lg:flex lg:flex-col lg:p-12 xl:p-16">
       {/* A soft glow and a faint grid, behind everything. */}
       <div aria-hidden="true" className="absolute -top-40 -right-40 size-144 rounded-full bg-brand-400/25 blur-3xl" />
       <div aria-hidden="true" className="absolute -bottom-48 -left-32 size-120 rounded-full bg-brand-300/10 blur-3xl" />
@@ -29,7 +29,8 @@ export function AuthShowcase() {
         <Wordmark className="text-on-brand [&>span]:text-brand-300" />
       </Link>
 
-      <div className="relative">
+      {/* The headline sits in the middle of the space under the logo, level with the form. */}
+      <div className="relative my-auto py-12">
         <p className="font-display text-[2.5rem] leading-[1.05] font-bold tracking-[-0.03em] xl:text-5xl">
           Your UAE business,
           <br />

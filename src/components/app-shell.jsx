@@ -94,7 +94,7 @@ export async function AppShell({ user, children }) {
       <main id="main" className="page-width flex-1 py-8 sm:py-10 lg:py-12">
         {children}
       </main>
-      <SiteFooter />
+      <SiteFooter signedIn />
     </div>
   );
 }

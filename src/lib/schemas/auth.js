@@ -6,8 +6,11 @@ export const SIGN_UP_ROLES = ["entrepreneur", "mentor", "funder"];
 
 const email = z.string().trim().toLowerCase().pipe(z.email("Enter a valid email address."));
 
+// Spaces at the start and end are trimmed off, so a stray space from a paste or
+// a phone keyboard cannot make a password that nobody can type again.
 export const password = z
   .string()
+  .trim()
   .min(8, "Use at least 8 characters.")
   .max(72, "Use 72 characters or fewer.") // bcrypt ignores anything after 72 bytes
   .regex(/[A-Za-z]/, "Include at least one letter.")
@@ -22,7 +25,7 @@ export const signUpSchema = z.object({
 
 export const signInSchema = z.object({
   email,
-  password: z.string().min(1, "Enter your password."),
+  password: z.string().trim().min(1, "Enter your password."),
 });
 
 export const forgotPasswordSchema = z.object({ email });
@@ -39,6 +42,6 @@ export const accountSchema = z.object({
 
 /** The account page: a new password, given the current one. */
 export const changePasswordSchema = z.object({
-  currentPassword: z.string().min(1, "Enter your current password."),
+  currentPassword: z.string().trim().min(1, "Enter your current password."),
   password,
 });
