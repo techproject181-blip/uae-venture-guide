@@ -27,4 +27,4 @@ All demo accounts use the password `Demo2026pass`:
 
 ## Stack
 
-Next.js 16 (JavaScript), Tailwind CSS v4, shadcn/ui, Motion, MongoDB Atlas with Mongoose, bcrypt and JWT cookies, Zod, Nodemailer, Recharts, react-pdf, the OpenAI API (optional) and Vitest.
+Next.js 16 (JavaScript), Tailwind CSS v4, shadcn/ui, Motion, MongoDB Atlas with Mongoose, bcrypt and JWT cookies, Zod, Nodemailer, Recharts, react-pdf and the OpenAI API (optional).
