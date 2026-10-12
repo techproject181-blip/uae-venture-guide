@@ -9,7 +9,7 @@ import { formatDate } from "@/lib/format";
 import { requireUser } from "@/lib/guards";
 import { User } from "@/models/User";
 
-export const metadata = { title: "Profile" };
+export const metadata = { title: "Account" };
 
 /** A settings card: an icon, a title and a line under it, then the form. */
 function SettingsCard({ icon: Icon, title, description, children }) {
@@ -29,7 +29,7 @@ function SettingsCard({ icon: Icon, title, description, children }) {
   );
 }
 
-/** Every role can see their profile and change their name and password here. */
+/** Every role can see their account details and change their name and password here. */
 export default async function AccountPage() {
   const user = await requireUser({ allowPending: true });
   await connectDB();
@@ -37,7 +37,7 @@ export default async function AccountPage() {
 
   return (
     <>
-      <PageHeader title="Profile" description="Your details and how you sign in." />
+      <PageHeader title="Account" description="Your details and how you sign in." />
 
       <div className="grid items-start gap-6 lg:grid-cols-[18rem_1fr] xl:grid-cols-[20rem_1fr]">
         <aside className="panel overflow-hidden lg:sticky lg:top-24">
