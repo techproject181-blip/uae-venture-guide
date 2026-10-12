@@ -5,7 +5,8 @@ import { PageHeader, Panel, Split } from "@/components/layout";
 import { Conversation } from "@/components/requests/conversation";
 import { formatDate } from "@/lib/format";
 import { requireUser } from "@/lib/guards";
-import { getInterestConversation, listInterestMessages } from "@/lib/interest-messages";
+import { getInterestConversation, listInterestMessages, whyInterestClosed } from "@/lib/interest-messages";
+import { canReadPlan } from "@/lib/plans";
 import { User } from "@/models/User";
 
 export const metadata = { title: "Conversation" };
@@ -20,13 +21,16 @@ export default async function InterestConversationPage({ params }) {
   const { id } = await params;
   const conversation = await getInterestConversation(id, user);
   if (!conversation) notFound();
-  const { interest, plan, isFunder, canSend } = conversation;
+  const { interest, plan, isFunder, canSend, closedReason } = conversation;
+  const closedText = whyInterestClosed(conversation);
 
-  const [people, messages] = await Promise.all([
+  const [people, messages, planReadable] = await Promise.all([
     User.find({ _id: { $in: [interest.funderId, plan.ownerId] } })
       .select("name")
       .lean(),
     listInterestMessages(interest, user.id),
+    // The plan page's own rule (lib/plans.js): the owner always, the funder while the plan is shared and not hidden.
+    canReadPlan(user, plan),
   ]);
   const nameOf = (userId) => people.find((person) => String(person._id) === String(userId))?.name ?? "A removed account";
   const funderName = nameOf(interest.funderId);
@@ -57,7 +61,7 @@ export default async function InterestConversationPage({ params }) {
                 { label: "Interest sent", value: formatDate(interest.createdAt) },
                 {
                   label: "Plan",
-                  value: canSend ? (
+                  value: planReadable ? (
                     <Link
                       href={`/plans/${plan._id}`}
                       className="text-foreground decoration-primary underline underline-offset-4 hover:decoration-2"
@@ -66,26 +70,27 @@ export default async function InterestConversationPage({ params }) {
                     </Link>
                   ) : (
                     <>
-                      {plan.title} <span className="font-normal text-muted-foreground">(no longer shared)</span>
+                      {plan.title}{" "}
+                      <span className="font-normal text-muted-foreground">
+                        {plan.hiddenByAdmin ? "(hidden by an administrator)" : "(no longer shared)"}
+                      </span>
                     </>
                   ),
                 },
               ]}
             />
             <p className="mt-5 text-sm text-muted-foreground">
-              {canSend
-                ? "Every message is saved here for both of you."
-                : "The plan is no longer shared. The conversation stays here to read."}
+              {canSend ? "Every message is saved here for both of you." : `${closedText} It stays here to read.`}
             </p>
           </Panel>
         }
       >
         <Panel title="Conversation" flush>
-          {/* The key remounts the conversation when it opens or closes again. */}
+          {/* The key remounts the conversation when it opens, closes or closes for another reason. */}
           <Conversation
-            key={String(canSend)}
+            key={closedReason ?? "open"}
             apiUrl={`/api/interests/${interest._id}/messages`}
-            closedText="The plan is no longer shared, so the conversation is closed. You can still read every message here."
+            closedText={closedText}
             openingLabel="Interest message"
             opening={opening}
             initialMessages={messages}

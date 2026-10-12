@@ -3,6 +3,10 @@ import { createPlanWithRoadmap } from "@/lib/plans";
 import { consumeQuota } from "@/lib/quota";
 import { intakeSchema } from "@/lib/schemas/plans";
 
+// The AI can take a minute or more to write a roadmap. On hosts that limit how
+// long a request may run, this one may run for up to two minutes.
+export const maxDuration = 120;
+
 // POST /api/plans: create a plan from the intake form and make its roadmap. Entrepreneurs only.
 export const POST = route(async (request) => {
   const user = await requireApiUser("entrepreneur");

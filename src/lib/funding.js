@@ -1,33 +1,69 @@
+import mongoose from "mongoose";
 import { progressPercent } from "@/lib/budget";
 import { connectDB } from "@/lib/db";
 import { FunderProfile } from "@/models/FunderProfile";
 import { FundingInterest } from "@/models/FundingInterest";
 import { Plan } from "@/models/Plan";
-import "@/models/User"; // registers the model that populate() reads from
+import { User } from "@/models/User"; // also registers the model that populate() reads from
 
 // Queries for funders. A funder never receives a full plan from here: pitch
 // cards hold only the fields below, and the full plan opens through
 // canReadPlan() once the owner accepts their interest.
+//
+// Funders find a plan only while it is shared, finished and not hidden by an
+// administrator, and while its owner's account is active: a suspended owner's
+// plans leave Discover and take no new interest until the account is active again.
 
 const PITCH_FIELDS = "title sector emirate budgetAed pitchSummary tasks.status updatedAt";
 
-/** Shared, visible plans as pitch cards, optionally filtered by sector and emirate. */
-export async function listPitchCards({ sector, emirate } = {}) {
-  await connectDB();
-  const filter = { shared: true, hiddenByAdmin: false, status: "ready" };
-  if (sector) filter.sector = sector;
-  if (emirate) filter.emirate = emirate;
-  const plans = await Plan.find(filter).select(PITCH_FIELDS).sort({ updatedAt: -1 }).limit(60).lean();
-  return plans.map(toPitchCard);
+const SHARED = { shared: true, hiddenByAdmin: false, status: "ready" };
+
+/** How many pitch cards one page of Discover shows. */
+export const PITCH_CARDS_PER_PAGE = 20;
+
+/** `filter` for shared plans, limited to owners whose account is active. */
+async function sharedPlansFilter(filter = {}) {
+  const shared = { ...SHARED, ...filter };
+  const owners = await Plan.find(shared).distinct("ownerId");
+  const activeOwners = await User.find({ _id: { $in: owners }, status: "active" }).distinct("_id");
+  return { ...shared, ownerId: { $in: activeOwners } };
 }
 
-/** One plan as a pitch card, or null when it is not shared. */
-export async function getPitchCard(planId) {
+/**
+ * One page of the plans funders may find, as pitch cards, newest first, and
+ * optionally filtered by sector and emirate: { cards, total, page }. A page
+ * past the end gives the last page.
+ */
+export async function listPitchCards({ sector, emirate, page = 1, pageSize = PITCH_CARDS_PER_PAGE } = {}) {
   await connectDB();
-  const plan = await Plan.findOne({ _id: planId, status: "ready", shared: true, hiddenByAdmin: false })
+  const filter = await sharedPlansFilter({ ...(sector && { sector }), ...(emirate && { emirate }) });
+  const total = await Plan.countDocuments(filter);
+  const current = Math.min(page, Math.max(1, Math.ceil(total / pageSize)));
+  // _id breaks ties, so no card shows on two pages.
+  const plans = await Plan.find(filter)
     .select(PITCH_FIELDS)
-    .lean()
-    .catch(() => null);
+    .sort({ updatedAt: -1, _id: -1 })
+    .skip((current - 1) * pageSize)
+    .limit(pageSize)
+    .lean();
+  return { cards: plans.map(toPitchCard), total, page: current };
+}
+
+/** A plan funders may find, as { _id, title, ownerId }, or null. */
+export async function findSharedPlan(planId) {
+  if (!mongoose.isValidObjectId(planId)) return null;
+  await connectDB();
+  const plan = await Plan.findOne({ _id: planId, ...SHARED })
+    .select("title ownerId")
+    .lean();
+  if (!plan || !(await User.exists({ _id: plan.ownerId, status: "active" }))) return null;
+  return plan;
+}
+
+/** One plan as a pitch card, or null when funders may not find it. */
+export async function getPitchCard(planId) {
+  if (!(await findSharedPlan(planId))) return null;
+  const plan = await Plan.findById(planId).select(PITCH_FIELDS).lean();
   return plan && toPitchCard(plan);
 }
 

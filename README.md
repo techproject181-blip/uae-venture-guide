@@ -6,7 +6,7 @@ A website that helps students and first-time founders plan a small business in t
 
 You need Node.js 24 and a MongoDB Atlas database (free cluster is fine).
 
-1. Copy `.env.example` to `.env.local`. Fill in `MONGODB_URI` and `JWT_SECRET`.
+1. Copy `.env.example` to `.env.local`. Fill in `MONGODB_URI` and `JWT_SECRET`. Add `OPENAI_API_KEY` if you want ChatGPT to write the roadmaps and answers; without it the app runs in sample mode.
 2. `npm install`
 3. `npm run seed` (adds demo data)
 4. `npm run dev`, then open http://localhost:3000
@@ -27,4 +27,4 @@ All demo accounts use the password `Demo2026pass`:
 
 ## Stack
 
-Next.js 16 (JavaScript), Tailwind CSS v4, shadcn/ui, Motion, MongoDB Atlas with Mongoose, bcrypt and JWT cookies, Zod, Nodemailer, Recharts and react-pdf.
+Next.js 16 (JavaScript), Tailwind CSS v4, shadcn/ui, Motion, MongoDB Atlas with Mongoose, bcrypt and JWT cookies, Zod, Nodemailer, Recharts, react-pdf, the OpenAI API (optional) and Vitest.

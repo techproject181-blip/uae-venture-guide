@@ -17,7 +17,7 @@ const HOW_IT_WORKS = [
   "Funders find your card on their Discover page. They see only the card.",
   "A funder who likes it sends you a message of interest.",
   "You accept or decline it on your Requests page. Only if you accept do they see the full plan.",
-  "Turning sharing off hides the card and ends every funder's access.",
+  "Turning sharing off hides the card. Funders you accepted cannot open the plan or send you messages until you share it again.",
 ];
 
 /**
@@ -85,7 +85,7 @@ export function SharingForm({ planId, card, shared, notice }) {
             id="shared"
             label="Share this plan's pitch card with funders"
             defaultChecked={shared}
-            hint="Funders see only the card. They see the full plan only if you accept their interest. Turning sharing off ends their access."
+            hint="Funders see only the card. They see the full plan only if you accept their interest. Turning sharing off stops their access until you share again."
           />
         </Panel>
       </form>

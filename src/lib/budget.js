@@ -1,5 +1,9 @@
 // Budget and progress arithmetic. Pure functions, used on the server and in
 // the browser (for live totals while editing). Amounts are whole dirhams.
+//
+// A budget item has two amounts. The estimate is what it costs each time, so
+// the first year counts a monthly estimate 12 times. What was actually paid
+// is the amount paid so far, so it is added up as entered.
 
 const TIMES_PER_FIRST_YEAR = { one_time: 1, monthly: 12, yearly: 1 };
 
@@ -8,29 +12,32 @@ export function firstYearCost(amount, recurrence) {
   return (amount ?? 0) * (TIMES_PER_FIRST_YEAR[recurrence] ?? 1);
 }
 
-/** First-year total of budget items. field is "estimatedAed" or "actualAed"; items without that amount are skipped. */
-export function firstYearTotal(items, field = "estimatedAed") {
-  return items.reduce((sum, item) => (item[field] == null ? sum : sum + firstYearCost(item[field], item.recurrence)), 0);
+/** First-year total of the estimates. */
+export function firstYearTotal(items) {
+  return items.reduce((sum, item) => sum + firstYearCost(item.estimatedAed, item.recurrence), 0);
 }
 
-/** Plain sum of one amount field, as entered. Used for what was actually paid, which is not repeated per month. */
-export function sumAmounts(items, field = "actualAed") {
-  return items.reduce((sum, item) => sum + (item[field] ?? 0), 0);
+/** What was actually paid so far, as entered. Costs not paid yet count 0. */
+export function paidTotal(items) {
+  return items.reduce((sum, item) => sum + (item.actualAed ?? 0), 0);
 }
 
-/** First-year totals per budget category, for the donut chart. */
-export function totalsByCategory(items, field = "estimatedAed") {
+/**
+ * Per budget category, for the bar charts: { estimated, actual }, counted the
+ * same way as firstYearTotal() and paidTotal(), so the charts match the totals.
+ */
+export function totalsByCategory(items) {
   const totals = {};
-  for (const item of items) {
-    if (item[field] == null) continue;
-    totals[item.category] = (totals[item.category] ?? 0) + firstYearCost(item[field], item.recurrence);
+  for (const category of new Set(items.map((item) => item.category))) {
+    const inCategory = items.filter((item) => item.category === category);
+    totals[category] = { estimated: firstYearTotal(inCategory), actual: paidTotal(inCategory) };
   }
   return totals;
 }
 
 /** Budget left after the estimated first-year total. Negative means over budget. */
 export function remainingBudget(budgetAed, items) {
-  return budgetAed - firstYearTotal(items, "estimatedAed");
+  return budgetAed - firstYearTotal(items);
 }
 
 /** Share of tasks done, as a whole percent. A plan with no tasks is at 0%. */

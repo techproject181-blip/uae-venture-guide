@@ -25,7 +25,8 @@ const ActualChart = dynamic(() => loadDrawings().then((drawings) => drawings.Act
 const chartHeight = (bars) => Math.max(140, bars * 44 + 32);
 
 /**
- * rows: [{ label, estimated, actual }] per category, first-year amounts.
+ * rows: [{ label, estimated, actual }] per category: the first-year estimate,
+ * and what was actually paid so far, as entered.
  * The first chart compares categories; the second compares estimates with what was paid.
  */
 export function BudgetCharts({ rows }) {
@@ -97,7 +98,7 @@ function ChartTable({ rows, showActual = false }) {
           <tr>
             <th scope="col">Category</th>
             <th scope="col">Estimated first-year cost</th>
-            {showActual && <th scope="col">Actual first-year cost</th>}
+            {showActual && <th scope="col">Actually paid</th>}
           </tr>
         </thead>
         <tbody>

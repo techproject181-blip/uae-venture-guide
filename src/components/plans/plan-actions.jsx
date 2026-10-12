@@ -42,7 +42,9 @@ export function PlanActions({ planId, failed = false }) {
       router.refresh();
       return;
     }
-    toast.success("New version ready.");
+    // A new version that failed is still kept, with "Try again" on its overview.
+    if (result.status === "ready") toast.success("New version ready.");
+    else toast.error("The roadmap could not be made. Please try again.");
     router.push(`/plans/${result.id}`);
   }
 

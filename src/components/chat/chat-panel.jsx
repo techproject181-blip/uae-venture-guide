@@ -5,15 +5,17 @@ import { useRouter } from "next/navigation";
 import { ExternalLink, Send } from "lucide-react";
 import { FormAlert } from "@/components/form/form-alert";
 import { Button } from "@/components/ui/button";
+import { FAILED_ANSWER } from "@/lib/chat/failed-answer";
 import { cn } from "@/lib/utils";
 
 const SUGGESTIONS = ["What will this cost me?", "Which documents do I still need?", "How long will it take?", "Mainland or free zone?"];
 
 /**
  * The chat about one plan, as one panel: a header row, the history with the
- * answer streaming in, and the question box at the bottom.
+ * answer streaming in, and the question box at the bottom. `ai` is true when
+ * the AI writes the answers (the server decides; the page never sees the key).
  */
-export function ChatPanel({ planId, messages, sources, left, title = "Ask about this plan", description }) {
+export function ChatPanel({ planId, messages, sources, left, title = "Ask about this plan", description, ai = false }) {
   const router = useRouter();
   const [draft, setDraft] = useState("");
   const [live, setLive] = useState(null); // { question, answer } while an answer streams in
@@ -50,6 +52,11 @@ export function ChatPanel({ planId, messages, sources, left, title = "Ask about 
         if (done) break;
         answer += decoder.decode(value, { stream: true });
         setLive({ question, answer });
+      }
+      // The AI stopped part-way and nothing was saved: say so, and put the question back in the box.
+      if (answer.endsWith(FAILED_ANSWER)) {
+        setError(FAILED_ANSWER);
+        setDraft(question);
       }
       // Reload the saved history and drop the live copy in one step, so nothing flickers.
       startTransition(() => {
@@ -139,7 +146,14 @@ export function ChatPanel({ planId, messages, sources, left, title = "Ask about 
             <span className="sr-only sm:not-sr-only">Send</span>
           </Button>
         </form>
-        <p className="mt-3 text-sm text-muted-foreground">{left} questions left today.</p>
+        <p className="mt-3 text-sm text-muted-foreground">
+          {left} questions left today. Answers are guidance, not legal or financial advice.
+        </p>
+        {ai && (
+          <p className="mt-1 text-sm text-muted-foreground">
+            An AI model (ChatGPT) writes the answers from your plan and the official sources.
+          </p>
+        )}
       </div>
     </section>
   );

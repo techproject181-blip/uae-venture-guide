@@ -13,6 +13,7 @@ const TONE = {
   in_progress: "waiting",
   generating: "waiting",
   suspended: "stopped",
+  rejected: "stopped",
   declined: "stopped",
   failed: "stopped",
   hidden: "stopped",

@@ -11,7 +11,20 @@ const feeReferenceSchema = new mongoose.Schema(
     emirate: { type: String, enum: [...valuesOf(EMIRATES), null], default: null }, // null = federal, all emirates
     jurisdiction: { type: String, enum: [...valuesOf(JURISDICTIONS), "any"], default: "any" },
     amountMinAed: { type: Number, required: true, min: 0 },
-    amountMaxAed: { type: Number, required: true, min: 0 },
+    amountMaxAed: {
+      type: Number,
+      required: true,
+      min: 0,
+      validate: {
+        // On create and save `this` is the fee; on an update with runValidators it is the query.
+        validator(max) {
+          const update = this instanceof mongoose.Query ? this.getUpdate() : null;
+          const min = update ? (update.$set?.amountMinAed ?? update.amountMinAed) : this.amountMinAed;
+          return min == null || max >= min;
+        },
+        message: "The highest amount cannot be below the lowest.",
+      },
+    },
     recurrence: { type: String, enum: valuesOf(RECURRENCES), required: true },
     notes: { type: String, trim: true, maxlength: 400 },
     verifiedAt: { type: Date, required: true },

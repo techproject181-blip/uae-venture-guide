@@ -17,7 +17,10 @@ export const PATCH = route(async (request, { params }) => {
   const { plan, item } = await findItem(params, user);
 
   // Changing an official amount or how often it is paid makes it the entrepreneur's own estimate.
-  if (data.estimatedAed !== item.estimatedAed || data.recurrence !== item.recurrence) item.costBasis = "estimate";
+  if (data.estimatedAed !== item.estimatedAed || data.recurrence !== item.recurrence) {
+    item.costBasis = "estimate";
+    item.feeReferenceId = undefined;
+  }
   item.category = data.category;
   item.label = data.label;
   item.estimatedAed = data.estimatedAed;

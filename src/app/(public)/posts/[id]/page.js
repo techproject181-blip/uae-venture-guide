@@ -25,14 +25,21 @@ export default async function PostPage({ params }) {
   const { id } = await params;
   await connectDB();
   const raw = await Post.findById(id)
-    .populate("authorId", "name")
+    .populate("authorId", "name status")
     .lean()
     .catch(() => null);
   const viewer = await getCurrentUser();
+  const isAdmin = viewer?.role === "admin";
   const isAuthor = raw && viewer && String(raw.authorId?._id) === viewer.id;
-  // A hidden post is gone for everyone except its author and administrators.
-  if (!raw || (raw.status !== "published" && !isAuthor && viewer?.role !== "admin")) notFound();
+  // While its author's account is not active, a post is gone for everyone
+  // except administrators (as on the posts page). A hidden post is gone for
+  // everyone except its author and administrators.
+  const authorActive = raw?.authorId?.status === "active";
+  if (!raw || (!isAdmin && (!authorActive || (raw.status !== "published" && !isAuthor)))) notFound();
   const post = toPlain(raw);
+  const notice = !authorActive
+    ? "The author's account is not active, so only administrators can see this post."
+    : post.status === "hidden" && "An administrator has hidden this post. Only you and administrators can see it.";
   const author = post.authorId?.name ?? "A mentor";
   const authorId = post.authorId?._id;
 
@@ -55,7 +62,7 @@ export default async function PostPage({ params }) {
         title={post.title}
         description={`By ${author} · ${formatDate(post.createdAt)}`}
         actions={
-          viewer?.role === "admin" && !isAuthor ? (
+          isAdmin && !isAuthor ? (
             <HideButton url={`/api/admin/posts/${post._id}`} hidden={post.status === "hidden"} what="post" />
           ) : (
             isAuthor && (
@@ -75,9 +82,9 @@ export default async function PostPage({ params }) {
           )
         }
       >
-        {post.status === "hidden" && (
+        {notice && (
           <p role="alert" className="rounded-lg border border-destructive/30 bg-destructive-surface px-4 py-3 text-sm text-destructive">
-            An administrator has hidden this post. Only you and administrators can see it.
+            {notice}
           </p>
         )}
       </PageHeader>

@@ -1,6 +1,15 @@
 import { Document, Link, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 import { estimatedWeeks, firstYearCost, firstYearTotal, progressPercent, remainingBudget, totalsByCategory } from "@/lib/budget";
-import { BUDGET_CATEGORIES, EMIRATES, JURISDICTIONS, RECURRENCES, SECTORS, TASK_STATUSES, labelOf } from "@/lib/constants";
+import {
+  BUDGET_CATEGORIES,
+  EMIRATES,
+  JURISDICTIONS,
+  JURISDICTION_PREFERENCES,
+  RECURRENCES,
+  SECTORS,
+  TASK_STATUSES,
+  labelOf,
+} from "@/lib/constants";
 import { formatAed, formatAedRange, formatDate } from "@/lib/format";
 import { reportColors } from "@/lib/theme-colors";
 
@@ -43,6 +52,7 @@ const s = StyleSheet.create({
   h2: { fontSize: 14, fontFamily: "Helvetica-Bold", marginTop: 22, paddingTop: 8, marginBottom: 8, borderTopWidth: 1, borderTopColor: INK },
   h3: { fontSize: 11, fontFamily: "Helvetica-Bold", marginTop: 10, marginBottom: 4 },
   muted: { color: MUTED },
+  small: { fontSize: 8, marginTop: 1 },
   box: { borderWidth: 1, borderColor: RULE, borderRadius: 4, padding: 10, marginTop: 12 },
   row: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: RULE, paddingVertical: 4 },
   headRow: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: STRONG_RULE, backgroundColor: FILL, paddingVertical: 4 },
@@ -52,9 +62,12 @@ const s = StyleSheet.create({
   bullet: { flexDirection: "row", marginBottom: 3 },
   barTrack: { flex: 1, height: 8, backgroundColor: FILL },
   link: { color: GREEN },
+  // Placed from the top of the A4 page (841.89 points high), about 24 points
+  // above its bottom edge. With `bottom`, react-pdf moves a footer that holds
+  // the page number off the page.
   footer: {
     position: "absolute",
-    bottom: 24,
+    top: 800,
     left: 40,
     right: 40,
     flexDirection: "row",
@@ -79,8 +92,11 @@ function Basis({ basis }) {
 export function PlanReport({ plan, sources }) {
   const total = firstYearTotal(plan.budgetItems);
   const remaining = remainingBudget(plan.budgetAed, plan.budgetItems);
-  const byCategory = totalsByCategory(plan.budgetItems);
-  const largest = Math.max(1, ...Object.values(byCategory));
+  const byCategory = Object.entries(totalsByCategory(plan.budgetItems)).map(([category, totals]) => [category, totals.estimated]);
+  const largest = Math.max(1, ...byCategory.map(([, amount]) => amount));
+  // The planner gives every document the same licensing source, so it is named once above the list.
+  const documentSourceIds = new Set(plan.documents.map((doc) => doc.sourceId));
+  const documentSources = sources.filter((source) => documentSourceIds.has(source._id));
 
   const fields = [
     ["Sector", labelOf(SECTORS, plan.sector)],
@@ -124,8 +140,30 @@ export function PlanReport({ plan, sources }) {
         </View>
 
         <View style={s.box}>
-          <Text style={{ fontFamily: "Helvetica-Bold" }}>Recommended: {labelOf(JURISDICTIONS, plan.recommendedJurisdiction)}</Text>
+          <Text style={{ fontFamily: "Helvetica-Bold" }}>
+            Recommended: {labelOf(JURISDICTIONS, plan.recommendedJurisdiction)}
+            <Text style={[s.muted, { fontFamily: "Helvetica" }]}>
+              {" "}
+              · Your answer: {labelOf(JURISDICTION_PREFERENCES, plan.jurisdictionPref)}
+            </Text>
+          </Text>
           <Text style={{ marginTop: 2 }}>{plan.jurisdictionReason}</Text>
+        </View>
+
+        {/* The founder's own answers from the intake form. */}
+        <View style={{ marginTop: 14 }}>
+          <Text style={s.label}>The idea</Text>
+          <Text style={{ marginTop: 2 }}>{plan.idea}</Text>
+          <View style={{ flexDirection: "row", marginTop: 8 }}>
+            <View style={{ flex: 3, paddingRight: 14 }}>
+              <Text style={s.label}>Customers</Text>
+              <Text style={{ marginTop: 2 }}>{plan.targetCustomers}</Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={s.label}>Team</Text>
+              <Text style={{ marginTop: 2 }}>{plan.teamSize === 1 ? "Just you" : `${plan.teamSize} people`}</Text>
+            </View>
+          </View>
         </View>
 
         <Text style={s.h2}>Roadmap</Text>
@@ -150,7 +188,8 @@ export function PlanReport({ plan, sources }) {
                   </Text>
                   <View style={cell(3)}>
                     <Text>{task.title}</Text>
-                    {task.authority ? <Text style={[s.muted, { fontSize: 8 }]}>{task.authority}</Text> : null}
+                    {task.description ? <Text style={s.small}>{task.description}</Text> : null}
+                    {task.authority ? <Text style={[s.muted, s.small]}>{task.authority}</Text> : null}
                   </View>
                   <Text style={cell(2.2)}>
                     {task.costMinAed || task.costMaxAed ? (
@@ -174,7 +213,7 @@ export function PlanReport({ plan, sources }) {
         </Text>
         <Text style={s.muted}>First-year cost by category. Monthly costs count 12 times.</Text>
         <View style={{ marginTop: 8, marginBottom: 12 }}>
-          {Object.entries(byCategory)
+          {byCategory
             .sort((a, b) => b[1] - a[1])
             .map(([category, amount]) => (
               <View key={category} style={{ flexDirection: "row", alignItems: "center", marginBottom: 4 }}>
@@ -211,6 +250,12 @@ export function PlanReport({ plan, sources }) {
         </View>
 
         <Text style={s.h2}>Documents</Text>
+        {documentSources.length > 0 && (
+          <Text style={[s.muted, { marginBottom: 6 }]}>
+            Official {documentSources.length === 1 ? "page" : "pages"} for these documents:{" "}
+            {documentSources.map((source) => source.title).join(", ")} (see Official sources).
+          </Text>
+        )}
         {plan.documents.map((doc) => (
           <View key={doc._id} style={s.bullet} wrap={false}>
             <Text style={[{ width: 22 }, doc.obtained && s.done]}>{doc.obtained ? "[x]" : "[ ]"}</Text>
@@ -251,8 +296,9 @@ export function PlanReport({ plan, sources }) {
           </>
         )}
 
+        {/* The advice notice (FR-12), on every page. */}
         <View style={s.footer} fixed>
-          <Text>Check each fee with the official source.</Text>
+          <Text>Guidance only. Check each step and fee with the official source. Not legal or financial advice.</Text>
           <Text render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`} />
         </View>
       </Page>

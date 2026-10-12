@@ -5,9 +5,10 @@ import { formatAed, formatAedRange } from "@/lib/format";
 import { LICENSING_AUTHORITIES } from "@/lib/roadmap/templates";
 import { Source } from "@/models/Source";
 
-// The sample chat assistant, used while no AI provider is connected. It
-// answers only from the plan and the official sources, like the real
-// assistant must, and says when a question is outside what the plan covers.
+// The sample chat assistant, used while no OpenAI key is set. It answers only
+// from the plan and the official sources, like the AI assistant (ai-answer.js)
+// must, and says when a question is outside what the plan covers. The sources
+// it links are the same ones the AI assistant is given.
 
 export const ASSISTANT = "sample-assistant-v1";
 const MAX_SOURCES = 3;
@@ -26,38 +27,39 @@ const TOPICS = [
 /** Answers a question about `plan`. Returns { text, sourceIds }. */
 export async function answerQuestion(plan, question) {
   const q = question.toLowerCase();
-  const topics = TOPICS.filter((topic) => topic.words.some((word) => q.includes(word))).map((topic) => topic.key);
-  const parts = topics.map((topic) => SECTIONS[topic](plan));
-
-  // Which sources to show depends on what the answer is based on:
-  // a known topic -> sources matching the question's words;
-  // matching roadmap steps -> the sources those steps cite;
-  // nothing -> the emirate's licensing authority, the right place to ask.
-  let sources;
-  if (parts.length > 0) {
-    sources = await searchSources(plan, { $text: { $search: question } });
-  } else {
+  const parts = topicsIn(q).map((topic) => SECTIONS[topic](plan));
+  if (parts.length === 0) {
     const steps = matchingTasks(plan, q);
-    if (steps.length > 0) {
-      parts.push(
-        "These steps in your roadmap match your question:\n" +
-          steps.map((task) => `- ${task.title}: ${task.description} ${costText(task)}`).join("\n"),
-      );
-      sources = await searchSources(plan, { _id: { $in: steps.flatMap((task) => task.sourceIds) } });
-    } else {
-      parts.push(
-        `Your plan does not cover this question. For business licences in ${labelOf(EMIRATES, plan.emirate)}, ` +
-          `ask the ${LICENSING_AUTHORITIES[plan.emirate]}.`,
-      );
-      sources = await searchSources(plan, { categories: "licensing", emirate: plan.emirate });
-    }
+    parts.push(
+      steps.length > 0
+        ? "These steps in your roadmap match your question:\n" +
+            steps.map((task) => `- ${task.title}: ${task.description} ${costText(task)}`).join("\n")
+        : `Your plan does not cover this question. For business licences in ${labelOf(EMIRATES, plan.emirate)}, ` +
+            `ask the ${LICENSING_AUTHORITIES[plan.emirate]}.`,
+    );
   }
   // The sources are shown as links under the answer, so the text does not list them.
   parts.push(
     "This is a sample answer from the built-in assistant, while the AI service is not connected. Check the official source before you act.",
   );
 
+  const sources = await sourcesForQuestion(plan, question);
   return { text: parts.join("\n\n"), sourceIds: sources.map((source) => source._id) };
+}
+
+/**
+ * Up to three active sources for the plan's emirate (or federal) that fit the
+ * question, depending on what the answer is based on:
+ * a known topic -> sources matching the question's words;
+ * matching roadmap steps -> the sources those steps cite;
+ * nothing -> the emirate's licensing authority, the right place to ask.
+ */
+export async function sourcesForQuestion(plan, question) {
+  const q = question.toLowerCase();
+  if (topicsIn(q).length > 0) return searchSources(plan, { $text: { $search: question } });
+  const steps = matchingTasks(plan, q);
+  if (steps.length > 0) return searchSources(plan, { _id: { $in: steps.flatMap((task) => task.sourceIds) } });
+  return searchSources(plan, { categories: "licensing", emirate: plan.emirate });
 }
 
 const SECTIONS = {
@@ -101,10 +103,20 @@ const SECTIONS = {
   },
 };
 
-function costText(task) {
+/** A step's cost with its label, for example "AED 620 (official)", or "no fee". */
+export function costText(task) {
   if (!task.costMinAed && !task.costMaxAed) return "no fee";
-  const basis = { reference: "official", demo: "demo fee, not checked yet" }[task.costBasis] ?? "estimate";
-  return `${formatAedRange(task.costMinAed, task.costMaxAed)} (${basis})`;
+  return `${formatAedRange(task.costMinAed, task.costMaxAed)} (${basisText(task.costBasis)})`;
+}
+
+/** The label of a cost's basis, in words: official, demo fee or estimate. */
+export function basisText(basis) {
+  return { reference: "official", demo: "demo fee, not checked yet" }[basis] ?? "estimate";
+}
+
+/** The keys of the topics a lower-case question is about. */
+function topicsIn(q) {
+  return TOPICS.filter((topic) => topic.words.some((word) => q.includes(word))).map((topic) => topic.key);
 }
 
 /** Tasks sharing at least two meaningful words with the question, best first. */

@@ -68,7 +68,11 @@ export default async function InterestsPage() {
                   )}
                   {interest.status === "accepted" && !open && (
                     <div className="mt-5 space-y-3 border-t pt-4">
-                      <p className="text-sm text-muted-foreground">The owner has stopped sharing this plan.</p>
+                      <p className="text-sm text-muted-foreground">
+                        {plan?.hiddenByAdmin
+                          ? "An administrator has hidden this plan from funders."
+                          : "The owner has stopped sharing this plan."}
+                      </p>
                       {/* The plan is closed, but the messages you already sent stay readable. */}
                       <Link href={`/interests/${interest._id}`} className={buttonVariants({ variant: "outline", size: "lg" })}>
                         Read the conversation

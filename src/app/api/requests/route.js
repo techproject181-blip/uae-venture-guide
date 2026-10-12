@@ -24,8 +24,15 @@ export const POST = route(async (request) => {
   if (data.planId && !mongoose.isValidObjectId(data.planId)) {
     throw new ApiError(400, "Choose one of your plans.", { planId: "Choose one of your plans." });
   }
-  if (data.planId && !(await Plan.exists({ _id: data.planId, ownerId: user.id }))) {
-    throw new ApiError(400, "Choose one of your own plans.", { planId: "Choose one of your own plans." });
+  if (data.planId) {
+    const plan = await Plan.findOne({ _id: data.planId, ownerId: user.id }).select("status").lean();
+    if (!plan) throw new ApiError(400, "Choose one of your own plans.", { planId: "Choose one of your own plans." });
+    // The mentor would get a plan with no roadmap to read, so only a finished one can go with a request.
+    if (plan.status !== "ready") {
+      throw new ApiError(400, "Only a plan with a finished roadmap can be attached.", {
+        planId: "Only a plan with a finished roadmap can be attached.",
+      });
+    }
   }
 
   try {

@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { sendJson } from "@/lib/form-helpers";
 import { cn } from "@/lib/utils";
 
-// Which buttons each status shows. Rejecting a new account suspends it.
+// Which buttons each status shows (see user-status.js). Rejecting a new account
+// suspends it, and a rejected sign-up can still be approved later.
 // Approve is the gold main button; reject and suspend are red outlines.
 const ACTIONS = {
   pending: [
@@ -27,9 +28,10 @@ const ACTIONS = {
     },
   ],
   suspended: [{ label: "Reactivate", status: "active", done: "Account reactivated.", variant: "default" }],
+  rejected: [{ label: "Approve", status: "active", done: "Account approved.", variant: "default" }],
 };
 
-/** The approve, reject, suspend and reactivate buttons for one user. */
+/** The approve, reject, suspend and reactivate buttons for one user. `status` comes from userStatus(). */
 export function UserActions({ userId, status, className }) {
   const router = useRouter();
   const [pending, setPending] = useState(false);

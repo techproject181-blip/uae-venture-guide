@@ -14,7 +14,9 @@ export const GET = route(async (request, { params }) => {
   await connectDB();
   const plan = await Plan.findById(id).lean();
   if (!plan || !(await canReadPlan(user, plan))) throw new ApiError(404, "Plan not found.");
-  const sources = await Source.find({ _id: { $in: plan.tasks.flatMap((task) => task.sourceIds) }, active: true })
+  // The sources the steps and the documents cite, active ones only.
+  const sourceIds = [...plan.tasks.flatMap((task) => task.sourceIds), ...plan.documents.map((doc) => doc.sourceId).filter(Boolean)];
+  const sources = await Source.find({ _id: { $in: sourceIds }, active: true })
     .select("title publisher url")
     .lean();
 

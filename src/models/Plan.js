@@ -45,6 +45,7 @@ const budgetItemSchema = new mongoose.Schema({
   actualAed: { type: Number, min: 0 },
   recurrence: { type: String, enum: valuesOf(RECURRENCES), default: "one_time" },
   costBasis: { type: String, enum: COST_BASIS, default: "estimate" },
+  feeReferenceId: { type: ObjectId, ref: "FeeReference" }, // the fee an official or demo amount comes from
   origin: { type: String, enum: ORIGIN, default: "user" },
 });
 
@@ -82,7 +83,7 @@ const planSchema = new mongoose.Schema(
     // The generated roadmap.
     status: { type: String, enum: ["generating", "ready", "failed"], default: "generating" },
     failureReason: String,
-    generator: String, // which planner made it, for example "sample-planner-v1"
+    generator: String, // which planner made it: "sample-planner-v1", or "openai:<model>" for the AI planner
     generatedAt: Date,
     summary: { type: String, default: "" },
     recommendedJurisdiction: { type: String, enum: [...valuesOf(JURISDICTIONS), null], default: null },

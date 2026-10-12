@@ -17,6 +17,15 @@
 /blob-report/
 /playwright/.cache/
 
+# every test and its setup, kept on this computer only
+/tests/
+/src/**/*.test.js
+/playwright.config.mjs
+/vitest.config.mjs
+
+# pushes to the client's repository, kept on this computer only
+/scripts/push-client.mjs
+
 # next.js
 /.next/
 /out/
@@ -65,9 +74,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# database exports hold real user data
-/backups/
 
 # Local demo logins
 *.local.txt

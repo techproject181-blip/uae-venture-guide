@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Plus, BookOpen, FileText, ShieldAlert, UserPlus, Users } from "lucide-react";
 import { UserActions } from "@/components/admin/user-actions";
+import { userStatus } from "@/components/admin/user-status";
 import { Avatar } from "@/components/avatar";
 import { PageHeader } from "@/components/page-header";
 import { StatusBadge } from "@/components/status-badge";
@@ -89,11 +90,11 @@ export async function AdminOverview({ user }) {
   ] = await Promise.all([
     User.countDocuments({ status: "pending" }),
     User.find({ status: "pending" }).sort({ createdAt: -1 }).limit(5).select("name email role createdAt").lean(),
-    User.find().sort({ createdAt: -1 }).limit(6).select("name email role status createdAt").lean(),
+    User.find().sort({ createdAt: -1 }).limit(6).select("name email role status rejected createdAt").lean(),
     User.aggregate([{ $group: { _id: "$role", count: { $sum: 1 } } }]),
     Plan.countDocuments(),
     Plan.countDocuments({ shared: true }),
-    Plan.countDocuments({ hiddenByAdmin: true }),
+    Plan.countDocuments({ shared: true, hiddenByAdmin: true }), // the content page lists shared plans only
     Source.countDocuments({ active: true }),
     Source.countDocuments({ active: false }),
     Source.countDocuments({ demo: true }),
@@ -204,7 +205,7 @@ export async function AdminOverview({ user }) {
                         <span className="text-sm text-ink-700">{ROLE_LABELS[account.role]}</span>
                       </td>
                       <td>
-                        <StatusBadge status={account.status} />
+                        <StatusBadge status={userStatus(account)} />
                       </td>
                       <td className="hidden text-right whitespace-nowrap text-muted-foreground md:table-cell">
                         {formatDate(account.createdAt)}
@@ -246,8 +247,8 @@ export async function AdminOverview({ user }) {
                 { label: "Sources shown", value: sources, href: "/admin/sources?show=shown" },
                 { label: "Sources hidden", value: hiddenSources, href: "/admin/sources?show=hidden" },
                 { label: "Demo sources to check", value: demoSources, href: "/admin/sources?show=demo", warn: demoSources > 0 },
-                { label: "Hidden posts", value: hiddenPosts, href: "/admin/content" },
-                { label: "Hidden shared plans", value: hiddenPlans, href: "/admin/content?tab=plans" },
+                { label: "Hidden posts", value: hiddenPosts, href: "/admin/content?show=hidden" },
+                { label: "Hidden shared plans", value: hiddenPlans, href: "/admin/content?tab=plans&show=hidden" },
               ].map((row) => (
                 <div key={row.label} className="flex items-center justify-between px-5 py-3">
                   <dt>

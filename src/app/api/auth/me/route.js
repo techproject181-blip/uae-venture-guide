@@ -1,13 +1,9 @@
-import { getCurrentUser } from "@/lib/session";
+import { requireApiUserOrPending, route } from "@/lib/api";
 
-// GET /api/auth/me: the signed-in user, or 401.
-export async function GET() {
-  try {
-    const user = await getCurrentUser();
-    if (!user) return Response.json({ error: "Not signed in." }, { status: 401 });
-    return Response.json({ user });
-  } catch (error) {
-    console.error("Loading the current user failed:", error);
-    return Response.json({ error: "Something went wrong. Please try again." }, { status: 500 });
-  }
-}
+// GET /api/auth/me: the signed-in user. Like the other API routes it answers
+// 401 when nobody is signed in and 403 when the account is suspended; an
+// account still waiting for approval gets its details.
+export const GET = route(async () => {
+  const user = await requireApiUserOrPending();
+  return Response.json({ user });
+});

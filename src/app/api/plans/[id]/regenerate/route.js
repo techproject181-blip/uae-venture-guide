@@ -1,6 +1,10 @@
 import { requireApiUser, route } from "@/lib/api";
-import { createPlanWithRoadmap, findOwnPlan, rebuildRoadmap } from "@/lib/plans";
+import { createNewVersion, findOwnPlan, rebuildRoadmap } from "@/lib/plans";
 import { consumeQuota } from "@/lib/quota";
+
+// The AI can take a minute or more to write a roadmap. On hosts that limit how
+// long a request may run, this one may run for up to two minutes.
+export const maxDuration = 120;
 
 // POST /api/plans/:id/regenerate: make a fresh roadmap from the same answers,
 // as a new plan, so the earlier one is kept. A failed plan has nothing worth
@@ -16,16 +20,7 @@ export const POST = route(async (request, { params }) => {
     return Response.json({ id: String(plan._id), status: plan.status });
   }
 
-  const intake = {
-    title: `${plan.title} (new version)`.slice(0, 80),
-    idea: plan.idea,
-    emirate: plan.emirate,
-    sector: plan.sector,
-    jurisdictionPref: plan.jurisdictionPref,
-    budgetAed: plan.budgetAed,
-    targetCustomers: plan.targetCustomers,
-    teamSize: plan.teamSize,
-  };
-  const fresh = await createPlanWithRoadmap(user.id, intake);
+  // Titled "… (version 2)", "… (version 3)" and so on, never "(new version) (new version)".
+  const fresh = await createNewVersion(plan);
   return Response.json({ id: String(fresh._id), status: fresh.status }, { status: 201 });
 });

@@ -1,30 +1,30 @@
 import mongoose from "mongoose";
+import { aiEnabled } from "../ai/openai.js";
 import { estimatedWeeks, firstYearTotal } from "../budget.js";
 import { EMIRATES, JURISDICTIONS, SECTORS, labelOf } from "../constants.js";
-import { connectDB } from "../db.js";
 import { formatAed } from "../format.js";
+import { aiRoadmap } from "./ai-planner.js";
+import { LOCAL_SECTORS, budgetItem, feeCost, feeFits, loadReferences, recommendJurisdiction, runningCosts } from "./shared.js";
 import { DOCUMENTS, LICENSING_AUTHORITIES, PHASES, SECTOR_RISKS, SECTOR_STEPS, STEPS } from "./templates.js";
-import { FeeReference } from "../../models/FeeReference.js";
-import { Source } from "../../models/Source.js";
 
 // Imports are relative (not "@/...") so scripts/seed.mjs can run this file in plain Node.
 //
-// The sample planner builds a startup roadmap from rules and the official fee
-// references, while no AI provider is connected. It returns the same shape an
-// AI planner will return, so the rest of the app does not change when one is
-// added: only generateRoadmap() picks a different planner.
+// generateRoadmap() picks the planner. With an OpenAI key set, the AI planner
+// (ai-planner.js) writes the roadmap; without one, the sample planner below
+// builds it from rules and the official fee references. Both get the same fees
+// and sources and return the same shape, so the rest of the app works the same
+// with either.
 
 export const GENERATOR = "sample-planner-v1";
 
-// Sectors whose customers usually come in person, which suits a mainland licence.
-const LOCAL_SECTORS = ["food_beverage", "retail", "health_wellness", "tourism_events", "education"];
-
 /** Builds the roadmap for a plan's intake answers. */
 export async function generateRoadmap(intake) {
-  await connectDB();
-  const near = { active: true, emirate: { $in: [intake.emirate, null] } };
-  const [fees, sources] = await Promise.all([FeeReference.find(near).lean(), Source.find(near).lean()]);
+  const references = await loadReferences(intake.emirate);
+  return aiEnabled() ? aiRoadmap(intake, references) : sampleRoadmap(intake, references);
+}
 
+/** The sample planner: the template steps for this business, with official fees where they exist. */
+function sampleRoadmap(intake, { fees, sources }) {
   const { jurisdiction, reason } = recommendJurisdiction(intake);
   const context = { intake, jurisdiction, fees, sources };
 
@@ -53,15 +53,7 @@ export async function generateRoadmap(intake) {
       origin: "planner",
       sourceIds: cost.sourceId ? [cost.sourceId] : sourcesFor(step, context),
     });
-    if (step.budget && cost.max > 0) {
-      budgetItems.push({
-        ...step.budget,
-        estimatedAed: Math.round((cost.min + cost.max) / 2),
-        recurrence: cost.recurrence,
-        costBasis: cost.basis,
-        origin: "planner",
-      });
-    }
+    if (step.budget && cost.max > 0) budgetItems.push(budgetItem(step.budget, cost));
   }
   budgetItems.push(...runningCosts(intake));
 
@@ -87,47 +79,10 @@ export async function generateRoadmap(intake) {
   };
 }
 
-function recommendJurisdiction({ jurisdictionPref, sector }) {
-  if (jurisdictionPref === "mainland") {
-    return {
-      jurisdiction: "mainland",
-      reason: "You chose mainland. A mainland licence lets you trade directly with customers across the UAE.",
-    };
-  }
-  if (jurisdictionPref === "free_zone") {
-    return {
-      jurisdiction: "free_zone",
-      reason: "You chose a free zone. Free zone packages usually include the licence, a desk and a visa allowance in one price.",
-    };
-  }
-  if (LOCAL_SECTORS.includes(sector)) {
-    return {
-      jurisdiction: "mainland",
-      reason: "Your customers will mostly visit you in person in the emirate, which is what a mainland licence is for.",
-    };
-  }
-  return {
-    jurisdiction: "free_zone",
-    reason: "Your business can work online or from a shared desk, and a free zone package is usually the simplest way to start.",
-  };
-}
-
-/**
- * The official fee for a step when one exists, otherwise the template's estimate.
- * A fee from the demo data was never checked, so it is marked "demo", not official.
- */
+/** The official fee for a step when one exists, otherwise the template's estimate. */
 function costFor(step, { intake, jurisdiction, fees }) {
   const fee = step.fee && findFee(fees, step.fee, intake.emirate, jurisdiction);
-  if (fee) {
-    return {
-      min: fee.amountMinAed,
-      max: fee.amountMaxAed,
-      basis: fee.demo ? "demo" : "reference",
-      feeId: fee._id,
-      sourceId: fee.sourceId,
-      recurrence: fee.recurrence,
-    };
-  }
+  if (fee) return feeCost(fee);
   const [min, max] = Array.isArray(step.estimate) ? step.estimate : step.estimate[jurisdiction];
   return { min, max, basis: "estimate", recurrence: step.recurrence ?? "one_time" };
 }
@@ -135,11 +90,10 @@ function costFor(step, { intake, jurisdiction, fees }) {
 /** Prefers a fee for this emirate and jurisdiction, then any jurisdiction, then a federal fee. */
 function findFee(fees, kind, emirate, jurisdiction) {
   const ofKind = fees.filter((fee) => fee.kind === kind);
-  const fits = (fee) => fee.jurisdiction === jurisdiction || fee.jurisdiction === "any";
   return (
     ofKind.find((fee) => fee.emirate === emirate && fee.jurisdiction === jurisdiction) ??
-    ofKind.find((fee) => fee.emirate === emirate && fits(fee)) ??
-    ofKind.find((fee) => fee.emirate === null && fits(fee)) ??
+    ofKind.find((fee) => fee.emirate === emirate && feeFits(fee, jurisdiction)) ??
+    ofKind.find((fee) => fee.emirate === null && feeFits(fee, jurisdiction)) ??
     null
   );
 }
@@ -166,23 +120,6 @@ function teamStep(employees, jurisdiction) {
     days: 14,
     budget: { category: "visa", label: "Employee visas and work permits" },
   };
-}
-
-/** Monthly costs every new business has, as estimates the entrepreneur can edit. */
-function runningCosts({ teamSize }) {
-  const items = [
-    { category: "technology", label: "Website, software and phone", estimatedAed: 500, recurrence: "monthly" },
-    { category: "marketing", label: "Ongoing marketing", estimatedAed: 1500, recurrence: "monthly" },
-  ];
-  if (teamSize > 1) {
-    items.push({
-      category: "staff",
-      label: `Salaries for ${teamSize - 1} ${teamSize === 2 ? "employee" : "employees"}`,
-      estimatedAed: 5000 * (teamSize - 1),
-      recurrence: "monthly",
-    });
-  }
-  return items.map((item) => ({ ...item, costBasis: "estimate", origin: "planner" }));
 }
 
 function authorityName(key, { intake, jurisdiction }) {

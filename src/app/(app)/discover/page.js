@@ -3,11 +3,12 @@ import { InterestForm } from "@/components/funding/interest-form";
 import { PitchCard } from "@/components/funding/pitch-card";
 import { CardGrid } from "@/components/layout";
 import { EmptyState, PageHeader } from "@/components/page-header";
+import { Pagination } from "@/components/pagination";
 import { StatusBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
 import { toPlain } from "@/lib/api";
 import { EMIRATES, SECTORS, valuesOf } from "@/lib/constants";
-import { listPitchCards } from "@/lib/funding";
+import { listPitchCards, PITCH_CARDS_PER_PAGE } from "@/lib/funding";
 import { requireUser } from "@/lib/guards";
 import { FunderProfile } from "@/models/FunderProfile";
 import { FundingInterest } from "@/models/FundingInterest";
@@ -26,7 +27,14 @@ export default async function DiscoverPage({ searchParams }) {
   const sector = valuesOf(SECTORS).includes(params.sector) ? params.sector : "";
   const emirate = valuesOf(EMIRATES).includes(params.emirate) ? params.emirate : "";
 
-  const cards = toPlain(await listPitchCards({ sector, emirate }));
+  const found = await listPitchCards({ sector, emirate, page: Math.max(1, Number.parseInt(params.page, 10) || 1) });
+  const { total, page } = found;
+  const cards = toPlain(found.cards);
+  // Page links keep the chosen filters; page 1 needs no number.
+  const pageHref = (n) => {
+    const query = String(new URLSearchParams({ ...(sector && { sector }), ...(emirate && { emirate }), ...(n > 1 && { page: n }) }));
+    return query ? `/discover?${query}` : "/discover";
+  };
   const [sent, hasProfile] = await Promise.all([
     FundingInterest.find({ funderId: user.id, planId: { $in: cards.map((c) => c._id) } })
       .select("planId status")
@@ -101,7 +109,7 @@ export default async function DiscoverPage({ searchParams }) {
         <>
           <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
             <p role="status">
-              {cards.length} {cards.length === 1 ? "plan" : "plans"}
+              {total} {total === 1 ? "plan" : "plans"}
             </p>
             {filtered && (
               <Link href="/discover" className={linkClass}>
@@ -144,6 +152,7 @@ export default async function DiscoverPage({ searchParams }) {
               );
             })}
           </CardGrid>
+          <Pagination page={page} total={total} pageSize={PITCH_CARDS_PER_PAGE} href={pageHref} />
         </>
       )}
     </>

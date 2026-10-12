@@ -4,7 +4,8 @@ import { sharingSchema } from "@/lib/schemas/community";
 
 // PATCH /api/plans/:id/sharing  { shared, pitchSummary }
 // The owner shares the plan's pitch card with funders, or stops sharing.
-// Stopping also ends the access of funders whose interest was accepted.
+// While it is not shared, funders whose interest was accepted cannot open the
+// plan or send messages; sharing it again lets them back in.
 export const PATCH = route(async (request, { params }) => {
   const user = await requireApiUser("entrepreneur");
   const { id } = await params;

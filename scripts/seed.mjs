@@ -1,6 +1,6 @@
 // Fills a database with a small set of starting data: a few accounts for each
 // role, official sources and fee references, mentor and funder profiles, two
-// plans made by the planner, two experience posts, two guidance requests (one
+// plans made by the planner, three experience posts, two guidance requests (one
 // with a saved founder–mentor conversation) and funder interest.
 // It also removes old demo accounts that are no longer in the list below.
 // Safe to run again: accounts, sources and fees are updated in place, and the
@@ -26,6 +26,10 @@ import { Post } from "../src/models/Post.js";
 import { RequestMessage } from "../src/models/RequestMessage.js";
 import { Source } from "../src/models/Source.js";
 import { User } from "../src/models/User.js";
+
+// The demo plans always come from the built-in planner, so the seed gives the
+// same plans every time and never needs the AI, even when .env.local has an OpenAI key.
+delete process.env.OPENAI_API_KEY;
 
 const DEMO_PASSWORD = "Demo2026pass";
 

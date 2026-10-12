@@ -3,14 +3,13 @@ import { connectDB } from "@/lib/db";
 import { createSession } from "@/lib/session";
 import { signInSchema } from "@/lib/schemas/auth";
 import { fieldErrors } from "@/lib/schemas/helpers";
-import { LOCK_MINUTES, LoginAttempt } from "@/models/LoginAttempt";
+import { clearAttempts, countAttempt, minutesText } from "@/models/LoginAttempt";
 import { User } from "@/models/User";
 
 // The hash of a random password. Checking against it when the email is unknown
 // makes every failed sign-in take the same time, so the response time does not
 // reveal which emails have an account.
 const DUMMY_HASH = "$2b$10$oniKR91pR2coTSKXB2hAFe0pURt13c5DjCWFhZqe6WGKuqypoWvOS";
-const MAX_FAILURES = 5;
 
 // POST /api/auth/sign-in  { email, password }
 export async function POST(request) {
@@ -23,20 +22,20 @@ export async function POST(request) {
 
   try {
     await connectDB();
-    // After too many wrong passwords for this email, stop checking for a while.
-    const attempts = await LoginAttempt.findOne({ email }).lean();
-    if (attempts?.failures >= MAX_FAILURES) {
-      return Response.json({ error: `Too many failed attempts. Wait ${LOCK_MINUTES} minutes, or reset your password.` }, { status: 429 });
+    // Each try is counted before the password is checked. After five wrong
+    // passwords for this email, stop checking until the lock ends.
+    const lockedFor = await countAttempt(email);
+    if (lockedFor) {
+      return Response.json({ error: `Too many failed attempts. Wait ${minutesText(lockedFor)}, or reset your password.` }, { status: 429 });
     }
 
     const user = await User.findOne({ email });
     const passwordMatches = await bcrypt.compare(password, user?.passwordHash ?? DUMMY_HASH);
 
     if (!user || !passwordMatches) {
-      await LoginAttempt.updateOne({ email }, { $inc: { failures: 1 } }, { upsert: true });
       return Response.json({ error: "Email or password is incorrect." }, { status: 401 });
     }
-    await LoginAttempt.deleteOne({ email });
+    await clearAttempts(email);
     if (user.status === "suspended") {
       if (user.rejected) {
         return Response.json({ error: "This account was not approved. Please contact the administrator." }, { status: 403 });

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { postJson } from "@/lib/form-helpers";
 
@@ -13,7 +14,13 @@ export function useSignOut() {
 
   async function signOut() {
     setPending(true);
-    await postJson("/api/auth/sign-out");
+    const result = await postJson("/api/auth/sign-out");
+    // If the cookie was not removed, the user is still signed in, so stay on this page.
+    if (!result.ok) {
+      setPending(false);
+      toast.error(result.error ?? "Could not sign out. Please try again.");
+      return;
+    }
     router.replace("/sign-in");
     router.refresh();
   }

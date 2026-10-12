@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { UserActions } from "@/components/admin/user-actions";
+import { userStatus } from "@/components/admin/user-status";
 import { Fields } from "@/components/document";
 import { Panel, Split } from "@/components/layout";
 import { PageHeader } from "@/components/page-header";
@@ -21,13 +22,14 @@ export default async function AdminUserPage({ params }) {
 
   await connectDB();
   const user = await User.findById(id)
-    .select("name email role status createdAt")
+    .select("name email role status rejected createdAt")
     .lean()
     .catch(() => null);
   if (!user) notFound();
   const Profile = user.role === "mentor" ? MentorProfile : user.role === "funder" ? FunderProfile : null;
   const profile = Profile && (await Profile.findOne({ userId: id }).lean());
   const canChange = user.role !== "admin" && id !== admin.id;
+  const status = userStatus(user);
 
   const rows =
     user.role === "mentor" && profile
@@ -53,7 +55,8 @@ export default async function AdminUserPage({ params }) {
     pending: "Until you approve it, this user can only fill in their profile.",
     active: "This account can sign in and use the app.",
     suspended: "This account cannot sign in.",
-  }[user.status];
+    rejected: "This sign-up was rejected, so the account cannot sign in. You can still approve it.",
+  }[status];
 
   return (
     <>
@@ -61,9 +64,9 @@ export default async function AdminUserPage({ params }) {
         back={{ href: "/admin/users", label: "All users" }}
         title={user.name}
         description={`${ROLE_LABELS[user.role]} · joined ${formatDate(user.createdAt)}`}
-        actions={canChange && <UserActions userId={id} status={user.status} className="justify-start" />}
+        actions={canChange && <UserActions userId={id} status={status} className="justify-start" />}
       >
-        <StatusBadge status={user.status} />
+        <StatusBadge status={status} />
       </PageHeader>
 
       <Split
@@ -75,7 +78,10 @@ export default async function AdminUserPage({ params }) {
                 <dl className="mt-5 space-y-3 border-t pt-5 text-sm">
                   <div>
                     <dt className="font-medium">Approve</dt>
-                    <dd className="text-muted-foreground">Makes the account active and emails the user that they can sign in.</dd>
+                    <dd className="text-muted-foreground">
+                      Makes a waiting or rejected account active and emails the user that they can sign in. Mentors and funders need a
+                      profile first.
+                    </dd>
                   </div>
                   <div>
                     <dt className="font-medium">Reject or Suspend</dt>

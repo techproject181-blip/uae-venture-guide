@@ -3,6 +3,7 @@ import { Search } from "lucide-react";
 import { AdminTabs } from "@/components/admin/admin-tabs";
 import { UserActions } from "@/components/admin/user-actions";
 import { tableEdges } from "@/components/admin/table-edges";
+import { userStatus } from "@/components/admin/user-status";
 import { TablePanel } from "@/components/layout";
 import { EmptyState, PageHeader } from "@/components/page-header";
 import { Pagination } from "@/components/pagination";
@@ -18,22 +19,26 @@ import { User } from "@/models/User";
 export const metadata = { title: "Users" };
 
 const PAGE_SIZE = 20;
+// A rejected sign-up is saved as suspended too (see user-status.js), so the
+// Suspended tab leaves those out and Rejected lists them.
 const FILTERS = [
-  { value: "pending", label: "Waiting for approval", empty: "Nobody is waiting for approval." },
-  { value: "active", label: "Active", empty: "No active accounts." },
-  { value: "suspended", label: "Suspended", empty: "No suspended accounts." },
-  { value: "all", label: "All", empty: "No accounts yet." },
+  { value: "pending", label: "Waiting for approval", query: { status: "pending" }, empty: "Nobody is waiting for approval." },
+  { value: "active", label: "Active", query: { status: "active" }, empty: "No active accounts." },
+  { value: "suspended", label: "Suspended", query: { status: "suspended", rejected: { $ne: true } }, empty: "No suspended accounts." },
+  { value: "rejected", label: "Rejected", query: { status: "suspended", rejected: true }, empty: "No rejected sign-ups." },
+  { value: "all", label: "All", query: {}, empty: "No accounts yet." },
 ];
 
 export default async function AdminUsersPage({ searchParams }) {
   const admin = await requireUser({ roles: ["admin"] });
   const params = await searchParams;
-  const filter = FILTERS.some((f) => f.value === params.status) ? params.status : "pending";
+  const current = FILTERS.find((f) => f.value === params.status) ?? FILTERS[0];
+  const filter = current.value;
   const page = Math.max(1, Number.parseInt(params.page, 10) || 1);
   const search = typeof params.q === "string" ? params.q.trim().slice(0, 80) : "";
 
   await connectDB();
-  const query = filter === "all" ? {} : { status: filter };
+  const query = { ...current.query };
   if (search) {
     // Escape the text so it is matched literally, then look in names and emails.
     const pattern = new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
@@ -45,13 +50,11 @@ export default async function AdminUsersPage({ searchParams }) {
       .sort({ createdAt: -1 })
       .skip((page - 1) * PAGE_SIZE)
       .limit(PAGE_SIZE)
-      .select("name email role status createdAt")
+      .select("name email role status rejected createdAt")
       .lean(),
     User.countDocuments(query),
     User.countDocuments({ status: "pending" }),
   ]);
-
-  const current = FILTERS.find((f) => f.value === filter);
 
   return (
     <>
@@ -111,6 +114,7 @@ export default async function AdminUsersPage({ searchParams }) {
             <tbody>
               {users.map((user) => {
                 const id = String(user._id);
+                const status = userStatus(user);
                 const canChange = user.role !== "admin" && id !== admin.id;
                 return (
                   <tr key={id}>
@@ -130,7 +134,7 @@ export default async function AdminUsersPage({ searchParams }) {
                             <p>
                               {ROLE_LABELS[user.role]} · <span className="whitespace-nowrap">joined {formatDate(user.createdAt)}</span>
                             </p>
-                            <StatusBadge status={user.status} />
+                            <StatusBadge status={status} />
                           </div>
                         </div>
                       </div>
@@ -139,12 +143,12 @@ export default async function AdminUsersPage({ searchParams }) {
                       <span className="text-sm text-ink-700">{ROLE_LABELS[user.role]}</span>
                     </td>
                     <td className="hidden md:table-cell">
-                      <StatusBadge status={user.status} />
+                      <StatusBadge status={status} />
                     </td>
                     <td className="hidden whitespace-nowrap md:table-cell">{formatDate(user.createdAt)}</td>
                     <td>
                       {canChange ? (
-                        <UserActions userId={id} status={user.status} />
+                        <UserActions userId={id} status={status} />
                       ) : (
                         <p className="text-right text-muted-foreground">No actions</p>
                       )}

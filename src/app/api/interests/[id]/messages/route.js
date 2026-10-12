@@ -1,11 +1,13 @@
 import { ApiError, readBody, requireApiUser, route } from "@/lib/api";
-import { findInterestConversation, listInterestMessages, sendInterestMessage } from "@/lib/interest-messages";
+import { findInterestConversation, listInterestMessages, sendInterestMessage, whyInterestClosed } from "@/lib/interest-messages";
 import { fieldErrors } from "@/lib/schemas/helpers";
 import { messagesQuerySchema, requestMessageSchema } from "@/lib/schemas/messages";
 
 // GET /api/interests/:id/messages?after=<ISO date>
 // The conversation between a plan's owner and a funder, oldest first. The page
-// asks every few seconds with `after` set to its newest message.
+// asks every few seconds with `after` set a little before the newest message it
+// has received. `canSend` turns false while the conversation is closed, and
+// `closedText` then says why.
 export const GET = route(async (request, { params }) => {
   const user = await requireApiUser();
   const { id } = await params;
@@ -15,10 +17,16 @@ export const GET = route(async (request, { params }) => {
   const conversation = await findInterestConversation(id, user);
   const after = query.data.after ? new Date(query.data.after) : undefined;
   const messages = await listInterestMessages(conversation.interest, user.id, { after });
-  return Response.json({ canSend: conversation.canSend, messages });
+  return Response.json({
+    canSend: conversation.canSend,
+    closedReason: conversation.closedReason,
+    closedText: whyInterestClosed(conversation),
+    messages,
+  });
 });
 
 // POST /api/interests/:id/messages  { body }
+// Sends a message, while the conversation is open. A closed one answers 409 with the reason.
 export const POST = route(async (request, { params }) => {
   const user = await requireApiUser();
   const { id } = await params;

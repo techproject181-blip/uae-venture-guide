@@ -13,6 +13,11 @@ import { cn } from "@/lib/utils";
 // so it asks instead.
 const POLL_EVERY_MS = 4000;
 
+// Each ask starts this long before the newest message received so far. The
+// server times a message just before saving it, so one can land a moment after
+// a later-timed one; the overlap still catches it, and repeats are skipped.
+const OVERLAP_MS = 30 * 1000;
+
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 /**
@@ -26,11 +31,29 @@ function formatTime(iso) {
   return `${uae.getUTCDate()} ${MONTHS[uae.getUTCMonth()]} · ${hours}:${minutes}`;
 }
 
-/** Adds `incoming` to `list`, skipping any message already there, oldest first. */
+/** Oldest first: by time, then by id, the same order as the server. ISO times sort correctly as text. */
+function byTime(a, b) {
+  if (a.createdAt !== b.createdAt) return a.createdAt < b.createdAt ? -1 : 1;
+  return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
+}
+
+/** Adds `incoming` to `list`, skipping any message already there, and keeps the list oldest first. */
 function merge(list, incoming) {
   const known = new Set(list.map((message) => message.id));
   const fresh = incoming.filter((message) => !known.has(message.id));
-  return fresh.length === 0 ? list : [...list, ...fresh];
+  return fresh.length === 0 ? list : [...list, ...fresh].sort(byTime);
+}
+
+/**
+ * The later of `time` and the newest message in `list` (ISO times, or null).
+ * Real messages only: the reply kept on older requests has an id starting with "reply-".
+ */
+function newestTime(list, time = null) {
+  let newest = time;
+  for (const message of list) {
+    if (!message.id.startsWith("reply-") && (!newest || message.createdAt > newest)) newest = message.createdAt;
+  }
+  return newest;
 }
 
 /**
@@ -38,12 +61,13 @@ function merge(list, incoming) {
  * request, or a founder and a funder about a plan (pass `apiUrl`): the
  * original request first, then the messages as bubbles (yours on the right),
  * and the box to write in. New messages arrive by asking the server every few
- * seconds while the tab is visible.
+ * seconds while the tab is visible. `closedText` says why a closed conversation
+ * is closed; when it closes while the page is open, the server's answer says why.
  */
 export function Conversation({
   requestId,
   apiUrl = `/api/requests/${requestId}/messages`,
-  closedText = "This request is completed, so the conversation is closed. You can still read every message here.",
+  closedText,
   opening,
   openingLabel = "Original request",
   initialMessages,
@@ -52,17 +76,17 @@ export function Conversation({
 }) {
   const [messages, setMessages] = useState(initialMessages);
   const [canSend, setCanSend] = useState(initialCanSend);
+  const [closedNote, setClosedNote] = useState(closedText ?? "This conversation is closed.");
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
   const [error, setError] = useState(null);
   const logRef = useRef(null);
-  const latest = useRef(messages);
+  // The newest time among the messages the server listed (the first load and
+  // each ask). It only moves forward, and a message you send does not move it,
+  // so a message the other person sent just before yours is still asked for.
+  const cursor = useRef(newestTime(initialMessages));
   const fieldId = useId();
   const hintId = useId();
-
-  useEffect(() => {
-    latest.current = messages;
-  }, [messages]);
 
   // Keep the newest message in view.
   useEffect(() => {
@@ -72,15 +96,16 @@ export function Conversation({
 
   const poll = useCallback(
     async (signal) => {
-      // Real messages only: the reply kept on older requests has an id starting with "reply-".
-      const last = latest.current.findLast((message) => !message.id.startsWith("reply-"));
-      const query = last ? `?after=${encodeURIComponent(last.createdAt)}` : "";
+      const after = cursor.current && new Date(new Date(cursor.current).getTime() - OVERLAP_MS).toISOString();
+      const query = after ? `?after=${encodeURIComponent(after)}` : "";
       try {
         const response = await fetch(`${apiUrl}${query}`, { signal, cache: "no-store" });
         if (!response.ok) return response.status === 404 ? "gone" : null;
         const body = await response.json();
+        cursor.current = newestTime(body.messages, cursor.current);
         setMessages((list) => merge(list, body.messages));
         setCanSend(body.canSend);
+        if (body.closedText) setClosedNote(body.closedText);
         return body.canSend ? null : "closed";
       } catch {
         return null; // offline or cancelled: try again on the next tick
@@ -125,13 +150,20 @@ export function Conversation({
     setSending(true);
     const result = await sendJson("POST", apiUrl, { body });
     setSending(false);
+    if (result.status === 409) {
+      // The conversation closed after the page loaded; the answer says why.
+      setCanSend(false);
+      if (result.error) setClosedNote(result.error);
+      return;
+    }
     if (!result.ok) {
       setError(result.fieldErrors?.body ?? result.error ?? "Something went wrong. Please try again.");
-      if (result.status === 409) setCanSend(false);
       return;
     }
     setDraft("");
     setMessages((list) => merge(list, [result.message]));
+    // Ask at once, so a message the other person sent meanwhile shows up now.
+    poll();
   }
 
   return (
@@ -175,7 +207,7 @@ export function Conversation({
                 onChange={(event) => setDraft(event.target.value)}
                 onKeyDown={(event) => {
                   // Enter sends; Shift+Enter starts a new line. Not while an
-                  // input method (for Arabic or Chinese, say) is composing a word.
+                  // input method (for Chinese or Japanese, say) is composing a word.
                   if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
                     event.preventDefault();
                     if (!sending) send();
@@ -198,7 +230,7 @@ export function Conversation({
         ) : (
           <div className="flex gap-3 rounded-lg border border-dashed border-ink-300 bg-ink-50 p-4 text-sm text-muted-foreground">
             <Lock className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-            <p>{closedText}</p>
+            <p>{closedNote} You can still read every message here.</p>
           </div>
         )}
       </div>

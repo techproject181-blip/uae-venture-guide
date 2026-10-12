@@ -7,7 +7,8 @@ import { RequestActions } from "@/components/requests/request-actions";
 import { StatusBadge } from "@/components/status-badge";
 import { formatDate } from "@/lib/format";
 import { requireUser } from "@/lib/guards";
-import { getConversation, listMessages } from "@/lib/messages";
+import { getConversation, listMessages, whyClosed } from "@/lib/messages";
+import { canReadPlan } from "@/lib/plans";
 import { Plan } from "@/models/Plan";
 import { User } from "@/models/User";
 
@@ -23,20 +24,21 @@ export default async function RequestConversationPage({ params }) {
   const { id } = await params;
   const conversation = await getConversation(id, user);
   if (!conversation) notFound();
-  const { request, isMentor, canSend } = conversation;
+  const { request, isMentor, canSend, closedReason } = conversation;
+  const closedText = whyClosed(conversation);
 
   const [people, plan, messages] = await Promise.all([
     User.find({ _id: { $in: [request.entrepreneurId, request.mentorId] } })
       .select("name")
       .lean(),
-    request.planId ? Plan.findById(request.planId).select("title").lean() : null,
+    request.planId ? Plan.findById(request.planId).select("title ownerId").lean() : null,
     listMessages(request, user.id),
   ]);
   const nameOf = (userId) => people.find((person) => String(person._id) === String(userId))?.name ?? "A removed account";
   const founderName = nameOf(request.entrepreneurId);
   const otherName = isMentor ? founderName : nameOf(request.mentorId);
-  // The mentor may open the plan only while the request is accepted (lib/plans.js).
-  const planReadable = plan && (!isMentor || request.status === "accepted");
+  // The plan page's own rule (lib/plans.js): the founder always, the mentor while the request is accepted.
+  const planReadable = Boolean(plan) && (await canReadPlan(user, plan));
 
   const opening = {
     id: `opening-${request._id}`,
@@ -92,16 +94,17 @@ export default async function RequestConversationPage({ params }) {
               ]}
             />
             <p className="mt-5 text-sm text-muted-foreground">
-              {canSend ? "Every message is saved here for both of you." : "The request is completed. The conversation stays here to read."}
+              {canSend ? "Every message is saved here for both of you." : `${closedText} It stays here to read.`}
             </p>
           </Panel>
         }
       >
         <Panel title="Conversation" flush>
-          {/* key: a fresh start when the status changes, so "Mark as completed" closes the box at once. */}
+          {/* key: a fresh start when the conversation opens or closes, so "Mark as completed" closes the box at once. */}
           <Conversation
-            key={request.status}
+            key={closedReason ?? "open"}
             requestId={String(request._id)}
+            closedText={closedText}
             opening={opening}
             initialMessages={messages}
             initialCanSend={canSend}

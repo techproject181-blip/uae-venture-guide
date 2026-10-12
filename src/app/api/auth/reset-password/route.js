@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { ApiError, readBody, route } from "@/lib/api";
 import { connectDB } from "@/lib/db";
 import { resetPasswordSchema } from "@/lib/schemas/auth";
-import { LoginAttempt } from "@/models/LoginAttempt";
+import { clearAttempts } from "@/models/LoginAttempt";
 import { User } from "@/models/User";
 
 // POST /api/auth/reset-password  { token, password }
@@ -23,7 +23,7 @@ export const POST = route(async (request) => {
   user.passwordChangedAt = new Date();
   await user.save();
   // The sign-in lock message promises a reset unlocks the account.
-  await LoginAttempt.deleteOne({ email: user.email });
+  await clearAttempts(user.email);
 
   return Response.json({ ok: true });
 });

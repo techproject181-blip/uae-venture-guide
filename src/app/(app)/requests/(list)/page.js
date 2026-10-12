@@ -22,6 +22,13 @@ const rowLink = "text-foreground decoration-primary underline underline-offset-4
 
 const STATUS_ORDER = { pending: 0, accepted: 1, completed: 2, declined: 3 };
 
+// Why a mentor cannot open the attached plan: it opens only while they have accepted the request.
+const PLAN_NOTE = {
+  pending: "(readable once you accept)",
+  completed: "(no longer shared)",
+  declined: "(not shared with you)",
+};
+
 /** Entrepreneurs see the guidance requests they sent and funders' interest in their plans; mentors see requests sent to them. */
 export default async function RequestsPage() {
   const user = await requireUser({ roles: ["entrepreneur", "mentor"] });
@@ -126,7 +133,7 @@ function RequestEntry({ request, isMentor }) {
                   </Link>
                 ) : (
                   <>
-                    {plan.title} <span>{request.status === "pending" ? "(readable once you accept)" : "(no longer shared)"}</span>
+                    {plan.title} <span>{PLAN_NOTE[request.status]}</span>
                   </>
                 )}
               </>

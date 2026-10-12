@@ -6,6 +6,7 @@ import { Panel, Split } from "@/components/layout";
 import { Cost, FactRows } from "@/components/plans/plan-bits";
 import { PlanActions } from "@/components/plans/plan-actions";
 import { buttonVariants } from "@/components/ui/button";
+import { aiEnabled } from "@/lib/ai/openai";
 import { firstYearTotal, remainingBudget } from "@/lib/budget";
 import { JURISDICTIONS, JURISDICTION_PREFERENCES, labelOf } from "@/lib/constants";
 import { formatAed, formatDate } from "@/lib/format";
@@ -141,14 +142,7 @@ export default async function PlanOverviewPage({ params }) {
               Official sources for this plan
             </Link>
           }
-          footer={
-            plan.generatedAt && (
-              <p className="text-sm text-muted-foreground">
-                Made {formatDate(plan.generatedAt)} by the built-in planner from the official fee references. The AI service is not
-                connected yet.
-              </p>
-            )
-          }
+          footer={plan.generatedAt && <p className="text-sm text-muted-foreground">{madeBy(plan)}</p>}
         >
           <ol className="divide-y">
             {phases.map((phase) => {
@@ -196,4 +190,16 @@ export default async function PlanOverviewPage({ params }) {
       </Panel>
     </Split>
   );
+}
+
+/**
+ * Who made the roadmap, for the line under it: the AI (its generator is
+ * "openai:<model>") or the built-in planner. Only while the AI is off does the
+ * line say it is not connected.
+ */
+function madeBy(plan) {
+  const made = `Made ${formatDate(plan.generatedAt)}`;
+  if (plan.generator?.startsWith("openai:")) return `${made} by an AI model (ChatGPT) from your answers and the official sources.`;
+  const notConnected = aiEnabled() ? "" : " The AI service is not connected yet.";
+  return `${made} by the built-in planner from the official fee references.${notConnected}`;
 }

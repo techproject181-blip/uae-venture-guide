@@ -22,10 +22,11 @@ export const PATCH = route(async (request, { params }) => {
   if (!user) throw new ApiError(404, "User not found.");
   if (user.role === "admin") throw new ApiError(400, "Administrator accounts cannot be changed here.");
 
-  const approved = user.status === "pending" && status === "active";
+  // Making a rejected sign-up active is a late approval, so it gets the same
+  // profile check and approval email as one still waiting.
+  const wasRejected = user.status === "suspended" && user.rejected;
+  const approved = status === "active" && (user.status === "pending" || wasRejected);
   const rejected = user.status === "pending" && status === "suspended";
-  // Reactivating a rejected sign-up is really a late approval, so they get the approval email too.
-  const lateApproval = user.status === "suspended" && status === "active" && user.rejected;
 
   if (approved) {
     // Approving someone with no profile would list an empty mentor or funder.
@@ -37,10 +38,10 @@ export const PATCH = route(async (request, { params }) => {
 
   user.status = status;
   if (rejected) user.rejected = true;
-  if (lateApproval) user.rejected = false;
+  if (approved) user.rejected = false;
   await user.save();
 
-  if (approved || lateApproval) {
+  if (approved) {
     await sendEmail({
       to: user.email,
       subject: "Your UAE Venture Guide account is approved",

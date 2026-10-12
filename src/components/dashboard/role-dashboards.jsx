@@ -184,9 +184,12 @@ export async function MentorDashboard({ user }) {
         ) : (
           <ListPanel title="Requests waiting for you" actions={<TextLink href="/requests">All requests</TextLink>}>
             {toPlain(pending.slice(0, 5)).map((request) => (
-              <Row key={request._id} className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+              <Row key={request._id} link className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
                 <div className="min-w-0">
-                  <p className="font-medium">{request.topic}</p>
+                  {/* A waiting request is answered on the requests page, which lists waiting ones first. */}
+                  <Link href="/requests" className={rowLink}>
+                    {request.topic}
+                  </Link>
                   <p className="mt-1 text-sm text-muted-foreground">
                     From {request.entrepreneurId?.name ?? "a removed account"} · {formatDate(request.createdAt)}
                   </p>
@@ -229,13 +232,13 @@ export async function MentorDashboard({ user }) {
 
 export async function FunderDashboard({ user }) {
   await connectDB();
-  const [profile, cards, interests, sharedCount] = await Promise.all([
+  const [profile, newest, interests] = await Promise.all([
     FunderProfile.exists({ userId: user.id }),
-    listPitchCards(),
+    // The three newest cards, and the count of every plan Discover shows.
+    listPitchCards({ pageSize: 3 }),
     listInterestsForFunder(user.id),
-    // Counted apart, because listPitchCards stops at 60 cards.
-    Plan.countDocuments({ shared: true, hiddenByAdmin: { $ne: true }, status: "ready" }),
   ]);
+  const { cards, total: sharedCount } = newest;
   const accepted = interests.filter((interest) => interest.status === "accepted").length;
   const waiting = interests.filter((interest) => interest.status === "pending").length;
 
@@ -308,10 +311,13 @@ export async function FunderDashboard({ user }) {
 
         {cards.length > 0 && (
           <ListPanel title="Newest shared plans" actions={<TextLink href="/discover">All shared plans</TextLink>}>
-            {toPlain(cards.slice(0, 3)).map((card) => (
-              <Row key={card._id} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-10">
+            {toPlain(cards).map((card) => (
+              <Row key={card._id} link className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-10">
                 <div className="min-w-0">
-                  <p className="font-medium">{card.title}</p>
+                  {/* Discover lists the newest plans first, so this card is near the top there. */}
+                  <Link href="/discover" className={rowLink}>
+                    {card.title}
+                  </Link>
                   <p className="mt-1 text-sm text-muted-foreground">
                     {labelOf(SECTORS, card.sector)} · {labelOf(EMIRATES, card.emirate)}
                   </p>
