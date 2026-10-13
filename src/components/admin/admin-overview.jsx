@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ArrowRight, Plus, BookOpen, FileText, ShieldAlert, UserPlus, Users } from "lucide-react";
 import { UserActions } from "@/components/admin/user-actions";
 import { userStatus } from "@/components/admin/user-status";
@@ -6,6 +5,7 @@ import { Avatar } from "@/components/avatar";
 import { PageHeader } from "@/components/page-header";
 import { StatusBadge } from "@/components/status-badge";
 import { buttonVariants } from "@/components/ui/button";
+import { OffLink } from "@/components/off-link";
 import { toPlain } from "@/lib/api";
 import { ROLE_LABELS } from "@/lib/constants";
 import { connectDB } from "@/lib/db";
@@ -16,6 +16,10 @@ import { Plan } from "@/models/Plan";
 import { Post } from "@/models/Post";
 import { Source } from "@/models/Source";
 import { User } from "@/models/User";
+
+// The submission build stops at the dashboard (lib/limited-mode.js), so every
+// link on it is drawn but switched off. Turn the flag off for real links.
+const Link = OffLink;
 
 const ROLE_ORDER = ["entrepreneur", "mentor", "funder", "admin"];
 
