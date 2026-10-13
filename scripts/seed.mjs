@@ -42,7 +42,7 @@ if (!process.env.MONGODB_URI) {
 }
 
 const USERS = [
-  { name: "Sara Al Mansoori", email: "admin@demo.test", role: "admin", status: "active" },
+  { name: "Sara Al Mansoori", email: process.env.ADMIN_EMAIL || "techproject181@gmail.com", role: "admin", status: "active" },
   { name: "Aisha Khan", email: "aisha@demo.test", role: "entrepreneur", status: "active" },
   { name: "Yousef Al Hammadi", email: "yousef@demo.test", role: "entrepreneur", status: "active" },
   { name: "Omar Saeed", email: "omar@demo.test", role: "mentor", status: "active" },
@@ -375,9 +375,13 @@ const keep = USERS.map((user) => user.email);
 const leftovers = await User.find({ email: { $regex: /@demo\.test$/, $nin: keep } }).distinct("_id");
 await removeAccounts(leftovers);
 
+// The administrator gets ADMIN_PASSWORD from .env.local when it is set, so the
+// real admin password never sits in the code. Everyone else gets the demo one.
 const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 10);
+const adminHash = process.env.ADMIN_PASSWORD ? await bcrypt.hash(process.env.ADMIN_PASSWORD, 10) : passwordHash;
 for (const user of USERS) {
-  await User.updateOne({ email: user.email }, { $set: { ...user, passwordHash } }, { upsert: true });
+  const hash = user.role === "admin" ? adminHash : passwordHash;
+  await User.updateOne({ email: user.email }, { $set: { ...user, passwordHash: hash } }, { upsert: true });
 }
 
 const sourceIds = {};
@@ -669,6 +673,6 @@ await InterestMessage.insertMany(
 
 await mongoose.disconnect();
 console.log(
-  `Demo data ready: ${USERS.length} accounts (password ${DEMO_PASSWORD}), ${SOURCES.length} sources, ${FEES.length} fee references, ` +
+  `Demo data ready: ${USERS.length} accounts (password ${DEMO_PASSWORD}${process.env.ADMIN_PASSWORD ? ", admin from ADMIN_PASSWORD" : ""}), ${SOURCES.length} sources, ${FEES.length} fee references, ` +
     `${PLANS.length} plans, ${POSTS.length} posts, 2 guidance requests (${CAFE_CHAT.length} chat messages) and 2 funder interests (${FUNDER_CHAT.length} chat messages).`,
 );
