@@ -25,6 +25,10 @@ All demo accounts use the password `Demo2026pass`:
 - `npm run lint` checks the code
 - `npm run build` builds for production
 
+## Docs
+
+The full project report is in [docs/UG project template.docx](docs/UG%20project%20template.docx).
+
 ## Stack
 
 Next.js 16 (JavaScript), Tailwind CSS v4, shadcn/ui, Motion, MongoDB Atlas with Mongoose, bcrypt and JWT cookies, Zod, Nodemailer, Recharts, react-pdf and the OpenAI API (optional).

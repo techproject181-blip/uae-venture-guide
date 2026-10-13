@@ -26,6 +26,10 @@
 # pushes to the client's repository, kept on this computer only
 /scripts/push-client.mjs
 
+# docs kept on this computer only, except the project report
+/docs/*
+!/docs/UG project template.docx
+
 # next.js
 /.next/
 /out/
