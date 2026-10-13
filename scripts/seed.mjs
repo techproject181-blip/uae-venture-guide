@@ -42,7 +42,7 @@ if (!process.env.MONGODB_URI) {
 }
 
 const USERS = [
-  { name: "Sara Al Mansoori", email: process.env.ADMIN_EMAIL || "techproject181@gmail.com", role: "admin", status: "active" },
+  { name: "Tech Project", email: process.env.ADMIN_EMAIL || "techproject181@gmail.com", role: "admin", status: "active" },
   { name: "Aisha Khan", email: "aisha@demo.test", role: "entrepreneur", status: "active" },
   { name: "Yousef Al Hammadi", email: "yousef@demo.test", role: "entrepreneur", status: "active" },
   { name: "Omar Saeed", email: "omar@demo.test", role: "mentor", status: "active" },

@@ -11,9 +11,9 @@ You need Node.js 24 and a MongoDB Atlas database (free cluster is fine).
 3. `npm run seed` (adds demo data)
 4. `npm run dev`, then open <http://localhost:3000>
 
-All demo accounts use the password `Demo2026pass`:
+The demo accounts use the password `Demo2026pass`:
 
-- Admin: `ADMIN_EMAIL` and `ADMIN_PASSWORD` from `.env.local` (without them, `admin@demo.test`)
+- Admin: the email in `scripts/seed.mjs` (or `ADMIN_EMAIL`), with the password from `ADMIN_PASSWORD` in `.env.local`
 - Entrepreneurs: `aisha@demo.test`, `yousef@demo.test`
 - Mentors: `omar@demo.test`, `fatima@demo.test`, `daniel@demo.test` (`rahul@demo.test` is pending)
 - Funders: `layla@demo.test` (`khalid@demo.test` is pending)
@@ -31,4 +31,4 @@ The full project report is in [docs/Project-Documentation.docx](docs/Project-Doc
 
 ## Stack
 
-Next.js 16 (JavaScript), Tailwind CSS v4, shadcn/ui, Motion, MongoDB Atlas with Mongoose, bcrypt and JWT cookies, Zod, Nodemailer, Recharts, react-pdf and the OpenAI API (optional).
+Next.js 16 (JavaScript), Tailwind CSS v4, shadcn/ui, Motion, MongoDB Atlas with Mongoose, bcrypt and JWT cookies, Zod, Nodemailer, Recharts, @react-pdf/renderer and the OpenAI API (optional).

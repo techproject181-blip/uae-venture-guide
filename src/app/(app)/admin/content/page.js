@@ -75,7 +75,7 @@ async function planRows(filter, skip) {
   }));
 }
 
-/** The administrator hides unsuitable experience posts and shared plans (FR-42). */
+/** The administrator hides unsuitable experience posts and shared plans (FR-25). */
 export default async function AdminContentPage({ searchParams }) {
   await requireUser({ roles: ["admin"] });
   const params = await searchParams;

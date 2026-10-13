@@ -8,7 +8,7 @@
 
 const RESPONSES_URL = "https://api.openai.com/v1/responses";
 
-// The balanced model. gpt-6-luna is cheaper, and gpt-6-astra the most capable.
+// The small, fast model, which also works on the free plan. gpt-6.1-sol and gpt-6-astra are stronger but need paid credit.
 const DEFAULT_MODEL = "gpt-6-luna";
 
 /** Whether the AI is connected: true when OPENAI_API_KEY is set. */

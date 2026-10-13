@@ -97,7 +97,7 @@ export default async function PlanLayout({ children, params }) {
       {/* Without a roadmap the other tabs would be empty. */}
       <PlanTabs planId={plan._id} tabs={plan.status !== "ready" ? TABS.slice(0, 1) : isOwner ? OWNER_TABS : TABS} />
       {children}
-      {/* The advice notice (FR-12), once here so every page of the plan shows it. */}
+      {/* The advice notice, once here so every page of the plan shows it. */}
       <p role="note" className="mt-6 max-w-3xl text-sm text-muted-foreground lg:mt-8">
         Guidance only. Check each step and fee with the official source before you pay or sign anything. This is not legal or financial
         advice.

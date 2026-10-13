@@ -13,7 +13,7 @@ import {
 import { formatAed, formatAedRange, formatDate } from "@/lib/format";
 import { reportColors } from "@/lib/theme-colors";
 
-// The plan as a PDF report (FR-40), drawn with @react-pdf/renderer. It uses
+// The plan as a PDF report (FR-13), drawn with @react-pdf/renderer. It uses
 // the built-in Helvetica font, so no font files are needed. It looks like the
 // app: black ink on white paper, thin rules, small uppercase field labels, an
 // OFFICIAL mark in gold on checked fees and green for finished steps. The
@@ -296,7 +296,7 @@ export function PlanReport({ plan, sources }) {
           </>
         )}
 
-        {/* The advice notice (FR-12), on every page. */}
+        {/* The advice notice, on every page. */}
         <View style={s.footer} fixed>
           <Text>Guidance only. Check each step and fee with the official source. Not legal or financial advice.</Text>
           <Text render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`} />
