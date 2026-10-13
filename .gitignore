@@ -28,7 +28,7 @@
 
 # docs kept on this computer only, except the project report
 /docs/*
-!/docs/UG project template.docx
+!/docs/Project-Documentation.docx
 
 # next.js
 /.next/

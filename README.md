@@ -27,7 +27,7 @@ All demo accounts use the password `Demo2026pass`:
 
 ## Docs
 
-The full project report is in [docs/UG project template.docx](docs/UG%20project%20template.docx).
+The full project report is in [docs/Project-Documentation.docx](docs/Project-Documentation.docx).
 
 ## Stack
 
