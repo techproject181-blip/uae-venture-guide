@@ -9,14 +9,14 @@
 const RESPONSES_URL = "https://api.openai.com/v1/responses";
 
 // The balanced model. gpt-6-luna is cheaper, and gpt-6-astra the most capable.
-const DEFAULT_MODEL = "gpt-6.1-sol";
+const DEFAULT_MODEL = "gpt-6-luna";
 
 /** Whether the AI is connected: true when OPENAI_API_KEY is set. */
 export function aiEnabled() {
   return Boolean(process.env.OPENAI_API_KEY?.trim());
 }
 
-/** The model to ask: OPENAI_MODEL, or gpt-6.1-sol when it is not set. */
+/** The model to ask: OPENAI_MODEL, or gpt-6-luna when it is not set. */
 export function aiModel() {
   return process.env.OPENAI_MODEL?.trim() || DEFAULT_MODEL;
 }
