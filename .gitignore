@@ -12,16 +12,6 @@
 
 # testing
 /coverage
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-
-# every test and its setup, kept on this computer only
-/tests/
-/src/**/*.test.js
-/playwright.config.mjs
-/vitest.config.mjs
 
 # pushes to the client's repository, kept on this computer only
 /scripts/push-client.mjs

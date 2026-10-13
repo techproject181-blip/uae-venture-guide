@@ -23,6 +23,7 @@ The demo accounts use the password `Demo2026pass`:
 - `npm run dev` starts the app
 - `npm run seed` adds demo data and removes old demo accounts
 - `npm run lint` checks the code
+- `npx vitest run` runs the tests (the database tests use the MongoDB in `.env.local`)
 - `npm run build` builds for production
 
 ## Docs
