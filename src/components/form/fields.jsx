@@ -64,11 +64,7 @@ export function TextField({ id, label, hint, error, className, ...inputProps }) 
 export function ReadOnlyField({ id, label, hint, value, title = "This cannot be changed.", className }) {
   return (
     <Field id={id} label={label} hint={hint} className={className}>
-      <p
-        id={id}
-        title={title}
-        className={cn(controlClass, "flex h-11 items-center gap-2 bg-ink-50 opacity-60 cursor-not-allowed")}
-      >
+      <p id={id} title={title} className={cn(controlClass, "flex h-11 items-center gap-2 bg-ink-50 opacity-60 cursor-not-allowed")}>
         <Lock className="size-4 shrink-0 text-ink-400" aria-hidden="true" />
         <span className="truncate">{value}</span>
       </p>

@@ -9,7 +9,7 @@ You need Node.js 24 and a MongoDB Atlas database (free cluster is fine).
 1. Copy `.env.example` to `.env.local`. Fill in `MONGODB_URI` and `JWT_SECRET`. Add `OPENAI_API_KEY` if you want ChatGPT to write the roadmaps and answers; without it the app runs in sample mode.
 2. `npm install`
 3. `npm run seed` (adds demo data)
-4. `npm run dev`, then open http://localhost:3000
+4. `npm run dev`, then open <http://localhost:3000>
 
 All demo accounts use the password `Demo2026pass`:
 
