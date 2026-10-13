@@ -1,6 +1,6 @@
+import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { ListPanel, PageHeader, Panel } from "@/components/layout";
-import { OffLink } from "@/components/off-link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -28,12 +28,11 @@ export function NextStep({ title, href, linkText, children }) {
     <Panel title="Next step" className="border-primary/25">
       <h3 className="font-semibold text-pretty">{title}</h3>
       {children && <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">{children}</div>}
-      {/* Switched off while the submission build stops at the dashboard (lib/limited-mode.js). */}
       {href && (
-        <OffLink href={href} className={buttonVariants({ variant: "outline", size: "lg", className: "mt-5 w-full" })}>
+        <Link href={href} className={buttonVariants({ variant: "outline", size: "lg", className: "mt-5 w-full" })}>
           {linkText}
           <ArrowRight aria-hidden="true" />
-        </OffLink>
+        </Link>
       )}
     </Panel>
   );
@@ -54,9 +53,9 @@ export function Shortcuts({ title = "Shortcuts", items }) {
             </span>
           )}
           <div className="min-w-0 flex-1">
-            <OffLink href={href} className={rowLink}>
+            <Link href={href} className={rowLink}>
               {label}
-            </OffLink>
+            </Link>
             {detail && <p className="mt-0.5 text-sm text-muted-foreground tabular-nums">{detail}</p>}
           </div>
           <ChevronRight className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
@@ -72,7 +71,7 @@ export function Shortcuts({ title = "Shortcuts", items }) {
  */
 export function TextLink({ href, className, children }) {
   return (
-    <OffLink
+    <Link
       href={href}
       className={cn(
         "-my-2.5 inline-flex min-h-11 items-center rounded-xs text-sm font-medium text-foreground decoration-primary underline underline-offset-4 outline-none hover:decoration-2 focus-visible:ring-3 focus-visible:ring-ring/50",
@@ -80,7 +79,7 @@ export function TextLink({ href, className, children }) {
       )}
     >
       {children}
-    </OffLink>
+    </Link>
   );
 }
 
