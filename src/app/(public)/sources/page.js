@@ -5,12 +5,9 @@ import { Pagination } from "@/components/pagination";
 import { SourceCard } from "@/components/source-card";
 import { Button } from "@/components/ui/button";
 import { EMIRATES, SOURCE_CATEGORIES, valuesOf } from "@/lib/constants";
-import { connectDB } from "@/lib/db";
-import { Source } from "@/models/Source";
+import { SOURCES_PER_PAGE, searchSources } from "@/lib/cache";
 
 export const metadata = { title: "Official sources" };
-
-const PAGE_SIZE = 20;
 
 const controlClass =
   "h-11 w-full rounded-lg border border-input bg-card px-3 text-base outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50";
@@ -21,21 +18,8 @@ export default async function SourcesPage({ searchParams }) {
   const emirate = valuesOf(EMIRATES).includes(params.emirate) ? params.emirate : "";
   const category = valuesOf(SOURCE_CATEGORIES).includes(params.category) ? params.category : "";
 
-  // Federal sources apply in every emirate, so they show with any emirate filter.
-  const query = { active: true };
-  if (q) query.$text = { $search: q };
-  if (emirate) query.emirate = { $in: [emirate, null] };
-  if (category) query.categories = category;
-
-  await connectDB();
-  const total = await Source.countDocuments(query);
-  // A page past the end shows the last page instead.
-  const page = Math.min(Math.max(1, Number.parseInt(params.page, 10) || 1), Math.max(1, Math.ceil(total / PAGE_SIZE)));
-  const sources = await Source.find(query, q ? { score: { $meta: "textScore" } } : {})
-    .sort(q ? { score: { $meta: "textScore" }, _id: 1 } : { emirate: 1, title: 1, _id: 1 })
-    .skip((page - 1) * PAGE_SIZE)
-    .limit(PAGE_SIZE)
-    .lean();
+  // Cached (lib/cache.js). A page past the end shows the last page instead.
+  const { sources, total, page } = await searchSources({ q, emirate, category, page: Number.parseInt(params.page, 10) || 1 });
   const filtered = Boolean(q || emirate || category);
   // The page links keep the search and filters.
   const pageHref = (n) => {
@@ -134,7 +118,7 @@ export default async function SourcesPage({ searchParams }) {
               </li>
             ))}
           </CardGrid>
-          <Pagination page={page} total={total} pageSize={PAGE_SIZE} href={pageHref} />
+          <Pagination page={page} total={total} pageSize={SOURCES_PER_PAGE} href={pageHref} />
         </>
       )}
     </>

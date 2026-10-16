@@ -6,7 +6,7 @@ import { SelectField, TextAreaField, TextField } from "@/components/form/fields"
 import { FormAlert } from "@/components/form/form-alert";
 import { SubmitButton } from "@/components/form/submit-button";
 import { useApiForm } from "@/components/form/use-api-form";
-import { sendJson } from "@/lib/form-helpers";
+import { apiRequest } from "@/lib/query";
 import { taskSchema } from "@/lib/schemas/plans";
 
 /** Adds a task to a plan, or edits `task` when one is given. `onDone` runs after a successful save. */
@@ -16,7 +16,7 @@ export function TaskForm({ planId, phases, task = null, onDone }) {
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: taskSchema,
     send: (data) =>
-      task ? sendJson("PATCH", `/api/plans/${planId}/tasks/${task._id}`, data) : sendJson("POST", `/api/plans/${planId}/tasks`, data),
+      task ? apiRequest("PATCH", `/api/plans/${planId}/tasks/${task._id}`, data) : apiRequest("POST", `/api/plans/${planId}/tasks`, data),
     onSuccess: (result, form) => {
       toast.success(task ? "Task saved." : "Task added.");
       if (!task) form.reset();

@@ -36,11 +36,11 @@ export function Wordmark({ className }) {
   );
 }
 
-/** The app name with its mark, linking home. */
-export function Logo({ className }) {
+/** The app name with its mark, linking home (to the dashboard inside the app). */
+export function Logo({ className, href = "/" }) {
   return (
     <Link
-      href="/"
+      href={href}
       className={cn(
         "group/logo inline-flex shrink-0 items-center gap-2 rounded-lg sm:gap-2.5 py-1 outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
         className,

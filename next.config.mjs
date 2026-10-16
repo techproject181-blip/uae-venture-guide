@@ -5,6 +5,8 @@ const nextConfig = {
   serverExternalPackages: ["@react-pdf/renderer"],
   // No floating Next.js button in the corner while developing.
   devIndicators: false,
+  // Lets pages cache public data with the "use cache" directive (see src/lib/cache.js).
+  cacheComponents: true,
 };
 
 export default nextConfig;

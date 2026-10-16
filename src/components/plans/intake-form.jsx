@@ -9,7 +9,7 @@ import { useApiForm } from "@/components/form/use-api-form";
 import { FormActions } from "@/components/layout";
 import { RoadLoader } from "@/components/loaders/road-loader";
 import { EMIRATES, JURISDICTION_PREFERENCES, SECTORS } from "@/lib/constants";
-import { postJson } from "@/lib/form-helpers";
+import { apiRequest } from "@/lib/query";
 import { intakeSchema } from "@/lib/schemas/plans";
 
 /** The questions that a new plan's roadmap is built from. */
@@ -17,7 +17,7 @@ export function IntakeForm() {
   const router = useRouter();
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: intakeSchema,
-    send: (data) => postJson("/api/plans", data),
+    send: (data) => apiRequest("POST", "/api/plans", data),
     onSuccess: (result) => router.push(`/plans/${result.id}`),
   });
 

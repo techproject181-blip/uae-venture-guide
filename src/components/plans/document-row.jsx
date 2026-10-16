@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { ExternalLink } from "lucide-react";
 import { toast } from "sonner";
-import { sendJson } from "@/lib/form-helpers";
+import { apiRequest, useApiMutation } from "@/lib/query";
 import { cn } from "@/lib/utils";
 
 /** One document in the checklist. The owner ticks it off once they have it. */
@@ -13,13 +13,14 @@ export function DocumentRow({ planId, document, source, canEdit }) {
   // The tick the owner just made, shown until the saved plan comes back.
   const [pending, setPending] = useState(null);
   const [, startTransition] = useTransition();
+  const { mutateAsync } = useApiMutation((obtained) => apiRequest("PATCH", `/api/plans/${planId}/documents/${document._id}`, { obtained }));
   const obtained = pending ?? document.obtained;
   const id = `doc-${document._id}`;
 
   async function toggle(event) {
     const next = event.target.checked;
     setPending(next);
-    const result = await sendJson("PATCH", `/api/plans/${planId}/documents/${document._id}`, { obtained: next });
+    const result = await mutateAsync(next);
     if (!result.ok) {
       setPending(null);
       toast.error(result.error ?? "Something went wrong. Please try again.");

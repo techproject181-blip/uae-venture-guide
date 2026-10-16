@@ -12,7 +12,7 @@ import { Stamp } from "@/components/stamp";
 import { StatusBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
 import { TASK_STATUSES } from "@/lib/constants";
-import { sendJson } from "@/lib/form-helpers";
+import { apiRequest, useApiMutation } from "@/lib/query";
 import { cn } from "@/lib/utils";
 
 /**
@@ -32,6 +32,7 @@ export function TaskRow({ planId, task, number, phases, sources, canEdit }) {
   // True once the owner marks this step done here, so the DONE stamp is pressed on.
   const [pressed, setPressed] = useState(false);
   const [, startTransition] = useTransition();
+  const { mutateAsync } = useApiMutation((status) => apiRequest("PATCH", `/api/plans/${planId}/tasks/${task._id}/status`, { status }));
 
   const status = pendingStatus ?? task.status;
   const done = status === "done";
@@ -40,7 +41,7 @@ export function TaskRow({ planId, task, number, phases, sources, canEdit }) {
   async function saveStatus(next) {
     setPendingStatus(next);
     setPressed(next === "done");
-    const result = await sendJson("PATCH", `/api/plans/${planId}/tasks/${task._id}/status`, { status: next });
+    const result = await mutateAsync(next);
     if (!result.ok) {
       setPendingStatus(null);
       setPressed(false);

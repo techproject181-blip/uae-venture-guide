@@ -8,14 +8,14 @@ import { FormAlert } from "@/components/form/form-alert";
 import { SubmitButton } from "@/components/form/submit-button";
 import { useApiForm } from "@/components/form/use-api-form";
 import { Stamp } from "@/components/stamp";
-import { postJson } from "@/lib/form-helpers";
+import { apiRequest } from "@/lib/query";
 import { forgotPasswordSchema, resetPasswordSchema } from "@/lib/schemas/auth";
 
 export function ForgotPasswordForm() {
   const [sent, setSent] = useState(false);
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: forgotPasswordSchema,
-    send: (data) => postJson("/api/auth/forgot-password", data),
+    send: (data) => apiRequest("POST", "/api/auth/forgot-password", data),
     onSuccess: () => setSent(true),
   });
 
@@ -43,7 +43,7 @@ export function ResetPasswordForm({ token }) {
   const router = useRouter();
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: resetPasswordSchema,
-    send: (data) => postJson("/api/auth/reset-password", data),
+    send: (data) => apiRequest("POST", "/api/auth/reset-password", data),
     onSuccess: () => {
       toast.success("Your password is changed. Please sign in.");
       router.replace("/sign-in");

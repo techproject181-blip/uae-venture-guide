@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
+import { DASHBOARD_ONLY, DISABLED_CLASS, DISABLED_TITLE, isAllowedPath } from "@/lib/limited-mode";
 import { cn } from "@/lib/utils";
 
 /**
@@ -11,7 +12,7 @@ import { cn } from "@/lib/utils";
  * tablet row, a single line that scrolls sideways, where the current section
  * sits on a pale emerald pill that slides the same way.
  */
-export function NavLinks({ links, className, compact = false }) {
+export function NavLinks({ links, className, compact = false, limited = false }) {
   const pathname = usePathname();
   const layoutId = compact ? "nav-pill" : "nav-line";
 
@@ -19,12 +20,21 @@ export function NavLinks({ links, className, compact = false }) {
     <nav aria-label="Main" className={cn(compact ? "no-scrollbar gap-1 overflow-x-auto" : "gap-1", className)}>
       {links.map(({ href, label, count }) => {
         const active = pathname === href || pathname.startsWith(`${href}/`);
+        // The submission build stops at the dashboard (lib/limited-mode.js):
+        // the other links stay visible but are greyed out and cannot be used.
+        // Only inside the signed-in app (`limited`); the public header stays open.
+        const off = limited && DASHBOARD_ONLY && !isAllowedPath(href);
         return (
           <Link
             key={href}
             href={href}
+            onClick={off ? (event) => event.preventDefault() : undefined}
             aria-current={active ? "page" : undefined}
+            aria-disabled={off ? "true" : undefined}
+            tabIndex={off ? -1 : undefined}
+            title={off ? DISABLED_TITLE : undefined}
             className={cn(
+              off && DISABLED_CLASS,
               "relative flex shrink-0 items-center whitespace-nowrap outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset",
               compact ? "my-2 rounded-full px-3.5 py-2 text-sm" : "px-3 text-sm",
               "transition-colors duration-200",

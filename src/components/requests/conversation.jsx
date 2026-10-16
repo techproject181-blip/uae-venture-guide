@@ -1,11 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Lock, Send } from "lucide-react";
 import { FormAlert } from "@/components/form/form-alert";
 import { Spinner } from "@/components/loaders/spinner";
 import { Button } from "@/components/ui/button";
-import { sendJson } from "@/lib/form-helpers";
+import { apiRequest, queryKeys, useApiMutation } from "@/lib/query";
 import { cn } from "@/lib/utils";
 
 // How often the page asks for new messages while the tab is in view. The app
@@ -78,7 +79,7 @@ export function Conversation({
   const [canSend, setCanSend] = useState(initialCanSend);
   const [closedNote, setClosedNote] = useState(closedText ?? "This conversation is closed.");
   const [draft, setDraft] = useState("");
-  const [sending, setSending] = useState(false);
+  const { mutateAsync: sendMessage, isPending: sending } = useApiMutation((body) => apiRequest("POST", apiUrl, { body }));
   const [error, setError] = useState(null);
   const logRef = useRef(null);
   // The newest time among the messages the server listed (the first load and
@@ -94,51 +95,51 @@ export function Conversation({
     if (log) log.scrollTop = log.scrollHeight;
   }, [messages.length]);
 
+  // Set once the server says the conversation is gone (404), so asking stops.
+  const [gone, setGone] = useState(false);
+
+  // One ask for new messages: from a little before the newest one seen so far.
+  // Repeats are skipped by merge(). Never throws: a failed ask just waits for the next tick.
   const poll = useCallback(
-    async (signal) => {
+    async ({ signal } = {}) => {
       const after = cursor.current && new Date(new Date(cursor.current).getTime() - OVERLAP_MS).toISOString();
       const query = after ? `?after=${encodeURIComponent(after)}` : "";
+      let result;
       try {
-        const response = await fetch(`${apiUrl}${query}`, { signal, cache: "no-store" });
-        if (!response.ok) return response.status === 404 ? "gone" : null;
-        const body = await response.json();
-        cursor.current = newestTime(body.messages, cursor.current);
-        setMessages((list) => merge(list, body.messages));
-        setCanSend(body.canSend);
-        if (body.closedText) setClosedNote(body.closedText);
-        return body.canSend ? null : "closed";
+        result = await apiRequest("GET", `${apiUrl}${query}`, undefined, { signal });
       } catch {
-        return null; // offline or cancelled: try again on the next tick
+        return null; // cancelled: try again on the next tick
       }
+      if (!result.ok) {
+        if (result.status === 404) setGone(true);
+        return null; // offline or a server error: try again on the next tick
+      }
+      cursor.current = newestTime(result.messages, cursor.current);
+      setMessages((list) => merge(list, result.messages));
+      setCanSend(result.canSend);
+      if (result.closedText) setClosedNote(result.closedText);
+      return null;
     },
     [apiUrl],
   );
 
   // Ask for new messages every few seconds while the tab is visible, and at
   // once when it comes back into view. Stop when the conversation is closed.
-  useEffect(() => {
-    if (!canSend) return undefined;
-    const controller = new AbortController();
-    let busy = false;
-    let stopped = false;
-
-    async function tick() {
-      if (busy || stopped || document.visibilityState !== "visible") return;
-      busy = true;
-      const result = await poll(controller.signal);
-      busy = false;
-      if (result) stopped = true;
-    }
-
-    const timer = setInterval(tick, POLL_EVERY_MS);
-    const onVisible = () => document.visibilityState === "visible" && tick();
-    document.addEventListener("visibilitychange", onVisible);
-    return () => {
-      controller.abort();
-      clearInterval(timer);
-      document.removeEventListener("visibilitychange", onVisible);
-    };
-  }, [canSend, poll]);
+  // React Query skips an ask while one is still running, and pauses the
+  // interval while the tab is hidden.
+  const { refetch } = useQuery({
+    queryKey: queryKeys.conversation(apiUrl),
+    queryFn: poll,
+    enabled: canSend && !gone,
+    // The page already has the messages, so do not ask on mount; the first ask comes after one interval.
+    initialData: null,
+    staleTime: POLL_EVERY_MS,
+    gcTime: 0,
+    refetchInterval: POLL_EVERY_MS,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: "always",
+    retry: false,
+  });
 
   async function send() {
     const body = draft.trim();
@@ -147,9 +148,7 @@ export function Conversation({
       return;
     }
     setError(null);
-    setSending(true);
-    const result = await sendJson("POST", apiUrl, { body });
-    setSending(false);
+    const result = await sendMessage(body);
     if (result.status === 409) {
       // The conversation closed after the page loaded; the answer says why.
       setCanSend(false);
@@ -163,7 +162,7 @@ export function Conversation({
     setDraft("");
     setMessages((list) => merge(list, [result.message]));
     // Ask at once, so a message the other person sent meanwhile shows up now.
-    poll();
+    if (!gone) refetch();
   }
 
   return (

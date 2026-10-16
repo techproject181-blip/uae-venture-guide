@@ -1,12 +1,10 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { SignInForm } from "@/components/auth/sign-in-form";
 
 export const metadata = { title: "Sign in" };
 
-export default async function SignInPage({ searchParams }) {
-  const { error } = await searchParams;
-  const notice = error === "suspended" ? "Your account is suspended. Please contact the administrator." : null;
-
+export default function SignInPage({ searchParams }) {
   return (
     <>
       <h1 className="text-[1.875rem] leading-[1.15] sm:text-[2.25rem]">Sign in</h1>
@@ -16,7 +14,16 @@ export default async function SignInPage({ searchParams }) {
           Create an account
         </Link>
       </p>
-      <SignInForm notice={notice} />
+      {/* The notice comes from the address, read at request time; the plain form shows until then. */}
+      <Suspense fallback={<SignInForm />}>
+        <FormWithNotice searchParams={searchParams} />
+      </Suspense>
     </>
   );
+}
+
+async function FormWithNotice({ searchParams }) {
+  const { error } = await searchParams;
+  const notice = error === "suspended" ? "Your account is suspended. Please contact the administrator." : null;
+  return <SignInForm notice={notice} />;
 }

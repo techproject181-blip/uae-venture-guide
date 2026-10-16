@@ -1,4 +1,5 @@
 import { ApiError, readBody, requireApiUser, route } from "@/lib/api";
+import { TAGS, expireTags } from "@/lib/cache";
 import { connectDB } from "@/lib/db";
 import { postFromForm, postSchema } from "@/lib/schemas/community";
 import { Post } from "@/models/Post";
@@ -21,6 +22,7 @@ export const PATCH = route(async (request, { params }) => {
   post.set({ title, body, images });
   post.chart = chart; // undefined removes the chart
   await post.save();
+  expireTags(TAGS.posts, TAGS.post(String(post._id)));
   return Response.json({ ok: true });
 });
 
@@ -29,5 +31,6 @@ export const DELETE = route(async (request, { params }) => {
   const user = await requireApiUser("mentor");
   const post = await findOwnPost(params, user);
   await post.deleteOne();
+  expireTags(TAGS.posts, TAGS.post(String(post._id)));
   return Response.json({ ok: true });
 });

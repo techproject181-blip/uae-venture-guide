@@ -7,7 +7,7 @@ import { FormAlert } from "@/components/form/form-alert";
 import { SubmitButton } from "@/components/form/submit-button";
 import { useApiForm } from "@/components/form/use-api-form";
 import { EMIRATES, SOURCE_CATEGORIES } from "@/lib/constants";
-import { sendJson } from "@/lib/form-helpers";
+import { apiRequest } from "@/lib/query";
 import { toDateInput } from "@/lib/format";
 import { sourceSchema } from "@/lib/schemas/sources";
 
@@ -18,7 +18,8 @@ export function SourceForm({ source = null }) {
   const router = useRouter();
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: sourceSchema,
-    send: (data) => (source ? sendJson("PATCH", `/api/admin/sources/${source._id}`, data) : sendJson("POST", "/api/admin/sources", data)),
+    send: (data) =>
+      source ? apiRequest("PATCH", `/api/admin/sources/${source._id}`, data) : apiRequest("POST", "/api/admin/sources", data),
     onSuccess: (result) => {
       toast.success(source ? "Source saved." : "Source added.");
       if (source) router.refresh();

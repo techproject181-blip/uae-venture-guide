@@ -1,16 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useConfirm } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
-import { sendJson } from "@/lib/form-helpers";
+import { apiRequest, useApiMutation } from "@/lib/query";
 
 /** The plan owner accepts or declines a funder's interest. Accepting opens the full plan to that funder. */
 export function InterestActions({ interestId }) {
   const router = useRouter();
-  const [pending, setPending] = useState(false);
+  const mutation = useApiMutation((action) => apiRequest("PATCH", `/api/interests/${interestId}`, { action }));
+  // The action being saved ("accept" or "decline"), or false.
+  const pending = mutation.isPending && mutation.variables;
   const confirm = useConfirm();
 
   async function act(action) {
@@ -23,9 +24,7 @@ export function InterestActions({ interestId }) {
       }))
     )
       return;
-    setPending(action);
-    const result = await sendJson("PATCH", `/api/interests/${interestId}`, { action });
-    setPending(false);
+    const result = await mutation.mutateAsync(action);
     if (!result.ok) {
       toast.error(result.error ?? "Something went wrong. Please try again.");
       return;

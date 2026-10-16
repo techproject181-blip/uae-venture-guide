@@ -6,7 +6,7 @@ import { SelectField, TextAreaField, TextField } from "@/components/form/fields"
 import { FormAlert } from "@/components/form/form-alert";
 import { SubmitButton } from "@/components/form/submit-button";
 import { useApiForm } from "@/components/form/use-api-form";
-import { postJson } from "@/lib/form-helpers";
+import { apiRequest } from "@/lib/query";
 import { mentorRequestSchema } from "@/lib/schemas/community";
 
 /** An entrepreneur asks this mentor for guidance, and may attach one of their plans. */
@@ -14,7 +14,7 @@ export function RequestForm({ mentorId, mentorName, plans }) {
   const router = useRouter();
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: mentorRequestSchema,
-    send: (data) => postJson("/api/requests", data),
+    send: (data) => apiRequest("POST", "/api/requests", data),
     onSuccess: () => {
       toast.success(`Request sent to ${mentorName}.`);
       router.push("/requests");

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { ApiError, readBody, requireApiUser, route } from "@/lib/api";
+import { TAGS, expireTags } from "@/lib/cache";
 import { connectDB } from "@/lib/db";
 import { appUrl, sendEmail } from "@/lib/email";
 import { FunderProfile } from "@/models/FunderProfile";
@@ -44,6 +45,8 @@ export const PATCH = route(async (request, { params }) => {
   if (rejected) user.rejected = true;
   if (approved) user.rejected = false;
   await user.save();
+  // A mentor appears in the directory, and their posts in the feed, only while active.
+  if (user.role === "mentor") expireTags(TAGS.mentors, TAGS.mentor(id), TAGS.posts);
 
   if (approved) {
     await sendEmail({

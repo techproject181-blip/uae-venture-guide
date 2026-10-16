@@ -3,6 +3,7 @@ import { Toaster } from "sonner";
 import { ConfirmProvider } from "@/components/confirm-dialog";
 import { MotionProvider } from "@/components/motion-provider";
 import { NavigationProgress } from "@/components/navigation-progress";
+import { QueryProvider } from "@/components/query-provider";
 import "./globals.css";
 
 // Geist for all text: clear at small sizes, with even figures for money.
@@ -28,9 +29,11 @@ export default function RootLayout({ children }) {
         >
           Skip to main content
         </a>
-        <MotionProvider>
-          <ConfirmProvider>{children}</ConfirmProvider>
-        </MotionProvider>
+        <QueryProvider>
+          <MotionProvider>
+            <ConfirmProvider>{children}</ConfirmProvider>
+          </MotionProvider>
+        </QueryProvider>
         <Toaster position="top-right" closeButton toastOptions={{ classNames: { toast: "rounded-xl! border-border! shadow-float!" } }} />
       </body>
     </html>

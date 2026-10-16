@@ -32,4 +32,6 @@ The full project report is in [docs/Project-Documentation.docx](docs/Project-Doc
 
 ## Stack
 
-Next.js 16 (JavaScript), Tailwind CSS v4, shadcn/ui, Motion, MongoDB Atlas with Mongoose, bcrypt and JWT cookies, Zod, Nodemailer, Recharts, @react-pdf/renderer and the OpenAI API (optional).
+Next.js 16 (JavaScript), TanStack Query, Tailwind CSS v4, shadcn/ui, Motion, MongoDB Atlas with Mongoose, bcrypt and JWT cookies, Zod, Nodemailer, Recharts, @react-pdf/renderer and the OpenAI API (optional).
+
+In the browser, every API call goes through one helper, `src/lib/query.js`, built on TanStack Query. On the server, public data (official sources, mentors and published posts) is cached through `src/lib/cache.js` with Next's `use cache`: sources for a few hours, mentors and posts for a few minutes, and each is cleared as soon as an admin or the author changes it.

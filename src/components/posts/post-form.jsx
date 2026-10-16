@@ -6,7 +6,7 @@ import { SelectField, TextAreaField, TextField } from "@/components/form/fields"
 import { FormAlert } from "@/components/form/form-alert";
 import { SubmitButton } from "@/components/form/submit-button";
 import { useApiForm } from "@/components/form/use-api-form";
-import { sendJson } from "@/lib/form-helpers";
+import { apiRequest } from "@/lib/query";
 import { postSchema } from "@/lib/schemas/community";
 import { FormPart } from "@/components/form/form-part";
 import { FormActions } from "@/components/layout";
@@ -23,7 +23,7 @@ export function PostForm({ post = null }) {
   const router = useRouter();
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: postSchema,
-    send: (data) => (post ? sendJson("PATCH", `/api/posts/${post._id}`, data) : sendJson("POST", "/api/posts", data)),
+    send: (data) => (post ? apiRequest("PATCH", `/api/posts/${post._id}`, data) : apiRequest("POST", "/api/posts", data)),
     onSuccess: (result) => {
       toast.success(post ? "Post saved." : "Post published.");
       router.push(`/posts/${post ? post._id : result.id}`);

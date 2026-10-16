@@ -10,7 +10,7 @@ import { Markdown } from "@/components/posts/markdown";
 import { PostChart } from "@/components/posts/post-chart";
 import { buttonVariants } from "@/components/ui/button";
 import { toPlain } from "@/lib/api";
-import { getMentor } from "@/lib/community";
+import { getMentorProfile, getPostsByAuthor, getPublicPost } from "@/lib/cache";
 import { connectDB } from "@/lib/db";
 import { formatDate } from "@/lib/format";
 import { getCurrentUser } from "@/lib/session";
@@ -23,12 +23,10 @@ const linkClass = "font-medium text-foreground decoration-primary underline unde
 
 export default async function PostPage({ params }) {
   const { id } = await params;
-  await connectDB();
-  const raw = await Post.findById(id)
-    .populate("authorId", "name status")
-    .lean()
-    .catch(() => null);
   const viewer = await getCurrentUser();
+  // Posts everyone may read come from the cache (lib/cache.js). Hidden posts
+  // and posts by inactive authors are read fresh, for their author and administrators.
+  const raw = (await getPublicPost(id)) ?? (viewer ? await findAnyPost(id) : null);
   const isAdmin = viewer?.role === "admin";
   const isAuthor = raw && viewer && String(raw.authorId?._id) === viewer.id;
   // While its author's account is not active, a post is gone for everyone
@@ -45,14 +43,7 @@ export default async function PostPage({ params }) {
 
   // The author's mentor profile (only listed while their account is active) and their other posts.
   const [mentor, others] = authorId
-    ? await Promise.all([
-        getMentor(authorId),
-        Post.find({ authorId, status: "published", _id: { $ne: post._id } })
-          .select("title createdAt")
-          .sort({ createdAt: -1 })
-          .limit(4)
-          .lean(),
-      ])
+    ? await Promise.all([getMentorProfile(authorId), getPostsByAuthor(authorId, { exceptId: post._id, limit: 4 })])
     : [null, []];
 
   return (
@@ -119,7 +110,7 @@ export default async function PostPage({ params }) {
                   </Link>
                 }
               >
-                {toPlain(others).map((other) => (
+                {others.map((other) => (
                   <li key={other._id} className="relative px-5 py-4 hover:bg-ink-50/70 sm:px-6">
                     <Link
                       href={`/posts/${other._id}`}
@@ -176,4 +167,13 @@ export default async function PostPage({ params }) {
       </Split>
     </>
   );
+}
+
+/** Any post with its author's name and status, or null. Never cached. */
+async function findAnyPost(id) {
+  await connectDB();
+  return Post.findById(id)
+    .populate("authorId", "name status")
+    .lean()
+    .catch(() => null);
 }

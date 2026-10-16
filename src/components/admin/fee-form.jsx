@@ -7,7 +7,7 @@ import { FormAlert } from "@/components/form/form-alert";
 import { SubmitButton } from "@/components/form/submit-button";
 import { useApiForm } from "@/components/form/use-api-form";
 import { EMIRATES, FEE_KINDS, JURISDICTIONS, RECURRENCES } from "@/lib/constants";
-import { sendJson } from "@/lib/form-helpers";
+import { apiRequest } from "@/lib/query";
 import { toDateInput } from "@/lib/format";
 import { feeSchema } from "@/lib/schemas/sources";
 
@@ -19,7 +19,7 @@ export function FeeForm({ sourceId, fee = null, defaultEmirate = null }) {
   const router = useRouter();
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: feeSchema,
-    send: (data) => (fee ? sendJson("PATCH", `/api/admin/fees/${fee._id}`, data) : sendJson("POST", "/api/admin/fees", data)),
+    send: (data) => (fee ? apiRequest("PATCH", `/api/admin/fees/${fee._id}`, data) : apiRequest("POST", "/api/admin/fees", data)),
     onSuccess: (result, form) => {
       toast.success(fee ? "Fee reference saved." : "Fee reference added.");
       if (fee) {

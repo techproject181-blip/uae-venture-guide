@@ -1,23 +1,22 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { postJson } from "@/lib/form-helpers";
+import { apiRequest, useApiMutation } from "@/lib/query";
 
 /** Signs out, then goes to the sign-in page. `pending` is true while it runs. */
 export function useSignOut() {
   const router = useRouter();
-  const [pending, setPending] = useState(false);
+  const { mutateAsync, isPending, isSuccess } = useApiMutation(() => apiRequest("POST", "/api/auth/sign-out"));
+  // Stays busy after success too, until the sign-in page has loaded.
+  const pending = isPending || isSuccess;
 
   async function signOut() {
-    setPending(true);
-    const result = await postJson("/api/auth/sign-out");
+    const result = await mutateAsync();
     // If the cookie was not removed, the user is still signed in, so stay on this page.
     if (!result.ok) {
-      setPending(false);
       toast.error(result.error ?? "Could not sign out. Please try again.");
       return;
     }

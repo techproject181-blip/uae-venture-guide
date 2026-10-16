@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { DeleteButton } from "@/components/delete-button";
 import { useConfirm } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
-import { postJson } from "@/lib/form-helpers";
+import { apiRequest, useApiMutation } from "@/lib/query";
 
 /**
  * "New version" makes a fresh roadmap from the same answers and keeps this one;
@@ -15,7 +14,7 @@ import { postJson } from "@/lib/form-helpers";
  */
 export function PlanActions({ planId, failed = false }) {
   const router = useRouter();
-  const [pending, setPending] = useState(false);
+  const { mutateAsync, isPending: pending } = useApiMutation(() => apiRequest("POST", `/api/plans/${planId}/regenerate`));
   const confirm = useConfirm();
 
   async function regenerate() {
@@ -29,9 +28,7 @@ export function PlanActions({ planId, failed = false }) {
       }))
     )
       return;
-    setPending(true);
-    const result = await postJson(`/api/plans/${planId}/regenerate`);
-    setPending(false);
+    const result = await mutateAsync();
     if (!result.ok) {
       toast.error(result.error ?? "Something went wrong. Please try again.");
       return;

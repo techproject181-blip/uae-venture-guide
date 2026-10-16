@@ -1,21 +1,4 @@
-// Small helpers for the forms and buttons that run in the browser.
-
-/** Sends JSON to one of the app's API routes. Returns the response body plus `ok`. */
-export async function sendJson(method, url, data) {
-  try {
-    const response = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: data === undefined ? undefined : JSON.stringify(data),
-    });
-    const body = await response.json().catch(() => ({}));
-    return { ok: response.ok, status: response.status, ...body };
-  } catch {
-    return { ok: false, error: "Could not reach the server. Check your connection and try again." };
-  }
-}
-
-export const postJson = (url, data) => sendJson("POST", url, data);
+// Small helpers for the forms that run in the browser. Requests go through @/lib/query.
 
 /** Reads a form into an object. A name used several times (a checkbox group) becomes a list. */
 export function formValues(form) {

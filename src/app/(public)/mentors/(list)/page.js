@@ -3,8 +3,7 @@ import { CardGrid } from "@/components/layout";
 import { MentorCard } from "@/components/mentors/mentor-card";
 import { EmptyState, PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
-import { toPlain } from "@/lib/api";
-import { listMentors } from "@/lib/community";
+import { getMentors } from "@/lib/cache";
 import { EMIRATES, EXPERTISE, valuesOf } from "@/lib/constants";
 
 export const metadata = { title: "Mentors" };
@@ -18,7 +17,7 @@ export default async function MentorsPage({ searchParams }) {
   const params = await searchParams;
   const expertise = valuesOf(EXPERTISE).includes(params.expertise) ? params.expertise : "";
   const emirate = valuesOf(EMIRATES).includes(params.emirate) ? params.emirate : "";
-  const mentors = toPlain(await listMentors({ expertise, emirate }));
+  const mentors = await getMentors({ expertise, emirate });
   const filtered = Boolean(expertise || emirate);
 
   return (

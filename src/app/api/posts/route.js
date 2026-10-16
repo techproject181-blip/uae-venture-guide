@@ -1,4 +1,5 @@
 import { readBody, requireApiUser, route } from "@/lib/api";
+import { TAGS, expireTags } from "@/lib/cache";
 import { connectDB } from "@/lib/db";
 import { postFromForm, postSchema } from "@/lib/schemas/community";
 import { Post } from "@/models/Post";
@@ -10,5 +11,6 @@ export const POST = route(async (request) => {
 
   await connectDB();
   const post = await Post.create({ ...postFromForm(data), authorId: user.id });
+  expireTags(TAGS.posts);
   return Response.json({ id: String(post._id) }, { status: 201 });
 });

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { cacheLife } from "next/cache";
 import { LogoMark, Wordmark } from "@/components/logo";
 
 const LINKS = [
@@ -47,7 +48,9 @@ export function SiteFooter({ signedIn = false }) {
           </div>
         )}
         <div className={`flex flex-col-reverse items-center gap-2 py-4 md:flex-row md:justify-between ${signedIn ? "" : "border-t"}`}>
-          <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} UAE Venture Guide. All rights reserved.</p>
+          <p className="text-sm text-muted-foreground">
+            © <Year /> UAE Venture Guide. All rights reserved.
+          </p>
           {/* The signed-in header lists each role's own pages, not all of these, so signed-in users find them here. */}
           {signedIn ? (
             links
@@ -66,4 +69,11 @@ export function SiteFooter({ signedIn = false }) {
       </div>
     </footer>
   );
+}
+
+/** This year. Cached, so the footer can be part of a prerendered page; it is re-read daily. */
+async function Year() {
+  "use cache";
+  cacheLife("days");
+  return new Date().getFullYear();
 }

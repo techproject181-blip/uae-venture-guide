@@ -1,4 +1,5 @@
 import { ApiError, readBody, requireApiUser, route } from "@/lib/api";
+import { TAGS, expireTags } from "@/lib/cache";
 import { connectDB } from "@/lib/db";
 import { sourceSchema } from "@/lib/schemas/sources";
 import { FeeReference } from "@/models/FeeReference";
@@ -13,6 +14,7 @@ export const PATCH = route(async (request, { params }) => {
   await connectDB();
   const source = await Source.findByIdAndUpdate(id, data, { returnDocument: "after", runValidators: true });
   if (!source) throw new ApiError(404, "Source not found.");
+  expireTags(TAGS.sources);
   return Response.json({ id });
 });
 
@@ -25,5 +27,6 @@ export const DELETE = route(async (request, { params }) => {
   const source = await Source.findByIdAndDelete(id);
   if (!source) throw new ApiError(404, "Source not found.");
   await FeeReference.deleteMany({ sourceId: id });
+  expireTags(TAGS.sources);
   return Response.json({ ok: true });
 });

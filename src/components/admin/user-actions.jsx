@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useConfirm } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
-import { sendJson } from "@/lib/form-helpers";
+import { apiRequest, useApiMutation } from "@/lib/query";
 import { cn } from "@/lib/utils";
 
 // Which buttons each status shows (see user-status.js). Rejecting a new account
@@ -34,7 +33,7 @@ const ACTIONS = {
 /** The approve, reject, suspend and reactivate buttons for one user. `status` comes from userStatus(). */
 export function UserActions({ userId, status, className }) {
   const router = useRouter();
-  const [pending, setPending] = useState(false);
+  const { mutateAsync, isPending: pending } = useApiMutation((data) => apiRequest("PATCH", `/api/admin/users/${userId}`, data));
   const confirm = useConfirm();
 
   async function change(action) {
@@ -48,9 +47,7 @@ export function UserActions({ userId, status, className }) {
       }))
     )
       return;
-    setPending(true);
-    const result = await sendJson("PATCH", `/api/admin/users/${userId}`, { status: action.status });
-    setPending(false);
+    const result = await mutateAsync({ status: action.status });
     if (!result.ok) {
       toast.error(result.error ?? "Something went wrong. Please try again.");
       return;

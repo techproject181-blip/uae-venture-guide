@@ -8,7 +8,7 @@ import { FormAlert } from "@/components/form/form-alert";
 import { LoadingOverlay } from "@/components/loaders/loading-overlay";
 import { SubmitButton } from "@/components/form/submit-button";
 import { useApiForm } from "@/components/form/use-api-form";
-import { postJson } from "@/lib/form-helpers";
+import { apiRequest } from "@/lib/query";
 import { signInSchema } from "@/lib/schemas/auth";
 
 /** `notice` is a message shown before the first attempt, for example after a suspension. */
@@ -18,7 +18,7 @@ export function SignInForm({ notice = null }) {
   const [leaving, setLeaving] = useState(false);
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: signInSchema,
-    send: (data) => postJson("/api/auth/sign-in", data),
+    send: (data) => apiRequest("POST", "/api/auth/sign-in", data),
     onSuccess: (result) => {
       setLeaving(true);
       router.replace(result.redirectTo);

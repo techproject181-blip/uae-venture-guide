@@ -2,16 +2,14 @@ import { CardGrid } from "@/components/layout";
 import { EmptyState, PageHeader } from "@/components/page-header";
 import { Pagination } from "@/components/pagination";
 import { PostCard } from "@/components/posts/post-card";
-import { toPlain } from "@/lib/api";
-import { listPosts, POSTS_PER_PAGE } from "@/lib/community";
+import { getPublishedPosts } from "@/lib/cache";
+import { POSTS_PER_PAGE } from "@/lib/community";
 
 export const metadata = { title: "Experience posts" };
 
 export default async function PostsPage({ searchParams }) {
   const params = await searchParams;
-  const found = await listPosts({ page: Math.max(1, Number.parseInt(params.page, 10) || 1) });
-  const { total, page } = found;
-  const posts = toPlain(found.posts);
+  const { posts, total, page } = await getPublishedPosts(Math.max(1, Number.parseInt(params.page, 10) || 1));
 
   return (
     <>

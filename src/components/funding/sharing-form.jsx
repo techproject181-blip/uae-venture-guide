@@ -9,7 +9,7 @@ import { FormAlert } from "@/components/form/form-alert";
 import { SubmitButton } from "@/components/form/submit-button";
 import { useApiForm } from "@/components/form/use-api-form";
 import { Panel, Split } from "@/components/layout";
-import { sendJson } from "@/lib/form-helpers";
+import { apiRequest } from "@/lib/query";
 import { sharingSchema } from "@/lib/schemas/community";
 
 // What happens once the card is shared, in order. Interest is answered on the Requests page.
@@ -29,7 +29,7 @@ export function SharingForm({ planId, card, shared, notice }) {
   const [summary, setSummary] = useState(card.pitchSummary ?? "");
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: sharingSchema,
-    send: (data) => sendJson("PATCH", `/api/plans/${planId}/sharing`, data),
+    send: (data) => apiRequest("PATCH", `/api/plans/${planId}/sharing`, data),
     onSuccess: (result) => {
       toast.success(result.shared ? "Your plan is shared with funders." : "Your plan is no longer shared.");
       router.refresh();

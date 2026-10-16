@@ -8,7 +8,7 @@ import { FormAlert } from "@/components/form/form-alert";
 import { SubmitButton } from "@/components/form/submit-button";
 import { useApiForm } from "@/components/form/use-api-form";
 import { Button } from "@/components/ui/button";
-import { postJson } from "@/lib/form-helpers";
+import { apiRequest } from "@/lib/query";
 import { interestSchema } from "@/lib/schemas/community";
 
 /** "I'm interested" on a pitch card: opens a short message form, then sends it to the owner. */
@@ -17,7 +17,7 @@ export function InterestForm({ planId }) {
   const [open, setOpen] = useState(false);
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: interestSchema,
-    send: (data) => postJson(`/api/plans/${planId}/interest`, data),
+    send: (data) => apiRequest("POST", `/api/plans/${planId}/interest`, data),
     onSuccess: () => {
       toast.success("Interest sent. The owner will be emailed.");
       setOpen(false);

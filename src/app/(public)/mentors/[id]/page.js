@@ -8,12 +8,11 @@ import { RequestForm } from "@/components/mentors/request-form";
 import { StatusBadge } from "@/components/status-badge";
 import { buttonVariants } from "@/components/ui/button";
 import { toPlain } from "@/lib/api";
-import { getMentor } from "@/lib/community";
+import { getMentorProfile, getPostsByAuthor } from "@/lib/cache";
 import { EMIRATES, EXPERTISE, SECTORS, labelOf } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import { getCurrentUser } from "@/lib/session";
 import { Plan } from "@/models/Plan";
-import { Post } from "@/models/Post";
 
 export const metadata = { title: "Mentor" };
 
@@ -25,14 +24,14 @@ const STEPS = [
 
 export default async function MentorPage({ params }) {
   const { id } = await params;
-  const mentor = await getMentor(id);
+  const mentor = await getMentorProfile(id);
   if (!mentor) notFound();
 
   const viewer = await getCurrentUser();
   const canAsk = viewer?.role === "entrepreneur" && viewer.status === "active";
   const [plans, posts] = await Promise.all([
     canAsk ? Plan.find({ ownerId: viewer.id, status: "ready" }).select("title").sort({ updatedAt: -1 }).lean() : [],
-    Post.find({ authorId: id, status: "published" }).select("title createdAt").sort({ createdAt: -1 }).limit(5).lean(),
+    getPostsByAuthor(id),
   ]);
 
   const firstName = mentor.name.split(" ")[0];
@@ -149,7 +148,7 @@ export default async function MentorPage({ params }) {
               </Link>
             }
           >
-            {toPlain(posts).map((post) => (
+            {posts.map((post) => (
               <li
                 key={post._id}
                 className="relative flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-5 py-4 hover:bg-ink-50/70 sm:px-6"

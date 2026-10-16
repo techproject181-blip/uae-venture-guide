@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { SiteFooter } from "@/components/site-footer";
@@ -6,9 +7,7 @@ import { getCurrentUser } from "@/lib/session";
 
 export const metadata = { title: "Page not found" };
 
-export default async function NotFound() {
-  // Signed-in people land here too (a plan they cannot open), so the footer should not offer them Sign in.
-  const user = await getCurrentUser().catch(() => null);
+export default function NotFound() {
   return (
     <div className="flex min-h-dvh flex-col">
       <header className="border-b bg-card">
@@ -46,7 +45,16 @@ export default async function NotFound() {
           Back to the home page
         </Link>
       </main>
-      <SiteFooter signedIn={Boolean(user)} />
+      {/* Until the session is read, the visitor footer shows. */}
+      <Suspense fallback={<SiteFooter />}>
+        <Footer />
+      </Suspense>
     </div>
   );
+}
+
+/** Signed-in people land here too (a plan they cannot open), so the footer should not offer them Sign in. */
+async function Footer() {
+  const user = await getCurrentUser().catch(() => null);
+  return <SiteFooter signedIn={Boolean(user)} />;
 }

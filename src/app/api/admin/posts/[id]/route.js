@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { ApiError, readBody, requireApiUser, route } from "@/lib/api";
+import { TAGS, expireTags } from "@/lib/cache";
 import { connectDB } from "@/lib/db";
 import { Post } from "@/models/Post";
 
@@ -14,5 +15,6 @@ export const PATCH = route(async (request, { params }) => {
   await connectDB();
   const post = await Post.findByIdAndUpdate(id, { status: hidden ? "hidden" : "published" }, { returnDocument: "after" });
   if (!post) throw new ApiError(404, "Post not found.");
+  expireTags(TAGS.posts, TAGS.post(id));
   return Response.json({ status: post.status });
 });

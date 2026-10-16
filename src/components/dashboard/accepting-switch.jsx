@@ -3,21 +3,19 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { sendJson } from "@/lib/form-helpers";
+import { apiRequest, useApiMutation } from "@/lib/query";
 import { cn } from "@/lib/utils";
 
 /** A switch for the mentor: whether founders can send new guidance requests. */
 export function AcceptingSwitch({ initial }) {
   const router = useRouter();
   const [on, setOn] = useState(initial);
-  const [pending, setPending] = useState(false);
+  const { mutateAsync, isPending: pending } = useApiMutation((accepting) => apiRequest("PATCH", "/api/profile/accepting", { accepting }));
 
   async function toggle() {
     const next = !on;
     setOn(next); // show the change at once, undo it if saving fails
-    setPending(true);
-    const result = await sendJson("PATCH", "/api/profile/accepting", { accepting: next });
-    setPending(false);
+    const result = await mutateAsync(next);
     if (!result.ok) {
       setOn(!next);
       toast.error(result.error ?? "Something went wrong. Please try again.");

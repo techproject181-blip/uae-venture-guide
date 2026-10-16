@@ -7,7 +7,7 @@ import { FormAlert } from "@/components/form/form-alert";
 import { SubmitButton } from "@/components/form/submit-button";
 import { useApiForm } from "@/components/form/use-api-form";
 import { EMIRATES, EXPERTISE, FUNDER_TYPES, SECTORS } from "@/lib/constants";
-import { sendJson } from "@/lib/form-helpers";
+import { apiRequest } from "@/lib/query";
 import { funderProfileSchema, mentorProfileSchema } from "@/lib/schemas/community";
 import { FormPart } from "@/components/form/form-part";
 import { FormActions } from "@/components/layout";
@@ -16,7 +16,7 @@ function useProfileForm(schema) {
   const router = useRouter();
   return useApiForm({
     schema,
-    send: (data) => sendJson("PUT", "/api/profile", data),
+    send: (data) => apiRequest("PUT", "/api/profile", data),
     onSuccess: () => {
       toast.success("Profile saved.");
       router.refresh();

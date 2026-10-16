@@ -482,6 +482,12 @@ details[open]::details-content {
   background-size: 200% 100%;
   animation: shimmer 1.6s linear infinite;
 }
+/* With "reduce motion" on, skeletons stay still instead of shimmering. */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
 
 /* Loaders wait a moment before showing, so fast pages never flash one. */
 @keyframes appear {

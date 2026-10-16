@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { ApiError, readBody, requireApiUser, route } from "@/lib/api";
+import { TAGS, expireTags } from "@/lib/cache";
 import { connectDB } from "@/lib/db";
 import { MentorProfile } from "@/models/MentorProfile";
 
@@ -13,5 +14,6 @@ export const PATCH = route(async (request) => {
   await connectDB();
   const result = await MentorProfile.updateOne({ userId: mentor.id }, { $set: { acceptingRequests: accepting } });
   if (result.matchedCount === 0) throw new ApiError(404, "Fill in your profile first.");
+  expireTags(TAGS.mentors, TAGS.mentor(mentor.id));
   return Response.json({ accepting });
 });

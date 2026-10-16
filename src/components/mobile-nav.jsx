@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Dialog } from "@base-ui/react/dialog";
 import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/logo";
+import { DASHBOARD_ONLY, DISABLED_CLASS, DISABLED_TITLE, isAllowedPath } from "@/lib/limited-mode";
 import { cn } from "@/lib/utils";
 
 /**
@@ -13,7 +14,7 @@ import { cn } from "@/lib/utils";
  * panel sliding in from the right. `children` go at the bottom of the panel,
  * for the account buttons. Choosing a link closes the panel.
  */
-export function MobileNav({ links, children }) {
+export function MobileNav({ links, children, limited = false }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -43,13 +44,19 @@ export function MobileNav({ links, children }) {
             <ul className="space-y-1">
               {links.map(({ href, label, count }) => {
                 const active = pathname === href || pathname.startsWith(`${href}/`);
+                // Switched off while the build stops at the dashboard (lib/limited-mode.js).
+                const off = limited && DASHBOARD_ONLY && !isAllowedPath(href);
                 return (
                   <li key={href}>
                     <Link
                       href={href}
-                      onClick={() => setOpen(false)}
+                      onClick={off ? (event) => event.preventDefault() : () => setOpen(false)}
                       aria-current={active ? "page" : undefined}
+                      aria-disabled={off ? "true" : undefined}
+                      tabIndex={off ? -1 : undefined}
+                      title={off ? DISABLED_TITLE : undefined}
                       className={cn(
+                        off && DISABLED_CLASS,
                         "flex min-h-11 items-center rounded-lg px-3 text-base font-medium outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50",
                         active ? "bg-accent text-primary" : "text-foreground hover:bg-ink-50",
                       )}

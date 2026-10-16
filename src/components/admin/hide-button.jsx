@@ -1,17 +1,16 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useConfirm } from "@/components/confirm-dialog";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { sendJson } from "@/lib/form-helpers";
+import { apiRequest, useApiMutation } from "@/lib/query";
 
 /** Hides or shows a post or a shared plan. `url` is the admin API route for it. */
 export function HideButton({ url, hidden, what }) {
   const router = useRouter();
-  const [pending, setPending] = useState(false);
+  const { mutateAsync, isPending: pending } = useApiMutation((data) => apiRequest("PATCH", url, data));
   const confirm = useConfirm();
 
   async function toggle() {
@@ -25,9 +24,7 @@ export function HideButton({ url, hidden, what }) {
       }))
     )
       return;
-    setPending(true);
-    const result = await sendJson("PATCH", url, { hidden: !hidden });
-    setPending(false);
+    const result = await mutateAsync({ hidden: !hidden });
     if (!result.ok) {
       toast.error(result.error ?? "Something went wrong. Please try again.");
       return;

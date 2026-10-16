@@ -1,11 +1,10 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { ResetPasswordForm } from "@/components/auth/password-reset-forms";
 
 export const metadata = { title: "Choose a new password" };
 
-export default async function ResetPasswordPage({ searchParams }) {
-  const { token = "" } = await searchParams;
-
+export default function ResetPasswordPage({ searchParams }) {
   return (
     <>
       <h1 className="text-[1.875rem] leading-[1.15] sm:text-[2.25rem]">Choose a new password</h1>
@@ -18,7 +17,15 @@ export default async function ResetPasswordPage({ searchParams }) {
           Need a new link?
         </Link>
       </p>
-      <ResetPasswordForm token={token} />
+      {/* The token is in the address, read at request time; the same form shows until then. */}
+      <Suspense fallback={<ResetPasswordForm token="" />}>
+        <FormWithToken searchParams={searchParams} />
+      </Suspense>
     </>
   );
+}
+
+async function FormWithToken({ searchParams }) {
+  const { token = "" } = await searchParams;
+  return <ResetPasswordForm token={token} />;
 }

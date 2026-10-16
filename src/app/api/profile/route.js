@@ -1,4 +1,5 @@
 import { readBody, requireApiUserOrPending, route } from "@/lib/api";
+import { TAGS, expireTags } from "@/lib/cache";
 import { connectDB } from "@/lib/db";
 import { funderProfileSchema, mentorProfileSchema } from "@/lib/schemas/community";
 import { FunderProfile } from "@/models/FunderProfile";
@@ -31,5 +32,7 @@ export const PUT = route(async (request) => {
     // upsert: the first save creates the profile.
     Profile.updateOne({ userId: user.id }, update, { upsert: true, runValidators: true }),
   ]);
+  // The name shows on the mentor's profile and on their posts.
+  if (isMentor) expireTags(TAGS.mentors, TAGS.mentor(user.id), TAGS.posts);
   return Response.json({ ok: true });
 });

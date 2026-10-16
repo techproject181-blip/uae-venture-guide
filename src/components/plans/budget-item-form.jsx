@@ -7,7 +7,7 @@ import { FormAlert } from "@/components/form/form-alert";
 import { SubmitButton } from "@/components/form/submit-button";
 import { useApiForm } from "@/components/form/use-api-form";
 import { BUDGET_CATEGORIES, RECURRENCES } from "@/lib/constants";
-import { sendJson } from "@/lib/form-helpers";
+import { apiRequest } from "@/lib/query";
 import { budgetItemSchema } from "@/lib/schemas/plans";
 
 /** Adds a cost to the budget, or edits `item` when one is given. */
@@ -17,7 +17,7 @@ export function BudgetItemForm({ planId, item = null, onDone }) {
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: budgetItemSchema,
     send: (data) =>
-      item ? sendJson("PATCH", `/api/plans/${planId}/budget/${item._id}`, data) : sendJson("POST", `/api/plans/${planId}/budget`, data),
+      item ? apiRequest("PATCH", `/api/plans/${planId}/budget/${item._id}`, data) : apiRequest("POST", `/api/plans/${planId}/budget`, data),
     onSuccess: (result, form) => {
       toast.success(item ? "Cost saved." : "Cost added.");
       if (!item) form.reset();

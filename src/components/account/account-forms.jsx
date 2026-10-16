@@ -6,7 +6,7 @@ import { PasswordField, ReadOnlyField, TextField } from "@/components/form/field
 import { FormAlert } from "@/components/form/form-alert";
 import { SubmitButton } from "@/components/form/submit-button";
 import { useApiForm } from "@/components/form/use-api-form";
-import { postJson, sendJson } from "@/lib/form-helpers";
+import { apiRequest } from "@/lib/query";
 import { accountSchema, changePasswordSchema } from "@/lib/schemas/auth";
 
 /** The bottom strip of a settings card: a short note on the left, the save button on the right. */
@@ -24,7 +24,7 @@ export function AccountDetailsForm({ name, email }) {
   const router = useRouter();
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: accountSchema,
-    send: (data) => sendJson("PATCH", "/api/account", data),
+    send: (data) => apiRequest("PATCH", "/api/account", data),
     onSuccess: () => {
       toast.success("Your name is saved.");
       router.refresh();
@@ -53,7 +53,7 @@ export function AccountDetailsForm({ name, email }) {
 export function ChangePasswordForm() {
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: changePasswordSchema,
-    send: (data) => postJson("/api/account/password", data),
+    send: (data) => apiRequest("POST", "/api/account/password", data),
     onSuccess: (_result, form) => {
       toast.success("Your password is changed.");
       form?.reset();

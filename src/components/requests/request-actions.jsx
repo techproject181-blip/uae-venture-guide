@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useConfirm } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
-import { sendJson } from "@/lib/form-helpers";
+import { apiRequest, useApiMutation } from "@/lib/query";
 
 const DONE = { accept: "Request accepted.", decline: "Request declined.", complete: "Request marked as completed." };
 
@@ -13,7 +13,9 @@ const DONE = { accept: "Request accepted.", decline: "Request declined.", comple
 export function RequestActions({ requestId, status }) {
   const router = useRouter();
   const [reply, setReply] = useState("");
-  const [pending, setPending] = useState(false);
+  const mutation = useApiMutation((data) => apiRequest("PATCH", `/api/requests/${requestId}`, data));
+  // The action being saved, or false.
+  const pending = mutation.isPending && mutation.variables.action;
   const confirm = useConfirm();
 
   async function act(action) {
@@ -26,9 +28,7 @@ export function RequestActions({ requestId, status }) {
       }))
     )
       return;
-    setPending(action);
-    const result = await sendJson("PATCH", `/api/requests/${requestId}`, { action, reply: reply.trim() || undefined });
-    setPending(false);
+    const result = await mutation.mutateAsync({ action, reply: reply.trim() || undefined });
     if (!result.ok) {
       toast.error(result.error ?? "Something went wrong. Please try again.");
       return;

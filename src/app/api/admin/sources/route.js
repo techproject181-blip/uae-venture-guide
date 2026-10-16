@@ -1,4 +1,5 @@
 import { readBody, requireApiUser, route } from "@/lib/api";
+import { TAGS, expireTags } from "@/lib/cache";
 import { connectDB } from "@/lib/db";
 import { sourceSchema } from "@/lib/schemas/sources";
 import { Source } from "@/models/Source";
@@ -10,5 +11,6 @@ export const POST = route(async (request) => {
 
   await connectDB();
   const source = await Source.create(data);
+  expireTags(TAGS.sources);
   return Response.json({ id: String(source._id) }, { status: 201 });
 });

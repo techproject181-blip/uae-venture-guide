@@ -8,7 +8,7 @@ import { FormAlert } from "@/components/form/form-alert";
 import { LoadingOverlay } from "@/components/loaders/loading-overlay";
 import { SubmitButton } from "@/components/form/submit-button";
 import { useApiForm } from "@/components/form/use-api-form";
-import { postJson } from "@/lib/form-helpers";
+import { apiRequest } from "@/lib/query";
 import { signUpSchema } from "@/lib/schemas/auth";
 
 export function SignUpForm() {
@@ -17,7 +17,7 @@ export function SignUpForm() {
   const [leaving, setLeaving] = useState(false);
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: signUpSchema,
-    send: (data) => postJson("/api/auth/sign-up", data),
+    send: (data) => apiRequest("POST", "/api/auth/sign-up", data),
     onSuccess: (result) => {
       setLeaving(true);
       router.replace(result.redirectTo);

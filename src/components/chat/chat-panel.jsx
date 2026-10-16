@@ -6,6 +6,7 @@ import { ExternalLink, Send } from "lucide-react";
 import { FormAlert } from "@/components/form/form-alert";
 import { Button } from "@/components/ui/button";
 import { FAILED_ANSWER } from "@/lib/chat/failed-answer";
+import { apiStream, queryKeys, useApiMutation } from "@/lib/query";
 import { cn } from "@/lib/utils";
 
 const SUGGESTIONS = ["What will this cost me?", "Which documents do I still need?", "How long will it take?", "Mainland or free zone?"];
@@ -22,7 +23,11 @@ export function ChatPanel({ planId, messages, sources, left, title = "Ask about 
   const [error, setError] = useState(null);
   const [, startTransition] = useTransition();
 
-  async function ask(question) {
+  // A mutation that sends the question and reads the streamed answer as it
+  // arrives. It never throws; problems are shown in the error box.
+  const { mutate } = useApiMutation(streamAnswer, { mutationKey: queryKeys.chat(planId) });
+
+  function ask(question) {
     if (question.trim().length < 2) {
       setError("Type a question.");
       return;
@@ -30,12 +35,12 @@ export function ChatPanel({ planId, messages, sources, left, title = "Ask about 
     setError(null);
     setDraft("");
     setLive({ question, answer: "" });
+    mutate(question);
+  }
+
+  async function streamAnswer(question) {
     try {
-      const response = await fetch(`/api/plans/${planId}/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: question }),
-      });
+      const response = await apiStream(`/api/plans/${planId}/chat`, { message: question });
       if (!response.ok) {
         const body = await response.json().catch(() => ({}));
         setError(body.error ?? "Something went wrong. Please try again.");
