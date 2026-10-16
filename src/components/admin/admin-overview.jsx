@@ -279,8 +279,8 @@ export async function AdminOverview({ user }) {
             <div role="note" className="flex gap-3 rounded-xl border border-gold-400 bg-gold-50 p-4 text-sm">
               <ShieldAlert className="mt-0.5 size-4 shrink-0 text-gold-700" aria-hidden="true" />
               <p>
-                <strong className="font-medium">Check the demo sources.</strong> Compare each one with the official page, then untick “demo”
-                on the source and on each of its fees, so new roadmaps mark those fees official.
+                <strong className="font-medium">Some sources aren’t checked yet.</strong> Check each one against its official page, then
+                untick “demo” on it and its fees.
               </p>
             </div>
           )}
