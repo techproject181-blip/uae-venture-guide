@@ -34,7 +34,6 @@ export default async function AdminUsersPage({ searchParams }) {
   const params = await searchParams;
   const current = FILTERS.find((f) => f.value === params.status) ?? FILTERS[0];
   const filter = current.value;
-  const page = Math.max(1, Number.parseInt(params.page, 10) || 1);
   const search = typeof params.q === "string" ? params.q.trim().slice(0, 80) : "";
 
   await connectDB();
@@ -45,16 +44,16 @@ export default async function AdminUsersPage({ searchParams }) {
     query.$or = [{ name: pattern }, { email: pattern }];
   }
   const withSearch = (rest) => `/admin/users?${new URLSearchParams({ ...(search && { q: search }), ...rest })}`;
-  const [users, total, pendingCount] = await Promise.all([
-    User.find(query)
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * PAGE_SIZE)
-      .limit(PAGE_SIZE)
-      .select("name email role status rejected createdAt")
-      .lean(),
-    User.countDocuments(query),
-    User.countDocuments({ status: "pending" }),
-  ]);
+  const [total, pendingCount] = await Promise.all([User.countDocuments(query), User.countDocuments({ status: "pending" })]);
+  // A page past the end (for example after approving the last person on it) shows the last page instead.
+  const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const page = Math.min(Math.max(1, Number.parseInt(params.page, 10) || 1), pages);
+  const users = await User.find(query)
+    .sort({ createdAt: -1 })
+    .skip((page - 1) * PAGE_SIZE)
+    .limit(PAGE_SIZE)
+    .select("name email role status rejected createdAt")
+    .lean();
 
   return (
     <>

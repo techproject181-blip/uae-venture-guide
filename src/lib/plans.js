@@ -94,6 +94,8 @@ const VERSION_ENDINGS = /(\s*\((new version|version \d+)\))+$/i;
  * The title for a new version of the plan called `title`: the title without
  * any earlier version ending, with the lowest number from 2 that none of
  * `takenTitles` (the owner's plan titles) has yet. "Karak café" -> "Karak café (version 2)".
+ * Exported for the tests.
+ * @internal
  */
 export function newVersionTitle(title, takenTitles = []) {
   const base = title.replace(VERSION_ENDINGS, "") || title;

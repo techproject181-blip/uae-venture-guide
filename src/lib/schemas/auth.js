@@ -2,13 +2,13 @@ import { z } from "zod";
 
 // Used by both the forms (instant feedback) and the API routes (the real check).
 
-export const SIGN_UP_ROLES = ["entrepreneur", "mentor", "funder"];
+const SIGN_UP_ROLES = ["entrepreneur", "mentor", "funder"];
 
 const email = z.string().trim().toLowerCase().pipe(z.email("Enter a valid email address."));
 
 // Spaces at the start and end are trimmed off, so a stray space from a paste or
 // a phone keyboard cannot make a password that nobody can type again.
-export const password = z
+const password = z
   .string()
   .trim()
   .min(8, "Use at least 8 characters.")

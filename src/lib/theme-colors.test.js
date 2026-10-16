@@ -1,5 +1,6 @@
 import { readFileSync, readdirSync, statSync } from "node:fs";
-import { join } from "node:path";
+import { join, relative } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { palette } from "@/lib/theme-colors";
 
@@ -16,8 +17,11 @@ function resolve(name) {
   return link ? resolve(link[1]) : value;
 }
 
+// The src/ folder as a real path, so a folder name with spaces (or Windows) works.
+const SRC = fileURLToPath(new URL("..", import.meta.url));
+
 /** Every .js and .jsx file under src/. */
-function sourceFiles(dir = new URL("..", import.meta.url).pathname) {
+function sourceFiles(dir = SRC) {
   return readdirSync(dir).flatMap((entry) => {
     const path = join(dir, entry);
     if (statSync(path).isDirectory()) return sourceFiles(path);
@@ -50,7 +54,7 @@ describe("colour palette", () => {
           .split("\n")
           .map((line, index) => ({ line, index }))
           .filter(({ line }) => RAW_COLOUR.test(line) || TAILWIND_COLOURS.test(line))
-          .map(({ line, index }) => `${file.split("/src/")[1]}:${index + 1}  ${line.trim().slice(0, 90)}`),
+          .map(({ line, index }) => `${relative(SRC, file)}:${index + 1}  ${line.trim().slice(0, 90)}`),
       );
     expect(problems).toEqual([]);
   });

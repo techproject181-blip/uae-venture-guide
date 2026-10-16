@@ -55,6 +55,7 @@ const listOf = (properties) => ({
   items: { type: "object", additionalProperties: false, required: Object.keys(properties), properties },
 });
 
+/** Exported for the tests. @internal */
 export const ROADMAP_SCHEMA = {
   type: "object",
   additionalProperties: false,
@@ -157,6 +158,8 @@ function roadmapInput(intake, fees, sources) {
  * - text is cut to the lengths a plan can store.
  * Throws when the answer cannot be used (no summary, no steps), so the plan is
  * marked failed and "Try again" works.
+ * Exported for the tests.
+ * @internal
  */
 export function sanitiseRoadmap(answer, { intake, fees, sources }) {
   if (!isObject(answer) || ![answer.tasks, answer.documents, answer.risks].every(Array.isArray)) {

@@ -1,20 +1,6 @@
 import { cn } from "@/lib/utils";
 
-import { Panel } from "@/components/layout";
-
 // Building blocks for plan and record pages.
-
-/**
- * One part of a page: a panel with a heading and optional buttons. It is the
- * layout kit's Panel under its older name.
- */
-export function Section({ title, description, actions, children, className, flush }) {
-  return (
-    <Panel title={title} description={description} actions={actions} className={className} flush={flush}>
-      {children}
-    </Panel>
-  );
-}
 
 // When a row of fields has room to sit on one line, measured by its own width
 // (a container query): a short row sooner than a long one. Full class names,

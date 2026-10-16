@@ -15,7 +15,7 @@ import { DOCUMENTS, LICENSING_AUTHORITIES, PHASES, SECTOR_RISKS, SECTOR_STEPS, S
 // and sources and return the same shape, so the rest of the app works the same
 // with either.
 
-export const GENERATOR = "sample-planner-v1";
+const GENERATOR = "sample-planner-v1";
 
 /** Builds the roadmap for a plan's intake answers. */
 export async function generateRoadmap(intake) {

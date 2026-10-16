@@ -31,6 +31,19 @@ export function route(handler) {
   };
 }
 
+/**
+ * True when the browser says the request came from another website. A form
+ * there can post to sign-in as plain text, which request.json() still reads,
+ * and would sign the visitor in to an account someone else controls. Requests
+ * that are not from a browser carry neither header and are let through.
+ */
+export function fromOtherSite(request) {
+  const site = request.headers.get("sec-fetch-site");
+  if (site) return site === "cross-site";
+  const origin = request.headers.get("origin");
+  return Boolean(origin) && new URL(origin).host !== new URL(request.url).host;
+}
+
 /** Reads the JSON body and checks it with a Zod schema. Throws a 400 listing the bad fields. */
 export async function readBody(request, schema) {
   const body = await request.json().catch(() => null);

@@ -13,7 +13,7 @@ You need Node.js 24 and a MongoDB Atlas database (free cluster is fine).
 
 The demo accounts use the password `Demo2026pass`:
 
-- Admin: the email in `scripts/seed.mjs` (or `ADMIN_EMAIL`), with the password from `ADMIN_PASSWORD` in `.env.local`
+- Admin: the email in `scripts/seed.mjs` (or `ADMIN_EMAIL`), with the password from `ADMIN_PASSWORD` in `.env.local` (`Demo2026pass` when it is empty)
 - Entrepreneurs: `aisha@demo.test`, `yousef@demo.test`
 - Mentors: `omar@demo.test`, `fatima@demo.test`, `daniel@demo.test` (`rahul@demo.test` is pending)
 - Funders: `layla@demo.test` (`khalid@demo.test` is pending)

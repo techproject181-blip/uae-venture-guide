@@ -35,7 +35,7 @@ export default async function AdminUserPage({ params }) {
     user.role === "mentor" && profile
       ? [
           ["Headline", profile.headline],
-          ["Experience", `${profile.yearsExperience} years`],
+          ["Experience", `${profile.yearsExperience} ${profile.yearsExperience === 1 ? "year" : "years"}`],
           ["Can help with", profile.expertise.map((a) => labelOf(EXPERTISE, a)).join(", ")],
           ["Emirates", profile.emirates.map((e) => labelOf(EMIRATES, e)).join(", ")],
           ["LinkedIn", profile.linkedinUrl ?? "Not given"],

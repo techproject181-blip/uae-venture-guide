@@ -52,7 +52,8 @@ export function FeeForm({ sourceId, fee = null, defaultEmirate = null }) {
           error={errors.item}
         />
         <SelectField
-          id="emirate"
+          id="fee-emirate"
+          name="emirate"
           label="Emirate"
           options={EMIRATE_OPTIONS}
           defaultValue={fee?.emirate ?? defaultEmirate ?? ""}
@@ -91,7 +92,8 @@ export function FeeForm({ sourceId, fee = null, defaultEmirate = null }) {
           error={errors.recurrence}
         />
         <TextField
-          id="verifiedAt"
+          id="fee-verifiedAt"
+          name="verifiedAt"
           label="Last checked on"
           type="date"
           defaultValue={toDateInput(fee?.verifiedAt ?? new Date())}
@@ -99,8 +101,8 @@ export function FeeForm({ sourceId, fee = null, defaultEmirate = null }) {
         />
       </div>
       <TextAreaField id="notes" label="Notes (optional)" rows={2} defaultValue={fee?.notes} error={errors.notes} />
-      <CheckboxField id="active" label="Use this fee in roadmaps" defaultChecked={fee?.active ?? true} />
-      <CheckboxField id="demo" label="This is demo data that has not been checked" defaultChecked={fee?.demo ?? false} />
+      <CheckboxField id="fee-active" name="active" label="Use this fee in roadmaps" defaultChecked={fee?.active ?? true} />
+      <CheckboxField id="fee-demo" name="demo" label="This is demo data that has not been checked" defaultChecked={fee?.demo ?? false} />
       <SubmitButton pending={pending} pendingText="Saving…">
         {fee ? "Save fee reference" : "Add fee reference"}
       </SubmitButton>

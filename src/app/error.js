@@ -7,7 +7,8 @@ import { Button, buttonVariants } from "@/components/ui/button";
 /** Shown in place of a page when something goes wrong while it loads, such as the database being out of reach. */
 export default function ErrorPage({ retry }) {
   return (
-    <div className="page-width flex flex-1 flex-col items-center justify-center py-16 text-center sm:py-24">
+    // It replaces the whole page under the root layout, so it brings its own <main> for the skip link.
+    <main id="main" className="page-width flex flex-1 flex-col items-center justify-center py-16 text-center sm:py-24">
       <span className="flex size-12 items-center justify-center rounded-full bg-danger-50 text-danger-700">
         <AlertTriangle className="size-6" aria-hidden="true" />
       </span>
@@ -23,6 +24,6 @@ export default function ErrorPage({ retry }) {
           Home page
         </Link>
       </div>
-    </div>
+    </main>
   );
 }

@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import { fromOtherSite } from "@/lib/api";
 import { connectDB } from "@/lib/db";
 import { createSession } from "@/lib/session";
 import { signInSchema } from "@/lib/schemas/auth";
@@ -13,6 +14,7 @@ const DUMMY_HASH = "$2b$10$oniKR91pR2coTSKXB2hAFe0pURt13c5DjCWFhZqe6WGKuqypoWvOS
 
 // POST /api/auth/sign-in  { email, password }
 export async function POST(request) {
+  if (fromOtherSite(request)) return Response.json({ error: "Please use the form on this website." }, { status: 403 });
   const body = await request.json().catch(() => null);
   const parsed = signInSchema.safeParse(body ?? {});
   if (!parsed.success) {

@@ -22,7 +22,8 @@ export const PATCH = route(async (request, { params }) => {
     task.costBasis = "estimate";
     task.feeReferenceId = undefined;
   }
-  task.set(data);
+  // An emptied "Details" box is left out of the body, so clear it on purpose.
+  task.set({ ...data, description: data.description ?? "" });
   await plan.save();
   return Response.json({ ok: true });
 });

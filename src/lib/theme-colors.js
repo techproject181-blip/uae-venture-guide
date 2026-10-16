@@ -4,6 +4,7 @@
 // theme-colors.test.js (next to this file) checks every value here against globals.css,
 // so change a colour there first, then here.
 
+/** Exported for the tests. @internal */
 export const palette = {
   "ink-0": "#ffffff",
   "ink-100": "#f1f5f9",

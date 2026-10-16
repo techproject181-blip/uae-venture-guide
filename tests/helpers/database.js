@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { afterAll, beforeAll } from "vitest";
 import { connectDB } from "@/lib/db";
 
-// The MongoDB from .env.local (or the environment, in CI). Each test file
+// The MongoDB from .env.local (or MONGODB_URI set in the environment). Each test file
 // swaps in its own database name.
 const SERVER = process.env.MONGODB_URI;
 

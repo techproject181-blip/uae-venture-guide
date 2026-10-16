@@ -356,12 +356,13 @@ async function removeAccounts(userIds) {
   const requestIds = await MentorRequest.find({ $or: [{ entrepreneurId: { $in: userIds } }, { mentorId: { $in: userIds } }] }).distinct(
     "_id",
   );
+  const interestIds = await FundingInterest.find({ $or: [{ planId: { $in: planIds } }, { funderId: { $in: userIds } }] }).distinct("_id");
   await Promise.all([
     RequestMessage.deleteMany({ requestId: { $in: requestIds } }),
     MentorRequest.deleteMany({ _id: { $in: requestIds } }),
     ChatMessage.deleteMany({ planId: { $in: planIds } }),
-    InterestMessage.deleteMany({ authorId: { $in: userIds } }),
-    FundingInterest.deleteMany({ $or: [{ planId: { $in: planIds } }, { funderId: { $in: userIds } }] }),
+    InterestMessage.deleteMany({ interestId: { $in: interestIds } }),
+    FundingInterest.deleteMany({ _id: { $in: interestIds } }),
     Plan.deleteMany({ _id: { $in: planIds } }),
     Post.deleteMany({ authorId: { $in: userIds } }),
     MentorProfile.deleteMany({ userId: { $in: userIds } }),
@@ -379,10 +380,22 @@ await removeAccounts(leftovers);
 // real admin password never sits in the code. Everyone else gets the demo one.
 const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 10);
 const adminHash = process.env.ADMIN_PASSWORD ? await bcrypt.hash(process.env.ADMIN_PASSWORD, 10) : passwordHash;
+// passwordChangedAt also ends every older session of these accounts, so a
+// session made before this run (say by someone who signed up with the admin's
+// email first) does not carry on with the new role.
 for (const user of USERS) {
   const hash = user.role === "admin" ? adminHash : passwordHash;
-  await User.updateOne({ email: user.email }, { $set: { ...user, passwordHash: hash } }, { upsert: true });
+  await User.updateOne({ email: user.email }, { $set: { ...user, passwordHash: hash, passwordChangedAt: new Date() } }, { upsert: true });
 }
+
+// Only this run's administrator stays one. An administrator left from an
+// earlier ADMIN_EMAIL is suspended, because the console cannot change admins.
+const adminEmail = USERS.find((user) => user.role === "admin").email;
+const oldAdmins = await User.updateMany(
+  { role: "admin", email: { $ne: adminEmail }, status: { $ne: "suspended" } },
+  { $set: { status: "suspended", passwordChangedAt: new Date() } },
+);
+if (oldAdmins.modifiedCount) console.log(`Suspended ${oldAdmins.modifiedCount} administrator account(s) from an earlier ADMIN_EMAIL.`);
 
 const sourceIds = {};
 for (const { key, ...source } of SOURCES) {
@@ -489,12 +502,13 @@ for (const [name, profile] of Object.entries(FUNDERS)) {
 // Start from a clean slate for the demo accounts' own content.
 const demoPlans = await Plan.find({ ownerId: { $in: [ids.aisha, ids.yousef] } }).distinct("_id");
 const demoRequests = await MentorRequest.find({ entrepreneurId: { $in: [ids.aisha, ids.yousef] } }).distinct("_id");
+const demoInterests = await FundingInterest.find({ planId: { $in: demoPlans } }).distinct("_id");
 await Promise.all([
   RequestMessage.deleteMany({ requestId: { $in: demoRequests } }),
   Plan.deleteMany({ _id: { $in: demoPlans } }),
   ChatMessage.deleteMany({ planId: { $in: demoPlans } }),
-  FundingInterest.deleteMany({ planId: { $in: demoPlans } }),
-  InterestMessage.deleteMany({ authorId: { $in: [ids.aisha, ids.yousef, ids.layla, ids.khalid] } }),
+  FundingInterest.deleteMany({ _id: { $in: demoInterests } }),
+  InterestMessage.deleteMany({ interestId: { $in: demoInterests } }),
   MentorRequest.deleteMany({ entrepreneurId: { $in: [ids.aisha, ids.yousef] } }),
   Post.deleteMany({ authorId: { $in: Object.keys(MENTORS).map((name) => ids[name]) } }),
 ]);
@@ -641,7 +655,8 @@ const [cafeInterest] = await FundingInterest.create([
     funderId: ids.layla,
     message: "I back student food businesses and would like to learn more about your café.",
     status: "accepted",
-    respondedAt: now,
+    createdAt: hoursAgo(24),
+    respondedAt: hoursAgo(22),
   },
   {
     planId: plans[1]._id,

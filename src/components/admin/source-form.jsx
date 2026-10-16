@@ -38,7 +38,14 @@ export function SourceForm({ source = null }) {
           defaultValue={source?.publisher}
           error={errors.publisher}
         />
-        <SelectField id="emirate" label="Emirate" options={EMIRATE_OPTIONS} defaultValue={source?.emirate ?? ""} error={errors.emirate} />
+        <SelectField
+          id="source-emirate"
+          name="emirate"
+          label="Emirate"
+          options={EMIRATE_OPTIONS}
+          defaultValue={source?.emirate ?? ""}
+          error={errors.emirate}
+        />
       </div>
       <TextField id="url" label="Web address" type="url" placeholder="https://" defaultValue={source?.url} error={errors.url} />
       <TextAreaField
@@ -56,16 +63,18 @@ export function SourceForm({ source = null }) {
         error={errors.categories}
       />
       <TextField
-        id="verifiedAt"
+        id="source-verifiedAt"
+        name="verifiedAt"
         label="Last checked on"
         type="date"
         defaultValue={toDateInput(source?.verifiedAt ?? new Date())}
         error={errors.verifiedAt}
         className="sm:max-w-xs"
       />
-      <CheckboxField id="active" label="Show this source to users" defaultChecked={source?.active ?? true} />
+      <CheckboxField id="source-active" name="active" label="Show this source to users" defaultChecked={source?.active ?? true} />
       <CheckboxField
-        id="demo"
+        id="source-demo"
+        name="demo"
         label="This is demo data that has not been checked"
         hint="Users see a Demo label next to it."
         defaultChecked={source?.demo ?? false}

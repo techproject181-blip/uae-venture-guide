@@ -19,6 +19,9 @@ import { User } from "@/models/User";
 
 const ROLE_ORDER = ["entrepreneur", "mentor", "funder", "admin"];
 
+/** "1 plan", "3 plans". */
+const plural = (number, word) => `${number} ${number === 1 ? word : `${word}s`}`;
+
 /** One number in the row at the top: an icon, the label, the value and a short line under it. */
 function Kpi({ icon: Icon, label, value, hint, href, alert }) {
   return (
@@ -133,11 +136,17 @@ export async function AdminOverview({ user }) {
           icon={Users}
           label="Accounts"
           value={accounts}
-          hint={`${byRole.entrepreneur ?? 0} founders · ${byRole.mentor ?? 0} mentors`}
+          hint={`${plural(byRole.entrepreneur ?? 0, "entrepreneur")} · ${plural(byRole.mentor ?? 0, "mentor")}`}
           href="/admin/users?status=all"
         />
-        <Kpi icon={BookOpen} label="Sources shown" value={sources} hint={`${fees} fees in use`} href="/admin/sources" />
-        <Kpi icon={FileText} label="Published posts" value={posts} hint={`${plans} plans · ${sharedPlans} shared`} href="/admin/content" />
+        <Kpi icon={BookOpen} label="Sources shown" value={sources} hint={`${plural(fees, "fee")} in use`} href="/admin/sources" />
+        <Kpi
+          icon={FileText}
+          label="Published posts"
+          value={posts}
+          hint={`${plural(plans, "plan")} · ${sharedPlans} shared`}
+          href="/admin/content"
+        />
       </div>
 
       <div className="grid items-start gap-4 xl:grid-cols-3">
@@ -267,7 +276,7 @@ export async function AdminOverview({ user }) {
               <ShieldAlert className="mt-0.5 size-4 shrink-0 text-gold-700" aria-hidden="true" />
               <p>
                 <strong className="font-medium">Check the demo sources.</strong> Compare each one with the official page, then untick “demo”
-                so its fees count as official.
+                on the source and on each of its fees, so new roadmaps mark those fees official.
               </p>
             </div>
           )}

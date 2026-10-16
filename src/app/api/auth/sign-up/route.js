@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import { fromOtherSite } from "@/lib/api";
 import { connectDB } from "@/lib/db";
 import { createSession } from "@/lib/session";
 import { signUpSchema } from "@/lib/schemas/auth";
@@ -7,6 +8,7 @@ import { User } from "@/models/User";
 
 // POST /api/auth/sign-up  { name, email, password, role }
 export async function POST(request) {
+  if (fromOtherSite(request)) return Response.json({ error: "Please use the form on this website." }, { status: 403 });
   const body = await request.json().catch(() => null);
   const parsed = signUpSchema.safeParse(body ?? {});
   if (!parsed.success) {

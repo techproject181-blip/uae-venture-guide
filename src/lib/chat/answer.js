@@ -10,7 +10,6 @@ import { Source } from "@/models/Source";
 // must, and says when a question is outside what the plan covers. The sources
 // it links are the same ones the AI assistant is given.
 
-export const ASSISTANT = "sample-assistant-v1";
 const MAX_SOURCES = 3;
 
 // Topics the assistant recognises, by the words a question uses.

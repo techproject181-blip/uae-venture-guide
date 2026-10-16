@@ -35,8 +35,8 @@ export function BackLink({ href, children, className }) {
  */
 export function PageHeader({ title, description, actions, back, children, className }) {
   return (
-    <div className={cn("mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between lg:mb-10", className)}>
-      <div className="min-w-0">
+    <div data-page-header className={cn("mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between lg:mb-10", className)}>
+      <div data-page-title className="min-w-0">
         {back && <BackLink href={back.href}>{back.label}</BackLink>}
         <h1 className="font-display text-[1.875rem] leading-[1.15] font-bold tracking-[-0.03em] sm:text-[2.25rem]">{title}</h1>
         {description && <p className="mt-2 max-w-2xl text-muted-foreground">{description}</p>}

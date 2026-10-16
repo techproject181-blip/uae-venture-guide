@@ -36,6 +36,10 @@ export const PATCH = route(async (request, { params }) => {
     }
   }
 
+  // Suspending or rejecting also ends the account's sessions, so a token taken
+  // before does not work again if the account is reactivated later. The person
+  // then sees why at sign-in ("suspended" or "not approved").
+  if (status === "suspended" && user.status !== "suspended") user.passwordChangedAt = new Date();
   user.status = status;
   if (rejected) user.rejected = true;
   if (approved) user.rejected = false;

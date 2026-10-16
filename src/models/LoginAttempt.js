@@ -4,7 +4,9 @@ import mongoose from "mongoose";
 // Five wrong passwords lock that email for 15 minutes, counted from the fifth.
 // Each counted try moves expiresAt 15 minutes on, so the count also starts
 // again after 15 quiet minutes. MongoDB deletes a record once expiresAt passes.
+/** Exported for the tests. @internal */
 export const MAX_FAILURES = 5;
+/** Exported for the tests. @internal */
 export const LOCK_MINUTES = 15;
 
 const loginAttemptSchema = new mongoose.Schema({
@@ -16,6 +18,7 @@ const loginAttemptSchema = new mongoose.Schema({
 loginAttemptSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 if (mongoose.models.LoginAttempt) mongoose.deleteModel("LoginAttempt");
+/** Exported for the tests. @internal */
 export const LoginAttempt = mongoose.model("LoginAttempt", loginAttemptSchema);
 
 /**

@@ -2,10 +2,13 @@ import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { SiteFooter } from "@/components/site-footer";
 import { buttonVariants } from "@/components/ui/button";
+import { getCurrentUser } from "@/lib/session";
 
 export const metadata = { title: "Page not found" };
 
-export default function NotFound() {
+export default async function NotFound() {
+  // Signed-in people land here too (a plan they cannot open), so the footer should not offer them Sign in.
+  const user = await getCurrentUser().catch(() => null);
   return (
     <div className="flex min-h-dvh flex-col">
       <header className="border-b bg-card">
@@ -43,7 +46,7 @@ export default function NotFound() {
           Back to the home page
         </Link>
       </main>
-      <SiteFooter />
+      <SiteFooter signedIn={Boolean(user)} />
     </div>
   );
 }

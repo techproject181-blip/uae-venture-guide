@@ -147,7 +147,7 @@ export function ChatPanel({ planId, messages, sources, left, title = "Ask about 
           </Button>
         </form>
         <p className="mt-3 text-sm text-muted-foreground">
-          {left} questions left today. Answers are guidance, not legal or financial advice.
+          {left === 1 ? "1 question" : `${left} questions`} left today. Answers are guidance, not legal or financial advice.
         </p>
         {ai && (
           <p className="mt-1 text-sm text-muted-foreground">

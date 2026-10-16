@@ -29,11 +29,13 @@ export const POST = route(async (request, { params }) => {
   // The sample assistant: the answer is made first, then saved with the
   // question in one write, so an error never leaves a question without its answer.
   const answer = await answerQuestion(plan.toObject(), message);
+  // A plan with many long steps can make a very long answer; it is cut to what a message can hold.
+  const text = answer.text.slice(0, 8000);
   await ChatMessage.insertMany([
     { planId: plan._id, role: "user", content: message },
-    { planId: plan._id, role: "assistant", content: answer.text, sourceIds: answer.sourceIds },
+    { planId: plan._id, role: "assistant", content: text, sourceIds: answer.sourceIds },
   ]);
-  return textStream(aFewWordsAtATime(answer.text));
+  return textStream(aFewWordsAtATime(text));
 });
 
 /** A plain text response that sends each piece from `pieces` (an async generator) as soon as it is ready. */

@@ -12,7 +12,9 @@ export const PATCH = route(async (request, { params }) => {
 
   await connectDB();
   if (data.sourceId && !(await Source.exists({ _id: data.sourceId }))) throw new ApiError(400, "Source not found.");
-  const fee = await FeeReference.findByIdAndUpdate(id, data, { returnDocument: "after", runValidators: true });
+  // An emptied "Notes" box is left out of the body, so remove the old note on purpose.
+  const update = data.notes === undefined ? { ...data, $unset: { notes: "" } } : data;
+  const fee = await FeeReference.findByIdAndUpdate(id, update, { returnDocument: "after", runValidators: true });
   if (!fee) throw new ApiError(404, "Fee reference not found.");
   return Response.json({ id });
 });

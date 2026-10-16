@@ -50,7 +50,7 @@ export function MentorCard({ mentor, preview = false, as: Heading = "h2" }) {
         )}
         <span className="inline-flex items-center gap-1.5 tabular-nums">
           <Briefcase className="size-4 shrink-0" aria-hidden="true" />
-          {mentor.yearsExperience} years
+          {mentor.yearsExperience} {mentor.yearsExperience === 1 ? "year" : "years"}
         </span>
         {!mentor.acceptingRequests && <StatusBadge status="info" label="Not taking requests" className="ml-auto" />}
       </div>

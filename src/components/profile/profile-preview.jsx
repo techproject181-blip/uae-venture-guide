@@ -12,7 +12,7 @@ const WHO_SEES = {
   ],
   funder: [
     "The administrator reads it before approving your account.",
-    "When you tell an owner a plan interests you, they see your name, organisation, type of funder, investment range and sectors.",
+    "When you tell an owner a plan interests you, they see your name, organisation, type of funder, investment range, sectors and what you look for.",
     "Once they accept, you can read the full plan and message the owner here.",
   ],
 };
@@ -58,6 +58,7 @@ export function ProfileAside({ role, name, profile }) {
                 { label: "Type of funder", value: labelOf(FUNDER_TYPES, profile.funderType) },
                 { label: "Invests", value: formatAedRange(profile.ticketMinAed, profile.ticketMaxAed) },
                 profile.sectors?.length > 0 && { label: "Sectors", value: profile.sectors.map((s) => labelOf(SECTORS, s)).join(", ") },
+                profile.bio && { label: "What you look for", value: profile.bio },
               ]}
             />
           </div>

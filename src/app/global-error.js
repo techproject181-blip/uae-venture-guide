@@ -7,6 +7,8 @@ export default function GlobalError({ retry }) {
   return (
     <html lang="en">
       <body className="flex min-h-dvh flex-col items-center justify-center bg-background p-6 text-center font-sans text-foreground">
+        {/* Metadata does not work here, so React's <title> names the tab. */}
+        <title>Something went wrong | UAE Venture Guide</title>
         <h1 className="text-[1.875rem] leading-[1.15] font-semibold">Something went wrong</h1>
         <p className="mt-2 max-w-md text-muted-foreground">The website could not load. Please try again in a moment.</p>
         <button

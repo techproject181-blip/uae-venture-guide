@@ -44,13 +44,15 @@ export function AdminBreadcrumb() {
 /**
  * Wraps the page. On phones and tablets a section's own page drops its big
  * title and intro line, because the top bar already names the section. Screen readers still hear both.
+ * The page header is found by its data attributes, not by its depth, because
+ * the page-enter templates wrap each page in extra divs.
  */
 export function AdminMain({ children }) {
   const { root } = useSection();
   return (
     <div
       data-root={root || undefined}
-      className="w-full max-lg:data-root:[&>div:first-child]:mb-4 max-lg:data-root:[&>div:first-child>div:first-child]:sr-only"
+      className="w-full max-lg:data-root:[&_[data-page-header]]:mb-4 max-lg:data-root:[&_[data-page-title]]:sr-only"
     >
       {children}
     </div>

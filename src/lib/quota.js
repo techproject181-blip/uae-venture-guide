@@ -29,18 +29,25 @@ export function uaeDayAgo(days) {
  * so the upsert tries to create a second document for the same user and day,
  * and the unique index rejects it. Two requests at the same moment therefore
  * cannot both get past the limit.
+ *
+ * The day's first two uses can also both try to create that document, and the
+ * one that loses gets the same error while still under the limit. So the
+ * error is only trusted the second time, once the document surely exists.
  */
 export async function consumeQuota(userId, kind) {
   await connectDB();
-  try {
-    await AiUsage.findOneAndUpdate(
-      { userId, day: uaeDay(), [kind]: { $lt: DAILY_LIMITS[kind] } },
-      { $inc: { [kind]: 1 } },
-      { upsert: true },
-    );
-  } catch (error) {
-    if (error?.code === 11000) throw new ApiError(429, MESSAGES[kind]);
-    throw error;
+  for (let attempt = 1; ; attempt++) {
+    try {
+      await AiUsage.findOneAndUpdate(
+        { userId, day: uaeDay(), [kind]: { $lt: DAILY_LIMITS[kind] } },
+        { $inc: { [kind]: 1 } },
+        { upsert: true },
+      );
+      return;
+    } catch (error) {
+      if (error?.code !== 11000) throw error;
+      if (attempt === 2) throw new ApiError(429, MESSAGES[kind]);
+    }
   }
 }
 

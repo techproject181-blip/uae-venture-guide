@@ -142,7 +142,7 @@ describe("failed sign-ins (NFR-04)", () => {
   });
 });
 
-describe("approving a rejected sign-up (FR-41)", () => {
+describe("approving a rejected sign-up (FR-23)", () => {
   let admin;
 
   beforeAll(async () => {

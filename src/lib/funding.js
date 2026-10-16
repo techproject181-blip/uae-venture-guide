@@ -60,13 +60,6 @@ export async function findSharedPlan(planId) {
   return plan;
 }
 
-/** One plan as a pitch card, or null when funders may not find it. */
-export async function getPitchCard(planId) {
-  if (!(await findSharedPlan(planId))) return null;
-  const plan = await Plan.findById(planId).select(PITCH_FIELDS).lean();
-  return plan && toPitchCard(plan);
-}
-
 function toPitchCard({ tasks, ...plan }) {
   return { ...plan, progress: progressPercent(tasks ?? []) };
 }

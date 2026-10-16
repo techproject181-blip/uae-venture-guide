@@ -44,6 +44,11 @@ export function InterestList({ interests }) {
                 </p>
 
                 {facts.length > 0 && <p className="mt-1 text-sm text-muted-foreground">{facts.join(" · ")}</p>}
+                {profile?.bio && (
+                  <p className="mt-2 max-w-prose text-sm whitespace-pre-line text-muted-foreground">
+                    <span className="font-medium text-foreground">What they look for:</span> {profile.bio}
+                  </p>
+                )}
 
                 <p className="mt-2 max-w-prose text-sm whitespace-pre-line text-foreground/80">{interest.message}</p>
               </div>

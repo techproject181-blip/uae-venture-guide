@@ -3,16 +3,24 @@ import { ChartColumn, Image as ImageIcon } from "lucide-react";
 import { Avatar } from "@/components/avatar";
 import { formatDate } from "@/lib/format";
 
-/** The start of a post's text, without headings or Markdown marks. */
-export function postExcerpt(body) {
-  return body
+/**
+ * The start of a post's text, without headings or Markdown marks. Only the
+ * marks themselves go, so hyphens, brackets and numbers in the text stay.
+ */
+function postExcerpt(body) {
+  const text = body
     .split("\n")
     .filter((line) => !line.trim().startsWith("#"))
+    .map((line) => line.replace(/^\s*(?:[-*+]|\d+\.|>)\s+/, "")) // list and quote marks
     .join(" ")
-    .replace(/[#*_>`[\]()-]/g, "")
+    .replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1") // a link keeps only its words
+    .replace(/(\*\*|__)(.+?)\1/g, "$2") // bold
+    .replace(/\*(.+?)\*/g, "$1") // italic
+    .replace(/(^|\W)_(.+?)_(?!\w)/g, "$1$2") // italic with underscores, not inside words
+    .replace(/`([^`]*)`/g, "$1") // code
     .replace(/\s+/g, " ")
-    .trim()
-    .slice(0, 240);
+    .trim();
+  return text.length > 240 ? `${text.slice(0, 240).trimEnd()}…` : text;
 }
 
 /**
@@ -47,7 +55,7 @@ export function PostCard({ post, authorName, badge, actions }) {
             {post.title}
           </Link>
         </h2>
-        <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground">{postExcerpt(post.body)}…</p>
+        <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted-foreground">{postExcerpt(post.body)}</p>
       </div>
 
       <div className="mt-5 flex min-h-8 flex-wrap items-center gap-x-4 gap-y-2 border-t pt-4 text-sm text-muted-foreground">

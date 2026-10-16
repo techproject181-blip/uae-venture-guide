@@ -20,10 +20,6 @@ export const checkbox = () => z.preprocess((value) => value === true || value ==
 export const aed = (message = "Enter an amount in dirhams.") =>
   z.preprocess(emptyToUndefined, z.coerce.number(message).int("Use whole dirhams.").min(0, "Use 0 or more."));
 
-/** Like aed(), but the field may be left empty. */
-export const optionalAed = () =>
-  z.preprocess(emptyToUndefined, z.coerce.number().int("Use whole dirhams.").min(0, "Use 0 or more.").optional());
-
 /** A whole number between min and max, with one message for any problem. */
 export const wholeNumber = (min, max, message) =>
   z.preprocess(emptyToUndefined, z.coerce.number(message).int(message).min(min, message).max(max, message));

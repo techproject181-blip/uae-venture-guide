@@ -1,6 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
 /* The app has no dark theme. This keeps the `dark:` classes in the shadcn
    components switched off, instead of following the computer's dark mode. */

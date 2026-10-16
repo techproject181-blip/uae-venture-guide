@@ -38,7 +38,7 @@ const QUESTIONS = [
   },
   {
     q: "Who can see my plan?",
-    a: "Only you. A mentor can read it while they are guiding you, and a funder only after you accept their interest. You can stop sharing at any time.",
+    a: "You and the site's administrator. A mentor can read it while they are guiding you, and a funder only after you accept their interest. You can stop sharing at any time.",
   },
 ];
 

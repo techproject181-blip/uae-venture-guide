@@ -41,7 +41,14 @@ export default async function MentorPage({ params }) {
     { label: "Can help with", value: <Chips items={mentor.expertise.map((a) => labelOf(EXPERTISE, a))} /> },
     mentor.industries.length > 0 && { label: "Industries", value: <Chips items={mentor.industries.map((s) => labelOf(SECTORS, s))} /> },
     { label: "Emirates", value: <span className="font-medium">{mentor.emirates.map((e) => labelOf(EMIRATES, e)).join(", ")}</span> },
-    { label: "Experience", value: <span className="font-medium tabular-nums">{mentor.yearsExperience} years</span> },
+    {
+      label: "Experience",
+      value: (
+        <span className="font-medium tabular-nums">
+          {mentor.yearsExperience} {mentor.yearsExperience === 1 ? "year" : "years"}
+        </span>
+      ),
+    },
   ].filter(Boolean);
 
   return (
