@@ -37,7 +37,7 @@ export function AuthShowcase() {
           one clear step at a time.
         </p>
         <p className="mt-4 max-w-md text-lg text-brand-100/80">
-          Licence, visas, bank and tax: every step with its cost, in the order you take them.
+          License, visas, bank and tax: every step with its cost, in the order you take them.
         </p>
 
         <div
