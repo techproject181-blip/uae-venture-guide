@@ -14,5 +14,5 @@ const chatMessageSchema = new mongoose.Schema(
 
 chatMessageSchema.index({ planId: 1, createdAt: 1 });
 
-if (mongoose.models.ChatMessage) mongoose.deleteModel("ChatMessage");
-export const ChatMessage = mongoose.model("ChatMessage", chatMessageSchema);
+if (mongoose.models.ChatMessage && mongoose.connection.readyState === 1) mongoose.deleteModel("ChatMessage");
+export const ChatMessage = mongoose.models.ChatMessage ?? mongoose.model("ChatMessage", chatMessageSchema);

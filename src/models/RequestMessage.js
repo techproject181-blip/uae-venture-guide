@@ -19,5 +19,5 @@ requestMessageSchema.index({ requestId: 1, createdAt: 1 });
 // For the "messages sent in the last minute" limit.
 requestMessageSchema.index({ authorId: 1, createdAt: -1 });
 
-if (mongoose.models.RequestMessage) mongoose.deleteModel("RequestMessage");
-export const RequestMessage = mongoose.model("RequestMessage", requestMessageSchema);
+if (mongoose.models.RequestMessage && mongoose.connection.readyState === 1) mongoose.deleteModel("RequestMessage");
+export const RequestMessage = mongoose.models.RequestMessage ?? mongoose.model("RequestMessage", requestMessageSchema);

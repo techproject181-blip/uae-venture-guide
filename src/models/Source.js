@@ -22,5 +22,5 @@ const sourceSchema = new mongoose.Schema(
 sourceSchema.index({ title: "text", publisher: "text", summary: "text" }, { name: "sources_text" });
 sourceSchema.index({ active: 1, emirate: 1 });
 
-if (mongoose.models.Source) mongoose.deleteModel("Source");
-export const Source = mongoose.model("Source", sourceSchema);
+if (mongoose.models.Source && mongoose.connection.readyState === 1) mongoose.deleteModel("Source");
+export const Source = mongoose.models.Source ?? mongoose.model("Source", sourceSchema);

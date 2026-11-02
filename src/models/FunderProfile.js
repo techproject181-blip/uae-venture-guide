@@ -15,5 +15,5 @@ const funderProfileSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-if (mongoose.models.FunderProfile) mongoose.deleteModel("FunderProfile");
-export const FunderProfile = mongoose.model("FunderProfile", funderProfileSchema);
+if (mongoose.models.FunderProfile && mongoose.connection.readyState === 1) mongoose.deleteModel("FunderProfile");
+export const FunderProfile = mongoose.models.FunderProfile ?? mongoose.model("FunderProfile", funderProfileSchema);

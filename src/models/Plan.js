@@ -105,5 +105,5 @@ const planSchema = new mongoose.Schema(
 planSchema.index({ ownerId: 1, updatedAt: -1 });
 planSchema.index({ shared: 1, hiddenByAdmin: 1, emirate: 1, sector: 1 });
 
-if (mongoose.models.Plan) mongoose.deleteModel("Plan");
-export const Plan = mongoose.model("Plan", planSchema);
+if (mongoose.models.Plan && mongoose.connection.readyState === 1) mongoose.deleteModel("Plan");
+export const Plan = mongoose.models.Plan ?? mongoose.model("Plan", planSchema);

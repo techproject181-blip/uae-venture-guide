@@ -22,6 +22,9 @@ const userSchema = new mongoose.Schema(
 userSchema.index({ status: 1, createdAt: -1 });
 
 // Next.js re-runs this file after each edit in development. Dropping the old
-// model first makes sure schema changes take effect without a restart.
-if (mongoose.models.User) mongoose.deleteModel("User");
-export const User = mongoose.model("User", userSchema);
+// model first makes sure schema changes take effect without a restart. Only
+// once connected: the build can also load this file twice (pages and API
+// routes), and a model dropped before the connection opens leaves the other
+// copy's queries waiting forever, so then the existing model is reused.
+if (mongoose.models.User && mongoose.connection.readyState === 1) mongoose.deleteModel("User");
+export const User = mongoose.models.User ?? mongoose.model("User", userSchema);

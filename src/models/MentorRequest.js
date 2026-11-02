@@ -22,5 +22,5 @@ const mentorRequestSchema = new mongoose.Schema(
 mentorRequestSchema.index({ entrepreneurId: 1, mentorId: 1 }, { unique: true, partialFilterExpression: { status: "pending" } });
 mentorRequestSchema.index({ mentorId: 1, status: 1, createdAt: -1 });
 
-if (mongoose.models.MentorRequest) mongoose.deleteModel("MentorRequest");
-export const MentorRequest = mongoose.model("MentorRequest", mentorRequestSchema);
+if (mongoose.models.MentorRequest && mongoose.connection.readyState === 1) mongoose.deleteModel("MentorRequest");
+export const MentorRequest = mongoose.models.MentorRequest ?? mongoose.model("MentorRequest", mentorRequestSchema);

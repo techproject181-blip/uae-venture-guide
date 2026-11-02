@@ -37,5 +37,5 @@ const feeReferenceSchema = new mongoose.Schema(
 feeReferenceSchema.index({ kind: 1, emirate: 1, active: 1 });
 feeReferenceSchema.index({ sourceId: 1 });
 
-if (mongoose.models.FeeReference) mongoose.deleteModel("FeeReference");
-export const FeeReference = mongoose.model("FeeReference", feeReferenceSchema);
+if (mongoose.models.FeeReference && mongoose.connection.readyState === 1) mongoose.deleteModel("FeeReference");
+export const FeeReference = mongoose.models.FeeReference ?? mongoose.model("FeeReference", feeReferenceSchema);

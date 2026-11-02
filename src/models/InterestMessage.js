@@ -18,5 +18,5 @@ interestMessageSchema.index({ interestId: 1, createdAt: 1 });
 // For the "messages sent in the last minute" limit.
 interestMessageSchema.index({ authorId: 1, createdAt: -1 });
 
-if (mongoose.models.InterestMessage) mongoose.deleteModel("InterestMessage");
-export const InterestMessage = mongoose.model("InterestMessage", interestMessageSchema);
+if (mongoose.models.InterestMessage && mongoose.connection.readyState === 1) mongoose.deleteModel("InterestMessage");
+export const InterestMessage = mongoose.models.InterestMessage ?? mongoose.model("InterestMessage", interestMessageSchema);

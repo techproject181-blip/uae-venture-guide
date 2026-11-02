@@ -17,9 +17,9 @@ const loginAttemptSchema = new mongoose.Schema({
 
 loginAttemptSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
-if (mongoose.models.LoginAttempt) mongoose.deleteModel("LoginAttempt");
+if (mongoose.models.LoginAttempt && mongoose.connection.readyState === 1) mongoose.deleteModel("LoginAttempt");
 /** Exported for the tests. @internal */
-export const LoginAttempt = mongoose.model("LoginAttempt", loginAttemptSchema);
+export const LoginAttempt = mongoose.models.LoginAttempt ?? mongoose.model("LoginAttempt", loginAttemptSchema);
 
 /**
  * Counts one password try for `email`, before the password is checked.

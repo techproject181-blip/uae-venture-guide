@@ -35,5 +35,5 @@ const postSchema = new mongoose.Schema(
 postSchema.index({ status: 1, createdAt: -1 });
 postSchema.index({ authorId: 1, createdAt: -1 });
 
-if (mongoose.models.Post) mongoose.deleteModel("Post");
-export const Post = mongoose.model("Post", postSchema);
+if (mongoose.models.Post && mongoose.connection.readyState === 1) mongoose.deleteModel("Post");
+export const Post = mongoose.models.Post ?? mongoose.model("Post", postSchema);

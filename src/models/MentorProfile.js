@@ -17,5 +17,5 @@ const mentorProfileSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-if (mongoose.models.MentorProfile) mongoose.deleteModel("MentorProfile");
-export const MentorProfile = mongoose.model("MentorProfile", mentorProfileSchema);
+if (mongoose.models.MentorProfile && mongoose.connection.readyState === 1) mongoose.deleteModel("MentorProfile");
+export const MentorProfile = mongoose.models.MentorProfile ?? mongoose.model("MentorProfile", mentorProfileSchema);

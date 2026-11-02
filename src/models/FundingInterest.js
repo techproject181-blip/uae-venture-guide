@@ -19,5 +19,5 @@ const fundingInterestSchema = new mongoose.Schema(
 fundingInterestSchema.index({ planId: 1, funderId: 1 }, { unique: true });
 fundingInterestSchema.index({ funderId: 1, createdAt: -1 });
 
-if (mongoose.models.FundingInterest) mongoose.deleteModel("FundingInterest");
-export const FundingInterest = mongoose.model("FundingInterest", fundingInterestSchema);
+if (mongoose.models.FundingInterest && mongoose.connection.readyState === 1) mongoose.deleteModel("FundingInterest");
+export const FundingInterest = mongoose.models.FundingInterest ?? mongoose.model("FundingInterest", fundingInterestSchema);

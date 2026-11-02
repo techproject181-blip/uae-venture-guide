@@ -18,5 +18,5 @@ aiUsageSchema.index({ userId: 1, day: 1 }, { unique: true });
 // Old usage is deleted automatically after 180 days.
 aiUsageSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 * 60 * 24 * 180 });
 
-if (mongoose.models.AiUsage) mongoose.deleteModel("AiUsage");
-export const AiUsage = mongoose.model("AiUsage", aiUsageSchema);
+if (mongoose.models.AiUsage && mongoose.connection.readyState === 1) mongoose.deleteModel("AiUsage");
+export const AiUsage = mongoose.models.AiUsage ?? mongoose.model("AiUsage", aiUsageSchema);
