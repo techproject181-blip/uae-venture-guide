@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Dialog } from "@base-ui/react/dialog";
@@ -9,13 +9,20 @@ import { Logo } from "@/components/logo";
 import { useNavCounts } from "@/components/use-nav-counts";
 import { cn } from "@/lib/utils";
 
+const isActive = (pathname, href) => pathname === href || pathname.startsWith(`${href}/`);
+
 /**
  * Phones and tablets (below 1024px): a menu button that opens the links in a
  * panel sliding in from the right. `children` go at the bottom of the panel,
- * for the account buttons. Choosing a link closes the panel.
+ * for the account buttons. Choosing a link closes the panel. A group of links,
+ * such as "Explore", is listed under its own small heading.
  */
 export function MobileNav({ links: drawnLinks, children }) {
   const [open, setOpen] = useState(false);
+  // Opened by tap or click, the panel itself takes focus, so no focus ring lands on the
+  // first link; opened from the keyboard, focus goes to the first link as usual.
+  const panelRef = useRef(null);
+  const firstFocus = (type) => (type === "keyboard" ? true : panelRef.current);
   const pathname = usePathname();
   const links = useNavCounts(drawnLinks);
   const hasNew = links.some((link) => link.count > 0);
@@ -32,7 +39,7 @@ export function MobileNav({ links: drawnLinks, children }) {
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 z-50 bg-ink-900/40 backdrop-blur-[2px] transition-opacity duration-300 data-ending-style:opacity-0 data-starting-style:opacity-0 lg:hidden" />
-        <Dialog.Popup className="fixed inset-y-0 right-0 z-50 flex w-[min(20rem,85vw)] flex-col border-l bg-card pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] shadow-window transition-transform duration-300 ease-out outline-none data-ending-style:translate-x-full data-starting-style:translate-x-full lg:hidden">
+        <Dialog.Popup ref={panelRef} initialFocus={firstFocus} className="fixed inset-y-0 right-0 z-50 flex w-[min(20rem,85vw)] flex-col border-l bg-card pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] shadow-window transition-transform duration-300 ease-out outline-none data-ending-style:translate-x-full data-starting-style:translate-x-full lg:hidden">
           <div className="flex h-16 items-center justify-between gap-3 border-b px-4">
             <Dialog.Title render={<div />}>
               <Logo />
@@ -46,27 +53,24 @@ export function MobileNav({ links: drawnLinks, children }) {
           </div>
           <nav aria-label="Main" className="flex-1 overflow-y-auto p-3">
             <ul className="space-y-1">
-              {links.map(({ href, label, count }) => {
-                const active = pathname === href || pathname.startsWith(`${href}/`);
+              {links.map(({ href, label, count, items }) => {
+                if (items) {
+                  return (
+                    <li key={label} className="pt-3">
+                      <p className="px-3 pb-1 text-xs font-semibold tracking-wide text-muted-foreground uppercase">{label}</p>
+                      <ul className="space-y-1">
+                        {items.map((item) => (
+                          <li key={item.href}>
+                            <DrawerLink href={item.href} label={item.label} active={isActive(pathname, item.href)} onClick={() => setOpen(false)} />
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  );
+                }
                 return (
                   <li key={href}>
-                    <Link
-                      href={href}
-                      onClick={() => setOpen(false)}
-                      aria-current={active ? "page" : undefined}
-                      className={cn(
-                        "flex min-h-11 items-center rounded-lg px-3 text-base font-medium outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50",
-                        active ? "bg-accent text-primary" : "text-foreground hover:bg-ink-50",
-                      )}
-                    >
-                      <span className="flex-1">{label}</span>
-                      {count > 0 && (
-                        <span className="rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground tabular-nums">
-                          {count}
-                          <span className="sr-only"> new</span>
-                        </span>
-                      )}
-                    </Link>
+                    <DrawerLink href={href} label={label} count={count} active={isActive(pathname, href)} onClick={() => setOpen(false)} />
                   </li>
                 );
               })}
@@ -80,5 +84,28 @@ export function MobileNav({ links: drawnLinks, children }) {
         </Dialog.Popup>
       </Dialog.Portal>
     </Dialog.Root>
+  );
+}
+
+/** One link in the panel, with its number of new things when there is one. */
+function DrawerLink({ href, label, count = 0, active, onClick }) {
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      aria-current={active ? "page" : undefined}
+      className={cn(
+        "flex min-h-11 items-center rounded-lg px-3 text-base font-medium outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50",
+        active ? "bg-accent text-primary" : "text-foreground hover:bg-ink-50",
+      )}
+    >
+      <span className="flex-1">{label}</span>
+      {count > 0 && (
+        <span className="rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground tabular-nums">
+          {count}
+          <span className="sr-only"> new</span>
+        </span>
+      )}
+    </Link>
   );
 }

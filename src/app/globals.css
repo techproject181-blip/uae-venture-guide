@@ -291,6 +291,90 @@
   }
 }
 
+/*
+ * A wide table that turns each row into a small card when its box is narrower
+ * than 45rem (phones, tablets, and beside a side panel): the first cell is the
+ * title, every cell with a data-label becomes a "label … value" line, and a
+ * cell without one (the buttons) sits underneath. Put the table in a
+ * .stack-table-box. The table keeps explicit roles on its parts, because some
+ * browsers stop reading a table as one once its display changes. These rules
+ * sit outside the layers so they win over the cells' own utility classes.
+ */
+.stack-table-box {
+  container-type: inline-size;
+}
+@container (width < 45rem) {
+  .stack-table {
+    min-width: 0;
+  }
+  .stack-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .stack-table,
+  .stack-table tbody,
+  .stack-table tfoot,
+  .stack-table tr {
+    display: block;
+  }
+  .stack-table tbody tr {
+    border-bottom: 1px solid var(--color-border);
+    padding: 1rem 1.25rem;
+  }
+  .stack-table tbody tr:has(> td[colspan]) {
+    padding: 0;
+  }
+  .stack-table :is(td, th):not([colspan]) {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    border: 0;
+    padding: 0.1875rem 0;
+    text-align: right;
+    white-space: normal;
+  }
+  .stack-table tbody td:first-child {
+    display: block;
+    padding-bottom: 0.5rem;
+    text-align: left;
+  }
+  .stack-table td[data-label]::before {
+    content: attr(data-label);
+    color: var(--color-muted-foreground);
+    text-align: left;
+  }
+  /* The buttons: their own padding pulled out, so their text lines up with the card's. */
+  .stack-table tbody td:not([data-label], :first-child, [colspan]) {
+    display: block;
+    margin-inline: -0.75rem;
+    padding-top: 0.5rem;
+    text-align: left;
+  }
+  .stack-table td:empty {
+    display: none;
+  }
+  .stack-table td[colspan] {
+    display: block;
+  }
+  .stack-table tfoot tr {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+  }
+  .stack-table tfoot :is(td, th) {
+    display: block;
+    border: 0;
+    padding: 0;
+    text-align: left;
+  }
+}
+
 /* Each page slides in softly when you open it (see the template.js files). */
 @keyframes page-enter {
   from {

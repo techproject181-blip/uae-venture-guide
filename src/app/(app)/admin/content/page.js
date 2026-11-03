@@ -143,7 +143,7 @@ export default async function AdminContentPage({ searchParams }) {
                 <th scope="col" className="hidden md:table-cell">
                   {list.owner}
                 </th>
-                <th scope="col" className="hidden lg:table-cell">
+                <th scope="col" className="hidden xl:table-cell">
                   {list.date}
                 </th>
                 <th scope="col" className="hidden sm:table-cell">
@@ -163,9 +163,9 @@ export default async function AdminContentPage({ searchParams }) {
                     </Link>
                     {/* Smaller screens hide some columns, so those facts sit under the title. */}
                     <p className="mt-0.5 text-muted-foreground md:hidden">
-                      {row.owner} · {row.detail}
+                      {row.owner} · <span className="whitespace-nowrap">{row.detail}</span>
                     </p>
-                    <p className="mt-0.5 hidden text-muted-foreground md:block lg:hidden">{row.detail}</p>
+                    <p className="mt-0.5 hidden text-muted-foreground md:block xl:hidden">{row.detail}</p>
                     <StatusBadge
                       className="mt-2 sm:hidden"
                       status={row.hidden ? "hidden" : "published"}
@@ -173,7 +173,7 @@ export default async function AdminContentPage({ searchParams }) {
                     />
                   </td>
                   <td className="hidden md:table-cell">{row.owner}</td>
-                  <td className="hidden lg:table-cell">{row.detail}</td>
+                  <td className="hidden whitespace-nowrap xl:table-cell">{row.detail}</td>
                   <td className="hidden sm:table-cell">
                     <StatusBadge status={row.hidden ? "hidden" : "published"} label={row.hidden ? "Hidden" : "Visible"} />
                   </td>

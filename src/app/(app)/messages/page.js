@@ -29,7 +29,7 @@ const COPY = {
 /**
  * Every conversation in one place, the same for entrepreneurs, mentors and
  * funders: who it is with, what it is about, the newest message and how many
- * are new. Requests and interests are still answered on their own pages.
+ * are new. Requests and interest are still answered on their own pages.
  */
 export default async function MessagesPage() {
   const user = await requireUser({ roles: ["entrepreneur", "mentor", "funder"] });

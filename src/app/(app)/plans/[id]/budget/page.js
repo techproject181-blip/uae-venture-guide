@@ -50,7 +50,7 @@ export default async function PlanBudgetPage({ params }) {
         <h2 id="budget-numbers" className="sr-only">
           First-year budget
         </h2>
-        <StatGrid>
+        <StatGrid className="max-[30rem]:grid-cols-1">
           <Stat label="Your budget" value={formatAed(plan.budgetAed)} />
           <Stat label="Estimated first-year cost" value={formatAed(estimated)} />
           <Stat label="Paid so far" value={formatAed(actual)} tone={paidOver > 0 ? "danger" : undefined} />
@@ -80,42 +80,47 @@ export default async function PlanBudgetPage({ params }) {
               <FeeLegend {...marks} />
             </div>
           )}
-          <div className="relative overflow-x-auto">
-            <table className="doc-table min-w-180">
-              <thead>
-                <tr>
-                  <th scope="col" className="pl-5 sm:pl-6">
+          {/* A table on wide screens, one card per cost when the box is narrow (.stack-table in globals.css). */}
+          <div className="stack-table-box">
+            <table role="table" className="doc-table stack-table min-w-180">
+              <thead role="rowgroup">
+                <tr role="row">
+                  <th role="columnheader" scope="col" className="pl-5 sm:pl-6">
                     Cost
                   </th>
-                  <th scope="col">How often</th>
-                  <th scope="col" className="text-right">
+                  <th role="columnheader" scope="col">
+                    How often
+                  </th>
+                  <th role="columnheader" scope="col" className="text-right">
                     Estimate
                   </th>
-                  <th scope="col" className="text-right">
+                  <th role="columnheader" scope="col" className="text-right">
                     Actually paid
                   </th>
-                  <th scope="col" className="text-right">
+                  <th role="columnheader" scope="col" className="text-right">
                     First year
                   </th>
                   {isOwner && (
-                    <th scope="col">
+                    <th role="columnheader" scope="col">
                       <span className="sr-only">Edit</span>
                     </th>
                   )}
                 </tr>
               </thead>
-              <tbody>
+              <tbody role="rowgroup">
                 {items.map((item) => (
                   <BudgetItemRow key={item._id} planId={plan._id} item={item} canEdit={isOwner} columns={columns} />
                 ))}
               </tbody>
-              <tfoot>
-                <tr>
-                  <th scope="row" colSpan={4} className="text-right">
+              <tfoot role="rowgroup">
+                <tr role="row">
+                  <th role="rowheader" scope="row" colSpan={4} className="text-right">
                     Estimated first-year total
                   </th>
-                  <td className="text-right">{formatAed(estimated)}</td>
-                  {isOwner && <td />}
+                  <td role="cell" className="text-right">
+                    {formatAed(estimated)}
+                  </td>
+                  {isOwner && <td role="cell" />}
                 </tr>
               </tfoot>
             </table>

@@ -29,7 +29,7 @@ export default async function MyPostsPage() {
     <>
       <PageHeader
         title="My posts"
-        description="Share what you learned, so new entrepreneurs can avoid the same mistakes."
+        description="Lessons you share with entrepreneurs. Posts are public: anyone can read them on Experience posts and on your mentor profile."
         actions={posts.length > 0 && newPost}
       />
       {posts.length === 0 ? (

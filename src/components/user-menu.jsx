@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Menu } from "@base-ui/react/menu";
-import { ChevronDown, LogOut, UserRound } from "lucide-react";
+import { ChevronDown, IdCard, LogOut, UserRound } from "lucide-react";
 import { useSignOut } from "@/components/auth/sign-out-button";
 import { Avatar } from "@/components/avatar";
 import { cn } from "@/lib/utils";
@@ -10,8 +10,11 @@ import { cn } from "@/lib/utils";
 const ITEM =
   "flex min-h-10 cursor-pointer items-center gap-2.5 rounded-md px-2.5 text-sm outline-none select-none data-highlighted:bg-ink-50 [&_svg]:size-4 [&_svg]:text-ink-500";
 
-/** The avatar and name in the top bar. Opens a small menu with the profile page and sign out. */
-export function UserMenu({ name, email, role, className }) {
+/**
+ * The avatar and name in the top bar. Opens a small menu with the account page,
+ * the public profile for mentors and funders (`hasProfile`), and sign out.
+ */
+export function UserMenu({ name, email, role, hasProfile = false, className }) {
   const { signOut, pending } = useSignOut();
 
   return (
@@ -23,7 +26,7 @@ export function UserMenu({ name, email, role, className }) {
         )}
       >
         <Avatar name={name} className="size-8 text-xs" />
-        <span className="hidden max-w-40 truncate text-sm font-medium lg:block">{name}</span>
+        <span className="hidden max-w-40 truncate text-sm font-medium xl:block">{name}</span>
         <ChevronDown className="size-4 text-ink-400 transition-transform in-data-popup-open:rotate-180" aria-hidden="true" />
         <span className="sr-only">Open your account menu</span>
       </Menu.Trigger>
@@ -39,6 +42,12 @@ export function UserMenu({ name, email, role, className }) {
               </div>
             </div>
             <Menu.Separator className="my-1 h-px bg-border" />
+            {hasProfile && (
+              <Menu.Item render={<Link href="/profile" />} className={ITEM}>
+                <IdCard aria-hidden="true" />
+                Profile
+              </Menu.Item>
+            )}
             <Menu.Item render={<Link href="/account" />} className={ITEM}>
               <UserRound aria-hidden="true" />
               Account

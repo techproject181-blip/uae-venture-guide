@@ -16,10 +16,10 @@ export function SourceCard({ source }) {
   return (
     <article className="group panel panel-link relative flex h-full flex-col p-5 sm:p-6">
       <div className="flex-1">
-        <div className="flex items-start justify-between gap-3">
-          <p className="flex min-w-0 items-center gap-2 text-sm font-medium text-muted-foreground">
-            <Landmark className="size-4 shrink-0" aria-hidden="true" />
-            <span className="truncate">{source.publisher}</span>
+        <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
+          <p className="flex min-w-0 items-start gap-2 text-sm font-medium text-muted-foreground">
+            <Landmark className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+            <span>{source.publisher}</span>
           </p>
           {source.demo && <StatusBadge status="pending" label="Not checked yet" className="shrink-0" />}
         </div>

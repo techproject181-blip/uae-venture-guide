@@ -211,7 +211,7 @@ export function MentorCardSkeleton() {
   );
 }
 
-/** PitchCard on Discover: title, place, the pitch, budget and progress, then the interest form. */
+/** PitchCard on "Shared plans": title, place, the pitch, budget and progress, then the interest form. */
 export function PitchCardSkeleton() {
   return (
     <div className={cardClass}>

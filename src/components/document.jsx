@@ -13,7 +13,8 @@ const ROW_FROM = {
 
 /**
  * Labelled values side by side, like the fields at the top of a licence.
- * items: [{ label, value }]; empty items are skipped. In a narrow space they
+ * items: [{ label, value, wide }]; empty items are skipped, and a `wide` one
+ * takes a whole row while they stack. In a narrow space they
  * stack in two columns. Inside a flex row, give the wrapper room (flex-1),
  * because it measures its own width.
  */
@@ -23,8 +24,8 @@ export function Fields({ items, className }) {
   return (
     <div className={cn("@container", className)}>
       <dl className={cn("grid grid-cols-2 gap-x-6 gap-y-4", row.list)}>
-        {shown.map(({ label, value }) => (
-          <div key={label} className={cn("min-w-0", row.item)}>
+        {shown.map(({ label, value, wide }) => (
+          <div key={label} className={cn("min-w-0", row.item, wide && "col-span-2")}>
             <dt className="field-label">{label}</dt>
             <dd className="mt-1 font-medium tabular-nums">{value}</dd>
           </div>

@@ -44,9 +44,9 @@ export default async function SourcesPage({ searchParams }) {
       <form
         key={`${q}|${emirate}|${category}`}
         role="search"
-        className="panel mb-6 grid gap-4 p-4 sm:p-5 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_8rem] md:items-end"
+        className="panel mb-6 grid gap-4 p-4 sm:grid-cols-2 sm:p-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_8rem] lg:items-end"
       >
-        <div className="space-y-2">
+        <div className="space-y-2 sm:col-span-2 lg:col-span-1">
           <label className="block text-sm font-medium" htmlFor="q">
             Search sources
           </label>
@@ -78,7 +78,7 @@ export default async function SourcesPage({ searchParams }) {
             ))}
           </select>
         </div>
-        <Button type="submit" size="lg" variant="outline">
+        <Button type="submit" size="lg" variant="outline" className="sm:col-span-2 lg:col-span-1">
           Search
         </Button>
       </form>

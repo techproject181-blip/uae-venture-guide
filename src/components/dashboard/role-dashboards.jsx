@@ -80,7 +80,7 @@ export async function EntrepreneurDashboard({ user }) {
             <Shortcuts
               items={[
                 { href: "/mentors", label: "Find a mentor", detail: "Ask someone who has done it before", icon: Users },
-                { href: "/requests", label: "Requests", detail: "Guidance requests and funder interest", icon: Inbox },
+                { href: "/requests", label: "Mentors & funders", detail: "Your requests to mentors and funder interest", icon: Inbox },
                 { href: "/messages", label: "Messages", detail: "Your chats with mentors and funders", icon: MessagesSquare },
                 { href: "/sources", label: "Official sources", detail: "The pages behind the official costs", icon: Landmark },
               ]}
@@ -170,7 +170,7 @@ export async function MentorDashboard({ user }) {
             )}
             <Shortcuts
               items={[
-                { href: "/requests", label: "Requests", detail: "Answer requests from entrepreneurs", icon: Inbox },
+                { href: "/requests", label: "Guidance requests", detail: "Answer requests from entrepreneurs", icon: Inbox },
                 { href: "/messages", label: "Messages", detail: "Your chats with entrepreneurs", icon: MessagesSquare },
                 { href: "/my-posts", label: "Your posts", detail: count(postCount, "post"), icon: Newspaper },
                 { href: "/profile", label: "Your profile", detail: "What entrepreneurs see in the directory", icon: UserRound },
@@ -236,7 +236,7 @@ export async function FunderDashboard({ user }) {
   await connectDB();
   const [profile, newest, interests] = await Promise.all([
     FunderProfile.exists({ userId: user.id }),
-    // The three newest cards, and the count of every plan Discover shows.
+    // The three newest cards, and the count of every plan "Shared plans" shows.
     listPitchCards({ pageSize: 3 }),
     listInterestsForFunder(user.id),
   ]);
@@ -251,7 +251,7 @@ export async function FunderDashboard({ user }) {
         description={`${count(sharedCount, "shared plan")} to explore.`}
         actions={
           <Link href="/discover" className={buttonVariants({ size: "lg" })}>
-            Discover plans
+            See shared plans
           </Link>
         }
       />
@@ -273,7 +273,7 @@ export async function FunderDashboard({ user }) {
             )}
             <Shortcuts
               items={[
-                { href: "/discover", label: "Discover plans", detail: "Pitch cards of shared plans", icon: Compass },
+                { href: "/discover", label: "Shared plans", detail: "Pitch cards of plans you can back", icon: Compass },
                 { href: "/interests", label: "Your interests", detail: count(interests.length, "interest") + " sent", icon: HandCoins },
                 { href: "/messages", label: "Messages", detail: "Your chats with entrepreneurs", icon: MessagesSquare },
                 { href: "/profile", label: "Your profile", detail: "What owners read about you", icon: UserRound },
@@ -317,7 +317,7 @@ export async function FunderDashboard({ user }) {
             {toPlain(cards).map((card) => (
               <Row key={card._id} link className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-10">
                 <div className="min-w-0">
-                  {/* Discover lists the newest plans first, so this card is near the top there. */}
+                  {/* "Shared plans" lists the newest first, so this card is near the top there. */}
                   <Link href="/discover" className={rowLink}>
                     {card.title}
                   </Link>

@@ -1,30 +1,21 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-/** The sections of a plan, as tabs that are real links (each has its own address). */
+/**
+ * The sections of a plan, as tabs that are real links (each has its own address).
+ * Phones get a grid of three per row, so every section is in view without
+ * scrolling; from 640px they sit in one row with a line under the current one.
+ */
 export function PlanTabs({ planId, tabs }) {
   const pathname = usePathname();
   const base = `/plans/${planId}`;
-  const navRef = useRef(null);
-
-  // On a phone the tabs scroll sideways; bring the current one into view.
-  useEffect(() => {
-    const nav = navRef.current;
-    const active = nav?.querySelector('[aria-current="page"]');
-    if (active) nav.scrollLeft = active.offsetLeft - (nav.clientWidth - active.offsetWidth) / 2;
-  }, [pathname]);
 
   return (
-    <nav
-      ref={navRef}
-      aria-label="Plan sections"
-      className="relative -mx-4 mt-4 mb-6 overflow-x-auto border-b px-4 sm:mx-0 sm:px-0 lg:mt-6 lg:mb-8"
-    >
-      <ul className="flex gap-1 sm:gap-2">
+    <nav aria-label="Plan sections" className="mt-4 mb-6 sm:border-b lg:mt-6 lg:mb-8">
+      <ul className="grid grid-cols-3 gap-1 rounded-xl border bg-ink-100/70 p-1 sm:flex sm:gap-2 sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0">
         {tabs.map(({ slug, label }) => {
           const href = slug ? `${base}/${slug}` : base;
           const active = pathname === href;
@@ -34,10 +25,11 @@ export function PlanTabs({ planId, tabs }) {
                 href={href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "block min-h-11 min-w-11 border-b-2 px-2 py-3 text-center text-sm font-medium whitespace-nowrap transition-[color,border-color] duration-200 outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset sm:px-3",
+                  "flex min-h-10 items-center justify-center rounded-lg px-2 text-center text-sm font-medium whitespace-nowrap transition-[color,border-color,background-color] duration-200 outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset",
+                  "sm:block sm:min-h-11 sm:min-w-11 sm:rounded-none sm:border-b-2 sm:px-3 sm:py-3",
                   active
-                    ? "border-primary text-primary"
-                    : "border-transparent text-muted-foreground hover:border-ink-300 hover:text-foreground",
+                    ? "bg-card text-primary shadow-xs ring-1 ring-border sm:border-primary sm:bg-transparent sm:shadow-none sm:ring-0"
+                    : "text-muted-foreground hover:text-foreground sm:border-transparent sm:hover:border-ink-300",
                 )}
               >
                 {label}

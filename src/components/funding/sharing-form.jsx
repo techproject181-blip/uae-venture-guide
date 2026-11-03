@@ -12,11 +12,11 @@ import { Panel, Split } from "@/components/layout";
 import { apiRequest } from "@/lib/query";
 import { sharingSchema } from "@/lib/schemas/community";
 
-// What happens once the card is shared, in order. Interest is answered on the Requests page.
+// What happens once the card is shared, in order. Interest is answered on "Mentors & funders".
 const HOW_IT_WORKS = [
-  "Funders find your card on their Discover page. They see only the card.",
+  "Funders find your card on their Shared plans page. They see only the card.",
   "A funder who likes it sends you a message of interest.",
-  "You accept or decline it on your Requests page. Only if you accept do they see the full plan.",
+  "You accept or decline it on your Mentors & funders page. Only if you accept do they see the full plan.",
   "Turning sharing off hides the card. Funders you accepted cannot open the plan or send you messages until you share it again.",
 ];
 

@@ -20,7 +20,7 @@ export function PitchCard({ card, children, framed = true }) {
         className="mt-5 border-t pt-4"
         items={[
           { label: "Budget", value: formatAed(card.budgetAed) },
-          { label: "Progress", value: `${card.progress}% of steps done` },
+          { label: "Progress", value: `${card.progress}% of steps done`, wide: true },
         ]}
       />
       <div aria-hidden="true" className="mt-3 h-1.5 overflow-hidden rounded-full bg-ink-200">

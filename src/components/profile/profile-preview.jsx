@@ -57,8 +57,12 @@ export function ProfileAside({ role, name, profile }) {
                 { label: "Organisation", value: profile.organization },
                 { label: "Type of funder", value: labelOf(FUNDER_TYPES, profile.funderType) },
                 { label: "Invests", value: formatAedRange(profile.ticketMinAed, profile.ticketMaxAed) },
-                profile.sectors?.length > 0 && { label: "Sectors", value: profile.sectors.map((s) => labelOf(SECTORS, s)).join(", ") },
-                profile.bio && { label: "What you look for", value: profile.bio },
+                profile.sectors?.length > 0 && {
+                  label: "Sectors",
+                  value: profile.sectors.map((s) => labelOf(SECTORS, s)).join(", "),
+                  wide: true,
+                },
+                profile.bio && { label: "What you look for", value: profile.bio, wide: true },
               ]}
             />
           </div>

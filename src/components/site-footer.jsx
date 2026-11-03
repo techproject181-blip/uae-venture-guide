@@ -48,7 +48,7 @@ export function SiteFooter({ signedIn = false }) {
           </div>
         )}
         <div className={`flex flex-col-reverse items-center gap-2 py-4 md:flex-row md:justify-between ${signedIn ? "" : "border-t"}`}>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-center text-sm text-muted-foreground md:text-left">
             © <Year /> UAE Venture Guide. All rights reserved.
           </p>
           {/* The signed-in header lists each role's own pages, not all of these, so signed-in users find them here. */}

@@ -9,28 +9,39 @@ import { firstYearCost } from "@/lib/budget";
 import { BUDGET_CATEGORIES, RECURRENCES, labelOf } from "@/lib/constants";
 import { formatAed } from "@/lib/format";
 
-/** One cost in the budget table. The owner can open an edit form under the row. */
+/**
+ * One cost in the budget table. The owner can open an edit form under the row.
+ * The labels and roles let the row become a card on narrow screens (.stack-table).
+ */
 export function BudgetItemRow({ planId, item, canEdit, columns }) {
   const [editing, setEditing] = useState(false);
 
   return (
     <>
-      <tr>
-        <td className="pl-5 sm:pl-6">
+      <tr role="row">
+        <td role="cell" className="pl-5 sm:pl-6">
           <p className="font-medium">{item.label}</p>
           <p className="text-muted-foreground">{labelOf(BUDGET_CATEGORIES, item.category)}</p>
         </td>
-        <td className="whitespace-nowrap">{labelOf(RECURRENCES, item.recurrence)}</td>
-        <td className="text-right">
-          {formatAed(item.estimatedAed)}
-          <div className="mt-1">
-            <CostBasis basis={item.costBasis} />
+        <td role="cell" data-label="How often" className="whitespace-nowrap">
+          {labelOf(RECURRENCES, item.recurrence)}
+        </td>
+        <td role="cell" data-label="Estimate" className="text-right">
+          <div>
+            {formatAed(item.estimatedAed)}
+            <div className="mt-1">
+              <CostBasis basis={item.costBasis} />
+            </div>
           </div>
         </td>
-        <td className="text-right">{item.actualAed == null ? "—" : formatAed(item.actualAed)}</td>
-        <td className="text-right font-medium">{formatAed(firstYearCost(item.estimatedAed, item.recurrence))}</td>
+        <td role="cell" data-label="Actually paid" className="text-right">
+          {item.actualAed == null ? "—" : formatAed(item.actualAed)}
+        </td>
+        <td role="cell" data-label="First year" className="text-right font-medium">
+          {formatAed(firstYearCost(item.estimatedAed, item.recurrence))}
+        </td>
         {canEdit && (
-          <td className="py-0.5 text-right">
+          <td role="cell" className="py-0.5 text-right">
             {/* A quiet text button: one per row, so a column of boxes does not crowd the table. */}
             <Button variant="link" size="lg" className="px-3" aria-expanded={editing} onClick={() => setEditing((open) => !open)}>
               Edit<span className="sr-only"> {item.label}</span>
@@ -39,8 +50,8 @@ export function BudgetItemRow({ planId, item, canEdit, columns }) {
         )}
       </tr>
       {editing && (
-        <tr>
-          <td colSpan={columns} className="bg-secondary/70 px-5 py-5 sm:px-6">
+        <tr role="row">
+          <td role="cell" colSpan={columns} className="bg-secondary/70 px-5 py-5 sm:px-6">
             <BudgetItemForm planId={planId} item={item} onDone={() => setEditing(false)} />
             <div className="mt-5 flex justify-end border-t pt-4">
               <DeleteButton

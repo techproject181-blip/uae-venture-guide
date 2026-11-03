@@ -39,56 +39,59 @@ export default async function AccountPage() {
     <>
       <PageHeader title="Account" description="Your details and how you sign in." />
 
-      <div className="grid items-start gap-6 lg:grid-cols-[18rem_1fr] xl:grid-cols-[20rem_1fr]">
-        <aside className="panel overflow-hidden lg:sticky lg:top-24">
-          <div className="h-20 bg-accent" />
-          <div className="-mt-10 px-5 pb-5">
-            <Avatar name={account.name} className="size-20 border-4 border-card text-xl" />
-            <p className="mt-3 text-lg font-semibold">{account.name}</p>
-            <p className="truncate text-sm text-muted-foreground">{account.email}</p>
-          </div>
-          <dl className="divide-y border-t text-sm">
-            <div className="flex items-center justify-between gap-3 px-5 py-3">
-              <dt className="flex items-center gap-2 text-muted-foreground">
-                <ShieldCheck className="size-4" aria-hidden="true" />
-                Role
-              </dt>
-              <dd className="font-medium">{ROLE_LABELS[account.role]}</dd>
+      {/* Measured by the page's own width: beside the admin sidebar there is less room. */}
+      <div className="@container">
+        <div className="grid items-start gap-6 @min-[56rem]:grid-cols-[18rem_1fr] @min-[72rem]:grid-cols-[20rem_1fr]">
+          <aside className="panel overflow-hidden @min-[56rem]:sticky @min-[56rem]:top-24">
+            <div className="h-20 bg-accent" />
+            <div className="-mt-10 px-5 pb-5">
+              <Avatar name={account.name} className="size-20 border-4 border-card text-xl" />
+              <p className="mt-3 text-lg font-semibold">{account.name}</p>
+              <p className="truncate text-sm text-muted-foreground">{account.email}</p>
             </div>
-            <div className="flex items-center justify-between gap-3 px-5 py-3">
-              <dt className="flex items-center gap-2 text-muted-foreground">
-                <BadgeCheck className="size-4" aria-hidden="true" />
-                Status
-              </dt>
-              <dd>
-                <StatusBadge status={account.status} />
-              </dd>
-            </div>
-            <div className="flex items-center justify-between gap-3 px-5 py-3">
-              <dt className="flex items-center gap-2 text-muted-foreground">
-                <CalendarDays className="size-4" aria-hidden="true" />
-                Member since
-              </dt>
-              <dd className="font-medium">{formatDate(account.createdAt)}</dd>
-            </div>
-          </dl>
-        </aside>
+            <dl className="divide-y border-t text-sm">
+              <div className="flex items-center justify-between gap-3 px-5 py-3">
+                <dt className="flex items-center gap-2 text-muted-foreground">
+                  <ShieldCheck className="size-4" aria-hidden="true" />
+                  Role
+                </dt>
+                <dd className="font-medium">{ROLE_LABELS[account.role]}</dd>
+              </div>
+              <div className="flex items-center justify-between gap-3 px-5 py-3">
+                <dt className="flex items-center gap-2 text-muted-foreground">
+                  <BadgeCheck className="size-4" aria-hidden="true" />
+                  Status
+                </dt>
+                <dd>
+                  <StatusBadge status={account.status} />
+                </dd>
+              </div>
+              <div className="flex items-center justify-between gap-3 px-5 py-3">
+                <dt className="flex items-center gap-2 text-muted-foreground">
+                  <CalendarDays className="size-4" aria-hidden="true" />
+                  Member since
+                </dt>
+                <dd className="font-medium">{formatDate(account.createdAt)}</dd>
+              </div>
+            </dl>
+          </aside>
 
-        <div className="space-y-6">
-          <SettingsCard
-            icon={UserRound}
-            title="Personal details"
-            description="The name other people see on your plans, requests and messages."
-          >
-            <AccountDetailsForm name={account.name} email={account.email} />
-          </SettingsCard>
-          <SettingsCard
-            icon={KeyRound}
-            title="Password"
-            description="Changing it signs you out on your other devices. You stay signed in here."
-          >
-            <ChangePasswordForm />
-          </SettingsCard>
+          <div className="space-y-6">
+            <SettingsCard
+              icon={UserRound}
+              title="Personal details"
+              description="The name other people see on your plans, requests and messages."
+            >
+              <AccountDetailsForm name={account.name} email={account.email} />
+            </SettingsCard>
+            <SettingsCard
+              icon={KeyRound}
+              title="Password"
+              description="Changing it signs you out on your other devices. You stay signed in here."
+            >
+              <ChangePasswordForm />
+            </SettingsCard>
+          </div>
         </div>
       </div>
     </>

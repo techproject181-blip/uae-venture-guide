@@ -61,6 +61,7 @@ export default async function InterestConversationPage({ params }) {
                 { label: "Interest sent", value: formatDate(interest.createdAt) },
                 {
                   label: "Plan",
+                  wide: true,
                   value: planReadable ? (
                     <Link
                       href={`/plans/${plan._id}`}

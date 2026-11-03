@@ -81,7 +81,9 @@ export default async function AdminSourcesPage({ searchParams }) {
                 <th scope="col" className="hidden md:table-cell">
                   Emirate
                 </th>
-                <th scope="col">Status</th>
+                <th scope="col" className="hidden sm:table-cell">
+                  Status
+                </th>
                 <th scope="col" className="hidden md:table-cell">
                   Last checked
                 </th>
@@ -95,6 +97,12 @@ export default async function AdminSourcesPage({ searchParams }) {
                 const id = String(source._id);
                 const emirate = source.emirate ? labelOf(EMIRATES, source.emirate) : "Federal";
                 const fees = feesBySource.get(id) ?? 0;
+                const status = (
+                  <div className="flex flex-wrap gap-1.5">
+                    <StatusBadge status={source.active ? "active" : "hidden"} label={source.active ? "Shown" : "Hidden"} />
+                    {source.demo && <Stamp tone="waiting">Not checked</Stamp>}
+                  </div>
+                );
                 return (
                   <tr key={id}>
                     <td>
@@ -110,14 +118,11 @@ export default async function AdminSourcesPage({ searchParams }) {
                         {emirate} · {fees === 1 ? "1 fee" : `${fees} fees`} ·{" "}
                         <span className="whitespace-nowrap">checked {formatDate(source.verifiedAt)}</span>
                       </p>
+                      {/* The smallest screens hide the status column too. */}
+                      <div className="mt-2 sm:hidden">{status}</div>
                     </td>
                     <td className="hidden md:table-cell">{emirate}</td>
-                    <td>
-                      <div className="flex flex-wrap gap-1.5">
-                        <StatusBadge status={source.active ? "active" : "hidden"} label={source.active ? "Shown" : "Hidden"} />
-                        {source.demo && <Stamp tone="waiting">Not checked</Stamp>}
-                      </div>
-                    </td>
+                    <td className="hidden sm:table-cell">{status}</td>
                     <td className="hidden whitespace-nowrap md:table-cell">{formatDate(source.verifiedAt)}</td>
                     <td className="hidden text-right md:table-cell">{fees}</td>
                   </tr>

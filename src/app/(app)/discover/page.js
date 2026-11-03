@@ -13,7 +13,7 @@ import { requireUser } from "@/lib/guards";
 import { FunderProfile } from "@/models/FunderProfile";
 import { FundingInterest } from "@/models/FundingInterest";
 
-export const metadata = { title: "Discover" };
+export const metadata = { title: "Shared plans" };
 
 const selectClass =
   "h-11 w-full cursor-pointer rounded-lg border border-input bg-card px-3 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50";
@@ -47,7 +47,7 @@ export default async function DiscoverPage({ searchParams }) {
   return (
     <>
       <PageHeader
-        title="Discover"
+        title="Shared plans"
         description="Plans that entrepreneurs chose to share. You see a full plan only if its owner accepts your interest."
       />
 

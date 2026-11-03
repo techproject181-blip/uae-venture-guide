@@ -57,8 +57,8 @@ export function PostFormHelp() {
 
       <Panel title="Who reads it">
         <p className="text-sm text-muted-foreground">
-          Published posts are public: anyone can read them on the Experience posts page, signed in or not. An administrator can hide a post
-          that breaks the rules.
+          A post is public as soon as you publish it. Anyone can read it, signed in or not, on the Experience posts page and on your mentor
+          profile. An administrator can hide a post that breaks the rules.
         </p>
       </Panel>
     </>

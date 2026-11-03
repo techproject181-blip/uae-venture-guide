@@ -42,7 +42,7 @@ export default async function PlanLayout({ children, params }) {
       ) : user.role === "funder" ? (
         <BackLink href="/interests">My interests</BackLink>
       ) : user.role === "mentor" ? (
-        <BackLink href="/requests">Requests</BackLink>
+        <BackLink href="/requests">Guidance requests</BackLink>
       ) : null}
       {/* The plan's header: one panel with the title, its buttons, the facts and how far the plan is. */}
       <div className="panel overflow-hidden">

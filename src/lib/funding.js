@@ -12,13 +12,13 @@ import { User } from "@/models/User"; // also registers the model that populate(
 //
 // Funders find a plan only while it is shared, finished and not hidden by an
 // administrator, and while its owner's account is active: a suspended owner's
-// plans leave Discover and take no new interest until the account is active again.
+// plans leave "Shared plans" and take no new interest until the account is active again.
 
 const PITCH_FIELDS = "title sector emirate budgetAed pitchSummary tasks.status updatedAt";
 
 const SHARED = { shared: true, hiddenByAdmin: false, status: "ready" };
 
-/** How many pitch cards one page of Discover shows. */
+/** How many pitch cards one page of "Shared plans" shows. */
 export const PITCH_CARDS_PER_PAGE = 20;
 
 /** `filter` for shared plans, limited to owners whose account is active. */

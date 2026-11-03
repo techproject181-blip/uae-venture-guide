@@ -143,7 +143,8 @@ export async function listConversations(user) {
 
 /**
  * The numbers next to the navigation links, keyed by the link: next to
- * "Requests", what waits for the user's answer (requests sent to a mentor,
+ * /requests ("Guidance requests" for mentors, "Mentors & funders" for
+ * entrepreneurs), what waits for the user's answer (requests sent to a mentor,
  * funder interest in an entrepreneur's plans); next to "Messages", the
  * conversations with new messages.
  */

@@ -78,6 +78,7 @@ export default async function RequestConversationPage({ params }) {
                 { label: "Sent", value: formatDate(request.createdAt) },
                 plan && {
                   label: "Attached plan",
+                  wide: true,
                   value: planReadable ? (
                     <Link
                       href={`/plans/${plan._id}`}

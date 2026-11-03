@@ -69,8 +69,8 @@ export default function HomePage() {
           />
           <div className="page-width grid items-center gap-12 py-12 sm:py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-12 lg:py-20 xl:gap-20">
             <div className="intro text-center lg:text-left">
-              <p className="mx-auto inline-flex items-center gap-2 rounded-full border bg-card px-3.5 py-1.5 text-sm font-medium shadow-xs lg:mx-0">
-                <span className="relative flex size-2">
+              <p className="mx-auto inline-flex max-w-full items-baseline gap-2 rounded-2xl border bg-card px-3.5 py-1.5 text-left text-sm font-medium shadow-xs sm:items-center sm:rounded-full lg:mx-0">
+                <span className="relative flex size-2 shrink-0 self-center max-sm:self-start max-sm:mt-1.5">
                   <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand-400 opacity-75" />
                   <span className="relative inline-flex size-2 rounded-full bg-primary" />
                 </span>

@@ -8,7 +8,7 @@ import { FundingInterest } from "@/models/FundingInterest";
 import { User } from "@/models/User";
 
 // POST /api/plans/:id/interest  { message }: a funder tells the owner of a shared plan they are interested.
-// Only a plan funders can find on Discover takes interest (see lib/funding.js).
+// Only a plan funders can find on "Shared plans" takes interest (see lib/funding.js).
 export const POST = route(async (request, { params }) => {
   const funder = await requireApiUser("funder");
   const { id } = await params;

@@ -15,11 +15,18 @@ import { formatDate } from "@/lib/format";
 import { requireUser } from "@/lib/guards";
 import { listInterestsForOwner } from "@/lib/funding";
 import { interestChats, requestChats } from "@/lib/inbox";
+import { getCurrentUser } from "@/lib/session";
 import { MentorRequest } from "@/models/MentorRequest";
 import "@/models/Plan"; // registers the models that populate() reads from
 import "@/models/User";
 
-export const metadata = { title: "Requests" };
+// Named after what each role does here, like the link in the navigation.
+const TITLES = { mentor: "Guidance requests", entrepreneur: "Mentors & funders" };
+
+export async function generateMetadata() {
+  const user = await getCurrentUser();
+  return { title: TITLES[user?.role] ?? "Requests" };
+}
 
 const rowLink = "text-foreground decoration-primary underline underline-offset-4 hover:decoration-2";
 
@@ -54,7 +61,7 @@ export default async function RequestsPage() {
   const list =
     requests.length === 0 ? (
       <EmptyState
-        title="No requests yet"
+        title={isMentor ? "No requests yet" : "No requests to mentors yet"}
         text={isMentor ? "Requests from entrepreneurs appear here." : "Find a mentor and ask for help with your plan."}
         action={
           !isMentor && (
@@ -65,7 +72,11 @@ export default async function RequestsPage() {
         }
       />
     ) : (
-      <Panel title="Guidance requests" description={isMentor ? undefined : "Open a chat once a mentor accepts."} flush>
+      <Panel
+        title={isMentor ? "Guidance requests" : "Your requests to mentors"}
+        description={isMentor ? undefined : "Open a chat once a mentor accepts."}
+        flush
+      >
         <ul className="divide-y">
           {requests.map((request) => (
             <RequestEntry key={request._id} request={request} isMentor={isMentor} chat={chats.get(request._id)} />
@@ -77,11 +88,11 @@ export default async function RequestsPage() {
   return (
     <>
       <PageHeader
-        title={isMentor ? "Guidance requests" : "Requests"}
+        title={TITLES[user.role]}
         description={
           isMentor
             ? "Entrepreneurs asking for your help. Once you accept, you can talk in a saved chat here and read the attached plan."
-            : "Your guidance requests to mentors, and funders' interest in your shared plans."
+            : "The requests you sent to mentors, and funders' interest in your shared plans."
         }
       />
 

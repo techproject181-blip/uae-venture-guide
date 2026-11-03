@@ -34,7 +34,7 @@ export default async function InterestsPage() {
           text="Browse shared plans and tell owners when one interests you."
           action={
             <Link href="/discover" className={buttonVariants({ size: "lg" })}>
-              Discover plans
+              See shared plans
             </Link>
           }
         />

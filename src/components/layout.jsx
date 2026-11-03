@@ -36,10 +36,13 @@ export function BackLink({ href, children, className }) {
 export function PageHeader({ title, description, actions, back, children, className }) {
   return (
     <div data-page-header className={cn("mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between lg:mb-10", className)}>
-      <div data-page-title className="min-w-0">
-        {back && <BackLink href={back.href}>{back.label}</BackLink>}
-        <h1 className="font-display text-[1.875rem] leading-[1.15] font-bold tracking-[-0.03em] sm:text-[2.25rem]">{title}</h1>
-        {description && <p className="mt-2 max-w-2xl text-muted-foreground">{description}</p>}
+      <div className="min-w-0">
+        {/* The admin console hides this part on small screens, where its top bar shows the title. */}
+        <div data-page-title>
+          {back && <BackLink href={back.href}>{back.label}</BackLink>}
+          <h1 className="font-display text-[1.875rem] leading-[1.15] font-bold tracking-[-0.03em] sm:text-[2.25rem]">{title}</h1>
+          {description && <p className="mt-2 max-w-2xl text-muted-foreground">{description}</p>}
+        </div>
         {children && <div className="mt-3">{children}</div>}
       </div>
       {actions && <div className="flex shrink-0 flex-wrap gap-2">{actions}</div>}
@@ -94,9 +97,18 @@ export function Panel({ title, description, actions, footer, children, flush = f
  */
 export function Split({ children, aside, className }) {
   return (
-    <div className={cn("grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-8 xl:grid-cols-[minmax(0,1fr)_23rem]", className)}>
-      <div className="min-w-0 space-y-6 lg:space-y-8">{children}</div>
-      {aside && <aside className="min-w-0 space-y-6">{aside}</aside>}
+    // The side column appears when the page's own width allows it (a container
+    // query), not the window's: beside the admin sidebar the page is 300px narrower.
+    <div className="@container">
+      <div
+        className={cn(
+          "grid items-start gap-6 @min-[64rem]:grid-cols-[minmax(0,1fr)_20rem] @min-[64rem]:gap-8 @min-[80rem]:grid-cols-[minmax(0,1fr)_23rem]",
+          className,
+        )}
+      >
+        <div className="min-w-0 space-y-6 lg:space-y-8">{children}</div>
+        {aside && <aside className="min-w-0 space-y-6">{aside}</aside>}
+      </div>
     </div>
   );
 }
@@ -128,7 +140,11 @@ export function TablePanel({ title, description, actions, children, className })
 
 /** Numbers at the top of a dashboard: two side by side on phones, up to four in a row. */
 export function StatGrid({ children, className }) {
-  return <dl className={cn("stagger grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6", className)}>{children}</dl>;
+  return (
+    <div className="@container">
+      <dl className={cn("stagger grid grid-cols-2 gap-4 @min-[48rem]:grid-cols-4 lg:gap-6", className)}>{children}</dl>
+    </div>
+  );
 }
 
 /** One number with its label. `tone="danger"` colours it red, for amounts over budget. `href` makes the whole card a link. */
@@ -136,7 +152,8 @@ export function Stat({ label, value, hint, tone, href }) {
   const number = (
     <span
       className={cn(
-        "block font-display text-[1.375rem] leading-none font-bold tracking-[-0.02em] tabular-nums sm:text-[1.875rem]",
+        // Sized by the card's own width, so an amount like "AED 120,000" stays on one line.
+        "block font-display text-[1.375rem] leading-none font-bold tracking-[-0.02em] tabular-nums @min-[11rem]:text-[1.625rem] @min-[13rem]:text-[1.875rem]",
         tone === "danger" && "text-destructive",
       )}
     >
@@ -144,7 +161,7 @@ export function Stat({ label, value, hint, tone, href }) {
     </span>
   );
   return (
-    <div className={cn("panel relative p-5 sm:p-6", href && "panel-link")}>
+    <div className={cn("@container panel relative p-5 sm:p-6", href && "panel-link")}>
       <dt className="text-sm font-medium text-muted-foreground">{label}</dt>
       <dd className="mt-2">
         {href ? (

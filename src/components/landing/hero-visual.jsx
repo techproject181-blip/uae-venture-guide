@@ -67,12 +67,14 @@ export function HeroVisual() {
                   {step.done && <Check className="size-3.5" strokeWidth={3} />}
                 </span>
                 <span className="hidden w-7 shrink-0 text-sm text-muted-foreground tabular-nums sm:inline">{step.number}</span>
-                <span className="min-w-0 flex-1 text-sm font-medium">{step.title}</span>
-                <span className="flex shrink-0 flex-col items-end gap-1.5">
-                  <span className="text-sm font-medium whitespace-nowrap tabular-nums">{step.fee}</span>
-                  {step.basis === "official" && <Stamp tone="official">Official</Stamp>}
-                  {step.basis === "demo" && <Stamp tone="quiet">Typical fee</Stamp>}
-                  {step.basis === "estimate" && <span className="text-xs text-muted-foreground">Estimate</span>}
+                <span className="flex min-w-0 flex-1 flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
+                  <span className="min-w-0 flex-1 text-sm font-medium">{step.title}</span>
+                  <span className="flex shrink-0 flex-wrap items-center gap-x-2 gap-y-1.5 sm:flex-col sm:items-end">
+                    <span className="text-sm font-medium whitespace-nowrap tabular-nums">{step.fee}</span>
+                    {step.basis === "official" && <Stamp tone="official">Official</Stamp>}
+                    {step.basis === "demo" && <Stamp tone="quiet">Typical fee</Stamp>}
+                    {step.basis === "estimate" && <span className="text-xs text-muted-foreground">Estimate</span>}
+                  </span>
                 </span>
               </li>
             ))}
@@ -111,7 +113,7 @@ export function HeroVisual() {
       {/* Floating card */}
       <div
         aria-hidden="true"
-        className="float-slow absolute -top-7 -right-4 hidden items-center gap-3 rounded-xl border bg-card p-3.5 pr-5 shadow-lg sm:flex lg:-right-8"
+        className="float-slow absolute -top-14 -right-3 hidden items-center gap-3 rounded-xl border bg-card p-3.5 pr-5 shadow-lg sm:flex"
         style={{ animationDelay: "-3s" }}
       >
         <span className="flex size-9 items-center justify-center rounded-full bg-accent text-xs font-bold text-accent-foreground">ABC</span>

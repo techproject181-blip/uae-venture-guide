@@ -16,11 +16,14 @@ export function AdminTabs({ label, tabs, children }) {
   );
 }
 
-/** The segmented control on its own, for a second filter on the right of the bar. */
+/**
+ * The segmented control on its own, for a second filter on the right of the bar.
+ * On a narrow screen the tabs wrap onto a second line, so none is out of sight.
+ */
 export function TabLinks({ label, tabs }) {
   return (
-    <nav aria-label={label} className="no-scrollbar -mx-1 overflow-x-auto px-1">
-      <ul className="inline-flex gap-0.5 rounded-lg border bg-ink-100/70 p-0.5">
+    <nav aria-label={label} className="min-w-0">
+      <ul className="inline-flex flex-wrap gap-0.5 rounded-lg border bg-ink-100/70 p-0.5">
         {tabs.map((tab) => (
           <li key={tab.href}>
             <Link
