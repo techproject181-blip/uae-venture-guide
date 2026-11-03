@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Lock, Send } from "lucide-react";
+import { Avatar } from "@/components/avatar";
 import { FormAlert } from "@/components/form/form-alert";
 import { Spinner } from "@/components/loaders/spinner";
 import { Button } from "@/components/ui/button";
@@ -195,9 +196,12 @@ export function Conversation({
         className="max-h-[60vh] min-h-64 space-y-5 overflow-y-auto bg-ink-50 px-4 py-5 outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset sm:px-6"
       >
         <Bubble message={opening} label={openingLabel} />
-        {messages.map((message) => (
-          <Bubble key={message.id} message={message} />
-        ))}
+        {messages.map((message, index) => {
+          const previous = index === 0 ? opening : messages[index - 1];
+          // Several messages in a row from one person show the name once, as chat apps do.
+          const sameAuthor = previous.mine === message.mine && previous.authorName === message.authorName;
+          return <Bubble key={message.id} message={message} showName={!sameAuthor} />;
+        })}
         {messages.length === 0 && (
           <p className="text-center text-sm text-muted-foreground">
             {canSend ? "No messages yet. Say hello to start the conversation." : "No messages were sent."}
@@ -257,10 +261,21 @@ export function Conversation({
 }
 
 /** One message: yours on the right in emerald, theirs on the left on white. */
-function Bubble({ message, label }) {
+/**
+ * One message: the writer's initials and name above it (unless the message
+ * before is theirs too), the text in a bubble (yours on the right, in green),
+ * and the time under it.
+ */
+function Bubble({ message, label, showName = true }) {
   const { mine } = message;
   return (
     <div className={cn("flex flex-col", mine ? "items-end" : "items-start")}>
+      {showName && (
+        <p className={cn("mb-1.5 flex items-center gap-2 px-1 text-sm font-medium", mine && "flex-row-reverse")}>
+          <Avatar name={message.authorName} className="size-7 text-[0.625rem] font-semibold" />
+          {message.authorName}
+        </p>
+      )}
       <div
         className={cn(
           "max-w-[85%] rounded-2xl px-4 py-2.5 leading-relaxed whitespace-pre-line wrap-anywhere sm:max-w-[75%]",
@@ -280,7 +295,6 @@ function Bubble({ message, label }) {
         {message.body}
       </div>
       <p className="mt-1 px-1 text-xs text-muted-foreground">
-        <span className="font-medium">{mine ? "You" : message.authorName}</span> ·{" "}
         <time dateTime={message.createdAt}>{formatTime(message.createdAt)}</time>
       </p>
     </div>

@@ -380,7 +380,8 @@ export function ShortcutsSkeleton() {
     <div className="panel overflow-hidden">
       <PanelHeadSkeleton titleWidth="w-24" />
       <ul className="divide-y">
-        {[0, 1, 2].map((n) => (
+        {/* Every dashboard has four shortcuts. */}
+        {[0, 1, 2, 3].map((n) => (
           <li key={n} className="flex items-center gap-3.5 px-5 py-4 sm:px-6">
             <Bone className="size-9 shrink-0 rounded-lg" />
             <div className="min-w-0 flex-1">

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Compass, HandCoins, Inbox, Landmark, Newspaper, Plus, UserRound, Users } from "lucide-react";
+import { Compass, HandCoins, Inbox, Landmark, MessagesSquare, Newspaper, Plus, UserRound, Users } from "lucide-react";
 import { AcceptingSwitch } from "@/components/dashboard/accepting-switch";
 import { Greeting, NextStep, Row, Shortcuts, TextLink, count, rowLink } from "@/components/dashboard/dashboard-bits";
 import { ListPanel, Panel, Split, Stat, StatGrid } from "@/components/layout";
@@ -81,6 +81,7 @@ export async function EntrepreneurDashboard({ user }) {
               items={[
                 { href: "/mentors", label: "Find a mentor", detail: "Ask someone who has done it before", icon: Users },
                 { href: "/requests", label: "Requests", detail: "Guidance requests and funder interest", icon: Inbox },
+                { href: "/messages", label: "Messages", detail: "Your chats with mentors and funders", icon: MessagesSquare },
                 { href: "/sources", label: "Official sources", detail: "The pages behind the official costs", icon: Landmark },
               ]}
             />
@@ -169,7 +170,8 @@ export async function MentorDashboard({ user }) {
             )}
             <Shortcuts
               items={[
-                { href: "/requests", label: "Requests", detail: "Answer and talk with entrepreneurs", icon: Inbox },
+                { href: "/requests", label: "Requests", detail: "Answer requests from entrepreneurs", icon: Inbox },
+                { href: "/messages", label: "Messages", detail: "Your chats with entrepreneurs", icon: MessagesSquare },
                 { href: "/my-posts", label: "Your posts", detail: count(postCount, "post"), icon: Newspaper },
                 { href: "/profile", label: "Your profile", detail: "What entrepreneurs see in the directory", icon: UserRound },
               ]}
@@ -273,6 +275,7 @@ export async function FunderDashboard({ user }) {
               items={[
                 { href: "/discover", label: "Discover plans", detail: "Pitch cards of shared plans", icon: Compass },
                 { href: "/interests", label: "Your interests", detail: count(interests.length, "interest") + " sent", icon: HandCoins },
+                { href: "/messages", label: "Messages", detail: "Your chats with entrepreneurs", icon: MessagesSquare },
                 { href: "/profile", label: "Your profile", detail: "What owners read about you", icon: UserRound },
               ]}
             />

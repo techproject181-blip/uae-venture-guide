@@ -44,7 +44,7 @@ export default async function InterestsPage() {
             const plan = interest.planId;
             const open = interest.status === "accepted" && plan?.shared && !plan?.hiddenByAdmin;
             const chat = chats.get(interest._id);
-            const unread = chat?.unread ?? false;
+            const unread = (chat?.unread ?? 0) > 0;
             const ownerName = plan?.ownerId?.name ?? "the owner";
             // Until someone writes in the chat, your interest is the newest message.
             const last = chat?.last ?? { body: interest.message, createdAt: interest.createdAt, mine: true };
@@ -77,7 +77,7 @@ export default async function InterestsPage() {
                         </Link>
                         <Link
                           href={`/interests/${interest._id}`}
-                          className={buttonVariants({ variant: unread ? "default" : "outline", size: "lg" })}
+                          className={buttonVariants({ variant: "outline", size: "lg" })}
                         >
                           <MessagesSquare aria-hidden="true" />
                           Open chat<span className="sr-only"> with {ownerName}</span>

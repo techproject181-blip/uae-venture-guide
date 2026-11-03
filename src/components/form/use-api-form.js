@@ -43,6 +43,11 @@ export function useApiForm({ schema, send, onSuccess }) {
       setErrors(found);
       setFormError(result.error ?? "Something went wrong. Please try again.");
       focusFirstError(form, found);
+      // A message for the whole form sits at its top, out of sight below a long
+      // form, so it is brought into view once drawn.
+      if (Object.keys(found).length === 0) {
+        requestAnimationFrame(() => form.querySelector('[role="alert"]')?.scrollIntoView({ behavior: "smooth", block: "center" }));
+      }
     }
   }
 

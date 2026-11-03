@@ -1,5 +1,6 @@
 "use client";
 
+import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { SelectField, TextAreaField, TextField } from "@/components/form/fields";
 import { FormAlert } from "@/components/form/form-alert";
@@ -7,19 +8,33 @@ import { FormPart } from "@/components/form/form-part";
 import { SubmitButton } from "@/components/form/submit-button";
 import { useApiForm } from "@/components/form/use-api-form";
 import { FormActions } from "@/components/layout";
-import { RoadLoader } from "@/components/loaders/road-loader";
+import { BuildingDialog } from "@/components/plans/building-dialog";
 import { EMIRATES, JURISDICTION_PREFERENCES, SECTORS } from "@/lib/constants";
 import { apiRequest } from "@/lib/query";
 import { intakeSchema } from "@/lib/schemas/plans";
 
-/** The questions that a new plan's roadmap is built from. */
+/**
+ * The questions that a new plan's roadmap is built from. While the roadmap is
+ * built, the road animation shows in the middle of the screen, until the new
+ * plan is on the page.
+ */
 export function IntakeForm() {
   const router = useRouter();
+  // Opening the new plan is part of the wait, so the animation stays until it shows.
+  const [opening, startOpening] = useTransition();
   const { errors, formError, pending, handleSubmit, clearError } = useApiForm({
     schema: intakeSchema,
-    send: (data) => apiRequest("POST", "/api/plans", data),
-    onSuccess: (result) => router.push(`/plans/${result.id}`),
+    send: async (data) => {
+      const result = await apiRequest("POST", "/api/plans", data);
+      // No answer at all (no status): the plan may still have been made on the server.
+      if (!result.ok && !result.status) {
+        return { ...result, error: "Could not reach the server. Your plan may still have been made, so check My plans before you try again." };
+      }
+      return result;
+    },
+    onSuccess: (result) => startOpening(() => router.push(`/plans/${result.id}`)),
   });
+  const building = pending || opening;
 
   return (
     <form noValidate onSubmit={handleSubmit} onChange={clearError} className="space-y-6 lg:space-y-8">
@@ -79,11 +94,11 @@ export function IntakeForm() {
       </FormPart>
 
       <FormActions>
-        <SubmitButton pending={pending} pendingText="Building your roadmap…">
+        <SubmitButton pending={building} pendingText="Building your roadmap…">
           Build my roadmap
         </SubmitButton>
       </FormActions>
-      {pending && <RoadLoader label="Finding the steps, fees and documents for your business…" className="panel px-6 py-8" />}
+      <BuildingDialog open={building} title="Building your roadmap" />
     </form>
   );
 }

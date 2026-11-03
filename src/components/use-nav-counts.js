@@ -4,8 +4,8 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { queryKeys, useApiQuery } from "@/lib/query";
 
-// The links whose number counts new messages (see lib/inbox.js navCounts).
-const COUNTED = ["/requests", "/interests"];
+// The links with a number next to them (see lib/inbox.js navCounts).
+const COUNTED = ["/requests", "/messages"];
 
 // How often to ask while the tab is in view. The layout drew the first numbers,
 // but it is not drawn again on each page change, so the links ask for themselves.

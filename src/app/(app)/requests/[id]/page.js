@@ -53,7 +53,7 @@ export default async function RequestConversationPage({ params }) {
       <PageHeader
         title={request.topic}
         description={`${isMentor ? "Guidance request from" : "Your guidance request to"} ${otherName}.`}
-        back={{ href: "/requests", label: "All requests" }}
+        back={{ href: "/messages", label: "Messages" }}
         actions={isMentor && request.status === "accepted" && <RequestActions requestId={String(request._id)} status={request.status} />}
       >
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-muted-foreground">

@@ -17,11 +17,13 @@ const NAV = {
     { href: "/plans", label: "My plans" },
     { href: "/mentors", label: "Mentors" },
     { href: "/requests", label: "Requests" },
+    { href: "/messages", label: "Messages" },
     { href: "/sources", label: "Sources" },
   ],
   mentor: [
     { href: "/dashboard", label: "Dashboard" },
     { href: "/requests", label: "Requests" },
+    { href: "/messages", label: "Messages" },
     { href: "/my-posts", label: "My posts" },
     { href: "/profile", label: "Profile" },
   ],
@@ -29,6 +31,7 @@ const NAV = {
     { href: "/dashboard", label: "Dashboard" },
     { href: "/discover", label: "Discover" },
     { href: "/interests", label: "My interests" },
+    { href: "/messages", label: "Messages" },
     { href: "/profile", label: "Profile" },
   ],
   admin: [
@@ -49,8 +52,8 @@ const PENDING_NAV = [
 export async function AppShell({ user, children }) {
   // Administrators get their own console with a sidebar.
   if (user.role === "admin" && user.status === "active") return <AdminShell user={user}>{children}</AdminShell>;
-  // What waits for an answer, plus conversations with new messages, sits next to
-  // "Requests" (or "My interests"). The links keep it up to date from here on.
+  // What waits for an answer sits next to "Requests", and conversations with new
+  // messages next to "Messages". The links keep them up to date from here on.
   const counts = await navCounts(user);
   const links = (user.status === "active" ? NAV[user.role] : PENDING_NAV).map((link) =>
     counts[link.href] > 0 ? { ...link, count: counts[link.href] } : link,

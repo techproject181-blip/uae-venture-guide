@@ -7,7 +7,8 @@ import { cn } from "@/lib/utils";
  * The newest message as up to two lines: "You: …" or "Omar: …". Bold and dark
  * while it is unread, quiet once read; screen readers hear "New message" first.
  */
-export function ChatPreview({ body, mine, authorName, unread = false, className }) {
+export function ChatPreview({ body, mine, authorName, unread: isNew = false, className }) {
+  const unread = Boolean(isNew);
   const who = mine ? "You" : (authorName ?? "").split(" ")[0] || "They";
   return (
     <p

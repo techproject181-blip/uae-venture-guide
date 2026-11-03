@@ -31,7 +31,7 @@ export function InterestList({ interests, chats = new Map() }) {
         ].filter(Boolean);
         const funderName = funder?.name ?? "A removed account";
         const chat = chats.get(interest._id);
-        const unread = chat?.unread ?? false;
+        const unread = (chat?.unread ?? 0) > 0;
         // Until someone writes in the chat, the funder's interest is the newest message.
         const last = chat?.last ?? { body: interest.message, createdAt: interest.createdAt, mine: false };
 
@@ -71,7 +71,7 @@ export function InterestList({ interests, chats = new Map() }) {
 
               <div className="flex shrink-0 flex-wrap gap-2 md:justify-end">
                 {interest.status === "accepted" && funder && (
-                  <Link href={`/interests/${interest._id}`} className={buttonVariants({ variant: unread ? "default" : "outline" })}>
+                  <Link href={`/interests/${interest._id}`} className={buttonVariants({ variant: "outline" })}>
                     <MessagesSquare aria-hidden="true" />
                     Open chat<span className="sr-only"> with {funder.name}</span>
                   </Link>

@@ -78,8 +78,13 @@ export default async function MentorsPage({ searchParams }) {
       ) : (
         <>
           <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+            {/* The directory lists every approved mentor, so without filters it says so. */}
             <p role="status">
-              {mentors.length} {mentors.length === 1 ? "mentor" : "mentors"}
+              {filtered
+                ? `${mentors.length} ${mentors.length === 1 ? "mentor matches" : "mentors match"} your filters`
+                : mentors.length === 1
+                  ? "1 mentor on the platform"
+                  : `All ${mentors.length} mentors on the platform`}
             </p>
             {filtered && (
               <Link href="/mentors" className={linkClass}>

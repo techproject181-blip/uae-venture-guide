@@ -49,7 +49,7 @@ export default async function InterestConversationPage({ params }) {
       <PageHeader
         title={plan.title}
         description={isFunder ? `Your conversation with ${otherName}, the plan's owner.` : `Your conversation with ${otherName}, a funder.`}
-        back={isFunder ? { href: "/interests", label: "My interests" } : { href: "/requests", label: "Requests" }}
+        back={{ href: "/messages", label: "Messages" }}
       />
 
       <Split

@@ -119,7 +119,7 @@ function RequestEntry({ request, isMentor, chat }) {
   const hasChat = accepted || request.status === "completed";
   const plan = request.planId;
   const planReadable = accepted || !isMentor;
-  const unread = chat?.unread ?? false;
+  const unread = (chat?.unread ?? 0) > 0;
   // Until someone writes in the chat, the request itself is the newest message.
   const last = chat?.last ?? { body: request.message, createdAt: request.createdAt, mine: !isMentor };
 
@@ -168,7 +168,7 @@ function RequestEntry({ request, isMentor, chat }) {
           {hasChat && (
             <Link
               href={`/requests/${request._id}`}
-              className={buttonVariants({ variant: accepted || unread ? "default" : "outline" })}
+              className={buttonVariants({ variant: "outline" })}
             >
               <MessagesSquare aria-hidden="true" />
               Open chat<span className="sr-only"> about {request.topic}</span>

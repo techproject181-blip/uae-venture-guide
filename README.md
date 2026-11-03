@@ -1,6 +1,6 @@
 # UAE Venture Guide
 
-A website that helps students and first-time founders plan a small business in the UAE. You enter your idea, emirate and budget. The app builds a step-by-step roadmap with costs, a budget, a document list and a plan assistant. Mentors and funders can help too.
+A website that helps students and first-time entrepreneurs plan a small business in the UAE. You enter your idea, emirate and budget. The app builds a step-by-step roadmap with costs, a budget, a document list and a plan assistant. Mentors and funders can help too.
 
 ## Run it
 

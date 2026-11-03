@@ -32,7 +32,8 @@ export function SharingForm({ planId, card, shared, notice }) {
     send: (data) => apiRequest("PATCH", `/api/plans/${planId}/sharing`, data),
     onSuccess: (result) => {
       toast.success(result.shared ? "Your plan is shared with funders." : "Your plan is no longer shared.");
-      router.refresh();
+      // The settings are saved, so go back to the plan's overview.
+      router.push(`/plans/${planId}`);
     },
   });
 
