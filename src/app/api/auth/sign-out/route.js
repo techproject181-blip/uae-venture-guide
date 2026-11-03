@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
+import { fromOtherSite } from "@/lib/api";
 import { deleteSession, getCurrentUser } from "@/lib/session";
 
-// POST /api/auth/sign-out: the Sign out button.
-export async function POST() {
+// POST /api/auth/sign-out: the Sign out button. A form on another website cannot use it.
+export async function POST(request) {
+  if (fromOtherSite(request)) return Response.json({ error: "Please use the button on this website." }, { status: 403 });
   await deleteSession();
   return Response.json({ ok: true });
 }

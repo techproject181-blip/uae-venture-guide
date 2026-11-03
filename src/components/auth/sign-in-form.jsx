@@ -11,8 +11,7 @@ import { useApiForm } from "@/components/form/use-api-form";
 import { apiRequest } from "@/lib/query";
 import { signInSchema } from "@/lib/schemas/auth";
 
-/** `notice` is a message shown before the first attempt, for example after a suspension. */
-export function SignInForm({ notice = null }) {
+export function SignInForm() {
   const router = useRouter();
   // Stays true until the next page opens, so the overlay covers the redirect too.
   const [leaving, setLeaving] = useState(false);
@@ -29,7 +28,7 @@ export function SignInForm({ notice = null }) {
   return (
     <form method="post" noValidate onSubmit={handleSubmit} onChange={clearError} className="mt-8 space-y-5">
       {(pending || leaving) && <LoadingOverlay label="Signing in…" />}
-      <FormAlert>{formError ?? notice}</FormAlert>
+      <FormAlert>{formError}</FormAlert>
       <TextField id="email" label="Email" type="email" autoComplete="email" error={errors.email} />
       <div>
         <PasswordField id="password" label="Password" autoComplete="current-password" error={errors.password} />

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { ApiError } from "@/lib/api";
 import { connectDB } from "@/lib/db";
+import { InterestMessage } from "@/models/InterestMessage";
 import { MentorRequest } from "@/models/MentorRequest";
 import { RequestMessage } from "@/models/RequestMessage";
 import { User } from "@/models/User";
@@ -105,13 +106,36 @@ export async function listMessages(request, viewerId, { after } = {}) {
 export async function sendMessage(conversation, user, body) {
   if (!conversation.canSend) throw new ApiError(409, whyClosed(conversation));
   await connectDB();
-  const aMinuteAgo = new Date(Date.now() - 60 * 1000);
-  const recent = await RequestMessage.countDocuments({ authorId: user.id, createdAt: { $gt: aMinuteAgo } });
-  if (recent >= MESSAGES_PER_MINUTE) {
-    throw new ApiError(429, "You are sending messages too quickly. Please wait a minute and try again.");
-  }
-  const message = await RequestMessage.create({ requestId: conversation.request._id, authorId: user.id, body });
+  const message = await saveWithinRate(user, () =>
+    RequestMessage.create({ requestId: conversation.request._id, authorId: user.id, body }),
+  );
   return toMessage({ ...message.toObject(), authorId: { _id: user.id, name: user.name } }, user.id);
+}
+
+/** Messages `userId` sent in the last minute, in mentor and funder conversations together; with `upToId`, only those saved up to that one. */
+async function sentLastMinute(userId, upToId) {
+  const filter = { authorId: userId, createdAt: { $gt: new Date(Date.now() - 60 * 1000) } };
+  if (upToId) filter._id = { $lte: upToId };
+  const counts = await Promise.all([RequestMessage.countDocuments(filter), InterestMessage.countDocuments(filter)]);
+  return counts[0] + counts[1];
+}
+
+/**
+ * Saves a message with `create`, or throws a 429 error when `user` has already
+ * sent MESSAGES_PER_MINUTE messages in the last minute. Messages sent at the
+ * same moment can all pass the first count, so each one counts again once
+ * saved, taking in only the messages saved before it, and is removed again
+ * when it went over the limit. Used by both kinds of conversation.
+ */
+export async function saveWithinRate(user, create) {
+  const tooQuickly = () => new ApiError(429, "You are sending messages too quickly. Please wait a minute and try again.");
+  if ((await sentLastMinute(user.id)) >= MESSAGES_PER_MINUTE) throw tooQuickly();
+  const message = await create();
+  if ((await sentLastMinute(user.id, message._id)) > MESSAGES_PER_MINUTE) {
+    await message.deleteOne();
+    throw tooQuickly();
+  }
+  return message;
 }
 
 function toMessage(message, viewerId) {

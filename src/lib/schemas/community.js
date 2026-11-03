@@ -6,6 +6,17 @@ import { checkbox, multiChoice, optionalText, webUrl, wholeNumber } from "@/lib/
 
 const name = z.string("Enter your full name.").trim().min(2, "Enter your full name.").max(80, "Use 80 characters or fewer.");
 
+/** True for linkedin.com and its country sites, such as ae.linkedin.com. */
+function onLinkedIn(address) {
+  try {
+    const host = new URL(address).hostname;
+    return host === "linkedin.com" || host.endsWith(".linkedin.com");
+  } catch {
+    // Not a web address at all: the address check reports that instead.
+    return true;
+  }
+}
+
 export const mentorProfileSchema = z.object({
   name,
   headline: z.string("Write a one-line headline.").trim().min(5, "Write a one-line headline.").max(120, "Use 120 characters or fewer."),
@@ -20,7 +31,9 @@ export const mentorProfileSchema = z.object({
   yearsExperience: wholeNumber(0, 60, "Enter your years of experience (0 to 60)."),
   linkedinUrl: z.preprocess(
     (value) => (value === "" ? undefined : value),
-    webUrl("Enter your full LinkedIn address, starting with https://.").optional(),
+    webUrl("Enter your full LinkedIn address, starting with https://.")
+      .refine(onLinkedIn, "This is not a LinkedIn link. Use your profile address on linkedin.com, for example https://www.linkedin.com/in/your-name.")
+      .optional(),
   ),
   acceptingRequests: checkbox(),
 });

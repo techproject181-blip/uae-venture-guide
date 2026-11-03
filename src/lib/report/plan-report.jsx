@@ -166,47 +166,55 @@ export function PlanReport({ plan, sources }) {
           </View>
         </View>
 
-        <Text style={s.h2}>Roadmap</Text>
-        {plan.phases.map((phase, index) => (
-          <View key={phase._id} wrap={false} style={{ marginBottom: 6 }}>
-            <Text style={s.h3}>
-              {index + 1}. {phase.title}
-            </Text>
-            <View style={s.headRow}>
-              <Text style={[s.head, cell(0.4, { paddingLeft: 2 })]}>No.</Text>
-              <Text style={[s.head, cell(3)]}>Step</Text>
-              <Text style={[s.head, cell(2.2)]}>Cost</Text>
-              <Text style={[s.head, cell(0.7)]}>Days</Text>
-              <Text style={[s.head, cell(0.9)]}>Status</Text>
-            </View>
-            {plan.tasks
-              .filter((task) => task.phaseId === phase._id)
-              .map((task, taskIndex) => (
-                <View key={task._id} style={s.row}>
-                  <Text style={[cell(0.4, { paddingLeft: 2 }), s.muted]}>
-                    {index + 1}.{taskIndex + 1}
-                  </Text>
-                  <View style={cell(3)}>
-                    <Text>{task.title}</Text>
-                    {task.description ? <Text style={s.small}>{task.description}</Text> : null}
-                    {task.authority ? <Text style={[s.muted, s.small]}>{task.authority}</Text> : null}
-                  </View>
-                  <Text style={cell(2.2)}>
-                    {task.costMinAed || task.costMaxAed ? (
-                      <>
-                        {formatAedRange(task.costMinAed, task.costMaxAed)}
-                        <Basis basis={task.costBasis} />
-                      </>
-                    ) : (
-                      "No fee"
-                    )}
-                  </Text>
-                  <Text style={cell(0.7)}>{task.estDays}</Text>
-                  <Text style={[cell(0.9), task.status === "done" && s.done]}>{labelOf(TASK_STATUSES, task.status)}</Text>
+        {/* A phase may run onto the next page, so the steps fill the pages. Each step stays whole, and a
+            phase's heading, column names and first step stay together, so no heading ends a page alone. */}
+        {plan.phases.map((phase, index) => {
+          const rows = plan.tasks
+            .filter((task) => task.phaseId === phase._id)
+            .map((task, taskIndex) => (
+              <View key={task._id} style={s.row} wrap={false}>
+                <Text style={[cell(0.4, { paddingLeft: 2 }), s.muted]}>
+                  {index + 1}.{taskIndex + 1}
+                </Text>
+                <View style={cell(3)}>
+                  <Text>{task.title}</Text>
+                  {task.description ? <Text style={s.small}>{task.description}</Text> : null}
+                  {task.authority ? <Text style={[s.muted, s.small]}>{task.authority}</Text> : null}
                 </View>
-              ))}
-          </View>
-        ))}
+                <Text style={cell(2.2)}>
+                  {task.costMinAed || task.costMaxAed ? (
+                    <>
+                      {formatAedRange(task.costMinAed, task.costMaxAed)}
+                      <Basis basis={task.costBasis} />
+                    </>
+                  ) : (
+                    "No fee"
+                  )}
+                </Text>
+                <Text style={cell(0.7)}>{task.estDays}</Text>
+                <Text style={[cell(0.9), task.status === "done" && s.done]}>{labelOf(TASK_STATUSES, task.status)}</Text>
+              </View>
+            ));
+          return (
+            <View key={phase._id} style={{ marginBottom: 6 }}>
+              <View wrap={false}>
+                {index === 0 && <Text style={s.h2}>Roadmap</Text>}
+                <Text style={s.h3}>
+                  {index + 1}. {phase.title}
+                </Text>
+                <View style={s.headRow}>
+                  <Text style={[s.head, cell(0.4, { paddingLeft: 2 })]}>No.</Text>
+                  <Text style={[s.head, cell(3)]}>Step</Text>
+                  <Text style={[s.head, cell(2.2)]}>Cost</Text>
+                  <Text style={[s.head, cell(0.7)]}>Days</Text>
+                  <Text style={[s.head, cell(0.9)]}>Status</Text>
+                </View>
+                {rows[0]}
+              </View>
+              {rows.slice(1)}
+            </View>
+          );
+        })}
 
         <Text style={s.h2} break>
           Budget

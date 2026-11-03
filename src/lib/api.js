@@ -47,7 +47,12 @@ export function fromOtherSite(request) {
 /** Reads the JSON body and checks it with a Zod schema. Throws a 400 listing the bad fields. */
 export async function readBody(request, schema) {
   const body = await request.json().catch(() => null);
-  const parsed = schema.safeParse(body ?? {});
+  // Anything but a JSON object (an unreadable or empty body, a list) is refused,
+  // instead of being read as an empty form that could switch a setting off.
+  if (body === null || typeof body !== "object" || Array.isArray(body)) {
+    throw new ApiError(400, "The request could not be read. Please try again.");
+  }
+  const parsed = schema.safeParse(body);
   if (!parsed.success) {
     throw new ApiError(400, "Please fix the highlighted fields.", fieldErrors(parsed.error));
   }

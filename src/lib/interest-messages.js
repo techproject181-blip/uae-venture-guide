@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { ApiError } from "@/lib/api";
 import { connectDB } from "@/lib/db";
-import { MAX_MESSAGES, MESSAGES_PER_MINUTE } from "@/lib/messages";
+import { MAX_MESSAGES, saveWithinRate } from "@/lib/messages";
 import { FundingInterest } from "@/models/FundingInterest";
 import { InterestMessage } from "@/models/InterestMessage";
 import { Plan } from "@/models/Plan";
@@ -84,12 +84,9 @@ export async function listInterestMessages(interest, viewerId, { after } = {}) {
 export async function sendInterestMessage(conversation, user, body) {
   if (!conversation.canSend) throw new ApiError(409, whyInterestClosed(conversation));
   await connectDB();
-  const aMinuteAgo = new Date(Date.now() - 60 * 1000);
-  const recent = await InterestMessage.countDocuments({ authorId: user.id, createdAt: { $gt: aMinuteAgo } });
-  if (recent >= MESSAGES_PER_MINUTE) {
-    throw new ApiError(429, "You are sending messages too quickly. Please wait a minute and try again.");
-  }
-  const message = await InterestMessage.create({ interestId: conversation.interest._id, authorId: user.id, body });
+  const message = await saveWithinRate(user, () =>
+    InterestMessage.create({ interestId: conversation.interest._id, authorId: user.id, body }),
+  );
   return toMessage({ ...message.toObject(), authorId: { _id: user.id, name: user.name } }, user.id);
 }
 

@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import { aiModel, generateJson } from "../ai/openai.js";
+import { firstYearTotal } from "../budget.js";
+import { formatAed } from "../format.js";
 import {
   BUDGET_CATEGORIES,
   EMIRATES,
@@ -239,8 +241,20 @@ export function sanitiseRoadmap(answer, { intake, fees, sources }) {
       impact: risk.impact,
       mitigation: clip(risk.mitigation, 600),
     }))
-    .filter((risk) => risk.title)
-    .slice(0, MAX_RISKS);
+    .filter((risk) => risk.title);
+  // The model leaves out the running costs (salaries among them), which are
+  // added above, so it cannot tell when the first year goes over the budget.
+  // That warning comes first, worded as the sample planner words it.
+  const total = firstYearTotal(budgetItems);
+  if (total > intake.budgetAed) {
+    risks.unshift({
+      title: "Costs are higher than planned",
+      description: `The estimated first-year cost of ${formatAed(total)} is above your budget of ${formatAed(intake.budgetAed)}.`,
+      likelihood: "high",
+      impact: "high",
+      mitigation: "Keep at least three months of costs in reserve, and check every official fee before you pay.",
+    });
+  }
 
   return {
     recommendedJurisdiction: jurisdiction,
@@ -250,7 +264,7 @@ export function sanitiseRoadmap(answer, { intake, fees, sources }) {
     tasks,
     budgetItems,
     documents,
-    risks,
+    risks: risks.slice(0, MAX_RISKS),
   };
 }
 

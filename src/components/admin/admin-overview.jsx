@@ -149,7 +149,7 @@ export async function AdminOverview({ user }) {
         />
       </div>
 
-      <div className="grid items-start gap-4 xl:grid-cols-3">
+      <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-3">
         <div className="space-y-4 xl:col-span-2">
           <Card
             title="Waiting for approval"

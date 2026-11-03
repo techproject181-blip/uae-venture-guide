@@ -39,8 +39,10 @@ export default async function SourcesPage({ searchParams }) {
         description="Government and free zone pages about licences, visas, tax and funding. Fees marked Official in a roadmap come from these pages."
       />
 
-      {/* A plain GET form: the filters live in the address, so results can be shared and work without JavaScript. */}
+      {/* A plain GET form: the filters live in the address, so results can be shared and work without JavaScript.
+          Keyed by the filters, so clearing them also resets the boxes, which only read their value once. */}
       <form
+        key={`${q}|${emirate}|${category}`}
         role="search"
         className="panel mb-6 grid gap-4 p-4 sm:p-5 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)_8rem] md:items-end"
       >

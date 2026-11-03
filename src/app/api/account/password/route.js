@@ -28,6 +28,9 @@ export const POST = route(async (request) => {
 
   user.passwordHash = await bcrypt.hash(password, 10);
   user.passwordChangedAt = new Date();
+  // A reset link sent earlier would otherwise still set a new password.
+  user.passwordResetHash = undefined;
+  user.passwordResetExpires = undefined;
   await user.save();
   // Other devices are signed out; give this one a fresh session so it stays signed in.
   await createSession(user);

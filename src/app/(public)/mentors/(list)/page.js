@@ -27,7 +27,11 @@ export default async function MentorsPage({ searchParams }) {
         description="Founders and professionals who help new businesses in the UAE. An administrator checks every mentor."
       />
 
-      <form className="panel mb-6 grid gap-4 p-4 sm:p-5 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_10rem] md:items-end">
+      {/* Keyed by the filters, so "Clear the filters" also resets the boxes, which only read their value once. */}
+      <form
+        key={`${expertise}|${emirate}`}
+        className="panel mb-6 grid gap-4 p-4 sm:p-5 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_10rem] md:items-end"
+      >
         <div className="space-y-2">
           <label className="block text-sm font-medium" htmlFor="expertise">
             Expertise

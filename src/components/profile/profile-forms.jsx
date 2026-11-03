@@ -63,6 +63,7 @@ export function MentorProfileForm({ name, profile }) {
           label="LinkedIn profile (optional)"
           type="url"
           placeholder="https://www.linkedin.com/in/…"
+          hint="Only a link to your profile on linkedin.com."
           defaultValue={profile?.linkedinUrl}
           error={errors.linkedinUrl}
         />
