@@ -50,7 +50,7 @@ export default async function SourcesPage({ searchParams }) {
           <label className="block text-sm font-medium" htmlFor="q">
             Search sources
           </label>
-          <input id="q" name="q" type="search" defaultValue={q} placeholder="Search, for example trade licence" className={controlClass} />
+          <input id="q" name="q" type="search" defaultValue={q} placeholder="For example: trade licence" className={controlClass} />
         </div>
         <div className="space-y-2">
           <label className="block text-sm font-medium" htmlFor="emirate">

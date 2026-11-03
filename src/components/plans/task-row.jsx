@@ -78,21 +78,23 @@ export function TaskRow({ planId, task, number, phases, sources, canEdit }) {
               aria-expanded={open}
               aria-controls={panelId}
               onClick={() => setOpen((shown) => !shown)}
-              className="group/toggle flex min-h-11 w-full flex-wrap items-center gap-x-3 gap-y-1 rounded-sm py-2.5 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+              className="group/toggle flex min-h-11 w-full items-start gap-3 rounded-sm py-2.5 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
             >
-              <span
-                className={cn("leading-6 font-medium underline-offset-4 group-hover/toggle:underline", done && "text-muted-foreground")}
-              >
-                {task.title}
+              <span className="flex min-w-0 flex-1 flex-wrap items-center gap-x-3 gap-y-1">
+                <span
+                  className={cn("leading-6 font-medium underline-offset-4 group-hover/toggle:underline", done && "text-muted-foreground")}
+                >
+                  {task.title}
+                </span>
+                {done && (
+                  <Stamp tone="done" pressed={pressed} className="-rotate-2">
+                    Done
+                  </Stamp>
+                )}
+                {status === "in_progress" && <StatusBadge status="in_progress" />}
               </span>
-              {done && (
-                <Stamp tone="done" pressed={pressed} className="-rotate-2">
-                  Done
-                </Stamp>
-              )}
-              {status === "in_progress" && <StatusBadge status="in_progress" />}
               <ChevronDown
-                className={cn("size-4 shrink-0 text-muted-foreground transition-transform", open && "rotate-180")}
+                className={cn("mt-1 size-4 shrink-0 text-muted-foreground transition-transform", open && "rotate-180")}
                 aria-hidden="true"
               />
             </button>

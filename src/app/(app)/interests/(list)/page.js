@@ -69,16 +69,13 @@ export default async function InterestsPage() {
                   </div>
 
                   {open && (
-                    <div className="mt-5 space-y-4 border-t pt-4">
+                    <div className="@container mt-5 space-y-4 border-t pt-4">
                       <Fields items={[{ label: "Owner", value: plan.ownerId?.name }]} />
-                      <div className="grid gap-2 sm:grid-cols-2">
+                      <div className="grid gap-2 @min-[26rem]:grid-cols-2">
                         <Link href={`/plans/${plan._id}`} className={buttonVariants({ size: "lg" })}>
                           Read the full plan
                         </Link>
-                        <Link
-                          href={`/interests/${interest._id}`}
-                          className={buttonVariants({ variant: "outline", size: "lg" })}
-                        >
+                        <Link href={`/interests/${interest._id}`} className={buttonVariants({ variant: "outline", size: "lg" })}>
                           <MessagesSquare aria-hidden="true" />
                           Open chat<span className="sr-only"> with {ownerName}</span>
                         </Link>

@@ -34,7 +34,7 @@ export default async function PlanOverviewPage({ params }) {
           : "New version builds a fresh roadmap from the same answers and keeps this one."
       }
     >
-      <div className="flex flex-wrap gap-3">
+      <div className="grid gap-3 sm:flex sm:flex-wrap">
         <PlanActions planId={plan._id} failed={plan.status === "failed"} />
       </div>
     </Panel>

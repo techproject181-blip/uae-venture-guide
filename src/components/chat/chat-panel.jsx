@@ -119,7 +119,7 @@ export function ChatPanel({ planId, messages, sources, left, title = "Ask about 
                 key={suggestion}
                 type="button"
                 onClick={() => ask(suggestion)}
-                className="min-h-11 rounded-full border border-ink-300 bg-card px-4 text-sm font-medium transition-colors duration-150 outline-none hover:border-primary hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                className="min-h-11 rounded-[1.375rem] border border-ink-300 bg-card px-4 py-2 text-left text-sm leading-snug font-medium transition-colors duration-150 outline-none hover:border-primary hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
               >
                 {suggestion}
               </button>

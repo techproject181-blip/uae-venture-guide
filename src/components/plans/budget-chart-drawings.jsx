@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Bar, BarChart, CartesianGrid, LabelList, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { formatAed } from "@/lib/format";
 
@@ -27,6 +28,16 @@ const legendText = (value) => <span style={{ color: INK }}>{value}</span>;
 
 const shortAed = (value) => (value >= 1000 ? `${Math.round(value / 1000)}k` : String(value));
 
+/**
+ * The chart's own width, and whether it is narrow (a phone): then the category
+ * names get less room, and the amounts are short ("AED 120k"), so the bars keep
+ * most of the width.
+ */
+function useNarrow() {
+  const [width, setWidth] = useState(0);
+  return { narrow: width > 0 && width < 400, onResize: (w) => setWidth(w) };
+}
+
 /** Round axis steps (0, 10k, 20k, 30k), about three of them, up to at least `max`. */
 function roundTicks(max) {
   const rough = Math.max(max, 1) / 3;
@@ -37,14 +48,21 @@ function roundTicks(max) {
 
 /** One bar per category, longest first, with the amount at the end of each bar. */
 export function CategoryChart({ rows, height }) {
+  const { narrow, onResize } = useNarrow();
   return (
-    <ResponsiveContainer width="100%" height={height}>
-      <BarChart accessibilityLayer={false} data={rows} layout="vertical" margin={{ left: 8, right: 100 }} barCategoryGap={8}>
+    <ResponsiveContainer width="100%" height={height} onResize={onResize}>
+      <BarChart
+        accessibilityLayer={false}
+        data={rows}
+        layout="vertical"
+        margin={{ left: narrow ? 0 : 8, right: narrow ? 64 : 100 }}
+        barCategoryGap={8}
+      >
         <XAxis type="number" hide />
-        <YAxis type="category" dataKey="label" width={96} {...axisProps} />
+        <YAxis type="category" dataKey="label" width={narrow ? 80 : 96} {...axisProps} />
         <Tooltip {...tooltipProps} />
         <Bar dataKey="estimated" name="Estimated" fill={ESTIMATED} radius={[0, 4, 4, 0]} maxBarSize={22} animationDuration={600}>
-          <LabelList dataKey="estimated" content={ValueLabel} />
+          <LabelList dataKey="estimated" content={(props) => <ValueLabel {...props} short={narrow} />} />
         </Bar>
       </BarChart>
     </ResponsiveContainer>
@@ -54,12 +72,20 @@ export function CategoryChart({ rows, height }) {
 /** Estimated and actual bars side by side for each category. */
 export function ActualChart({ rows, height }) {
   const ticks = roundTicks(Math.max(...rows.flatMap((row) => [row.estimated, row.actual])));
+  const { narrow, onResize } = useNarrow();
   return (
-    <ResponsiveContainer width="100%" height={height}>
-      <BarChart accessibilityLayer={false} data={rows} layout="vertical" margin={{ left: 8, right: 24 }} barGap={2} barCategoryGap={12}>
+    <ResponsiveContainer width="100%" height={height} onResize={onResize}>
+      <BarChart
+        accessibilityLayer={false}
+        data={rows}
+        layout="vertical"
+        margin={{ left: narrow ? 0 : 8, right: narrow ? 16 : 24 }}
+        barGap={2}
+        barCategoryGap={12}
+      >
         <CartesianGrid horizontal={false} stroke={RULE} />
         <XAxis type="number" domain={[0, ticks.at(-1)]} ticks={ticks} tickFormatter={shortAed} {...axisProps} />
-        <YAxis type="category" dataKey="label" width={96} {...axisProps} />
+        <YAxis type="category" dataKey="label" width={narrow ? 80 : 96} {...axisProps} />
         <Tooltip {...tooltipProps} />
         <Legend
           verticalAlign="top"
@@ -76,8 +102,8 @@ export function ActualChart({ rows, height }) {
   );
 }
 
-/** The amount at the end of a bar, on one line (Recharts' own label wraps at spaces). */
-function ValueLabel({ x, y, width, height, value }) {
+/** The amount at the end of a bar, on one line (Recharts' own label wraps at spaces); `short` on phones. */
+function ValueLabel({ x, y, width, height, value, short = false }) {
   return (
     <text
       x={x + width + 6}
@@ -87,7 +113,7 @@ function ValueLabel({ x, y, width, height, value }) {
       fontSize={12}
       style={{ fontVariantNumeric: "tabular-nums" }}
     >
-      {formatAed(value)}
+      {short ? `AED ${shortAed(value)}` : formatAed(value)}
     </text>
   );
 }

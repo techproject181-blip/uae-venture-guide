@@ -39,7 +39,11 @@ export function MobileNav({ links: drawnLinks, children }) {
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 z-50 bg-ink-900/40 backdrop-blur-[2px] transition-opacity duration-300 data-ending-style:opacity-0 data-starting-style:opacity-0 lg:hidden" />
-        <Dialog.Popup ref={panelRef} initialFocus={firstFocus} className="fixed inset-y-0 right-0 z-50 flex w-[min(20rem,85vw)] flex-col border-l bg-card pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] shadow-window transition-transform duration-300 ease-out outline-none data-ending-style:translate-x-full data-starting-style:translate-x-full lg:hidden">
+        <Dialog.Popup
+          ref={panelRef}
+          initialFocus={firstFocus}
+          className="fixed inset-y-0 right-0 z-50 flex w-[min(20rem,85vw)] flex-col border-l bg-card pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] shadow-window transition-transform duration-300 ease-out outline-none data-ending-style:translate-x-full data-starting-style:translate-x-full lg:hidden"
+        >
           <div className="flex h-16 items-center justify-between gap-3 border-b px-4">
             <Dialog.Title render={<div />}>
               <Logo />
@@ -61,7 +65,12 @@ export function MobileNav({ links: drawnLinks, children }) {
                       <ul className="space-y-1">
                         {items.map((item) => (
                           <li key={item.href}>
-                            <DrawerLink href={item.href} label={item.label} active={isActive(pathname, item.href)} onClick={() => setOpen(false)} />
+                            <DrawerLink
+                              href={item.href}
+                              label={item.label}
+                              active={isActive(pathname, item.href)}
+                              onClick={() => setOpen(false)}
+                            />
                           </li>
                         ))}
                       </ul>
