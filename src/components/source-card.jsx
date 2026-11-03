@@ -21,7 +21,7 @@ export function SourceCard({ source }) {
             <Landmark className="size-4 shrink-0" aria-hidden="true" />
             <span className="truncate">{source.publisher}</span>
           </p>
-          {source.demo && <StatusBadge status="pending" label="Demo, not checked" className="shrink-0" />}
+          {source.demo && <StatusBadge status="pending" label="Not checked yet" className="shrink-0" />}
         </div>
         <h2 className="mt-3 text-[1.0625rem] leading-snug font-semibold tracking-[-0.01em]">
           <a

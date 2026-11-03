@@ -11,6 +11,10 @@ const fundingInterestSchema = new mongoose.Schema(
     message: { type: String, required: true, trim: true, maxlength: 1000 },
     status: { type: String, enum: ["pending", "accepted", "declined"], default: "pending" },
     respondedAt: Date,
+    // When each of them last had the conversation open. A message from the
+    // other person after that is new to them (see lib/inbox.js).
+    ownerReadAt: Date,
+    funderReadAt: Date,
   },
   { timestamps: true },
 );

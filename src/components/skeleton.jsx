@@ -32,7 +32,7 @@ export function SkeletonPage({ children }) {
 }
 
 /** A stand-in for PageHeader: title, a description of `lines` lines, and `actions` large buttons. */
-export function HeaderSkeleton({ titleWidth = "w-56", lines = 1, actions = 0 }) {
+export function HeaderSkeleton({ titleWidth = "w-56", lines = 1, actions = 0, badge = false }) {
   return (
     <div className="mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between lg:mb-10">
       <div className="min-w-0 flex-1">
@@ -42,6 +42,8 @@ export function HeaderSkeleton({ titleWidth = "w-56", lines = 1, actions = 0 }) 
             <Line key={n} width={n === lines - 1 && lines > 1 ? "w-3/5" : "w-full"} />
           ))}
         </div>
+        {/* The dashboards' role chip (RoleBadge). */}
+        {badge && <Bone className="mt-3 h-7.5 w-44 rounded-full" />}
       </div>
       {actions > 0 && (
         <div className="flex shrink-0 flex-wrap gap-2">

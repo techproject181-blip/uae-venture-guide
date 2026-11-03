@@ -8,10 +8,7 @@ import { NavLinks } from "@/components/nav-links";
 import { SiteFooter } from "@/components/site-footer";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { ROLE_LABELS } from "@/lib/constants";
-import { connectDB } from "@/lib/db";
-import { FundingInterest } from "@/models/FundingInterest";
-import { MentorRequest } from "@/models/MentorRequest";
-import { Plan } from "@/models/Plan";
+import { navCounts } from "@/lib/inbox";
 
 // The links each role sees. Pending mentors and funders only reach their profile.
 const NAV = {
@@ -48,25 +45,15 @@ const PENDING_NAV = [
   { href: "/profile", label: "Profile" },
 ];
 
-/** What waits for this user's answer: requests sent to a mentor, or funder interest in a founder's plans. */
-async function waitingCount(user) {
-  await connectDB();
-  if (user.role === "mentor") return MentorRequest.countDocuments({ mentorId: user.id, status: "pending" });
-  if (user.role === "entrepreneur") {
-    const plans = await Plan.find({ ownerId: user.id }).distinct("_id");
-    return FundingInterest.countDocuments({ planId: { $in: plans }, status: "pending" });
-  }
-  return 0;
-}
-
 /** Header, navigation and footer around every signed-in page. */
 export async function AppShell({ user, children }) {
   // Administrators get their own console with a sidebar.
   if (user.role === "admin" && user.status === "active") return <AdminShell user={user}>{children}</AdminShell>;
-  const waiting = user.status === "active" ? await waitingCount(user) : 0;
-  // The number of things waiting for an answer sits next to "Requests".
+  // What waits for an answer, plus conversations with new messages, sits next to
+  // "Requests" (or "My interests"). The links keep it up to date from here on.
+  const counts = await navCounts(user);
   const links = (user.status === "active" ? NAV[user.role] : PENDING_NAV).map((link) =>
-    link.href === "/requests" && waiting > 0 ? { ...link, count: waiting } : link,
+    counts[link.href] > 0 ? { ...link, count: counts[link.href] } : link,
   );
 
   return (

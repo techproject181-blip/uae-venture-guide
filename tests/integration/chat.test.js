@@ -15,7 +15,7 @@ afterAll(() => {
   vi.unstubAllEnvs();
 });
 
-const SAMPLE_NOTICE = "This is a sample answer from the built-in assistant";
+const SAMPLE_NOTICE = "This answer comes from the built-in assistant";
 
 let sources, plan;
 beforeAll(async () => {

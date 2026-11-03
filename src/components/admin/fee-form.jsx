@@ -102,7 +102,13 @@ export function FeeForm({ sourceId, fee = null, defaultEmirate = null }) {
       </div>
       <TextAreaField id="notes" label="Notes (optional)" rows={2} defaultValue={fee?.notes} error={errors.notes} />
       <CheckboxField id="fee-active" name="active" label="Use this fee in roadmaps" defaultChecked={fee?.active ?? true} />
-      <CheckboxField id="fee-demo" name="demo" label="This is demo data that has not been checked" defaultChecked={fee?.demo ?? false} />
+      <CheckboxField
+        id="fee-demo"
+        name="demo"
+        label="Not checked yet"
+        hint="Tick it until you have checked the amount on the official page. Roadmaps then show it as “Typical fee”, not official."
+        defaultChecked={fee?.demo ?? false}
+      />
       <SubmitButton pending={pending} pendingText="Saving…">
         {fee ? "Save fee reference" : "Add fee reference"}
       </SubmitButton>

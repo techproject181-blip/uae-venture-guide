@@ -59,7 +59,7 @@ export async function findConversation(requestId, user) {
 export function whyClosed({ closedReason, isMentor }) {
   if (closedReason === "completed") return "The request is completed, so the conversation is closed.";
   if (closedReason === "inactive") {
-    return `The ${isMentor ? "founder" : "mentor"}'s account is no longer active, so the conversation is closed.`;
+    return `The ${isMentor ? "entrepreneur" : "mentor"}'s account is no longer active, so the conversation is closed.`;
   }
   return null;
 }
@@ -97,6 +97,17 @@ export async function listMessages(request, viewerId, { after } = {}) {
     });
   }
   return list;
+}
+
+/** Notes that the viewer has read the conversation up to now, so its messages no longer count as new. */
+export async function markRead({ request, isMentor }) {
+  await connectDB();
+  // Without timestamps: reading must not change the request's updatedAt.
+  await MentorRequest.updateOne(
+    { _id: request._id },
+    { $set: { [isMentor ? "mentorReadAt" : "entrepreneurReadAt"]: new Date() } },
+    { timestamps: false },
+  );
 }
 
 /**

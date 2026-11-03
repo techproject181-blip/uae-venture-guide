@@ -115,7 +115,7 @@ export default async function AdminUserPage({ params }) {
           <Panel
             title="Profile"
             description={
-              user.role === "mentor" ? "What founders see in the mentor directory." : "What owners read when this funder sends interest."
+              user.role === "mentor" ? "What entrepreneurs see in the mentor directory." : "What owners read when this funder sends interest."
             }
             flush={Boolean(profile)}
           >

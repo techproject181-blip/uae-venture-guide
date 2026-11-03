@@ -40,7 +40,7 @@ export default async function EditSourcePage({ params }) {
       <PageHeader back={{ href: "/admin/sources", label: "All sources" }} title={source.title} description={source.publisher}>
         <span className="flex flex-wrap gap-1.5">
           <StatusBadge status={source.active ? "active" : "hidden"} label={source.active ? "Shown" : "Hidden"} />
-          {source.demo && <Stamp tone="waiting">Demo</Stamp>}
+          {source.demo && <Stamp tone="waiting">Not checked</Stamp>}
         </span>
       </PageHeader>
 
@@ -84,7 +84,7 @@ export default async function EditSourcePage({ params }) {
                   listed on the public sources page.
                 </li>
                 <li>Roadmaps mark a cost as official only when it comes from one of its fee references.</li>
-                <li>Fees marked demo appear in roadmaps as “Demo fee”, not official.</li>
+                <li>Fees not checked yet appear in roadmaps as “Typical fee”, not official.</li>
                 <li>Deleting the source deletes its fee references too.</li>
               </ul>
             </Panel>
@@ -131,7 +131,7 @@ export default async function EditSourcePage({ params }) {
                       {labelOf(FEE_KINDS, fee.kind) !== fee.item && <p className="text-muted-foreground">{labelOf(FEE_KINDS, fee.kind)}</p>}
                       <div className="mt-2 flex flex-wrap gap-1.5">
                         {!fee.active && <StatusBadge status="hidden" label="Not used" />}
-                        {fee.demo && <Stamp tone="waiting">Demo</Stamp>}
+                        {fee.demo && <Stamp tone="waiting">Not checked</Stamp>}
                         {fee.active && !fee.demo && <Stamp tone="official">Official</Stamp>}
                       </div>
                     </td>

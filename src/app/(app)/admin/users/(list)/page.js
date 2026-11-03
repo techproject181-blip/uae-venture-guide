@@ -21,12 +21,13 @@ export const metadata = { title: "Users" };
 const PAGE_SIZE = 20;
 // A rejected sign-up is saved as suspended too (see user-status.js), so the
 // Suspended tab leaves those out and Rejected lists them.
+// The first one, All, is what the page shows without a filter.
 const FILTERS = [
+  { value: "all", label: "All", query: {}, empty: "No accounts yet." },
   { value: "pending", label: "Waiting for approval", query: { status: "pending" }, empty: "Nobody is waiting for approval." },
   { value: "active", label: "Active", query: { status: "active" }, empty: "No active accounts." },
   { value: "suspended", label: "Suspended", query: { status: "suspended", rejected: { $ne: true } }, empty: "No suspended accounts." },
   { value: "rejected", label: "Rejected", query: { status: "suspended", rejected: true }, empty: "No rejected sign-ups." },
-  { value: "all", label: "All", query: {}, empty: "No accounts yet." },
 ];
 
 export default async function AdminUsersPage({ searchParams }) {

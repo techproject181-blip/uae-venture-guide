@@ -34,17 +34,17 @@ const MAX_DOCUMENTS = 15;
 const MAX_RISKS = 10;
 
 const INSTRUCTIONS = `You are the roadmap planner of UAE Venture Guide, which helps people start a business in the United Arab Emirates.
-From the founder's answers, write their startup roadmap: the steps in order, what each step costs, the documents to collect and the main risks.
+From the entrepreneur's answers, write their startup roadmap: the steps in order, what each step costs, the documents to collect and the main risks.
 
 Rules:
 - Write short, plain English for someone starting their first business. Do not include links or web addresses.
-- Put each step in one of the phases given, in the order the founder does them. Most roadmaps have 10 to 20 steps.
+- Put each step in one of the phases given, in the order the entrepreneur does them. Most roadmaps have 10 to 20 steps.
 - Use only the fee references and official sources given, and never invent fees, amounts or sources.
 - When a fee reference is the cost of a step, put its id in feeId; otherwise feeId is null. A fee for mainland companies does not apply to a free zone company, and the other way round.
 - When an official source covers a step or a document, put its id in sourceId; otherwise sourceId is null.
 - For every step, also give your own estimate of its cost in whole dirhams, even when you cite a fee. A free step is 0 to 0.
 - The app adds the monthly running costs itself (website, software and phone; ongoing marketing; staff salaries), so leave those out.
-- If the founder chose mainland or a free zone, keep that choice and explain what it means for this business. If they are not sure, recommend one and say why.
+- If the entrepreneur chose mainland or a free zone, keep that choice and explain what it means for this business. If they are not sure, recommend one and say why.
 - Keep amounts of money out of the summary: the plan's pages show the live totals next to it.`;
 
 // The JSON the model must send back. In strict mode every object lists all its
@@ -70,7 +70,7 @@ export const ROADMAP_SCHEMA = {
       phase: oneOf(PHASE_KEYS, "The key of the phase the step belongs to."),
       title: text("A short instruction, for example: Reserve your trade name."),
       description: text("One or two sentences on what to do."),
-      authority: text("Who the founder deals with for this step, or an empty string."),
+      authority: text("Who the entrepreneur deals with for this step, or an empty string."),
       feeId: idOrNull("The id of the fee reference that is the cost of this step, or null."),
       sourceId: idOrNull("The id of the official source for this step, or null."),
       estimateMinAed: { type: "integer", description: "Your estimate of the lowest cost, in whole dirhams." },
@@ -83,7 +83,7 @@ export const ROADMAP_SCHEMA = {
     documents: listOf({
       name: text("For example: Passport copy."),
       description: text("One sentence on what is needed."),
-      required: { type: "boolean", description: "False when only some founders need it." },
+      required: { type: "boolean", description: "False when only some entrepreneurs need it." },
       sourceId: idOrNull("The id of the official source that asks for it, or null."),
     }),
     risks: listOf({
@@ -111,11 +111,11 @@ export async function aiRoadmap(intake, { fees, sources }) {
   return { generator: `openai:${model}`, generatedAt: new Date(), ...sanitiseRoadmap(answer, { intake, fees, sources }) };
 }
 
-/** The founder's answers, the phases, and the only fees and sources the model may cite, each with its id. */
+/** The entrepreneur's answers, the phases, and the only fees and sources the model may cite, each with its id. */
 function roadmapInput(intake, fees, sources) {
   const where = (emirate) => (emirate ? labelOf(EMIRATES, emirate) : "All emirates");
   const data = {
-    founder: {
+    entrepreneur: {
       planName: intake.title,
       idea: intake.idea,
       customers: intake.targetCustomers,
@@ -144,7 +144,7 @@ function roadmapInput(intake, fees, sources) {
       summary: source.summary,
     })),
   };
-  return `The founder's answers, the phases, and the only fee references and official sources you may use:\n${JSON.stringify(data)}`;
+  return `The entrepreneur's answers, the phases, and the only fee references and official sources you may use:\n${JSON.stringify(data)}`;
 }
 
 /**

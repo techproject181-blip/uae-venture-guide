@@ -3,16 +3,19 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
+import { useNavCounts } from "@/components/use-nav-counts";
 import { cn } from "@/lib/utils";
 
 /**
  * The navigation links. On wide screens the current section has an emerald
  * line under it that slides from link to link; `compact` is the phone and
  * tablet row, a single line that scrolls sideways, where the current section
- * sits on a pale emerald pill that slides the same way.
+ * sits on a pale emerald pill that slides the same way. The numbers next to
+ * the links stay up to date (useNavCounts).
  */
-export function NavLinks({ links, className, compact = false }) {
+export function NavLinks({ links: drawnLinks, className, compact = false }) {
   const pathname = usePathname();
+  const links = useNavCounts(drawnLinks);
   const layoutId = compact ? "nav-pill" : "nav-line";
 
   return (

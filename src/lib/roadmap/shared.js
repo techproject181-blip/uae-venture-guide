@@ -33,8 +33,8 @@ export function feeFits(fee, jurisdiction) {
 
 /**
  * A step's cost taken from a fee reference: its amounts, how often it is paid,
- * and its source. A fee from the demo data was never checked, so it is marked
- * "demo", not official.
+ * and its source. A fee nobody has checked yet is marked "demo" ("Typical
+ * fee" on screen), not official.
  */
 export function feeCost(fee) {
   return {

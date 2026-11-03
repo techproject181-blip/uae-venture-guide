@@ -3,7 +3,7 @@ import { Stamp } from "@/components/stamp";
 
 const ROLES = [
   { value: "entrepreneur", title: "Entrepreneur", text: "Plan and launch your business." },
-  { value: "mentor", title: "Mentor", text: "Guide new founders.", needsApproval: true },
+  { value: "mentor", title: "Mentor", text: "Guide new entrepreneurs.", needsApproval: true },
   { value: "funder", title: "Funder", text: "Find ideas to support.", needsApproval: true },
 ];
 

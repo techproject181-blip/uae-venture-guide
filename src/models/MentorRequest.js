@@ -14,6 +14,10 @@ const mentorRequestSchema = new mongoose.Schema(
     status: { type: String, enum: ["pending", "accepted", "declined", "completed"], default: "pending" },
     mentorReply: { type: String, trim: true, maxlength: 2000 },
     respondedAt: Date,
+    // When each of them last had the conversation open. A message from the
+    // other person after that is new to them (see lib/inbox.js).
+    entrepreneurReadAt: Date,
+    mentorReadAt: Date,
   },
   { timestamps: true },
 );

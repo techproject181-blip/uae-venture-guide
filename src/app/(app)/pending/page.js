@@ -25,7 +25,7 @@ export default async function PendingPage() {
   const profile = Profile ? await Profile.findOne({ userId: user.id }).select("updatedAt").lean() : null;
 
   const steps = [
-    { title: "Complete your profile", text: "Tell the administrator who you are and how you can help founders." },
+    { title: "Complete your profile", text: "Tell the administrator who you are and how you can help entrepreneurs." },
     { title: "An administrator reviews it", text: `Every ${user.role} account is checked by hand before it can be used.` },
     { title: "You get an email", text: "Once your account is approved, we email you a link to sign in and start." },
   ];

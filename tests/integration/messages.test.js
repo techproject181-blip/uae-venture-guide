@@ -130,7 +130,7 @@ describe("who may see a conversation", () => {
     await User.updateOne({ _id: someMentor.id }, { status: "active" });
     await User.updateOne({ _id: someFounder.id }, { status: "suspended" });
     expect(whyClosed(await getConversation(request._id, someMentor))).toBe(
-      "The founder's account is no longer active, so the conversation is closed.",
+      "The entrepreneur's account is no longer active, so the conversation is closed.",
     );
 
     // Both active again: the conversation opens again.

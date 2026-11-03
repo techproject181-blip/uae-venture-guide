@@ -24,7 +24,7 @@ export default async function MentorsPage({ searchParams }) {
     <>
       <PageHeader
         title="Mentors"
-        description="Founders and professionals who help new businesses in the UAE. An administrator checks every mentor."
+        description="Business owners and professionals who help new businesses in the UAE. An administrator checks every mentor."
       />
 
       {/* Keyed by the filters, so "Clear the filters" also resets the boxes, which only read their value once. */}

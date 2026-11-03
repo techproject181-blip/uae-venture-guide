@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Lock, Send } from "lucide-react";
 import { FormAlert } from "@/components/form/form-alert";
 import { Spinner } from "@/components/loaders/spinner";
@@ -98,6 +98,20 @@ export function Conversation({
   // Set once the server says the conversation is gone (404), so asking stops.
   const [gone, setGone] = useState(false);
 
+  // Tell the server the conversation is read, when the page opens and when the
+  // other person's messages come in, then refresh the numbers in the navigation.
+  const queryClient = useQueryClient();
+  const readUrl = apiUrl.replace(/\/messages$/, "/read");
+  const markRead = useCallback(async () => {
+    const result = await apiRequest("POST", readUrl);
+    if (result.ok) queryClient.invalidateQueries({ queryKey: queryKeys.navCounts() });
+  }, [readUrl, queryClient]);
+  useEffect(() => {
+    markRead();
+  }, [markRead]);
+  // The newest message from the other person that has been marked read.
+  const theirsRead = useRef(newestTime(initialMessages.filter((message) => !message.mine)));
+
   // One ask for new messages: from a little before the newest one seen so far.
   // Repeats are skipped by merge(). Never throws: a failed ask just waits for the next tick.
   const poll = useCallback(
@@ -118,9 +132,14 @@ export function Conversation({
       setMessages((list) => merge(list, result.messages));
       setCanSend(result.canSend);
       if (result.closedText) setClosedNote(result.closedText);
+      const theirs = newestTime(result.messages.filter((message) => !message.mine));
+      if (theirs && (!theirsRead.current || theirs > theirsRead.current)) {
+        theirsRead.current = theirs;
+        markRead();
+      }
       return null;
     },
-    [apiUrl],
+    [apiUrl, markRead],
   );
 
   // Ask for new messages every few seconds while the tab is visible, and at

@@ -46,7 +46,7 @@ export function MentorProfileForm({ name, profile }) {
         <TextField
           id="headline"
           label="Headline"
-          placeholder="For example: Founder of two cafés in Dubai"
+          placeholder="For example: Owner of two cafés in Dubai"
           defaultValue={profile?.headline}
           error={errors.headline}
         />
@@ -54,7 +54,7 @@ export function MentorProfileForm({ name, profile }) {
           id="bio"
           label="About you"
           rows={5}
-          hint="Your experience, and how you like to help founders."
+          hint="Your experience, and how you like to help entrepreneurs."
           defaultValue={profile?.bio}
           error={errors.bio}
         />
@@ -94,7 +94,7 @@ export function MentorProfileForm({ name, profile }) {
       <FormPart
         id="requests"
         legend="Guidance requests"
-        note="Turn this off when you are busy. Founders still see your profile, but cannot send you new requests."
+        note="Turn this off when you are busy. Entrepreneurs still see your profile, but cannot send you new requests."
       >
         <CheckboxField
           id="acceptingRequests"
@@ -171,7 +171,7 @@ export function FunderProfileForm({ name, profile }) {
           id="bio"
           label="What you look for"
           rows={5}
-          hint="The kind of founders and ideas you like to support."
+          hint="The kind of entrepreneurs and ideas you like to support."
           defaultValue={profile?.bio}
           error={errors.bio}
         />

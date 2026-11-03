@@ -1,21 +1,29 @@
 import Link from "next/link";
+import { MessagesSquare } from "lucide-react";
 import { DeleteButton } from "@/components/delete-button";
 import { Fields } from "@/components/document";
 import { CardGrid } from "@/components/layout";
 import { EmptyState, PageHeader } from "@/components/page-header";
+import { ChatPreview } from "@/components/requests/chat-preview";
 import { StatusBadge } from "@/components/status-badge";
 import { buttonVariants } from "@/components/ui/button";
 import { toPlain } from "@/lib/api";
 import { formatDate } from "@/lib/format";
 import { listInterestsForFunder } from "@/lib/funding";
 import { requireUser } from "@/lib/guards";
+import { interestChats } from "@/lib/inbox";
 
 export const metadata = { title: "My interests" };
 
-/** A funder's interest requests. Accepted ones link to the full plan while it stays shared. */
+/**
+ * A funder's interest requests. Accepted ones link to the full plan while it
+ * stays shared, and to the chat with the owner: the card shows its newest
+ * message, with a dot while it is unread.
+ */
 export default async function InterestsPage() {
   const user = await requireUser({ roles: ["funder"] });
   const interests = toPlain(await listInterestsForFunder(user.id));
+  const chats = await interestChats(interests, user);
 
   return (
     <>
@@ -35,6 +43,11 @@ export default async function InterestsPage() {
           {interests.map((interest) => {
             const plan = interest.planId;
             const open = interest.status === "accepted" && plan?.shared && !plan?.hiddenByAdmin;
+            const chat = chats.get(interest._id);
+            const unread = chat?.unread ?? false;
+            const ownerName = plan?.ownerId?.name ?? "the owner";
+            // Until someone writes in the chat, your interest is the newest message.
+            const last = chat?.last ?? { body: interest.message, createdAt: interest.createdAt, mine: true };
             return (
               <li key={interest._id}>
                 <article className="panel flex h-full flex-col p-5 sm:p-6">
@@ -44,13 +57,15 @@ export default async function InterestsPage() {
                         <h2 className="text-[1.0625rem] leading-snug font-semibold tracking-[-0.01em]">
                           {plan?.title ?? "A deleted plan"}
                         </h2>
-                        <p className="mt-1 text-sm text-muted-foreground tabular-nums">Sent {formatDate(interest.createdAt)}</p>
+                        <p className="mt-1 flex flex-wrap items-center gap-x-2 text-sm text-muted-foreground tabular-nums">
+                          <span>
+                            {interest.status === "accepted" ? `With ${ownerName}` : "Sent"} · {formatDate(last.createdAt)}
+                          </span>
+                        </p>
                       </div>
                       <StatusBadge status={interest.status} className="shrink-0" />
                     </div>
-                    <p className="mt-4 line-clamp-4 text-sm leading-relaxed whitespace-pre-line text-muted-foreground">
-                      {interest.message}
-                    </p>
+                    <ChatPreview body={last.body} mine={last.mine} authorName={ownerName} unread={unread} className="mt-4" />
                   </div>
 
                   {open && (
@@ -60,8 +75,12 @@ export default async function InterestsPage() {
                         <Link href={`/plans/${plan._id}`} className={buttonVariants({ size: "lg" })}>
                           Read the full plan
                         </Link>
-                        <Link href={`/interests/${interest._id}`} className={buttonVariants({ variant: "outline", size: "lg" })}>
-                          Message the owner
+                        <Link
+                          href={`/interests/${interest._id}`}
+                          className={buttonVariants({ variant: unread ? "default" : "outline", size: "lg" })}
+                        >
+                          <MessagesSquare aria-hidden="true" />
+                          Open chat<span className="sr-only"> with {ownerName}</span>
                         </Link>
                       </div>
                     </div>

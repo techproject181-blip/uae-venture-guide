@@ -2,7 +2,7 @@ import { Check, MessageCircle, Wallet } from "lucide-react";
 import { Stamp } from "@/components/stamp";
 
 // An example plan, drawn like the plan page. It shows each kind of fee mark
-// once or twice: Official (checked by an administrator), Demo fee and Estimate.
+// once or twice: Official (checked by an administrator), Typical fee and Estimate.
 const STEPS = [
   { number: "1.1", title: "Reserve your trade name", fee: "AED 620", basis: "official", done: true },
   { number: "1.2", title: "Get initial approval", fee: "AED 120", basis: "official", done: true },
@@ -71,7 +71,7 @@ export function HeroVisual() {
                 <span className="flex shrink-0 flex-col items-end gap-1.5">
                   <span className="text-sm font-medium whitespace-nowrap tabular-nums">{step.fee}</span>
                   {step.basis === "official" && <Stamp tone="official">Official</Stamp>}
-                  {step.basis === "demo" && <Stamp tone="quiet">Demo fee</Stamp>}
+                  {step.basis === "demo" && <Stamp tone="quiet">Typical fee</Stamp>}
                   {step.basis === "estimate" && <span className="text-xs text-muted-foreground">Estimate</span>}
                 </span>
               </li>
@@ -123,7 +123,7 @@ export function HeroVisual() {
           </span>
         </span>
       </div>
-      {/* Visible on purpose: the demo data has no checked fees, so real demo plans show Demo fee or Estimate, not Official. */}
+      {/* Visible on purpose: the seeded fees are not checked yet, so seeded plans show Typical fee or Estimate, not Official. */}
       <figcaption className="mx-auto mt-5 max-w-md text-center text-sm text-muted-foreground">
         An example plan. <span className="font-medium text-foreground">Official</span> means an administrator checked the fee against a
         government or free zone page.

@@ -31,7 +31,7 @@ export function ProgressBar({ percent, label = "Progress" }) {
 
 /**
  * A cost with its basis: a gold OFFICIAL seal when it comes from a checked fee
- * reference, a grey DEMO FEE stamp when the fee reference is demo data, otherwise "Estimate".
+ * reference, a grey TYPICAL FEE stamp when the fee reference is not checked yet, otherwise "Estimate".
  */
 export function Cost({ min, max, basis, className }) {
   if (!min && !max) return <span className={cn("text-sm text-muted-foreground", className)}>No fee</span>;
@@ -45,7 +45,7 @@ export function Cost({ min, max, basis, className }) {
 
 export function CostBasis({ basis }) {
   if (basis === "reference") return <Stamp tone="official">Official</Stamp>;
-  if (basis === "demo") return <Stamp tone="quiet">Demo fee</Stamp>;
+  if (basis === "demo") return <Stamp tone="quiet">Typical fee</Stamp>;
   return <span className="text-xs text-muted-foreground">Estimate</span>;
 }
 
@@ -72,7 +72,7 @@ export function FeeLegend({ official = false, demo = false, estimate = false, do
       )}
       {demo && (
         <span className={item}>
-          <Stamp tone="quiet">Demo fee</Stamp> sample amount, not checked
+          <Stamp tone="quiet">Typical fee</Stamp> usual amount, not checked yet
         </span>
       )}
       {estimate && (

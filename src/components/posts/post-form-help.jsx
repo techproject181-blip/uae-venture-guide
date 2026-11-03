@@ -2,7 +2,7 @@ import { Panel } from "@/components/layout";
 
 const TIPS = [
   "Tell one real story: what you tried, what it cost and what you would do differently.",
-  "Name the emirate, licence or free zone when it matters. Founders search for those.",
+  "Name the emirate, licence or free zone when it matters. Entrepreneurs search for those.",
   "Short paragraphs and a few headings make a long post easy to read on a phone.",
   "Add a chart when numbers tell the story, such as costs in your first year.",
 ];

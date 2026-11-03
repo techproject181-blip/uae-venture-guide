@@ -26,7 +26,7 @@ export default async function ProfilePage() {
         title="Your profile"
         description={
           isMentor
-            ? "Founders see this in the mentor directory before they ask you for guidance."
+            ? "Entrepreneurs see this in the mentor directory before they ask you for guidance."
             : "Plan owners see this when you send them an interest request."
         }
       >

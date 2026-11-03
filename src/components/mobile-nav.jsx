@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Dialog } from "@base-ui/react/dialog";
 import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/logo";
+import { useNavCounts } from "@/components/use-nav-counts";
 import { cn } from "@/lib/utils";
 
 /**
@@ -13,17 +14,21 @@ import { cn } from "@/lib/utils";
  * panel sliding in from the right. `children` go at the bottom of the panel,
  * for the account buttons. Choosing a link closes the panel.
  */
-export function MobileNav({ links, children }) {
+export function MobileNav({ links: drawnLinks, children }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const links = useNavCounts(drawnLinks);
+  const hasNew = links.some((link) => link.count > 0);
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger
-        aria-label="Open menu"
-        className="flex size-10 shrink-0 items-center justify-center rounded-lg border bg-card text-foreground outline-none hover:bg-ink-50 focus-visible:ring-3 focus-visible:ring-ring/50 lg:hidden"
+        aria-label={hasNew ? "Open menu, something new is waiting" : "Open menu"}
+        className="relative flex size-10 shrink-0 items-center justify-center rounded-lg border bg-card text-foreground outline-none hover:bg-ink-50 focus-visible:ring-3 focus-visible:ring-ring/50 lg:hidden"
       >
         <Menu className="size-5" aria-hidden="true" />
+        {/* The numbers sit inside the closed menu, so the button shows that one is waiting. */}
+        {hasNew && <span aria-hidden="true" className="absolute -top-1 -right-1 size-3 rounded-full bg-primary ring-2 ring-card" />}
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 z-50 bg-ink-900/40 backdrop-blur-[2px] transition-opacity duration-300 data-ending-style:opacity-0 data-starting-style:opacity-0 lg:hidden" />

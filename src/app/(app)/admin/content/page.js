@@ -114,10 +114,7 @@ export default async function AdminContentPage({ searchParams }) {
 
   return (
     <>
-      <PageHeader
-        title="Content"
-        description="Hide posts and shared plans that break the rules. Hidden items stay saved, and you can show them again."
-      />
+      <PageHeader title="Content" description="Hide posts and shared plans that break the rules. You can show them again." />
 
       <AdminTabs
         label="Choose content"

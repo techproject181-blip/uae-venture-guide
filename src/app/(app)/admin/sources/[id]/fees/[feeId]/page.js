@@ -39,7 +39,7 @@ export default async function EditFeePage({ params }) {
       <PageHeader back={{ href: `/admin/sources/${id}`, label: "Back to the source" }} title="Edit fee reference" description={fee.item}>
         <span className="flex flex-wrap gap-1.5">
           {!fee.active && <StatusBadge status="hidden" label="Not used" />}
-          {fee.demo && <Stamp tone="waiting">Demo</Stamp>}
+          {fee.demo && <Stamp tone="waiting">Not checked</Stamp>}
           {fee.active && !fee.demo && <Stamp tone="official">Official</Stamp>}
         </span>
       </PageHeader>
@@ -80,7 +80,7 @@ export default async function EditFeePage({ params }) {
                 <li>While “Use this fee in roadmaps” is ticked, new roadmaps for {where} can use it for a step’s cost.</li>
                 <li>
                   {fee.demo
-                    ? "It is marked demo, so roadmaps show it as “Demo fee”, not official."
+                    ? "It is not checked yet, so roadmaps show it as “Typical fee”, not official."
                     : "Roadmaps show it with an Official stamp."}
                 </li>
               </ul>

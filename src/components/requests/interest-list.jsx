@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { MessagesSquare } from "lucide-react";
+import { Avatar } from "@/components/avatar";
+import { ChatPreview } from "@/components/requests/chat-preview";
 import { InterestActions } from "@/components/requests/interest-actions";
 import { StatusBadge } from "@/components/status-badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -7,8 +10,13 @@ import { formatAedRange, formatDate } from "@/lib/format";
 
 const link = "text-foreground decoration-primary underline underline-offset-4 hover:decoration-2";
 
-/** Funding interest in the owner's plans, with the funder's profile and accept/decline buttons. Rows for a flush panel. */
-export function InterestList({ interests }) {
+/**
+ * Funding interest in the owner's plans, with the funder's profile and
+ * accept/decline buttons. Rows for a flush panel. Once accepted, a row reads
+ * like a chat: the newest message, with a dot while it is unread (`chats`
+ * from lib/inbox.js, keyed by interest id).
+ */
+export function InterestList({ interests, chats = new Map() }) {
   return (
     <ul className="divide-y">
       {interests.map((interest) => {
@@ -21,42 +29,51 @@ export function InterestList({ interests }) {
           profile && formatAedRange(profile.ticketMinAed, profile.ticketMaxAed),
           profile?.sectors.length > 0 && profile.sectors.map((s) => labelOf(SECTORS, s)).join(", "),
         ].filter(Boolean);
+        const funderName = funder?.name ?? "A removed account";
+        const chat = chats.get(interest._id);
+        const unread = chat?.unread ?? false;
+        // Until someone writes in the chat, the funder's interest is the newest message.
+        const last = chat?.last ?? { body: interest.message, createdAt: interest.createdAt, mine: false };
 
         return (
           <li key={interest._id} className="px-5 py-4 sm:px-6 sm:py-5">
             <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-6">
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
-                  <h3 className="text-base font-semibold">{funder?.name ?? "A removed account"}</h3>
-                  <StatusBadge status={interest.status} />
-                </div>
+              <div className="flex min-w-0 flex-1 gap-3.5">
+                <Avatar name={funderName} className="size-10 text-xs" />
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
+                    <h3 className="text-base font-semibold">{funderName}</h3>
+                    <StatusBadge status={interest.status} />
+                  </div>
 
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Interested in{" "}
-                  {interest.planId ? (
-                    <Link href={`/plans/${interest.planId._id}`} className={`font-medium ${link}`}>
-                      {interest.planId.title}
-                    </Link>
-                  ) : (
-                    "a deleted plan"
-                  )}{" "}
-                  · {formatDate(interest.createdAt)}
-                </p>
-
-                {facts.length > 0 && <p className="mt-1 text-sm text-muted-foreground">{facts.join(" · ")}</p>}
-                {profile?.bio && (
-                  <p className="mt-2 max-w-prose text-sm whitespace-pre-line text-muted-foreground">
-                    <span className="font-medium text-foreground">What they look for:</span> {profile.bio}
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Interested in{" "}
+                    {interest.planId ? (
+                      <Link href={`/plans/${interest.planId._id}`} className={`font-medium ${link}`}>
+                        {interest.planId.title}
+                      </Link>
+                    ) : (
+                      "a deleted plan"
+                    )}{" "}
+                    · {formatDate(last.createdAt)}
                   </p>
-                )}
 
-                <p className="mt-2 max-w-prose text-sm whitespace-pre-line text-foreground/80">{interest.message}</p>
+                  {facts.length > 0 && <p className="mt-1 text-sm text-muted-foreground">{facts.join(" · ")}</p>}
+                  {profile?.bio && (
+                    <p className="mt-2 max-w-prose text-sm whitespace-pre-line text-muted-foreground">
+                      <span className="font-medium text-foreground">What they look for:</span> {profile.bio}
+                    </p>
+                  )}
+
+                  <ChatPreview body={last.body} mine={last.mine} authorName={funderName} unread={unread} className="mt-2" />
+                </div>
               </div>
 
               <div className="flex shrink-0 flex-wrap gap-2 md:justify-end">
                 {interest.status === "accepted" && funder && (
-                  <Link href={`/interests/${interest._id}`} className={buttonVariants({ variant: "outline" })}>
-                    Message {funder.name.split(" ")[0]}
+                  <Link href={`/interests/${interest._id}`} className={buttonVariants({ variant: unread ? "default" : "outline" })}>
+                    <MessagesSquare aria-hidden="true" />
+                    Open chat<span className="sr-only"> with {funder.name}</span>
                   </Link>
                 )}
                 {interest.status === "pending" && <InterestActions interestId={interest._id} />}

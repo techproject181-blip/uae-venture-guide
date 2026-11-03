@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { connectDB } from "@/lib/db";
 import { SESSION_COOKIE, SESSION_MAX_AGE, signSessionToken, verifySessionToken } from "@/lib/jwt";
 import { User } from "@/models/User";
@@ -28,8 +29,12 @@ export async function deleteSession() {
  * approval or suspension takes effect at once. cache() runs it once per request.
  */
 export const getCurrentUser = cache(async () => {
-  const cookieStore = await cookies();
-  const session = await verifySessionToken(cookieStore.get(SESSION_COOKIE)?.value);
+  const token = (await cookies()).get(SESSION_COOKIE)?.value;
+  if (!token) return null;
+  // Checking the token reads the clock (it expires), which Next.js allows only
+  // once it knows this is a real request, not a prerender.
+  await connection();
+  const session = await verifySessionToken(token);
   if (!session?.sub) return null;
 
   await connectDB();

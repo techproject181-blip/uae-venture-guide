@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Plus, BookOpen, FileText, ShieldAlert, UserPlus, Users } from "lucide-react";
 import { UserActions } from "@/components/admin/user-actions";
+import { RoleBadge } from "@/components/dashboard/dashboard-bits";
 import { userStatus } from "@/components/admin/user-status";
 import { Avatar } from "@/components/avatar";
 import { PageHeader } from "@/components/page-header";
@@ -121,7 +122,9 @@ export async function AdminOverview({ user }) {
             Add source
           </Link>
         }
-      />
+      >
+        <RoleBadge role={user.role} />
+      </PageHeader>
 
       <div className="stagger mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Kpi
@@ -255,7 +258,7 @@ export async function AdminOverview({ user }) {
               {[
                 { label: "Sources shown", value: sources, href: "/admin/sources?show=shown" },
                 { label: "Sources hidden", value: hiddenSources, href: "/admin/sources?show=hidden" },
-                { label: "Demo sources to check", value: demoSources, href: "/admin/sources?show=demo", warn: demoSources > 0 },
+                { label: "Sources to check", value: demoSources, href: "/admin/sources?show=demo", warn: demoSources > 0 },
                 { label: "Hidden posts", value: hiddenPosts, href: "/admin/content?show=hidden" },
                 { label: "Hidden shared plans", value: hiddenPlans, href: "/admin/content?tab=plans&show=hidden" },
               ].map((row) => (
@@ -276,7 +279,7 @@ export async function AdminOverview({ user }) {
               <ShieldAlert className="mt-0.5 size-4 shrink-0 text-gold-700" aria-hidden="true" />
               <p>
                 <strong className="font-medium">Some sources aren’t checked yet.</strong> Check each one against its official page, then
-                untick “demo” on it and its fees.
+                untick “Not checked yet” on it and its fees.
               </p>
             </div>
           )}

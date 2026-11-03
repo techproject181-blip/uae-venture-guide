@@ -421,7 +421,7 @@ for (const fee of FEES) {
         amountMinAed: fee.min,
         amountMaxAed: fee.max,
         recurrence: fee.recurrence,
-        notes: "Demo amount for testing. Check the official page before relying on it.",
+        notes: "Typical amount, not checked yet. Check the official page before relying on it.",
         verifiedAt: now,
         active: true,
         demo: true,
@@ -437,7 +437,7 @@ const ids = Object.fromEntries((await User.find({ email: /@demo\.test$/ }).lean(
 
 const MENTORS = {
   omar: {
-    headline: "Founder of two cafés in Dubai",
+    headline: "Owner of two cafés in Dubai",
     bio: "I opened two specialty cafés in Dubai and have helped friends set up food businesses in Dubai and Sharjah. Happy to talk about locations, fit-out and food safety.",
     expertise: ["hospitality_food", "business_setup"],
     industries: ["food_beverage", "retail"],
@@ -446,7 +446,7 @@ const MENTORS = {
   },
   fatima: {
     headline: "Marketing lead for UAE startups",
-    bio: "Ten years of marketing for retail and online brands across the UAE. I help founders find their first customers without spending too much.",
+    bio: "Ten years of marketing for retail and online brands across the UAE. I help entrepreneurs find their first customers without spending too much.",
     expertise: ["marketing_sales", "retail_ecommerce"],
     industries: ["ecommerce", "retail", "creative_media"],
     emirates: ["abu_dhabi", "dubai"],
@@ -454,7 +454,7 @@ const MENTORS = {
   },
   daniel: {
     headline: "Software engineer and product advisor",
-    bio: "I build software products and help student founders turn app ideas into a first version that users can try.",
+    bio: "I build software products and help student entrepreneurs turn app ideas into a first version that users can try.",
     expertise: ["technology_product", "finance_funding"],
     industries: ["technology", "education"],
     emirates: ["dubai", "sharjah", "ajman"],
@@ -484,7 +484,7 @@ const FUNDERS = {
     ticketMinAed: 25000,
     ticketMaxAed: 150000,
     sectors: ["food_beverage", "education", "technology"],
-    bio: "I back student founders with small first cheques and stay close as a mentor.",
+    bio: "I back student entrepreneurs with small first cheques and stay close as a mentor.",
   },
   khalid: {
     organization: "Khalid Rahman",
@@ -577,7 +577,7 @@ const POSTS = [
   {
     author: "fatima",
     title: "Finding your first 100 customers on a small budget",
-    body: "You do not need a big marketing budget to start. These worked for the founders I advise:\n\n1. Instagram posts that show the product being made\n2. A launch offer for friends and their friends\n3. Partnering with a café or gym that serves the same customers\n\nTrack which one brings customers, and spend more only on that one.",
+    body: "You do not need a big marketing budget to start. These worked for the entrepreneurs I advise:\n\n1. Instagram posts that show the product being made\n2. A launch offer for friends and their friends\n3. Partnering with a café or gym that serves the same customers\n\nTrack which one brings customers, and spend more only on that one.",
     chart: {
       type: "pie",
       title: "Where my clients' first customers came from",
@@ -596,6 +596,9 @@ for (const { author, ...post } of POSTS) {
 }
 
 const hoursAgo = (hours) => new Date(now.getTime() - hours * 60 * 60 * 1000);
+// Each person has read a chat up to their own last message, so whoever wrote
+// last sees nothing new and the other one has a new message waiting.
+const readAt = (chat, person) => hoursAgo(Math.min(...chat.filter(({ author }) => author === person).map(({ hours }) => hours)));
 const [cafeRequest] = await MentorRequest.create([
   {
     entrepreneurId: ids.aisha,
@@ -648,6 +651,11 @@ await RequestMessage.insertMany(
     updatedAt: hoursAgo(hours),
   })),
 );
+await MentorRequest.updateOne(
+  { _id: cafeRequest._id },
+  { $set: { entrepreneurReadAt: readAt(CAFE_CHAT, "aisha"), mentorReadAt: readAt(CAFE_CHAT, "omar") } },
+  { timestamps: false },
+);
 
 const [cafeInterest] = await FundingInterest.create([
   {
@@ -684,6 +692,11 @@ await InterestMessage.insertMany(
     createdAt: hoursAgo(hours),
     updatedAt: hoursAgo(hours),
   })),
+);
+await FundingInterest.updateOne(
+  { _id: cafeInterest._id },
+  { $set: { ownerReadAt: readAt(FUNDER_CHAT, "aisha"), funderReadAt: readAt(FUNDER_CHAT, "layla") } },
+  { timestamps: false },
 );
 
 await mongoose.disconnect();

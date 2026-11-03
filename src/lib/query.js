@@ -56,6 +56,7 @@ export async function apiGet(url, { signal } = {}) {
 export const queryKeys = {
   conversation: (apiUrl) => ["conversation", apiUrl],
   chat: (planId) => ["chat", planId],
+  navCounts: () => ["nav-counts"],
 };
 
 /** Try a failed query again up to twice, but never for a 4xx: asking again gives the same answer. */

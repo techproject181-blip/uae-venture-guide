@@ -22,7 +22,7 @@ const QUESTIONS = [
   },
   {
     q: "How do I know a fee is right?",
-    a: "Each fee shows where it comes from. Official means an administrator checked it against a government or free zone page, and the page is linked. Demo fees and estimates are labelled as such. Always check the official page before you pay.",
+    a: "Each fee shows where it comes from. Official means an administrator checked it against a government or free zone page, and the page is linked. A typical fee is a usual amount not checked yet, and an estimate is our guess. Both are labelled. Always check the official page before you pay.",
   },
   {
     q: "Does it cost anything?",
@@ -74,7 +74,7 @@ export default function HomePage() {
                   <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand-400 opacity-75" />
                   <span className="relative inline-flex size-2 rounded-full bg-primary" />
                 </span>
-                For students and first-time founders
+                For students and first-time entrepreneurs
               </p>
               <h1 className="mt-6 text-[2.5rem] leading-[1.02] tracking-[-0.04em] sm:text-6xl xl:text-7xl">
                 Plan your UAE startup, <span className="text-primary">step by step.</span>

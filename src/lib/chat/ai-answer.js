@@ -20,13 +20,13 @@ import { ChatMessage } from "@/models/ChatMessage";
 // assistant would link, and must answer from those alone. The page shows
 // those sources as links under the answer.
 
-const INSTRUCTIONS = `You are the plan assistant of UAE Venture Guide. You answer a founder's question about their own plan to start a business in the United Arab Emirates.
+const INSTRUCTIONS = `You are the plan assistant of UAE Venture Guide. You answer an entrepreneur's question about their own plan to start a business in the United Arab Emirates.
 
 Rules:
 - Answer only from the plan data and the official sources given. Never invent fees, amounts, rules or steps.
 - If the plan data and the sources do not cover the question, say so plainly, and say who to ask when the plan names them.
 - Use short, plain English: a few sentences, with lines that start with "- " for a list. No headings, tables, bold text or numbered lists.
-- Give each amount exactly as the plan shows it, with its label (official, demo fee or estimate).
+- Give each amount exactly as the plan shows it, with its label (official, typical fee or estimate).
 - Do not put links or web addresses in the answer. The page shows the sources as links under it.`;
 
 /**
@@ -71,7 +71,7 @@ function questionInput(plan, question, sources) {
       summary: plan.summary,
       licence: {
         recommended: labelOf(JURISDICTIONS, plan.recommendedJurisdiction),
-        foundersChoice: labelOf(JURISDICTION_PREFERENCES, plan.jurisdictionPref),
+        entrepreneursChoice: labelOf(JURISDICTION_PREFERENCES, plan.jurisdictionPref),
         reason: plan.jurisdictionReason,
       },
       weeksNeeded: estimatedWeeks(plan.phases, plan.tasks),
@@ -85,7 +85,7 @@ function questionInput(plan, question, sources) {
         days: task.estDays,
       })),
       budget: {
-        foundersBudget: formatAed(plan.budgetAed),
+        entrepreneursBudget: formatAed(plan.budgetAed),
         firstYearEstimate: formatAed(firstYearTotal(plan.budgetItems)),
         againstBudget: remaining >= 0 ? `${formatAed(remaining)} under budget` : `${formatAed(-remaining)} over budget`,
         paidSoFar: formatAed(paidTotal(plan.budgetItems)),
@@ -113,5 +113,5 @@ function questionInput(plan, question, sources) {
     },
     officialSources: sources.map((source) => ({ title: source.title, publisher: source.publisher, summary: source.summary })),
   };
-  return `The plan and the official sources:\n${JSON.stringify(facts)}\n\nThe founder's question:\n${question}`;
+  return `The plan and the official sources:\n${JSON.stringify(facts)}\n\nThe entrepreneur's question:\n${question}`;
 }

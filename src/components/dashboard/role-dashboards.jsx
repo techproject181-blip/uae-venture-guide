@@ -141,7 +141,7 @@ export async function MentorDashboard({ user }) {
       <Greeting
         user={user}
         description={
-          accepted > 0 ? `You are guiding ${count(accepted, "founder")} now.` : "Founders who need your help ask for guidance here."
+          accepted > 0 ? `You are guiding ${count(accepted, "entrepreneur")} now.` : "Entrepreneurs who need your help ask for guidance here."
         }
         actions={
           <Link href="/my-posts/new" className={buttonVariants({ size: "lg" })}>
@@ -164,14 +164,14 @@ export async function MentorDashboard({ user }) {
             {profile && <AcceptingSwitch initial={profile.acceptingRequests} />}
             {!profile && (
               <NextStep title="Complete your profile" href="/profile" linkText="Edit profile">
-                Founders find you in the mentor directory through your profile.
+                Entrepreneurs find you in the mentor directory through your profile.
               </NextStep>
             )}
             <Shortcuts
               items={[
-                { href: "/requests", label: "Requests", detail: "Answer and talk with founders", icon: Inbox },
+                { href: "/requests", label: "Requests", detail: "Answer and talk with entrepreneurs", icon: Inbox },
                 { href: "/my-posts", label: "Your posts", detail: count(postCount, "post"), icon: Newspaper },
-                { href: "/profile", label: "Your profile", detail: "What founders see in the directory", icon: UserRound },
+                { href: "/profile", label: "Your profile", detail: "What entrepreneurs see in the directory", icon: UserRound },
               ]}
             />
           </>

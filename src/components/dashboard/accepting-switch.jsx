@@ -32,7 +32,7 @@ export function AcceptingSwitch({ initial }) {
           Taking new requests
         </p>
         <p className="mt-0.5 text-sm text-muted-foreground">
-          {on ? "Founders can ask you for guidance." : "Paused: founders see you are not taking requests."}
+          {on ? "Entrepreneurs can ask you for guidance." : "Paused: entrepreneurs see you are not taking requests."}
         </p>
       </div>
       <button

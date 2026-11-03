@@ -21,7 +21,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${geist.variable} ${display.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col">
+      {/* Browser extensions (ColorZilla, Grammarly…) add attributes to body before
+          React loads; this ignores those on this one tag only. */}
+      <body className="flex min-h-full flex-col" suppressHydrationWarning>
         <NavigationProgress />
         <a
           href="#main"

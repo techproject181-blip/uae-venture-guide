@@ -52,7 +52,7 @@ export function SourceForm({ source = null }) {
       <TextAreaField
         id="summary"
         label="Summary"
-        hint="What a founder can find on this page, in one or two sentences."
+        hint="What an entrepreneur can find on this page, in one or two sentences."
         defaultValue={source?.summary}
         error={errors.summary}
       />
@@ -76,8 +76,8 @@ export function SourceForm({ source = null }) {
       <CheckboxField
         id="source-demo"
         name="demo"
-        label="This is demo data that has not been checked"
-        hint="Users see a Demo label next to it."
+        label="Not checked yet"
+        hint="Tick it until you have checked the page yourself. Users see a “Not checked yet” label next to it."
         defaultChecked={source?.demo ?? false}
       />
       {/* Editing happens on the source page, where "Add fee reference" is the gold main button, so saving is an outline there. */}

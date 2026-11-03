@@ -85,7 +85,7 @@ const cell = (flex, extra) => ({ flex, paddingRight: 6, ...extra });
 /** A cost's basis, as on screen: OFFICIAL in gold for a checked fee, otherwise "estimate". */
 function Basis({ basis }) {
   if (basis === "reference") return <Text style={s.official}> OFFICIAL</Text>;
-  if (basis === "demo") return <Text style={s.muted}> demo fee, not checked</Text>;
+  if (basis === "demo") return <Text style={s.muted}> typical fee, not checked</Text>;
   return <Text style={s.muted}> estimate</Text>;
 }
 

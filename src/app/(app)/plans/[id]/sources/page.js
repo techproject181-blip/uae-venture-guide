@@ -38,8 +38,8 @@ export default async function PlanSourcesPage({ params }) {
   const aside = (
     <Panel title="About these sources" flush>
       <p className="px-5 pt-5 text-sm leading-relaxed text-muted-foreground sm:px-6 sm:pt-6">
-        Federal pages and the pages for {labelOf(EMIRATES, plan.emirate)}. Each shows when it was last checked. Sources marked demo are
-        sample data, so check the real page before you rely on them.
+        Federal pages and the pages for {labelOf(EMIRATES, plan.emirate)}. Each shows when it was last checked. A source marked “Not
+        checked yet” has a summary an administrator has not confirmed, so check the official page before you rely on it.
       </p>
       <div className="mt-4 border-t">
         <FactRows
@@ -97,7 +97,7 @@ function SourceRow({ source }) {
       <p className="mt-2 max-w-2xl leading-relaxed">{source.summary}</p>
       <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
         Last checked {formatDate(source.verifiedAt)}
-        {source.demo && <StatusBadge status="pending" label="Demo, not checked" />}
+        {source.demo && <StatusBadge status="pending" label="Not checked yet" />}
       </p>
     </li>
   );

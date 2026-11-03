@@ -9,8 +9,8 @@ import { cn } from "@/lib/utils";
 
 const ROLES = [
   {
-    id: "founders",
-    label: "Founders",
+    id: "entrepreneurs",
+    label: "Entrepreneurs",
     icon: Rocket,
     blurb: "Plan and start your business",
     title: "Start with a plan you can follow",
@@ -26,12 +26,12 @@ const ROLES = [
     id: "mentors",
     label: "Mentors",
     icon: Compass,
-    blurb: "Guide new founders",
-    title: "Help new founders where they get stuck",
+    blurb: "Guide new entrepreneurs",
+    title: "Help new entrepreneurs where they get stuck",
     points: [
       "A profile in the mentor directory, after approval",
       "Accept the requests you can help with",
-      "Chat with the founder on the website and read their plan",
+      "Chat with the entrepreneur on the website and read their plan",
       "Write experience posts with charts and pictures",
     ],
     cta: "Join as a mentor",
@@ -43,9 +43,9 @@ const ROLES = [
     blurb: "Find plans to back",
     title: "Find plans that are ready to talk",
     points: [
-      "Browse plans that founders chose to share",
+      "Browse plans that entrepreneurs chose to share",
       "Filter by sector and emirate",
-      "Send interest; the founder decides",
+      "Send interest; the entrepreneur decides",
       "Read the full plan once they accept",
     ],
     cta: "Join as a funder",
@@ -76,7 +76,7 @@ export function RoleTabs({ titleId }) {
     <div className="reveal panel grid overflow-hidden lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
       <div className="border-b bg-ink-50/70 p-6 sm:p-8 lg:border-r lg:border-b-0 lg:p-10">
         <h2 id={titleId} className="font-display text-[1.75rem] leading-tight font-bold tracking-[-0.03em] sm:text-[2.25rem]">
-          Made for founders, mentors and funders
+          Made for entrepreneurs, mentors and funders
         </h2>
         <p className="mt-3 text-muted-foreground">Mentors and funders are approved by an administrator first.</p>
 
@@ -85,7 +85,7 @@ export function RoleTabs({ titleId }) {
           aria-label="Who it is for"
           aria-orientation="vertical"
           onKeyDown={onKeyDown}
-          className="mt-6 grid gap-2 sm:grid-cols-3 lg:mt-8 lg:grid-cols-1"
+          className="mt-6 grid gap-2 md:grid-cols-3 lg:mt-8 lg:grid-cols-1"
         >
           {ROLES.map((r) => {
             const Icon = r.icon;

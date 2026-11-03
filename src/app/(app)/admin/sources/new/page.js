@@ -23,7 +23,7 @@ export default async function NewSourcePage() {
                 <li>Use the government or free zone page itself, not a news story or a consultant’s summary.</li>
                 <li>Choose the emirate the page covers. Federal pages apply to every emirate.</li>
                 <li>Set “Last checked on” to the day you read the page.</li>
-                <li>Tick “demo” only for sample data nobody has checked. Users see a Demo label next to it.</li>
+                <li>Tick “Not checked yet” while nobody has checked the page. Users see a “Not checked yet” label next to it.</li>
               </ul>
             </Panel>
             <Panel title="What happens next">

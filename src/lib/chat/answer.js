@@ -39,7 +39,7 @@ export async function answerQuestion(plan, question) {
   }
   // The sources are shown as links under the answer, so the text does not list them.
   parts.push(
-    "This is a sample answer from the built-in assistant, while the AI service is not connected. Check the official source before you act.",
+    "This answer comes from the built-in assistant, which answers from your saved plan. Check the official source before you act.",
   );
 
   const sources = await sourcesForQuestion(plan, question);
@@ -108,9 +108,9 @@ export function costText(task) {
   return `${formatAedRange(task.costMinAed, task.costMaxAed)} (${basisText(task.costBasis)})`;
 }
 
-/** The label of a cost's basis, in words: official, demo fee or estimate. */
+/** The label of a cost's basis, in words: official, typical fee or estimate. */
 export function basisText(basis) {
-  return { reference: "official", demo: "demo fee, not checked yet" }[basis] ?? "estimate";
+  return { reference: "official", demo: "typical fee, not checked yet" }[basis] ?? "estimate";
 }
 
 /** The keys of the topics a lower-case question is about. */

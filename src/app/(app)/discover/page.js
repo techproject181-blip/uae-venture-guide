@@ -48,7 +48,7 @@ export default async function DiscoverPage({ searchParams }) {
     <>
       <PageHeader
         title="Discover"
-        description="Plans that founders chose to share. You see a full plan only if its owner accepts your interest."
+        description="Plans that entrepreneurs chose to share. You see a full plan only if its owner accepts your interest."
       />
 
       <form className="panel mb-6 grid gap-4 p-4 sm:p-5 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_10rem] md:items-end">
@@ -96,7 +96,7 @@ export default async function DiscoverPage({ searchParams }) {
       {cards.length === 0 ? (
         <EmptyState
           title={filtered ? "No plans match" : "No shared plans yet"}
-          text={filtered ? "Try another sector or emirate." : "Plans appear here when founders share them."}
+          text={filtered ? "Try another sector or emirate." : "Plans appear here when entrepreneurs share them."}
           action={
             filtered && (
               <Link href="/discover" className={linkClass}>

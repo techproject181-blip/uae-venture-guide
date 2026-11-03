@@ -22,7 +22,7 @@ const FILTERS = [
   { value: "all", label: "All", test: () => true, empty: "No sources yet" },
   { value: "shown", label: "Shown", test: (source) => source.active, empty: "No source is shown to users" },
   { value: "hidden", label: "Hidden", test: (source) => !source.active, empty: "No hidden sources" },
-  { value: "demo", label: "Demo data", test: (source) => source.demo, empty: "No demo sources" },
+  { value: "demo", label: "Not checked", test: (source) => source.demo, empty: "Every source is checked" },
 ];
 
 export default async function AdminSourcesPage({ searchParams }) {
@@ -49,7 +49,7 @@ export default async function AdminSourcesPage({ searchParams }) {
     <>
       <PageHeader
         title="Official sources"
-        description="The government and free zone pages that roadmaps and chat may cite, and the fees taken from them."
+        description="Government and free zone pages that roadmaps and chat cite, with their fees."
         actions={all.length === 0 && addButton}
       />
 
@@ -115,7 +115,7 @@ export default async function AdminSourcesPage({ searchParams }) {
                     <td>
                       <div className="flex flex-wrap gap-1.5">
                         <StatusBadge status={source.active ? "active" : "hidden"} label={source.active ? "Shown" : "Hidden"} />
-                        {source.demo && <Stamp tone="waiting">Demo</Stamp>}
+                        {source.demo && <Stamp tone="waiting">Not checked</Stamp>}
                       </div>
                     </td>
                     <td className="hidden whitespace-nowrap md:table-cell">{formatDate(source.verifiedAt)}</td>

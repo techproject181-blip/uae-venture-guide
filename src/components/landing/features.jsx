@@ -50,11 +50,11 @@ export function Features() {
       <Feature
         icon={Landmark}
         title="Fees you can check"
-        text="Every fee says where it comes from: an official page, demo data or our estimate."
+        text="Every fee says where it comes from: a checked official page, a typical fee or our estimate."
       >
         <div className="flex flex-wrap items-center gap-2">
           <Stamp tone="official">Official</Stamp>
-          <Stamp tone="quiet">Demo fee</Stamp>
+          <Stamp tone="quiet">Typical fee</Stamp>
           <span className="text-xs text-muted-foreground">Estimate</span>
         </div>
       </Feature>

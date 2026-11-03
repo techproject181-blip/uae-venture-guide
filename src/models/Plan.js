@@ -13,7 +13,7 @@ import {
 
 const { ObjectId } = mongoose.Schema.Types;
 // reference = backed by a checked fee reference ("Official" on screen); demo = backed by a
-// fee reference from the demo data, not checked yet ("Demo fee"); estimate = the planner's guess.
+// fee reference nobody has checked yet ("Typical fee"); estimate = the planner's guess.
 const COST_BASIS = ["reference", "demo", "estimate"];
 const ORIGIN = ["planner", "user"]; // who added it: the roadmap planner or the entrepreneur
 

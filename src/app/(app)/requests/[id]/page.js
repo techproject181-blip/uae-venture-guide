@@ -74,7 +74,7 @@ export default async function RequestConversationPage({ params }) {
           <Panel title="About this request">
             <Fields
               items={[
-                { label: isMentor ? "Founder" : "Mentor", value: otherName },
+                { label: isMentor ? "Entrepreneur" : "Mentor", value: otherName },
                 { label: "Sent", value: formatDate(request.createdAt) },
                 plan && {
                   label: "Attached plan",

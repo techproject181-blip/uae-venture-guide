@@ -1,16 +1,31 @@
 import Link from "next/link";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronRight, UserRound } from "lucide-react";
 import { ListPanel, PageHeader, Panel } from "@/components/layout";
 import { buttonVariants } from "@/components/ui/button";
+import { ROLE_LABELS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 // Small building blocks shared by the role dashboards. Every dashboard has the
 // same skeleton: Greeting → StatGrid → Split (the role's main list on the
 // left; NextStep, Shortcuts and notices on the right).
 
-/** The greeting at the top of every dashboard, with an optional short line under it. */
+/** The greeting at the top of every dashboard, with an optional short line under it and the account's role. */
 export function Greeting({ user, description, actions }) {
-  return <PageHeader title={`Welcome, ${user.name.split(" ")[0]}`} description={description} actions={actions} />;
+  return (
+    <PageHeader title={`Welcome, ${user.name.split(" ")[0]}`} description={description} actions={actions}>
+      <RoleBadge role={user.role} />
+    </PageHeader>
+  );
+}
+
+/** Which kind of account is signed in, for example "Mentor account", under each dashboard's greeting. */
+export function RoleBadge({ role }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full border bg-card px-3 py-1 text-sm font-medium">
+      <UserRound className="size-4 text-primary" aria-hidden="true" />
+      {ROLE_LABELS[role]} account
+    </span>
+  );
 }
 
 /** The title link of a list row. Its ::after covers the row (the <li> is `relative`), so the whole row is a large target. */

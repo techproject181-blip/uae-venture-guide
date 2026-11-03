@@ -12,7 +12,7 @@ export default async function NewPostPage() {
       <PageHeader
         back={{ href: "/my-posts", label: "My posts" }}
         title="Write an experience post"
-        description="A lesson from your own business, for founders starting out in the UAE."
+        description="A lesson from your own business, for entrepreneurs starting out in the UAE."
       />
       <Split aside={<PostFormHelp />}>
         <PostForm />

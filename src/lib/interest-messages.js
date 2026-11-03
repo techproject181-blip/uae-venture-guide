@@ -80,6 +80,17 @@ export async function listInterestMessages(interest, viewerId, { after } = {}) {
   return messages.map((message) => toMessage(message, viewerId));
 }
 
+/** Notes that the viewer has read the conversation up to now, so its messages no longer count as new. */
+export async function markInterestRead({ interest, isFunder }) {
+  await connectDB();
+  // Without timestamps: reading must not change the interest's updatedAt.
+  await FundingInterest.updateOne(
+    { _id: interest._id },
+    { $set: { [isFunder ? "funderReadAt" : "ownerReadAt"]: new Date() } },
+    { timestamps: false },
+  );
+}
+
 /** Saves a message from `user`. Throws when the conversation is closed or the user is sending too fast. */
 export async function sendInterestMessage(conversation, user, body) {
   if (!conversation.canSend) throw new ApiError(409, whyInterestClosed(conversation));

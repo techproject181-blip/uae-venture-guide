@@ -43,7 +43,7 @@ function SwitchSkeleton() {
 function RoleSkeleton({ role }) {
   return (
     <>
-      <HeaderSkeleton actions={1} />
+      <HeaderSkeleton actions={1} badge />
       <StatGridSkeleton />
       {role === "entrepreneur" && (
         <SplitSkeleton
@@ -92,7 +92,7 @@ function CardHead({ width = "w-36" }) {
 function AdminSkeleton() {
   return (
     <>
-      <HeaderSkeleton titleWidth="w-40" actions={1} />
+      <HeaderSkeleton titleWidth="w-40" actions={1} badge />
       <div className="mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {[0, 1, 2, 3].map((n) => (
           <div key={n} className="panel flex flex-col gap-4 p-5">

@@ -346,7 +346,7 @@ describe("without an OpenAI key", () => {
     const saved = await ChatMessage.find({ planId: plan._id }).sort({ _id: 1 }).lean();
     expect(saved.map((message) => message.role)).toEqual(["user", "assistant"]);
     expect(text).toBe(saved[1].content);
-    expect(text).toContain("This is a sample answer from the built-in assistant");
+    expect(text).toContain("This answer comes from the built-in assistant");
     expect(fetch).not.toHaveBeenCalled();
   });
 });

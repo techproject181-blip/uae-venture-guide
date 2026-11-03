@@ -21,9 +21,9 @@ export const mentorProfileSchema = z.object({
   name,
   headline: z.string("Write a one-line headline.").trim().min(5, "Write a one-line headline.").max(120, "Use 120 characters or fewer."),
   bio: z
-    .string("Tell founders about your experience.")
+    .string("Tell entrepreneurs about your experience.")
     .trim()
-    .min(30, "Tell founders about your experience (at least 30 characters).")
+    .min(30, "Tell entrepreneurs about your experience (at least 30 characters).")
     .max(2000, "Use 2,000 characters or fewer."),
   expertise: multiChoice(valuesOf(EXPERTISE), "Choose valid areas.").refine((list) => list.length > 0, "Choose at least one area."),
   industries: multiChoice(valuesOf(SECTORS), "Choose valid industries."),
@@ -51,9 +51,9 @@ export const funderProfileSchema = z
     ticketMaxAed: wholeNumber(0, 1_000_000_000, "Enter the largest amount you invest, in whole dirhams."),
     sectors: multiChoice(valuesOf(SECTORS), "Choose valid sectors.").refine((list) => list.length > 0, "Choose at least one sector."),
     bio: z
-      .string("Tell founders what you look for.")
+      .string("Tell entrepreneurs what you look for.")
       .trim()
-      .min(30, "Tell founders what you look for (at least 30 characters).")
+      .min(30, "Tell entrepreneurs what you look for (at least 30 characters).")
       .max(2000, "Use 2,000 characters or fewer."),
   })
   .refine((profile) => profile.ticketMaxAed >= profile.ticketMinAed, {

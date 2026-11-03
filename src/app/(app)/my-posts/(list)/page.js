@@ -29,7 +29,7 @@ export default async function MyPostsPage() {
     <>
       <PageHeader
         title="My posts"
-        description="Share what you learned, so new founders can avoid the same mistakes."
+        description="Share what you learned, so new entrepreneurs can avoid the same mistakes."
         actions={posts.length > 0 && newPost}
       />
       {posts.length === 0 ? (

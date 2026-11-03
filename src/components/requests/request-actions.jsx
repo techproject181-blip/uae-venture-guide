@@ -23,7 +23,7 @@ export function RequestActions({ requestId, status }) {
       action === "complete" &&
       !(await confirm({
         title: "Mark as completed?",
-        description: "The founder's plan is no longer shared with you, and the conversation becomes read-only.",
+        description: "The entrepreneur's plan is no longer shared with you, and the conversation becomes read-only.",
         confirmLabel: "Mark completed",
       }))
     )
