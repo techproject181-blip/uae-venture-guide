@@ -183,5 +183,6 @@ export function Stat({ label, value, hint, tone, href }) {
 
 /** The buttons at the end of a form, in one row. */
 export function FormActions({ children, className }) {
-  return <div className={cn("flex flex-wrap items-center gap-3 pt-2", className)}>{children}</div>;
+  // On phones each button takes the full width, like the other forms' buttons.
+  return <div className={cn("flex flex-wrap items-center gap-3 pt-2 max-sm:*:w-full", className)}>{children}</div>;
 }

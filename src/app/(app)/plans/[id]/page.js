@@ -183,7 +183,7 @@ export default async function PlanOverviewPage({ params }) {
         <Fields
           className="mt-5"
           items={[
-            { label: "Customers", value: plan.targetCustomers },
+            { label: "Customers", value: plan.targetCustomers, wide: true },
             { label: "Team", value: plan.teamSize === 1 ? "Just you" : `${plan.teamSize} people` },
           ]}
         />
